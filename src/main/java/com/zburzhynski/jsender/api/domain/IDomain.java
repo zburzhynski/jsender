@@ -1,7 +1,6 @@
 package com.zburzhynski.jsender.api.domain;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
 
 /**
  * Domain interface.
@@ -39,33 +38,4 @@ public interface IDomain extends Serializable {
      * @param id unique identifier of entity to set
      */
     void setId(String id);
-
-    /**
-     * Gets record state.
-     *
-     * @return record state
-     */
-    State getState();
-
-    /**
-     * Sets record state.
-     *
-     * @param state record state to set
-     */
-    void setState(State state);
-
-    /**
-     * Gets date of state.
-     *
-     * @return date of state
-     */
-    Timestamp getStateDate();
-
-    /**
-     * Sets date of state.
-     *
-     * @param stateDate date of state to set
-     */
-    void setStateDate(Timestamp stateDate);
-
 }
