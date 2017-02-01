@@ -1,9 +1,15 @@
 apply plugin: 'java'
 apply plugin: 'idea'
+apply plugin: 'liquibase'
 apply plugin: 'application'
 
 compileJava.options.encoding = 'UTF-8'
 compileTestJava.options.encoding = 'UTF-8'
+
+configurations {
+    integTestCompile { extendsFrom compile }
+    integTestRuntime { extendsFrom integTestCompile, runtime }
+}
 
 repositories {
     mavenCentral()
@@ -11,10 +17,64 @@ repositories {
 
 dependencies {
 
+    /* ---------------- spring dependencies ---------------- */
+    compile('org.springframework:spring-tx:3.1.2.RELEASE')
+    compile('org.springframework:spring-web:3.1.2.RELEASE')
+    compile('org.springframework:spring-orm:3.1.2.RELEASE')
+
+    /* ---------------- persistence dependencies ---------------- */
     compile('junit:junit:4.12')
     compile('org.slf4j:slf4j-api:1.7.22')
     compile('javax.mail:mail:1.5.0-b01')
     compile('org.icefaces:icefaces-ace:3.2.0')
     compile('org.apache.commons:commons-lang3:3.5')
+    compile('org.liquibase:liquibase-core:2.0.1')
+    compile('com.augusttechgroup:groovy-liquibase-dsl:0.7.3')
+    compile('postgresql:postgresql:9.1-901.jdbc4')
+    compile('org.hibernate:hibernate-core:5.2.6.Final')
+    compile('org.hibernate.javax.persistence:hibernate-jpa-2.0-api:1.0.1.Final')
+
+    /* ---------------- aspect dependencies ---------------- */
+    compile('commons-dbcp:commons-dbcp:20030825.184428')
 
 }
+
+/* ---------------- liquibase setup---------------------- */
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath group:'net.saliman', name: 'gradle-liquibase-plugin', version: '1.0.2'
+        classpath 'postgresql:postgresql:9.1-901.jdbc4'
+    }
+}
+
+liquibase {
+    activities {
+        dbInit {
+            changeLogFile 'src/main/resources/liquibase/tablespace.groovy'
+            url postgreBaseUrl
+            username postgreRootUserName
+            password postgreRootUserPassword
+        }
+        dbUpdate {
+            changeLogFile 'src/main/resources/liquibase/main.groovy'
+            url postgreBaseUrl
+            username postgreUserName
+            password postgreUserPassword
+        }
+    }
+}
+
+task init << {
+    liquibase.runList = 'dbInit'
+}
+
+task upd << {
+    liquibase.runList = 'dbUpdate'
+}
+
+task dbInit(dependsOn: ['init', 'update'])
+
+task dbUpdate(dependsOn: ['upd', 'update'])
