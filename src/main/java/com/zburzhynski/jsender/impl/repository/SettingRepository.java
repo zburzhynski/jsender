@@ -1,6 +1,5 @@
 package com.zburzhynski.jsender.impl.repository;
 
-import com.zburzhynski.jsender.api.domain.ISetting;
 import com.zburzhynski.jsender.api.domain.SettingCategory;
 import com.zburzhynski.jsender.api.domain.Settings;
 import com.zburzhynski.jsender.api.repository.ISettingRepository;
@@ -21,7 +20,7 @@ import javax.annotation.Resource;
  * @author Vladimir Zburzhynski
  */
 @Repository("settingRepository")
-public class SettingRepository implements ISettingRepository {
+public class SettingRepository implements ISettingRepository<String, Setting> {
 
     @Resource
     private SessionFactory sessionFactory;
@@ -30,14 +29,14 @@ public class SettingRepository implements ISettingRepository {
      * {@inheritDoc}
      */
     @Override
-    public ISetting findByName(Settings name) {
+    public Setting findByName(Settings name) {
         Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Setting.class);
         criteria.add(Restrictions.eq(Setting.P_NAME, name.name()).ignoreCase());
-        return (ISetting) criteria.uniqueResult();
+        return (Setting) criteria.uniqueResult();
     }
 
     @Override
-    public List<ISetting> findByCategory(SettingCategory category) {
+    public List<Setting> findByCategory(SettingCategory category) {
         Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Setting.class);
         criteria.add(Restrictions.eq(Setting.P_CATEGORY, category));
         return criteria.list();
