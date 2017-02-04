@@ -9,10 +9,18 @@ compileTestJava.options.encoding = 'UTF-8'
 configurations {
     integTestCompile { extendsFrom compile }
     integTestRuntime { extendsFrom integTestCompile, runtime }
+    angular
 }
 
 repositories {
     mavenCentral()
+    ivy {
+        name = 'AngularJS'
+        url = 'https://code.angularjs.org/'
+        layout 'pattern', {
+            artifact '[revision]/[module](.[classifier]).[ext]'
+        }
+    }
 }
 
 dependencies {
@@ -35,9 +43,31 @@ dependencies {
 
     /* ---------------- aspect dependencies ---------------- */
     compile('commons-dbcp:commons-dbcp:20030825.184428')
+    compile('commons-codec:commons-codec:1.10')
 
+    /* ---------------- angularJS dependencies ---------------- */
+    compile('org.webjars:angularjs:1.6.1')
+    angular group: 'angular', name: 'angular', version: '1.3.9', classifier: 'min', ext: 'js'
+
+    /* ---------------- jersey rest dependencies ---------------- */
+    compile('javax.ws.rs:jsr311-api:1.1.1')
+    compile('com.sun.jersey:jersey-server:1.19')
+    compile('com.sun.jersey:jersey-servlet:1.19')
+    compile('com.sun.jersey:jersey-core:1.19')
+    compile('com.sun.jersey:jersey-json:1.19')
+    compile('com.sun.jersey.contribs:jersey-spring:1.19')
+
+    /* ---------------- liquibase dependencies ---------------- */
+    compile('com.augusttechgroup:groovy-liquibase-dsl:0.7.3')
 }
 
+task fetch(type: Copy) {
+    from configurations.angular
+    into 'src/main/webapp/lib'
+    rename {
+        'angular.js'
+    }
+}
 /* ---------------- liquibase setup---------------------- */
 buildscript {
     repositories {
