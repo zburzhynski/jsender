@@ -1,6 +1,5 @@
 package com.zburzhynski.jsender.impl.domain;
 
-import com.zburzhynski.jsender.api.domain.ISetting;
 import com.zburzhynski.jsender.api.domain.SettingCategory;
 import com.zburzhynski.jsender.api.domain.SettingValueType;
 import com.zburzhynski.jsender.api.domain.Settings;
@@ -23,7 +22,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "setting")
-public class Setting extends Domain implements ISetting {
+public class Setting extends Domain implements Comparable<Setting> {
 
     public static final String P_NAME = "name";
     public static final String P_CATEGORY = "category";
@@ -89,7 +88,7 @@ public class Setting extends Domain implements ISetting {
     }
 
     @Override
-    public int compareTo(ISetting o) {
+    public int compareTo(Setting o) {
         return Settings.valueOf(name.toUpperCase()).compareTo(Settings.valueOf(o.getName().toUpperCase()));
     }
 
