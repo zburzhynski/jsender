@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://java.sun.com/xml/ns/javaee"
+         xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+         http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+         id="WebApp_ID" version="2.5">
+
+    <display-name>jSender</display-name>
+
+    <!-- Spring context -->
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>
+            classpath*:spring/application-context.xml
+            <!--,-->
+            <!--classpath:spring/security-config.xml-->
+        </param-value>
+    </context-param>
+
+    <!--&lt;!&ndash; Log4j config &ndash;&gt;-->
+    <!--<context-param>-->
+        <!--<param-name>log4jConfigLocation</param-name>-->
+        <!--<param-value>classpath:config/log4j.properties</param-value>-->
+    <!--</context-param>-->
+
+    <listener>
+        <listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
+    </listener>
+
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+
+    <!-- Session timeout -->
+    <session-config>
+        <session-timeout>240</session-timeout>
+    </session-config>
+
+
+    <servlet>
+        <servlet-name>jersey-serlvet</servlet-name>
+
+        <servlet-class>
+            com.sun.jersey.spi.container.servlet.ServletContainer
+        </servlet-class>
+
+        <init-param>
+            <param-name>com.sun.jersey.config.property.packages</param-name>
+            <param-value>com.zburzhynski.jsender.impl.rest</param-value>
+        </init-param>
+
+        <init-param>
+            <param-name>com.sun.jersey.api.json.POJOMappingFeature</param-name>
+            <param-value>true</param-value>
+        </init-param>
+
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>jersey-serlvet</servlet-name>
+        <url-pattern>/rest/*</url-pattern>
+    </servlet-mapping>
+
+</web-app>
