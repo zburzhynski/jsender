@@ -65,8 +65,8 @@ databaseChangeLog {
     changeSet(id: '2017-02-04-05', author: 'Nikita Shevtsov <shevtsou@gmail.com>') {
         comment("Added foreign constraint FK_contact_info_email_2_contact_info")
         addForeignKeyConstraint(constraintName: 'FK_contact_info_email_2_contact_info',
-                baseTableName: 'contact_info_email', baseTableSchemaName: 'jsender', baseColumnNames: 'contact_info_id',
-                referencedTableName: 'contact_info', referencedTableSchemaName: 'jsender', referencedColumnNames: 'id')
+                baseTableSchemaName: 'jsender', baseTableName: 'contact_info_email' , baseColumnNames: 'contact_info_id',
+                referencedTableSchemaName: 'jsender', referencedTableName: 'contact_info', referencedColumnNames: 'id')
     }
 
     changeSet(id: '2017-02-04-06', author: 'Nikita Shevtsov <shevtsou@gmail.com>') {
@@ -98,8 +98,8 @@ databaseChangeLog {
     changeSet(id: '2017-02-04-07', author: 'Nikita Shevtsov <shevtsou@gmail.com>') {
         comment("Added foreign constraint FK_contact_info_phone_2_contact_info")
         addForeignKeyConstraint(constraintName: 'FK_contact_info_phone_2_contact_info',
-                baseTableName: 'contact_info_phone', baseTableSchemaName: 'jsender', baseColumnNames: 'contact_info_id',
-                referencedTableName: 'contact_info', referencedTableSchemaName: 'jsender', referencedColumnNames: 'id')
+                baseTableSchemaName: 'jsender', baseTableName: 'contact_info_phone', baseColumnNames: 'contact_info_id',
+                referencedTableSchemaName: 'jsender', referencedTableName: 'contact_info', referencedColumnNames: 'id')
     }
 
     changeSet(id: '2017-02-04-08', author: 'Nikita Shevtsov <shevtsou@gmail.com>') {
@@ -121,15 +121,15 @@ databaseChangeLog {
     changeSet(id: '2017-02-04-9', author: 'Nikita Shevtsov <shevtsou@gmail.com>') {
         comment("Added foreign constraint FK_client_2_contact_info")
         addForeignKeyConstraint(constraintName: 'FK_client_2_contact_info',
-                baseTableName: 'client', baseTableSchemaName: 'jsender', baseColumnNames: 'contact_info_id',
-                referencedTableName: 'contact_info', referencedTableSchemaName: 'jsender', referencedColumnNames: 'id')
+                baseTableSchemaName: 'jsender', baseTableName: 'client', baseColumnNames: 'contact_info_id',
+                referencedTableSchemaName: 'jsender', referencedTableName: 'contact_info', referencedColumnNames: 'id')
     }
 
     changeSet(id: '2017-02-04-10', author: 'Nikita Shevtsov <shevtsou@gmail.com>') {
         comment("Added foreign constraint FK_client_2_person")
         addForeignKeyConstraint(constraintName: 'FK_client_2_person',
-                baseTableName: 'client', baseTableSchemaName: 'jsender', baseColumnNames: 'person_id',
-                referencedTableName: 'person', referencedTableSchemaName: 'jsender', referencedColumnNames: 'id')
+                baseTableSchemaName: 'jsender', baseTableName: 'client', baseColumnNames: 'person_id',
+                referencedTableSchemaName: 'jsender', referencedTableName: 'person', referencedColumnNames: 'id')
     }
 
     changeSet(id: '2017-02-04-11', author: 'Nikita Shevtsov <shevtsou@gmail.com>') {
