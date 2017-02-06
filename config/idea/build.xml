@@ -1,0 +1,11 @@
+<project name="jPlanner" basedir=".">
+<description description="This script allows to convert property files to ascii, before run application" />
+
+    <target name="convert" description="convert property to ascii">
+        <delete dir="out/artifacts/jplanner/WEB-INF/classes/config" />
+        <native2ascii src="src/main/resources/config"
+                      dest="out/artifacts/jplanner/WEB-INF/classes/config"
+                      includes="**/*.properties" />
+    </target>
+
+</project>

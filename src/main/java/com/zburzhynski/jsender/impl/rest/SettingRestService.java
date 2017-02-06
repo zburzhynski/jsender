@@ -1,15 +1,11 @@
 package com.zburzhynski.jsender.impl.rest;
-import com.zburzhynski.jsender.api.domain.ISetting;
+
 import com.zburzhynski.jsender.api.domain.Settings;
 import com.zburzhynski.jsender.api.service.ISettingService;
 import com.zburzhynski.jsender.impl.domain.Setting;
-import com.zburzhynski.jsender.impl.service.SettingService;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
-import javax.faces.bean.ManagedProperty;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -31,7 +27,7 @@ public class SettingRestService {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public ISetting getSetting() {
+    public Setting getSetting() {
         settingService.getByName(Settings.MAIL_PASSWORD);
         Setting setting = new Setting();
         setting.setName("settinasdf");

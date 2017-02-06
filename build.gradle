@@ -36,6 +36,15 @@ dependencies {
     /* ---------------- aspect dependencies ---------------- */
     compile('commons-dbcp:commons-dbcp:20030825.184428')
     compile('commons-codec:commons-codec:1.10')
+    compile('log4j:log4j:1.2.17')
+    compile('commons-collections:commons-collections:3.2.2')
+
+    /* ---------------- jsf dependencies ---------------- */
+    compile('com.sun.faces:jsf-api:2.2.14')
+    compile('com.sun.faces:jsf-impl:2.2.14')
+    compile('org.primefaces:primefaces:6.0')
+    compile('javax.enterprise:cdi-api:2.0-PFD')
+    compile('org.glassfish.web:el-impl:2.2')
 
     /* ---------------- jersey rest dependencies ---------------- */
     compile('javax.ws.rs:jsr311-api:1.1.1')

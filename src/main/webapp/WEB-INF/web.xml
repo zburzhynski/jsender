@@ -8,59 +8,111 @@
 
     <display-name>jSender</display-name>
 
+    <!-- Change to "Production" when you are ready to deploy -->
+    <context-param>
+        <param-name>javax.faces.PROJECT_STAGE</param-name>
+        <param-value>Production</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>webAppRootKey</param-name>
+        <param-value>jsender.root</param-value>
+    </context-param>
+
     <!-- Spring context -->
     <context-param>
         <param-name>contextConfigLocation</param-name>
         <param-value>
             classpath*:spring/application-context.xml
-            <!--,-->
-            <!--classpath:spring/security-config.xml-->
         </param-value>
     </context-param>
-
-    <!--&lt;!&ndash; Log4j config &ndash;&gt;-->
-    <!--<context-param>-->
-        <!--<param-name>log4jConfigLocation</param-name>-->
-        <!--<param-value>classpath:config/log4j.properties</param-value>-->
-    <!--</context-param>-->
-
-    <listener>
-        <listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
-    </listener>
 
     <listener>
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
+
+    <context-param>
+        <param-name>org.icefaces.ace.theme</param-name>
+        <param-value>redmond</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>com.sun.faces.expressionFactory</param-name>
+        <param-value>com.sun.el.ExpressionFactoryImpl</param-value>
+    </context-param>
+
+    <!-- Returns null instead of '' -->
+    <context-param>
+        <param-name>javax.faces.INTERPRET_EMPTY_STRING_SUBMITTED_VALUES_AS_NULL</param-name>
+        <param-value>true</param-value>
+    </context-param>
+
+    <!-- Default time zone -->
+    <context-param>
+        <param-name>javax.faces.DATETIMECONVERTER_DEFAULT_TIMEZONE_IS_SYSTEM_TIMEZONE</param-name>
+        <param-value>true</param-value>
+    </context-param>
 
     <!-- Session timeout -->
     <session-config>
         <session-timeout>240</session-timeout>
     </session-config>
 
+    <!-- Session expired handling -->
+    <context-param>
+        <param-name>org.icefaces.sessionExpiredRedirectURI</param-name>
+        <param-value>/pages/error/session_expired.xhtml</param-value>
+    </context-param>
 
-    <servlet>
-        <servlet-name>jersey-serlvet</servlet-name>
+    <!-- Custom functions, components -->
+    <context-param>
+        <param-name>javax.faces.FACELETS_LIBRARIES</param-name>
+        <param-value>
+            /WEB-INF/component.taglib.xml
+        </param-value>
+    </context-param>
 
-        <servlet-class>
-            com.sun.jersey.spi.container.servlet.ServletContainer
-        </servlet-class>
-
+    <!-- Spring charset filter -->
+    <filter>
+        <filter-name>charsetFilter</filter-name>
+        <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
         <init-param>
-            <param-name>com.sun.jersey.config.property.packages</param-name>
-            <param-value>com.zburzhynski.jsender.impl.rest</param-value>
+            <param-name>encoding</param-name>
+            <param-value>UTF-8</param-value>
         </init-param>
-
         <init-param>
-            <param-name>com.sun.jersey.api.json.POJOMappingFeature</param-name>
+            <param-name>forceEncoding</param-name>
             <param-value>true</param-value>
         </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>charsetFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
 
+    <!-- JSF mapping -->
+    <servlet>
+        <servlet-name>Faces Servlet</servlet-name>
+        <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
 
+    <!-- Map these files with JSF -->
     <servlet-mapping>
-        <servlet-name>jersey-serlvet</servlet-name>
-        <url-pattern>/rest/*</url-pattern>
+        <servlet-name>Faces Servlet</servlet-name>
+        <url-pattern>/faces/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Faces Servlet</servlet-name>
+        <url-pattern>*.jsf</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Faces Servlet</servlet-name>
+        <url-pattern>*.faces</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Faces Servlet</servlet-name>
+        <url-pattern>*.xhtml</url-pattern>
     </servlet-mapping>
 
 </web-app>
