@@ -9,7 +9,9 @@ import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.annotation.Resource;
 
 /**
@@ -20,7 +22,7 @@ import javax.annotation.Resource;
  * @author Vladimir Zburzhynski
  */
 @Repository("settingRepository")
-public class SettingRepository implements ISettingRepository<String, Setting> {
+public class SettingRepository extends AbstractBaseRepository<String, Setting> implements ISettingRepository<String, Setting> {
 
     @Resource
     private SessionFactory sessionFactory;
@@ -35,11 +37,30 @@ public class SettingRepository implements ISettingRepository<String, Setting> {
         return (Setting) criteria.uniqueResult();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Setting> findByCategory(SettingCategory category) {
         Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Setting.class);
         criteria.add(Restrictions.eq(Setting.P_CATEGORY, category));
         return criteria.list();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected Class<? extends Setting> getDomainClass() {
+        return Setting.class;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected Map<String, Boolean> getDefaultSorting() {
+        return new HashMap<>();
     }
 
 }

@@ -15,7 +15,7 @@ import java.util.List;
  * @param <T>  The type of model object.
  * @author Vladimir Zburzhynski
  */
-public interface ISettingRepository<ID, T extends IDomain> {
+public interface ISettingRepository<ID, T extends IDomain> extends IBaseRepository<ID, T> {
 
     /**
      * Finds setting by name.

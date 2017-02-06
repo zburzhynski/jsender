@@ -19,11 +19,18 @@
         <param-value>jsender.root</param-value>
     </context-param>
 
+    <!-- Welcome page -->
+    <welcome-file-list>
+        <welcome-file>pages/setting/settings.xhtml</welcome-file>
+    </welcome-file-list>
+
     <!-- Spring context -->
     <context-param>
         <param-name>contextConfigLocation</param-name>
         <param-value>
-            classpath*:spring/application-context.xml
+            classpath:spring/application-context.xml
+            <!--,-->
+            <!--classpath:spring/security-config.xml-->
         </param-value>
     </context-param>
 
@@ -113,6 +120,31 @@
     <servlet-mapping>
         <servlet-name>Faces Servlet</servlet-name>
         <url-pattern>*.xhtml</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>jersey-serlvet</servlet-name>
+
+        <servlet-class>
+            com.sun.jersey.spi.container.servlet.ServletContainer
+        </servlet-class>
+
+        <init-param>
+            <param-name>com.sun.jersey.config.property.packages</param-name>
+            <param-value>com.zburzhynski.jsender.impl.rest</param-value>
+        </init-param>
+
+        <init-param>
+            <param-name>com.sun.jersey.api.json.POJOMappingFeature</param-name>
+            <param-value>true</param-value>
+        </init-param>
+
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>jersey-serlvet</servlet-name>
+        <url-pattern>/rest/*</url-pattern>
     </servlet-mapping>
 
 </web-app>
