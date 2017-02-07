@@ -22,7 +22,8 @@ import javax.annotation.Resource;
  * @author Vladimir Zburzhynski
  */
 @Repository("settingRepository")
-public class SettingRepository extends AbstractBaseRepository<String, Setting> implements ISettingRepository<String, Setting> {
+public class SettingRepository extends AbstractBaseRepository<String, Setting>
+    implements ISettingRepository<String, Setting> {
 
     @Resource
     private SessionFactory sessionFactory;

@@ -9,7 +9,7 @@ import java.net.URLConnection;
 import java.net.URLEncoder;
 
 /**
- * SMS sender
+ * SMS sender.
  * <p/>
  * Date: 31.01.2017
  *
@@ -21,13 +21,15 @@ public class SMSSender {
 
     private static final String PROTOCOL = "http";
 
+    private static final Integer PORT = 80;
+
     private static void sendSms(String phone, String text, String sender, String name, String password) {
         try {
             String authString = name + COLON + password;
             String authStringEnc = null;
 
-            URL url = new URL(PROTOCOL, "api.smsfeedback.ru", 80, "/messages/v2/send/?phone=%2B" + phone + "&text="
-                + URLEncoder.encode(text, "UTF-8") + "&sender=" + sender);
+            URL url = new URL(PROTOCOL, "api.smsfeedback.ru", PORT, "/messages/v2/send/?phone=%2B" +
+                phone + "&text=" + URLEncoder.encode(text, "UTF-8") + "&sender=" + sender);
             URLConnection urlConnection = url.openConnection();
             urlConnection.setRequestProperty("Authorization", authStringEnc);
         } catch (Exception ex) {
