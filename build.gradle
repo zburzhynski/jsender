@@ -37,9 +37,6 @@ dependencies {
     compile('commons-dbcp:commons-dbcp:20030825.184428')
     compile('commons-codec:commons-codec:1.10')
 
-    /* ---------------- angularJS dependencies ---------------- */
-    compile('org.webjars:angularjs:1.6.1')
-
     /* ---------------- jersey rest dependencies ---------------- */
     compile('javax.ws.rs:jsr311-api:1.1.1')
     compile('com.sun.jersey:jersey-server:1.19')
