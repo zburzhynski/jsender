@@ -1,0 +1,67 @@
+<?xml version="1.0"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/pages/template/layout_template.xhtml">
+
+    <ui:define name="content">
+        <style type="text/css">
+            .name {
+                font-weight: bold;
+                width: 25%;
+            }
+            .val {
+                width: 40%;
+            }
+            .msg {
+                width: 35%;
+            }
+        </style>
+        <p:panel>
+            <h:form id="settingForm">
+                <p:focus />
+                <h:panelGrid columns="3" columnClasses="name,val,msg" width="70%">
+                <p:outputLabel id="description"
+                               value="#{settingBean.setting.description}"
+                               required="true" />
+                <c:if test="#{settingBean.setting.type == 'STRING'}">
+                    <p:inputTextarea id="stringValue"
+                                     value="#{settingBean.setting.value}"
+                                     required="true"
+                                     maxlength="250"
+                                     style="width: 97%" />
+                    <p:message for="stringValue" />
+                </c:if>
+                <c:if test="#{settingBean.setting.type == 'INTEGER'}">
+                    <p:inputText id="integerValue"
+                                     value="#{settingBean.setting.value}"
+                                     required="true"
+                                     maxlength="250"
+                                     style="width: 97%">
+                        <f:convertNumber integerOnly="true" />
+                    </p:inputText>
+                    <p:message for="integerValue" />
+                </c:if>
+                <c:if test="#{settingBean.setting.type == 'BOOLEAN'}">
+                    <p:selectBooleanCheckbox id="booleanValue"
+                                             value="#{settingBean.setting.value}" />
+                    <p:message for="booleanValue" />
+                </c:if>
+                </h:panelGrid>
+                <h:panelGrid columns="2">
+                    <h:commandButton id="saveSetting"
+                                     value="#{msgs['button.save']}"
+                                     action="#{settingBean.saveSetting}" />
+                    <h:commandButton id="cancelUpdateSetting"
+                                     value="#{msgs['button.cancel']}"
+                                     action="/pages/setting/settings?faces-redirect=true"
+                                     immediate="true" />
+                </h:panelGrid>
+            </h:form>
+        </p:panel>
+    </ui:define>
+
+</ui:composition>

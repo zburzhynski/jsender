@@ -13,18 +13,6 @@
     <context:component-scan base-package="com.zburzhynski.jsender.impl.service,
     com.zburzhynski.jsender.impl.repository" />
 
-    <bean id="log4jInitializer"
-          class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
-        <property name="staticMethod">
-            <value>org.springframework.util.Log4jConfigurer.initLogging</value>
-        </property>
-        <property name="arguments">
-            <list>
-                <value>classpath:config/log4j.properties</value>
-            </list>
-        </property>
-    </bean>
-
     <!-- Internationalization -->
     <bean id="messageSource"
           class="org.springframework.context.support.ReloadableResourceBundleMessageSource">

@@ -1,6 +1,7 @@
 package com.zburzhynski.jsender.impl.domain;
 
-import org.hibernate.annotations.SortNatural;
+import org.hibernate.annotations.Sort;
+import org.hibernate.annotations.SortType;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -22,24 +23,24 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "contact_info")
-public class ContactInfo {
+public class ContactInfo extends Domain {
 
     public static final String P_PHONES = "phones";
 
     public static final String P_EMAILS = "emails";
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "contactInfo")
-    @SortNatural
+    @Sort(type = SortType.NATURAL)
     private Set<Client> clients = new HashSet<>();
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "contact_info_id", nullable = false)
-    @SortNatural
+    @Sort(type = SortType.NATURAL)
     private SortedSet<ContactInfoPhone> phones = new TreeSet<>();
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "contact_info_id", nullable = false)
-    @SortNatural
+    @Sort(type = SortType.NATURAL)
     private SortedSet<ContactInfoEmail> emails = new TreeSet<>();
 
     public Set<Client> getClients() {

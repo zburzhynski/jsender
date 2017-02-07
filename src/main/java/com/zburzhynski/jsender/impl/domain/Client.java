@@ -1,7 +1,5 @@
 package com.zburzhynski.jsender.impl.domain;
 
-import org.hibernate.annotations.SortNatural;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
