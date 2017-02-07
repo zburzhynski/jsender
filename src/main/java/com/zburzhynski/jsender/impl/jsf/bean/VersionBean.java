@@ -16,7 +16,7 @@ public class VersionBean {
 
     private String version = "1.0.0";
 
-    private String versionDate = "05.02.2017";
+    private String versionDate = "07.02.2017";
 
     /**
      * Gets program version.

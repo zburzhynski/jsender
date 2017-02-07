@@ -5,7 +5,7 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static org.apache.commons.lang3.StringUtils.join;
 import com.zburzhynski.jsender.api.dto.Email;
-import org.icefaces.ace.json.JSONObject;
+import org.codehaus.jettison.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,7 +50,7 @@ public class EmailSender {
      * @throws MessagingException if any
      */
     public void send(Email email) throws MessagingException {
-        LOGGER.info("Sending email {} ", new JSONObject(email).toString());
+        LOGGER.info("Sending email {} ", email);
         Message message = new MimeMessage(session);
         message.setFrom(isNotBlank(email.getFrom()) ? new InternetAddress(email.getFrom()) : null);
         message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(join(email.getRecipients(), COMMA)));

@@ -1,0 +1,43 @@
+.started {
+    background: #2b802f;
+}
+.finished {
+    background: #8b5333;
+}
+.canceled {
+    background: #ff4b43;
+}
+
+.cabinetLabel {
+    width: 10%;
+    text-align: right;
+}
+.cabinetValue {
+    width: 33%;
+}
+.workplaceLabel {
+    width: 24%;
+    text-align: right;
+}
+.workplaceValue {
+    width: 33%;
+}
+.doctorLabel {
+    width: 10%;
+}
+.doctorValue {
+    width: 90%;
+}
+
+.eventMenu {
+    width: 18%;
+}
+.eventMenuButton {
+    width: 100%;
+}
+.workplaceViewType {
+    width: 30%;
+}
+.workplaceViewValue {
+    width: 70%;
+}
