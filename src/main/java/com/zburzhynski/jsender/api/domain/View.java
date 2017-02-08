@@ -9,7 +9,9 @@ package com.zburzhynski.jsender.api.domain;
  */
 public enum View {
 
-    SETTINGS_VIEW("/pages/setting/settings?faces-redirect=true");
+    CLIENTS("/pages/client/clients?faces-redirect=true"),
+    CLIENT("/pages/client/client?faces-redirect=true"),
+    SETTINGS("/pages/setting/settings?faces-redirect=true");
 
     private String path;
 

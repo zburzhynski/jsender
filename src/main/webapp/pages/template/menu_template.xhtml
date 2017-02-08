@@ -11,6 +11,7 @@
         <ui:composition>
             <h:form id="mainMenuForm">
                 <p:menubar>
+                    <p:menuitem id="mClients" value="#{msgs['mainMenu.clients']}" action="#{mainMenuBean.clients}" />
                     <p:submenu id="mSettings" label="#{msgs['mainMenu.settings']}" icon="ui-icon ui-icon-gear">
                         <p:menuitem id="smSettings" value="#{msgs['mainMenu.settings']}" action="#{mainMenuBean.settings}" />
                     </p:submenu>

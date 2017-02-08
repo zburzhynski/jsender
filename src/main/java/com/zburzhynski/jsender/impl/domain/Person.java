@@ -26,6 +26,12 @@ import javax.persistence.Table;
 @Table(name = "person")
 public class Person extends Domain {
 
+    public static final String P_NAME = "name";
+
+    public static final String P_SURNAME = "surname";
+
+    public static final String P_PATRONYMIC = "patronymic";
+
     @Column(name = "name")
     private String name;
 

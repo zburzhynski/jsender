@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/pages/template/layout_template.xhtml">
+
+    <ui:define name="content">
+        <style type="text/css">
+            .name {
+                font-weight: bold;
+                width: 27%;
+            }
+            .val {
+                width: 38%;
+            }
+            .msg {
+                width: 35%;
+            }
+            .cal .ui-inputfield {
+                width: 97%;
+            }
+        </style>
+        <p:panel>
+            <h:form id="cleintForm">
+                <p:focus />
+                <h:panelGrid columns="3" columnClasses="name,val,msg" width="60%">
+                    <h:outputLabel for="surname" value="#{msgs['person.surname']}:" />
+                    <p:inputTextarea id="surname" value="#{clientBean.client.person.surname}" required="true" maxlength="50" style="width: 97%" />
+                    <p:message for="surname" />
+                    <h:outputLabel for="name" value="#{msgs['person.name']}:" />
+                    <p:inputTextarea id="name" value="#{clientBean.client.person.name}" required="true" maxlength="50" style="width: 97%" />
+                    <p:message for="name" />
+                    <h:outputLabel for="patronymic" value="#{msgs['person.patronymic']}:" />
+                    <p:inputTextarea id="patronymic" value="#{clientBean.client.person.patronymic}" required="true" maxlength="50" style="width: 97%" />
+                    <p:message for="patronymic" />
+                    <h:outputLabel for="birthday" value="#{msgs['person.birthday']}:" />
+                    <p:calendar id="birthday"
+                                value="#{clientBean.client.person.birthday}"
+                                label="#{msgs['person.birthday']}"
+                                pattern="dd/MM/yyyy"
+                                yearRange="1900:c"
+                                navigator="true"
+                                locale="ru"
+                                required="true"
+                                styleClass="cal">
+                    </p:calendar>
+                    <p:message for="birthday" />
+                    <h:outputLabel for="gender" value="#{msgs['person.gender']}:" />
+                    <p:selectOneRadio id="gender"
+                                      value="#{clientBean.client.person.gender}">
+                        <f:selectItems value="#{genderBean.genders}" var="g" itemValue="#{g}"
+                                       itemLabel="#{msgs[g.value]}" />
+                    </p:selectOneRadio>
+                    <p:message for="gender" />
+                </h:panelGrid>
+                <h:panelGrid columns="2">
+                    <h:commandButton id="saveClient" value="#{msgs['button.save']}"
+                                     action="#{clientBean.saveClient}" />
+                    <h:commandButton id="cancelUpdateClient" value="#{msgs['button.cancel']}"
+                                     action="/pages/client/clients?faces-redirect=true"
+                                     immediate="true" />
+                </h:panelGrid>
+                <ui:include src="/pages/localization/calendar-localization.xhtml" />
+            </h:form>
+        </p:panel>
+    </ui:define>
+
+</ui:composition>

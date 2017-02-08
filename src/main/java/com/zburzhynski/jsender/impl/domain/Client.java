@@ -18,6 +18,8 @@ import javax.persistence.Table;
 @Table(name = "client")
 public class Client extends Domain {
 
+    public static final String P_PERSON = "person";
+
     public static final String P_CONTACT_INFO = "contactInfo";
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
