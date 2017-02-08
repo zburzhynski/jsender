@@ -9,11 +9,14 @@ import static com.zburzhynski.jsender.api.domain.Settings.MAIL_USER_NAME;
 import com.zburzhynski.jsender.api.domain.View;
 import com.zburzhynski.jsender.api.service.ISettingService;
 import com.zburzhynski.jsender.impl.domain.Setting;
+import com.zburzhynski.jsender.impl.jsf.validator.SettingValidator;
 
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
@@ -34,11 +37,14 @@ public class SettingBean implements Serializable {
 
     private Map<String, Setting> settings;
 
-    private List<Setting> smsSendingSettings;
+    private Set<Setting> smsSendingSettings;
 
-    private List<Setting> emailSendingSettings;
+    private Set<Setting> emailSendingSettings;
 
     private int tabIndex;
+
+    @ManagedProperty(value = "#{settingValidator}")
+    private SettingValidator settingValidator;
 
     @ManagedProperty(value = "#{settingService}")
     private ISettingService settingService;
@@ -53,8 +59,8 @@ public class SettingBean implements Serializable {
         for (Setting item : all) {
             settings.put(item.getName(), item);
         }
-        smsSendingSettings = settingService.getByCategory(SMS_SENDING);
-        emailSendingSettings = settingService.getByCategory(EMAIL_SENDING);
+        smsSendingSettings = new TreeSet<>(settingService.getByCategory(SMS_SENDING));
+        emailSendingSettings = new TreeSet<>(settingService.getByCategory(EMAIL_SENDING));
     }
 
     /**
@@ -99,6 +105,10 @@ public class SettingBean implements Serializable {
      * @return path for navigating
      */
     public String saveSetting() {
+        boolean valid = settingValidator.validate(setting);
+        if (!valid) {
+            return null;
+        }
         settingService.saveOrUpdate(setting);
         init();
         return View.SETTINGS_VIEW.getPath();
@@ -112,19 +122,19 @@ public class SettingBean implements Serializable {
         this.settings = settings;
     }
 
-    public List<Setting> getSmsSendingSettings() {
+    public Set<Setting> getSmsSendingSettings() {
         return smsSendingSettings;
     }
 
-    public void setSmsSendingSettings(List<Setting> smsSendingSettings) {
+    public void setSmsSendingSettings(Set<Setting> smsSendingSettings) {
         this.smsSendingSettings = smsSendingSettings;
     }
 
-    public List<Setting> getEmailSendingSettings() {
+    public Set<Setting> getEmailSendingSettings() {
         return emailSendingSettings;
     }
 
-    public void setEmailSendingSettings(List<Setting> emailSendingSettings) {
+    public void setEmailSendingSettings(Set<Setting> emailSendingSettings) {
         this.emailSendingSettings = emailSendingSettings;
     }
 
@@ -146,6 +156,10 @@ public class SettingBean implements Serializable {
 
     public void setTabIndex(int tabIndex) {
         this.tabIndex = tabIndex;
+    }
+
+    public void setSettingValidator(SettingValidator settingValidator) {
+        this.settingValidator = settingValidator;
     }
 
     public void setSettingService(ISettingService settingService) {

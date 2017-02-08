@@ -1,6 +1,6 @@
 package com.zburzhynski.jsender.impl.service;
 
-import static com.zburzhynski.jsender.api.domain.CommonConstants.COLON;
+import static com.zburzhynski.jsender.api.domain.CommonConstant.COLON;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

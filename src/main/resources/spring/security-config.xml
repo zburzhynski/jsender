@@ -1,0 +1,90 @@
+<beans:beans xmlns:beans="http://www.springframework.org/schema/beans"
+             xmlns="http://www.springframework.org/schema/security"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://www.springframework.org/schema/beans
+             http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+             http://www.springframework.org/schema/security
+             http://www.springframework.org/schema/security/spring-security-3.1.xsd">
+
+    <http pattern="/javax.faces.resource/**" security="none"></http>
+    <http auto-config="false" use-expressions="true" >
+        <form-login login-page="/pages/security/login.xhtml"
+                    login-processing-url="/security/loginProcess"
+                    default-target-url="/pages/patient/patients.xhtml"
+                    always-use-default-target="true"
+                    authentication-failure-handler-ref="authenticationFailureHandler" />
+        <logout logout-success-url="/pages/security/login.xhtml" invalidate-session="true" delete-cookies="JSESSIONID" />
+        <intercept-url pattern="/pages/security/change_password.xhtml" access="isAuthenticated()" />
+        <intercept-url pattern="/pages/security/**" access="permitAll" />
+        <intercept-url pattern="/pages/patient/patients.xhtml" access="hasRole('read_patient')" />
+        <intercept-url pattern="/pages/patient/patient.xhtml" access="hasRole('edit_patient')" />
+        <intercept-url pattern="/pages/dental_service/dental_services.xhtml" access="hasRole('read_dental_service')" />
+        <intercept-url pattern="/pages/dental_service/dental_service.xhtml" access="hasRole('edit_dental_service')" />
+        <intercept-url pattern="/pages/treatment_plan/treatment_plans.xhtml" access="hasRole('read_treatment_plan')" />
+        <intercept-url pattern="/pages/treatment_plan/treatment_plan.xhtml" access="hasRole('edit_treatment_plan')" />
+        <intercept-url pattern="/pages/material/materials.xhtml" access="hasRole('read_material')" />
+        <intercept-url pattern="/pages/material/material.xhtml" access="hasRole('edit_material')" />
+        <intercept-url pattern="/pages/diagnosis/**" access="hasRole('read_diagnosis')" />
+        <intercept-url pattern="/pages/occlusion/**" access="hasRole('read_occlusion')" />
+        <intercept-url pattern="/pages/organization/**" access="hasRole('read_organization')" />
+        <intercept-url pattern="/pages/position/**" access="hasRole('read_job_position')" />
+        <intercept-url pattern="/pages/measure/**" access="hasRole('read_measure')" />
+        <intercept-url pattern="/pages/reference/**" access="hasRole('read_common_reference')" />
+        <intercept-url pattern="/pages/waybill/waybills.xhtml" access="hasRole('read_waybill')" />
+        <intercept-url pattern="/pages/waybill/waybill.xhtml" access="hasRole('edit_waybill')" />
+        <intercept-url pattern="/pages/outcome/outcomes.xhtml" access="hasRole('read_material_outcome')" />
+        <intercept-url pattern="/pages/outcome/outcome.xhtml" access="hasRole('edit_material_outcome')" />
+        <intercept-url pattern="/pages/balance/balances.xhtml" access="hasRole('read_material_balance')" />
+        <intercept-url pattern="/pages/residue/residues.xhtml" access="hasRole('read_material_residue')" />
+        <intercept-url pattern="/pages/residue/residue.xhtml" access="hasRole('edit_material_residue')" />
+        <intercept-url pattern="/pages/statistics/diagnoses.xhtml" access="hasRole('read_diagnosis_statistic')" />
+        <intercept-url pattern="/pages/statistics/visits.xhtml" access="hasRole('read_visit_statistic')" />
+        <intercept-url pattern="/pages/statistics/patients.xhtml" access="hasRole('read_patient_statistic')" />
+        <intercept-url pattern="/pages/report/**" access="hasRole('read_report')" />
+        <intercept-url pattern="/pages/backup/**" access="hasRole('read_backup')" />
+        <intercept-url pattern="/pages/setting/**" access="hasRole('read_setting')" />
+        <intercept-url pattern="/pages/employee/employees.xhtml" access="hasRole('read_employee')" />
+        <intercept-url pattern="/pages/employee/employee.xhtml" access="hasRole('edit_employee')" />
+        <intercept-url pattern="/pages/role/roles.xhtml" access="hasRole('read_role')" />
+        <intercept-url pattern="/pages/role/role.xhtml" access="hasRole('edit_role')" />
+        <intercept-url pattern="/pages/requisite/**" access="hasRole('read_requisite')" />
+        <intercept-url pattern="/**" access="isAuthenticated()" />
+        <custom-filter ref="exceptionTranslationFilter" before="FILTER_SECURITY_INTERCEPTOR" />
+    </http>
+
+    <authentication-manager alias="authenticationManager">
+        <authentication-provider user-service-ref="customUserDetailsService">
+            <password-encoder hash="md5"></password-encoder>
+        </authentication-provider>
+    </authentication-manager>
+
+    <beans:bean id="sessionManagementFilter"
+                class="org.springframework.security.web.session.SessionManagementFilter">
+        <beans:constructor-arg name="securityContextRepository" ref="httpSessionSecurityContextRepository" />
+    </beans:bean>
+
+    <beans:bean id="exceptionTranslationFilter" class="org.springframework.security.web.access.ExceptionTranslationFilter">
+        <beans:property name="accessDeniedHandler" ref="jsfAccessDeniedHandler"/>
+        <beans:property name="authenticationEntryPoint" ref="authenticationEntryPoint"/>
+    </beans:bean>
+
+    <beans:bean id="jsfAccessDeniedHandler" class="com.zburzhynski.jdent.impl.security.JsfAccessDeniedHandler">
+        <beans:property name="loginPath" value="/pages/security/access_denied.xhtml" />
+        <beans:property name="contextRelative" value="false" />
+    </beans:bean>
+
+    <beans:bean id="authenticationFailureHandler" class="org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler">
+        <beans:property name="redirectStrategy" ref="jsfRedirectStrategy" />
+        <beans:property name="defaultFailureUrl" value="/pages/security/login.xhtml?login_error=1" />
+    </beans:bean>
+
+    <beans:bean  id="authenticationEntryPoint" class="com.zburzhynski.jdent.impl.security.JsfLoginUrlAuthenticationEntryPoint">
+        <beans:property name="loginFormUrl" value="/pages/security/login.xhtml"/>
+        <beans:property name="redirectStrategy" ref="jsfRedirectStrategy" />
+    </beans:bean >
+
+    <beans:bean id="jsfRedirectStrategy" class="com.zburzhynski.jdent.impl.security.JsfRedirectStrategy"/>
+
+    <beans:bean id="httpSessionSecurityContextRepository" class="org.springframework.security.web.context.HttpSessionSecurityContextRepository"/>
+
+</beans:beans>

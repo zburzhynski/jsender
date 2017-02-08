@@ -1,8 +1,8 @@
 package com.zburzhynski.jsender.impl.domain;
 
-import static com.zburzhynski.jsender.api.domain.CommonConstants.LEFT_PARENTHESIS;
-import static com.zburzhynski.jsender.api.domain.CommonConstants.RIGHT_PARENTHESIS;
-import static com.zburzhynski.jsender.api.domain.CommonConstants.SPACE;
+import static com.zburzhynski.jsender.api.domain.CommonConstant.LEFT_PARENTHESIS;
+import static com.zburzhynski.jsender.api.domain.CommonConstant.RIGHT_PARENTHESIS;
+import static com.zburzhynski.jsender.api.domain.CommonConstant.SPACE;
 import com.zburzhynski.jsender.api.domain.PhoneNumberType;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
