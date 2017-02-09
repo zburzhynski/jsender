@@ -30,7 +30,6 @@ public class ContactInfo extends Domain {
     public static final String P_EMAILS = "emails";
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "contactInfo")
-    @Sort(type = SortType.NATURAL)
     private Set<Client> clients = new HashSet<>();
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)

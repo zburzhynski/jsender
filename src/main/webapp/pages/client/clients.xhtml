@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/pages/template/layout_template.xhtml">
+
+    <ui:define name="content">
+        <p:panel>
+            <h:form id="clientsForm">
+                <h4>#{msgs['clients.header']}</h4>
+                <p:dataTable value="#{clientBean.clientModel}"
+                             var="client"
+                             paginator="true"
+                             paginatorPosition="bottom"
+                             paginatorAlwaysVisible="false"
+                             lazy="true"
+                             emptyMessage="#{msgs['clients.empty']}"
+                             rows="#{clientBean.rowCount}">
+                    <p:column headerText="#{msgs['person.surname']}" width="24%">
+                        <h:outputText value="#{client.person.surname}" />
+                    </p:column>
+                    <p:column headerText="#{msgs['person.name']}" width="23%">
+                        <h:outputText value="#{client.person.name}" />
+                    </p:column>
+                    <p:column headerText="#{msgs['person.patronymic']}" width="23%">
+                        <h:outputText value="#{client.person.patronymic}" />
+                    </p:column>
+                    <p:column headerText="#{msgs['person.birthday']}" width="20%">
+                        <h:outputText value="#{client.person.birthday}">
+                            <f:convertDateTime pattern="dd.MM.yyyy" />
+                        </h:outputText>
+                    </p:column>
+                    <p:column width="6%">
+                        <h:panelGroup>
+                            <p:commandLink action="#{clientBean.editClient}"
+                                           style="padding-right: 5px">
+                                <p:graphicImage url="/resources/css/css-images/edit.gif" title="#{msgs['button.edit']}" />
+                                <f:setPropertyActionListener
+                                        target="#{clientBean.client}" value="#{client}" />
+                            </p:commandLink>
+                            <p:commandLink action="#{clientBean.removeClient}">
+                                <p:graphicImage url="/resources/css/css-images/delete.png" title="#{msgs['button.remove']}" />
+                                <p:confirm header="#{msgs['removeClientConfirm.header']}"
+                                           message="#{msgs['removeClientConfirm.message']}?"
+                                           icon="ui-icon-alert" />
+                                <f:setPropertyActionListener
+                                        target="#{clientBean.client}" value="#{client}" />
+                            </p:commandLink>
+                        </h:panelGroup>
+                    </p:column>
+                </p:dataTable>
+                <h:panelGrid columns="2" style="padding-top: 5px">
+                    <h:commandButton action="#{clientBean.addClient}"
+                                     image="/resources/css/css-images/add.gif"
+                                     title="#{msgs['button.add']}" />
+                </h:panelGrid>
+                <p:confirmDialog global="true" closeOnEscape="true">
+                    <p:commandButton value="#{msgs['button.ok']}"
+                                     type="button"
+                                     styleClass="ui-confirmdialog-yes"
+                                     icon="ui-icon-check" />
+                    <p:commandButton value="#{msgs['button.cancel']}"
+                                     type="button"
+                                     styleClass="ui-confirmdialog-no"
+                                     icon="ui-icon-close" />
+                </p:confirmDialog>
+            </h:form>
+        </p:panel>
+    </ui:define>
+
+</ui:composition>

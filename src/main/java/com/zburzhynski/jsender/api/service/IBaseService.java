@@ -32,6 +32,13 @@ public interface IBaseService<ID, T extends IDomain> {
     boolean saveOrUpdate(T object);
 
     /**
+     * Deletes entity.
+     *
+     * @param object entity to delete
+     */
+    void delete(T object);
+
+    /**
      * Gets list of all entities from database.
      *
      * @return list of entities

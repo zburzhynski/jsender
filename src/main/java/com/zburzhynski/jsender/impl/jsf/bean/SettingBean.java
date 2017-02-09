@@ -2,6 +2,8 @@ package com.zburzhynski.jsender.impl.jsf.bean;
 
 import static com.zburzhynski.jsender.api.domain.SettingCategory.EMAIL_SENDING;
 import static com.zburzhynski.jsender.api.domain.SettingCategory.SMS_SENDING;
+import static com.zburzhynski.jsender.api.domain.SettingCategory.VIEW;
+import static com.zburzhynski.jsender.api.domain.Settings.CLIENTS_PER_PAGE_COUNT;
 import static com.zburzhynski.jsender.api.domain.Settings.MAIL_PASSWORD;
 import static com.zburzhynski.jsender.api.domain.Settings.MAIL_SMTP_HOST;
 import static com.zburzhynski.jsender.api.domain.Settings.MAIL_SMTP_PORT;
@@ -37,6 +39,8 @@ public class SettingBean implements Serializable {
 
     private Map<String, Setting> settings;
 
+    private Set<Setting> viewSettings;
+
     private Set<Setting> smsSendingSettings;
 
     private Set<Setting> emailSendingSettings;
@@ -57,10 +61,20 @@ public class SettingBean implements Serializable {
         settings = new HashMap<>();
         List<Setting> all = settingService.getAll();
         for (Setting item : all) {
-            settings.put(item.getName(), item);
+            settings.put(item.getName().toUpperCase(), item);
         }
+        viewSettings = new TreeSet<>(settingService.getByCategory(VIEW));
         smsSendingSettings = new TreeSet<>(settingService.getByCategory(SMS_SENDING));
         emailSendingSettings = new TreeSet<>(settingService.getByCategory(EMAIL_SENDING));
+    }
+
+    /**
+     * Gets clients per page count.
+     *
+     * @return clients per page count
+     */
+    public int getClientsPerPageCount() {
+        return Integer.parseInt(settings.get(CLIENTS_PER_PAGE_COUNT.name()).getValue());
     }
 
     /**
@@ -111,7 +125,7 @@ public class SettingBean implements Serializable {
         }
         settingService.saveOrUpdate(setting);
         init();
-        return View.SETTINGS_VIEW.getPath();
+        return View.SETTINGS.getPath();
     }
 
     public Map<String, Setting> getSettings() {
@@ -120,6 +134,14 @@ public class SettingBean implements Serializable {
 
     public void setSettings(Map<String, Setting> settings) {
         this.settings = settings;
+    }
+
+    public Set<Setting> getViewSettings() {
+        return viewSettings;
+    }
+
+    public void setViewSettings(Set<Setting> viewSettings) {
+        this.viewSettings = viewSettings;
     }
 
     public Set<Setting> getSmsSendingSettings() {

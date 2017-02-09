@@ -9,6 +9,8 @@ package com.zburzhynski.jsender.api.domain;
  */
 public enum Settings {
 
+    CLIENTS_PER_PAGE_COUNT,
+
     MAIL_SMTP_HOST,
 
     MAIL_SMTP_PORT,

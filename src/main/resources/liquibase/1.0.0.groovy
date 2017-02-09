@@ -168,6 +168,17 @@ databaseChangeLog {
 
     changeSet(id: '2017-02-04-13', author: 'Nikita Shevtsov <shevtsou@gmail.com>') {
         insert(schemaName: 'jsender', tableName: 'setting') {
+            column(name: 'id', value: 'dd23cd60-76fc-4dae-87cd-8b7ce777747d')
+            column(name: 'category', value: 'VIEW')
+            column(name: 'name', value: 'clients_per_page_count')
+            column(name: 'value', value: '20')
+            column(name: 'type', value: 'INTEGER')
+            column(name: 'description', value: 'Количество клиентов на странице')
+        }
+    }
+
+    changeSet(id: '2017-02-04-14', author: 'Nikita Shevtsov <shevtsou@gmail.com>') {
+        insert(schemaName: 'jsender', tableName: 'setting') {
             column(name: 'id', value: 'a039ad9b-4a0a-4622-a549-ce355c45cea1')
             column(name: 'category', value: 'EMAIL_SENDING')
             column(name: 'name', value: 'mail_smtp_host')

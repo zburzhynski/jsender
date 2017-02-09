@@ -1,6 +1,7 @@
 package com.zburzhynski.jsender.impl.jsf.bean;
 
-import static com.zburzhynski.jsender.api.domain.View.SETTINGS_VIEW;
+import static com.zburzhynski.jsender.api.domain.View.CLIENTS;
+import static com.zburzhynski.jsender.api.domain.View.SETTINGS;
 
 import java.io.Serializable;
 import javax.enterprise.context.SessionScoped;
@@ -22,12 +23,21 @@ public class MainMenuBean implements Serializable {
     private SettingBean settingBean;
 
     /**
+     * Redirects to clients.xhtml page.
+     *
+     * @return path to redirect
+     */
+    public String clients() {
+        return CLIENTS.getPath();
+    }
+
+    /**
      * Redirects to settings.xhtml page.
      *
      * @return path to redirect
      */
     public String settings() {
-        return SETTINGS_VIEW.getPath();
+        return SETTINGS.getPath();
     }
 
     public void setSettingBean(SettingBean settingBean) {
