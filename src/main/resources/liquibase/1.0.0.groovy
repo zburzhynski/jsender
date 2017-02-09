@@ -170,7 +170,7 @@ databaseChangeLog {
         insert(schemaName: 'jsender', tableName: 'setting') {
             column(name: 'id', value: 'dd23cd60-76fc-4dae-87cd-8b7ce777747d')
             column(name: 'category', value: 'VIEW')
-            column(name: 'name', value: 'clients_per_page_count')
+            column(name: 'name', value: 'clients_per_page')
             column(name: 'value', value: '20')
             column(name: 'type', value: 'INTEGER')
             column(name: 'description', value: 'Количество клиентов на странице')

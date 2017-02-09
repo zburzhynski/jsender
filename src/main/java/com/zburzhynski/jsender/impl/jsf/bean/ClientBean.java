@@ -112,7 +112,7 @@ public class ClientBean {
     }
 
     public Integer getRowCount() {
-        return settingBean.getClientsPerPageCount();
+        return settingBean.getClientsPerPage();
     }
 
     public void setClientService(IClientService clientService) {
