@@ -3,7 +3,7 @@ package com.zburzhynski.jsender.impl.jsf.bean;
 import static com.zburzhynski.jsender.api.domain.SettingCategory.EMAIL_SENDING;
 import static com.zburzhynski.jsender.api.domain.SettingCategory.SMS_SENDING;
 import static com.zburzhynski.jsender.api.domain.SettingCategory.VIEW;
-import static com.zburzhynski.jsender.api.domain.Settings.CLIENTS_PER_PAGE_COUNT;
+import static com.zburzhynski.jsender.api.domain.Settings.CLIENTS_PER_PAGE;
 import static com.zburzhynski.jsender.api.domain.Settings.MAIL_PASSWORD;
 import static com.zburzhynski.jsender.api.domain.Settings.MAIL_SMTP_HOST;
 import static com.zburzhynski.jsender.api.domain.Settings.MAIL_SMTP_PORT;
@@ -69,12 +69,12 @@ public class SettingBean implements Serializable {
     }
 
     /**
-     * Gets clients per page count.
+     * Gets clients per page.
      *
-     * @return clients per page count
+     * @return clients per page
      */
-    public int getClientsPerPageCount() {
-        return Integer.parseInt(settings.get(CLIENTS_PER_PAGE_COUNT.name()).getValue());
+    public int getClientsPerPage() {
+        return Integer.parseInt(settings.get(CLIENTS_PER_PAGE.name()).getValue());
     }
 
     /**
