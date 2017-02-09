@@ -55,6 +55,13 @@ public interface IBaseRepository<ID, T extends IDomain> {
     void saveOrUpdate(T object);
 
     /**
+     * Deletes object.
+     *
+     * @param object Object to delete
+     */
+    void delete(T object);
+
+    /**
      * Finds all entities in database.
      *
      * @return list of entities

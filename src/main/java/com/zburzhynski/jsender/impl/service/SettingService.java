@@ -67,6 +67,15 @@ public class SettingService implements ISettingService<String, Setting> {
      * {@inheritDoc}
      */
     @Override
+    @Transactional(readOnly = false)
+    public void delete(Setting setting) {
+        settingRepository.delete(setting);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public List<Setting> getAll() {
         return settingRepository.findAll();
     }

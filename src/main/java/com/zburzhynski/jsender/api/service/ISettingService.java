@@ -7,7 +7,7 @@ import com.zburzhynski.jsender.api.domain.Settings;
 import java.util.List;
 
 /**
- * Setting service interface..
+ * Setting service interface.
  * <p/>
  * Date: 03.08.2016
  *
@@ -33,4 +33,5 @@ public interface ISettingService<ID, T extends IDomain> extends IBaseService<ID,
      * @return settings
      */
     List<T> getByCategory(SettingCategory category);
+
 }
