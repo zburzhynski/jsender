@@ -1,6 +1,6 @@
 package com.zburzhynski.jsender.impl.domain;
 
-import static com.zburzhynski.jsender.api.domain.CommonConstants.DOT;
+import static com.zburzhynski.jsender.api.domain.CommonConstant.DOT;
 import static com.zburzhynski.jsender.api.domain.Gender.M;
 import static javax.xml.stream.XMLStreamConstants.SPACE;
 import com.zburzhynski.jsender.api.domain.Gender;

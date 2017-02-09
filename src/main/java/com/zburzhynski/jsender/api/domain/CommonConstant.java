@@ -7,7 +7,7 @@ package com.zburzhynski.jsender.api.domain;
  *
  * @author Vladimir Zburzhynski
  */
-public abstract class CommonConstants {
+public abstract class CommonConstant {
 
     public static final String DOT = ".";
     public static final String COMMA = ",";

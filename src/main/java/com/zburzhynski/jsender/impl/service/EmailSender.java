@@ -1,6 +1,6 @@
 package com.zburzhynski.jsender.impl.service;
 
-import static com.zburzhynski.jsender.api.domain.CommonConstants.COMMA;
+import static com.zburzhynski.jsender.api.domain.CommonConstant.COMMA;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static org.apache.commons.lang3.StringUtils.join;

@@ -1,6 +1,6 @@
 package com.zburzhynski.jsender.impl.repository;
 
-import static com.zburzhynski.jsender.api.domain.CommonConstants.DOT;
+import static com.zburzhynski.jsender.api.domain.CommonConstant.DOT;
 import static com.zburzhynski.jsender.impl.domain.Client.P_CONTACT_INFO;
 import static com.zburzhynski.jsender.impl.domain.Client.P_PERSON;
 import static com.zburzhynski.jsender.impl.domain.Person.P_NAME;

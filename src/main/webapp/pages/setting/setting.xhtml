@@ -23,6 +23,7 @@
         <p:panel>
             <h:form id="settingForm">
                 <p:focus />
+                <p:messages id="messages" />
                 <h:panelGrid columns="3" columnClasses="name,val,msg" width="70%">
                 <p:outputLabel id="description"
                                value="#{settingBean.setting.description}"
@@ -33,7 +34,6 @@
                                      required="true"
                                      maxlength="250"
                                      style="width: 97%" />
-                    <p:message for="stringValue" />
                 </c:if>
                 <c:if test="#{settingBean.setting.type == 'INTEGER'}">
                     <p:inputText id="integerValue"
@@ -43,12 +43,28 @@
                                      style="width: 97%">
                         <f:convertNumber integerOnly="true" />
                     </p:inputText>
-                    <p:message for="integerValue" />
                 </c:if>
                 <c:if test="#{settingBean.setting.type == 'BOOLEAN'}">
                     <p:selectBooleanCheckbox id="booleanValue"
                                              value="#{settingBean.setting.value}" />
-                    <p:message for="booleanValue" />
+                </c:if>
+                <c:if test="#{settingBean.setting.type == 'DATE'}">
+                    <p:inputMask id="dateValue"
+                                     mask="99.99.9999"
+                                     value="#{settingBean.setting.value}"
+                                     label="#{settingBean.setting.description}"
+                                     required="true"
+                                     maxlength="250"
+                                     style="width: 97%">
+                    </p:inputMask>
+                </c:if>
+                <c:if test="#{settingBean.setting.type == 'PASSWORD'}">
+                    <h:inputSecret id="passwordValue"
+                                   value="#{settingBean.setting.value}"
+                                   label="#{settingBean.setting.description}"
+                                   required="true"
+                                   maxlength="250"
+                                   style="width: 97%" />
                 </c:if>
                 </h:panelGrid>
                 <h:panelGrid columns="2">
