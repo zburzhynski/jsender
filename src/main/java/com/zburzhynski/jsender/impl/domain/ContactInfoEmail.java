@@ -1,5 +1,6 @@
 package com.zburzhynski.jsender.impl.domain;
 
+import com.zburzhynski.jsender.api.domain.ISortable;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -17,7 +18,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "contact_info_email")
-public class ContactInfoEmail extends Domain implements Comparable<ContactInfoEmail> {
+public class ContactInfoEmail extends Domain implements Comparable<ContactInfoEmail>, ISortable {
 
     public static final String P_ADDRESS = "address";
 

@@ -1,9 +1,11 @@
 package com.zburzhynski.jsender.impl.jsf.bean;
 
+import static com.zburzhynski.jsender.api.domain.SettingCategory.COMMON;
 import static com.zburzhynski.jsender.api.domain.SettingCategory.EMAIL_SENDING;
 import static com.zburzhynski.jsender.api.domain.SettingCategory.SMS_SENDING;
 import static com.zburzhynski.jsender.api.domain.SettingCategory.VIEW;
 import static com.zburzhynski.jsender.api.domain.Settings.CLIENTS_PER_PAGE;
+import static com.zburzhynski.jsender.api.domain.Settings.DEFAULT_COUNTRY_CODE;
 import static com.zburzhynski.jsender.api.domain.Settings.MAIL_PASSWORD;
 import static com.zburzhynski.jsender.api.domain.Settings.MAIL_SMTP_HOST;
 import static com.zburzhynski.jsender.api.domain.Settings.MAIL_SMTP_PORT;
@@ -39,6 +41,8 @@ public class SettingBean implements Serializable {
 
     private Map<String, Setting> settings;
 
+    private Set<Setting> commonSettings;
+
     private Set<Setting> viewSettings;
 
     private Set<Setting> smsSendingSettings;
@@ -63,9 +67,19 @@ public class SettingBean implements Serializable {
         for (Setting item : all) {
             settings.put(item.getName().toUpperCase(), item);
         }
+        commonSettings = new TreeSet<>(settingService.getByCategory(COMMON));
         viewSettings = new TreeSet<>(settingService.getByCategory(VIEW));
         smsSendingSettings = new TreeSet<>(settingService.getByCategory(SMS_SENDING));
         emailSendingSettings = new TreeSet<>(settingService.getByCategory(EMAIL_SENDING));
+    }
+
+    /**
+     * Gets default country code.
+     *
+     * @return default country code
+     */
+    public String getDefaultCountryCode() {
+        return settings.get(DEFAULT_COUNTRY_CODE.name()).getValue();
     }
 
     /**
@@ -134,6 +148,14 @@ public class SettingBean implements Serializable {
 
     public void setSettings(Map<String, Setting> settings) {
         this.settings = settings;
+    }
+
+    public Set<Setting> getCommonSettings() {
+        return commonSettings;
+    }
+
+    public void setCommonSettings(Set<Setting> commonSettings) {
+        this.commonSettings = commonSettings;
     }
 
     public Set<Setting> getViewSettings() {

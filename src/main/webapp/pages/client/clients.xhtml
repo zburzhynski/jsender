@@ -34,11 +34,9 @@
                     </p:column>
                     <p:column width="6%">
                         <h:panelGroup>
-                            <p:commandLink action="#{clientBean.editClient}"
+                            <p:commandLink action="#{clientBean.editClient(client.id)}"
                                            style="padding-right: 5px">
                                 <p:graphicImage url="/resources/css/css-images/edit.gif" title="#{msgs['button.edit']}" />
-                                <f:setPropertyActionListener
-                                        target="#{clientBean.client}" value="#{client}" />
                             </p:commandLink>
                             <p:commandLink action="#{clientBean.removeClient}">
                                 <p:graphicImage url="/resources/css/css-images/delete.png" title="#{msgs['button.remove']}" />

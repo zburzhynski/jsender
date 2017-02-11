@@ -6,8 +6,6 @@ import com.zburzhynski.jsender.impl.domain.Setting;
 import com.zburzhynski.jsender.impl.util.DateUtils;
 import org.springframework.stereotype.Component;
 
-import javax.faces.application.FacesMessage;
-
 /**
  * Setting validator.
  * <p/>
@@ -23,8 +21,6 @@ public class SettingValidator extends BaseValidator {
     private static final int MONTHS_IN_YEAR = 12;
 
     private static final String INCORRECT_DATE_FORMAT = "settingValidator.incorrectDateFormat";
-
-    private FacesMessage message = new FacesMessage();
 
     /**
      * Validates setting.

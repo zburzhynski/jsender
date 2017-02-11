@@ -212,4 +212,15 @@ databaseChangeLog {
         }
     }
 
+    changeSet(id: '2017-02-11-01', author: 'Nikita Shevtsov <shevtsou@gmail.com>') {
+        insert(schemaName: 'jsender', tableName: 'setting') {
+            column(name: 'id', value: '75e3f5a0-4395-4f7d-831d-874aa38b4bf8')
+            column(name: 'category', value: 'COMMON')
+            column(name: 'name', value: 'default_country_code')
+            column(name: 'value', value: '+375')
+            column(name: 'type', value: 'STRING')
+            column(name: 'description', value: 'Код страны по умолчанию')
+        }
+    }
+
 }

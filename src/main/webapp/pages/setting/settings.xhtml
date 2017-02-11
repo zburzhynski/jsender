@@ -13,6 +13,9 @@
             <h:form id="settingsForm">
                 <h4>#{msgs['settings.header']}</h4>
                 <p:tabView activeIndex="#{settingBean.tabIndex}">
+                    <p:tab id="common" title="#{msgs['settings.common']}">
+                        <cm:setting settings="#{settingBean.commonSettings}" />
+                    </p:tab>
                     <p:tab id="view" title="#{msgs['settings.view']}">
                         <cm:setting settings="#{settingBean.viewSettings}" />
                     </p:tab>

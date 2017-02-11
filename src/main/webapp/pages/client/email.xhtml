@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/pages/template/layout_template.xhtml">
+
+    <ui:define name="content">
+        <style type="text/css">
+            .name {
+                font-weight: bold;
+                width: 31%;
+            }
+            .val {
+                width: 36%;
+            }
+            .msg {
+                width: 33%;
+            }
+            .cal .ui-inputfield {
+                width: 97%;
+            }
+        </style>
+        <p:panel>
+            <h:form id="emailForm">
+                <p:focus />
+                <p:messages id="messages" />
+                <h:panelGrid columns="3" columnClasses="name,val,msg" width="70%">
+                    <h:outputLabel for="address" value="#{msgs['contactInfo.email']}:" />
+                    <p:inputText id="address" value="#{clientBean.email.address}" required="true" maxlength="50" />
+                    <h:message for="address" />
+                    <h:outputLabel value="#{msgs['contactInfo.email.description']}:" />
+                    <p:inputTextarea id="description" value="#{clientBean.email.description}"
+                                     maxlength="1000"
+                                     style="width: 84%" />
+                    <h:message for="description" />
+                </h:panelGrid>
+                <h:panelGrid columns="2">
+                    <h:commandButton id="saveEmail" value="#{msgs['button.save']}"
+                                     action="#{clientBean.saveEmail}" />
+                    <h:commandButton id="cancelUpdateEmail" value="#{msgs['button.cancel']}"
+                                     action="#{clientBean.cancelUpdateEmail}"
+                                     immediate="true" />
+                </h:panelGrid>
+            </h:form>
+        </p:panel>
+    </ui:define>
+
+</ui:composition>
