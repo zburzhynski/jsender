@@ -3,6 +3,9 @@ package com.zburzhynski.jsender.impl.repository;
 import static com.zburzhynski.jsender.api.domain.CommonConstant.DOT;
 import static com.zburzhynski.jsender.impl.domain.Client.P_CONTACT_INFO;
 import static com.zburzhynski.jsender.impl.domain.Client.P_PERSON;
+import static com.zburzhynski.jsender.impl.domain.ContactInfo.P_EMAILS;
+import static com.zburzhynski.jsender.impl.domain.ContactInfo.P_PHONES;
+import static com.zburzhynski.jsender.impl.domain.Domain.P_ID;
 import static com.zburzhynski.jsender.impl.domain.Person.P_NAME;
 import static com.zburzhynski.jsender.impl.domain.Person.P_PATRONYMIC;
 import static com.zburzhynski.jsender.impl.domain.Person.P_SURNAME;
@@ -13,6 +16,8 @@ import com.zburzhynski.jsender.impl.util.CriteriaHelper;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
+import org.hibernate.sql.JoinType;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;
@@ -34,10 +39,23 @@ public class ClientRepository extends AbstractBaseRepository<String, Client>
      * {@inheritDoc}
      */
     @Override
-    public List<Client> findByCriteria(ClientSearchCriteria searchCriteria) {
+    public Client findById(String id) {
         Criteria criteria = getSession().createCriteria(getDomainClass());
         criteria.createAlias(P_PERSON, P_PERSON);
         criteria.createAlias(P_CONTACT_INFO, P_CONTACT_INFO);
+        criteria.createAlias(P_CONTACT_INFO + DOT + P_EMAILS, P_EMAILS, JoinType.LEFT_OUTER_JOIN);
+        criteria.createAlias(P_CONTACT_INFO + DOT + P_PHONES, P_PHONES, JoinType.LEFT_OUTER_JOIN);
+        criteria.add(Restrictions.eq(P_ID, id));
+        return (Client) criteria.uniqueResult();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<Client> findByCriteria(ClientSearchCriteria searchCriteria) {
+        Criteria criteria = getSession().createCriteria(getDomainClass());
+        criteria.createAlias(P_PERSON, P_PERSON);
         CriteriaHelper.addPagination(criteria, searchCriteria.getStart(), searchCriteria.getEnd());
         criteria.addOrder(Order.asc(P_PERSON + DOT + P_SURNAME));
         criteria.addOrder(Order.asc(P_PERSON + DOT + P_NAME));

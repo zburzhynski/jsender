@@ -9,6 +9,8 @@ package com.zburzhynski.jsender.api.domain;
  */
 public enum SettingCategory {
 
+    COMMON,
+
     VIEW,
 
     EMAIL_SENDING,

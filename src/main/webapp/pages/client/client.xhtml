@@ -24,17 +24,17 @@
             }
         </style>
         <p:panel>
-            <h:form id="cleintForm">
+            <h:form id="clientForm">
                 <p:focus />
                 <h:panelGrid columns="3" columnClasses="name,val,msg" width="60%">
                     <h:outputLabel for="surname" value="#{msgs['person.surname']}:" />
-                    <p:inputTextarea id="surname" value="#{clientBean.client.person.surname}" required="true" maxlength="50" style="width: 97%" />
+                    <p:inputText id="surname" value="#{clientBean.client.person.surname}" required="true" maxlength="50" style="width: 97%" />
                     <p:message for="surname" />
                     <h:outputLabel for="name" value="#{msgs['person.name']}:" />
-                    <p:inputTextarea id="name" value="#{clientBean.client.person.name}" required="true" maxlength="50" style="width: 97%" />
+                    <p:inputText id="name" value="#{clientBean.client.person.name}" required="true" maxlength="50" style="width: 97%" />
                     <p:message for="name" />
                     <h:outputLabel for="patronymic" value="#{msgs['person.patronymic']}:" />
-                    <p:inputTextarea id="patronymic" value="#{clientBean.client.person.patronymic}" required="true" maxlength="50" style="width: 97%" />
+                    <p:inputText id="patronymic" value="#{clientBean.client.person.patronymic}" required="true" maxlength="50" style="width: 97%" />
                     <p:message for="patronymic" />
                     <h:outputLabel for="birthday" value="#{msgs['person.birthday']}:" />
                     <p:calendar id="birthday"
@@ -56,6 +56,82 @@
                     </p:selectOneRadio>
                     <p:message for="gender" />
                 </h:panelGrid>
+                <h:panelGrid>
+                    <h:outputText value="#{msgs['contactInfo.phones.header']}" styleClass="b" />
+                </h:panelGrid>
+                <p:dataTable value="#{clientBean.client.contactInfo.phones}"
+                             var="phone"
+                             emptyMessage="#{msgs['contactInfo.phones.empty']}">
+                    <p:column headerText="#{msgs['contactInfo.phone.phoneNumber']}"
+                                style="width: 45%">
+                        <h:outputText value="#{phone.fullNumber}"
+                                      style="#{clientBean.isValidPhone(phone)? '':'color: red'}" />
+                        <h:outputText value=" (#{msgs['clientContactInfoValidator.phoneNumberIncorrect']})"
+                                      rendered="#{!clientBean.isValidPhone(phone)}" style="color: red"/>
+                    </p:column>
+                    <p:column headerText="#{msgs['contactInfo.phone.description']}" style="width: 50%">
+                        <h:outputText value="#{phone.description}" />
+                    </p:column>
+                    <p:column style="width: 6%;">
+                        <h:panelGroup>
+                            <p:commandLink action="#{clientBean.editPhone}"
+                                           style="padding-right: 5px">
+                                <p:graphicImage url="/resources/css/css-images/edit.gif" title="#{msgs['button.edit']}" />
+                                <f:setPropertyActionListener
+                                        target="#{clientBean.phone}" value="#{phone}" />
+                            </p:commandLink>
+                            <p:commandLink action="#{clientBean.removePhone}">
+                                <p:graphicImage url="/resources/css/css-images/delete.png" title="#{msgs['button.remove']}" />
+                                <p:confirm header="#{msgs['removePhoneConfirm.header']}"
+                                           message="#{msgs['removePhoneConfirm.message']}?"
+                                           icon="ui-icon-alert" />
+                                <f:setPropertyActionListener
+                                        target="#{clientBean.phone}" value="#{phone}" />
+                            </p:commandLink>
+                        </h:panelGroup>
+                    </p:column>
+                </p:dataTable>
+                <h:panelGrid columns="2" style="padding-top: 5px">
+                    <h:commandButton action="#{clientBean.addPhone}"
+                                     image="/resources/css/css-images/add.gif"
+                                     title="#{msgs['button.add']}" />
+                </h:panelGrid>
+                <h:panelGrid style="padding-top: 5px">
+                    <h:outputText value="#{msgs['contactInfo.emails.header']}" styleClass="b" />
+                </h:panelGrid>
+                <p:dataTable value="#{clientBean.client.contactInfo.emails}"
+                             var="email"
+                             emptyMessage="#{msgs['contactInfo.emails.empty']}">
+                <p:column headerText="#{msgs['contactInfo.email']}" style="width: 45%">
+                    <h:outputText value="#{email.address}" />
+                </p:column>
+                <p:column headerText="#{msgs['contactInfo.email.description']}" style="width: 50%">
+                    <h:outputText value="#{email.description}" />
+                </p:column>
+                <p:column style="width: 6%;">
+                    <h:panelGroup>
+                        <p:commandLink action="#{clientBean.editEmail}"
+                                       style="padding-right: 5px">
+                            <p:graphicImage url="/resources/css/css-images/edit.gif" title="#{msgs['button.edit']}" />
+                            <f:setPropertyActionListener
+                                    target="#{clientBean.email}" value="#{email}" />
+                        </p:commandLink>
+                        <p:commandLink action="#{clientBean.removeEmail}">
+                            <p:graphicImage url="/resources/css/css-images/delete.png" title="#{msgs['button.remove']}" />
+                            <p:confirm header="#{msgs['removeEmailConfirm.header']}"
+                                       message="#{msgs['removeEmailConfirm.message']}?"
+                                       icon="ui-icon-alert" />
+                            <f:setPropertyActionListener
+                                    target="#{clientBean.email}" value="#{email}" />
+                        </p:commandLink>
+                    </h:panelGroup>
+                </p:column>
+                </p:dataTable>
+                <h:panelGrid columns="2" style="padding-top: 5px">
+                    <h:commandButton action="#{clientBean.addEmail}"
+                                     image="/resources/css/css-images/add.gif"
+                                     title="#{msgs['button.add']}" />
+                </h:panelGrid>
                 <h:panelGrid columns="2">
                     <h:commandButton id="saveClient" value="#{msgs['button.save']}"
                                      action="#{clientBean.saveClient}" />
@@ -63,6 +139,16 @@
                                      action="/pages/client/clients?faces-redirect=true"
                                      immediate="true" />
                 </h:panelGrid>
+                <p:confirmDialog global="true" closeOnEscape="true">
+                    <p:commandButton value="#{msgs['button.ok']}"
+                                     type="button"
+                                     styleClass="ui-confirmdialog-yes"
+                                     icon="ui-icon-check" />
+                    <p:commandButton value="#{msgs['button.cancel']}"
+                                     type="button"
+                                     styleClass="ui-confirmdialog-no"
+                                     icon="ui-icon-close" />
+                </p:confirmDialog>
                 <ui:include src="/pages/localization/calendar-localization.xhtml" />
             </h:form>
         </p:panel>

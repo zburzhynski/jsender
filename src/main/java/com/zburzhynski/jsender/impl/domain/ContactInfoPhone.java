@@ -3,6 +3,7 @@ package com.zburzhynski.jsender.impl.domain;
 import static com.zburzhynski.jsender.api.domain.CommonConstant.LEFT_PARENTHESIS;
 import static com.zburzhynski.jsender.api.domain.CommonConstant.RIGHT_PARENTHESIS;
 import static com.zburzhynski.jsender.api.domain.CommonConstant.SPACE;
+import com.zburzhynski.jsender.api.domain.ISortable;
 import com.zburzhynski.jsender.api.domain.PhoneNumberType;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -24,7 +25,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "contact_info_phone")
-public class ContactInfoPhone extends Domain implements Comparable<ContactInfoPhone> {
+public class ContactInfoPhone extends Domain implements Comparable<ContactInfoPhone>, ISortable {
 
     public static final String P_COUNTRY_CODE = "countryCode";
 

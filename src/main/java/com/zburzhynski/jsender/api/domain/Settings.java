@@ -9,6 +9,9 @@ package com.zburzhynski.jsender.api.domain;
  */
 public enum Settings {
 
+    DEFAULT_COUNTRY_CODE,
+
+
     CLIENTS_PER_PAGE,
 
     MAIL_SMTP_HOST,

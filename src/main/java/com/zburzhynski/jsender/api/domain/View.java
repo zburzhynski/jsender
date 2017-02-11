@@ -11,6 +11,8 @@ public enum View {
 
     CLIENTS("/pages/client/clients?faces-redirect=true"),
     CLIENT("/pages/client/client?faces-redirect=true"),
+    CONTACT_INFO_EMAIL("/pages/client/email?faces-redirect=true"),
+    CONTACT_INFO_PHONE("/pages/client/phone?faces-redirect=true"),
     SETTINGS("/pages/setting/settings?faces-redirect=true");
 
     private String path;
