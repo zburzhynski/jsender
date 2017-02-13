@@ -27,22 +27,29 @@
             <h:form id="phoneNumberForm">
                 <p:focus />
                 <p:messages id="messages" />
-                <h:panelGrid columns="3" columnClasses="name,val,msg" width="70%">
+                <h:panelGrid columns="2" columnClasses="name,val" width="55%">
                     <h:outputLabel for="countryCode" value="#{msgs['contactInfo.phone.countryCode']}:" />
-                    <p:inputText id="countryCode" value="#{clientBean.phone.countryCode}" required="true" validatorMessage="#{msgs['contactInfoPhoneValidator.invalidCountryCode']}">
+                    <p:inputText id="countryCode" value="#{clientBean.phone.countryCode}"
+                                 required="true"
+                                 validatorMessage="#{msgs['contactInfoPhoneValidator.invalidCountryCode']}"
+                                 label="#{msgs['contactInfo.phone.countryCode']}">
                         <f:validateRegex pattern="\+?[0-9]{1,10}" />
                     </p:inputText>
-                    <h:message for="countryCode" />
                     <h:outputLabel for="cityCode" value="#{msgs['contactInfo.phone.cityCode']}:" />
-                    <p:inputText id="cityCode" value="#{clientBean.phone.cityCode}" required="true" validatorMessage="#{msgs['contactInfoPhoneValidator.invalidOperatorCode']}">
+                    <p:inputText id="cityCode" value="#{clientBean.phone.cityCode}"
+                                 required="true"
+                                 validatorMessage="#{msgs['contactInfoPhoneValidator.invalidOperatorCode']}"
+                                 label="#{msgs['contactInfo.phone.cityCode']}">
                         <f:validateRegex pattern="\+?[0-9]{1,10}" />
                     </p:inputText>
-                    <h:message for="cityCode" />
                     <h:outputLabel for="phoneNumber" value="#{msgs['contactInfo.phone.phoneNumber']}:" />
-                    <p:inputText id="phoneNumber" value="#{clientBean.phone.phoneNumber}" required="true" validatorMessage="#{msgs['contactInfoPhoneValidator.invalidPhoneNumber']}">
+                    <p:inputText id="phoneNumber"
+                                 value="#{clientBean.phone.phoneNumber}"
+                                 required="true"
+                                 validatorMessage="#{msgs['contactInfoPhoneValidator.invalidPhoneNumber']}"
+                                 label="#{msgs['contactInfo.phone.phoneNumber']}">
                         <f:validateRegex pattern="[0-9]{1,20}" />
                     </p:inputText>
-                    <h:message for="phoneNumber" />
                     <h:outputLabel value="#{msgs['contactInfo.phone.phoneNumberType']}:" />
                     <p:selectOneMenu id="phoneNumberType"
                                      value="#{clientBean.phone.phoneNumberType}"
@@ -54,15 +61,13 @@
                                        itemValue="#{type}"
                                        itemLabel="#{msgs[type.value]}" />
                     </p:selectOneMenu>
-                    <h:message for="phoneNumberType" />
                     <h:outputLabel value="#{msgs['contactInfo.phone.mobileOperator']}:" />
                     <p:inputText id="mobileOperator" value="#{clientBean.phone.mobileOperator}" maxlength="128" />
-                    <h:message for="mobileOperator" />
                     <h:outputLabel value="#{msgs['contactInfo.phone.description']}:" />
                     <p:inputTextarea id="description" value="#{clientBean.phone.description}"
+                                     label="#{msgs['contactInfo.phone.description']}"
                                      maxlength="1000"
                                      style="width: 84%" />
-                    <h:message for="description" />
                 </h:panelGrid>
                 <h:panelGrid columns="2">
                     <h:commandButton id="savePhoneNumber" value="#{msgs['button.save']}"
