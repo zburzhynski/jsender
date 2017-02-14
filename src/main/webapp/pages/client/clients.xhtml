@@ -16,6 +16,10 @@
                              paginatorPosition="bottom"
                              paginatorAlwaysVisible="false"
                              lazy="true"
+                             selection="#{clientBean.selectedClients}"
+                             selectionMode="multiple"
+                             disabledSelection="#{clientBean.redirectFrom == 'CLIENTS'}"
+                             rowKey="#{client.id}"
                              emptyMessage="#{msgs['clients.empty']}"
                              rows="#{clientBean.rowCount}">
                     <p:column headerText="#{msgs['person.surname']}" width="24%">
@@ -49,10 +53,18 @@
                         </h:panelGroup>
                     </p:column>
                 </p:dataTable>
-                <h:panelGrid columns="2" style="padding-top: 5px">
+                <h:panelGrid style="padding-top: 5px">
                     <h:commandButton action="#{clientBean.addClient}"
                                      image="/resources/css/css-images/add.gif"
                                      title="#{msgs['button.add']}" />
+                </h:panelGrid>
+                <h:panelGrid columns="2" style="padding-top: 5px;">
+                    <h:commandButton id="select" value="#{msgs['button.select']}"
+                                     action="#{clientBean.selectClient}"
+                                     rendered="#{clientBean.redirectFrom != 'CLIENTS'}"/>
+                    <h:commandButton id="cancelSelect" value="#{msgs['button.cancel']}"
+                                     action="#{clientBean.cancelSelectClient}"
+                                     rendered="#{clientBean.redirectFrom != 'CLIENTS'}"/>
                 </h:panelGrid>
                 <p:confirmDialog global="true" closeOnEscape="true">
                     <p:commandButton value="#{msgs['button.ok']}"

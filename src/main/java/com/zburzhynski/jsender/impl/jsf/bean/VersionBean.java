@@ -1,5 +1,6 @@
 package com.zburzhynski.jsender.impl.jsf.bean;
 
+import java.io.Serializable;
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 
@@ -12,7 +13,7 @@ import javax.faces.bean.ManagedBean;
  */
 @ManagedBean
 @ApplicationScoped
-public class VersionBean {
+public class VersionBean implements Serializable {
 
     private String version = "1.0.0";
 

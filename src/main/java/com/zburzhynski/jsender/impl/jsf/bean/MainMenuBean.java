@@ -1,7 +1,10 @@
 package com.zburzhynski.jsender.impl.jsf.bean;
 
 import static com.zburzhynski.jsender.api.domain.View.CLIENTS;
+import static com.zburzhynski.jsender.api.domain.View.SENDING;
 import static com.zburzhynski.jsender.api.domain.View.SETTINGS;
+
+import com.zburzhynski.jsender.impl.util.BeanUtils;
 
 import java.io.Serializable;
 import javax.enterprise.context.SessionScoped;
@@ -19,6 +22,8 @@ import javax.faces.bean.ManagedProperty;
 @SessionScoped
 public class MainMenuBean implements Serializable {
 
+    private static final String CLIENT_BEAN = "clientBean";
+
     @ManagedProperty(value = "#{settingBean}")
     private SettingBean settingBean;
 
@@ -28,7 +33,20 @@ public class MainMenuBean implements Serializable {
      * @return path to redirect
      */
     public String clients() {
+        ClientBean clientBean = BeanUtils.getSessionBean(CLIENT_BEAN);
+        if (clientBean != null) {
+            clientBean.setRedirectFrom(CLIENTS);
+        }
         return CLIENTS.getPath();
+    }
+
+    /**
+     * Redirects to sending.xhtml page.
+     *
+     * @return path to redirect
+     */
+    public String sending() {
+        return SENDING.getPath();
     }
 
     /**

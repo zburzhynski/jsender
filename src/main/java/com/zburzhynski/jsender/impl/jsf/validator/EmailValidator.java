@@ -7,7 +7,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Email validator.
+ * Message validator.
  * <p/>
  * Date: 23.06.2014
  *

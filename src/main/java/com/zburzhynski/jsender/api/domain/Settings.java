@@ -14,6 +14,14 @@ public enum Settings {
 
     CLIENTS_PER_PAGE,
 
+    RECIPIENTS_PER_PAGE,
+
+
+    SMS_USER_NAME,
+
+    SMS_PASSWORD,
+
+
     MAIL_SMTP_HOST,
 
     MAIL_SMTP_PORT,
