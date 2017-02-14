@@ -7,10 +7,12 @@ import static com.zburzhynski.jsender.api.domain.View.SENDING;
 import static javax.faces.application.FacesMessage.SEVERITY_ERROR;
 import com.zburzhynski.jsender.api.domain.SendingType;
 import com.zburzhynski.jsender.api.dto.Message;
+import com.zburzhynski.jsender.api.service.ISender;
 import com.zburzhynski.jsender.impl.domain.Client;
 import com.zburzhynski.jsender.impl.domain.ContactInfoEmail;
 import com.zburzhynski.jsender.impl.domain.ContactInfoPhone;
 import com.zburzhynski.jsender.impl.util.PropertyReader;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 
@@ -51,6 +53,12 @@ public class SendingBean implements Serializable {
     @ManagedProperty(value = "#{clientBean}")
     private ClientBean clientBean;
 
+    @ManagedProperty(value = "#{emailSender}")
+    private ISender emailSender;
+
+    @ManagedProperty(value = "#{smsSender}")
+    private ISender smsSender;
+
     @ManagedProperty(value = "#{propertyReader}")
     private PropertyReader reader;
 
@@ -61,6 +69,36 @@ public class SendingBean implements Serializable {
      * Sends message.
      */
     public void send() {
+        boolean successful = true;
+        List<String> contacts = new ArrayList<>();
+        if (SendingType.SMS.equals(sendingType)) {
+            for (Client recipient : recipients) {
+                for (ContactInfoPhone phone : recipient.getContactInfo().getPhones()) {
+                    contacts.add(phone.getFullNumber());
+                }
+            }
+            messageToSend.setRecipients(contacts);
+            if (CollectionUtils.isEmpty(messageToSend.getRecipients())) {
+                addMessage(RECIPIENTS_NOT_SPECIFIED);
+                return;
+            }
+            successful = smsSender.send(messageToSend);
+        } else if (SendingType.EMAIL.equals(sendingType)) {
+            for (Client recipient : recipients) {
+                for (ContactInfoEmail email : recipient.getContactInfo().getEmails()) {
+                    contacts.add(email.getAddress());
+                }
+            }
+            messageToSend.setRecipients(contacts);
+            if (CollectionUtils.isEmpty(messageToSend.getRecipients())) {
+                addMessage(RECIPIENTS_NOT_SPECIFIED);
+                return;
+            }
+            successful = emailSender.send(messageToSend);
+        }
+        if (!successful) {
+            addMessage(SEND_MESSAGE_ERROR);
+        }
     }
 
     /**
@@ -161,6 +199,14 @@ public class SendingBean implements Serializable {
 
     public void setClientBean(ClientBean clientBean) {
         this.clientBean = clientBean;
+    }
+
+    public void setEmailSender(ISender emailSender) {
+        this.emailSender = emailSender;
+    }
+
+    public void setSmsSender(ISender smsSender) {
+        this.smsSender = smsSender;
     }
 
     public void setReader(PropertyReader reader) {
