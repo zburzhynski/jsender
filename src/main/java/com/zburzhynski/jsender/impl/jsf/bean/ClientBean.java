@@ -13,7 +13,6 @@ import com.zburzhynski.jsender.impl.domain.ContactInfoPhone;
 import com.zburzhynski.jsender.impl.jsf.validator.ClientContactInfoValidator;
 import com.zburzhynski.jsender.impl.util.SortableUtils;
 import org.apache.commons.lang3.SerializationUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
 

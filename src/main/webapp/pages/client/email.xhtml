@@ -27,15 +27,15 @@
             <h:form id="emailForm">
                 <p:focus />
                 <p:messages id="messages" />
-                <h:panelGrid columns="3" columnClasses="name,val,msg" width="70%">
+                <h:panelGrid columns="2" columnClasses="name,val" width="55%">
                     <h:outputLabel for="address" value="#{msgs['contactInfo.email']}:" />
-                    <p:inputText id="address" value="#{clientBean.email.address}" required="true" maxlength="50" />
-                    <h:message for="address" />
+                    <p:inputText id="address" value="#{clientBean.email.address}" required="true" maxlength="50" label="#{msgs['contactInfo.email']}"/>
                     <h:outputLabel value="#{msgs['contactInfo.email.description']}:" />
-                    <p:inputTextarea id="description" value="#{clientBean.email.description}"
+                    <p:inputTextarea id="description"
+                                     value="#{clientBean.email.description}"
                                      maxlength="1000"
+                                     label="#{msgs['contactInfo.email.description']}"
                                      style="width: 84%" />
-                    <h:message for="description" />
                 </h:panelGrid>
                 <h:panelGrid columns="2">
                     <h:commandButton id="saveEmail" value="#{msgs['button.save']}"
