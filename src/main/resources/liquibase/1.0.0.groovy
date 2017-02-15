@@ -272,4 +272,40 @@ databaseChangeLog {
         }
     }
 
+    changeSet(id: '2017-02-16-01', author: 'Nikita Shevtsov <shevtsou@gmail.com>') {
+        createTable(schemaName: 'jsender', tableName: 'sent_message', tablespace: 'jsender_data', remarks: 'Sent message') {
+            column(name: 'id', type: 'VARCHAR(128)', remarks: 'The unique identifier for message') {
+                constraints(nullable: false)
+            }
+            column(name: 'sent_date', type: 'TIMESTAMP', remarks: 'The sent date') {
+                constraints(nullable: false)
+            }
+            column(name: 'sending_type', type: 'VARCHAR(5)', remarks: 'Message sending_type') {
+                constraints(nullable: false)
+            }
+            column(name: 'client_id', type: 'VARCHAR(128)', remarks: 'The reference to client table') {
+                constraints(nullable: false)
+            }
+            column(name: 'contact_info', type: 'VARCHAR(50)', remarks: 'The message contact info') {
+                constraints(nullable: false)
+            }
+            column(name: 'subject', type: 'VARCHAR(200)', remarks: 'Message subject')
+            column(name: 'text', type: 'VARCHAR(1000)', remarks: 'Message sent text') {
+                constraints(nullable: false)
+            }
+            column(name: 'status', type: 'VARCHAR(20)', remarks: 'Message status') {
+                constraints(nullable: false)
+            }
+        }
+        addPrimaryKey(schemaName: 'jsender', tableName: 'sent_message', tablespace: 'jsender_index',
+                columnNames: 'id', constraintName: 'PK_sent_message')
+    }
+
+    changeSet(id: '2017-02-16-02', author: 'Nikita Shevtsov <shevtsou@gmail.com>') {
+        comment("Added foreign constraint FK_sent_message_2_client")
+        addForeignKeyConstraint(constraintName: 'FK_sent_message_2_client',
+                baseTableSchemaName: 'jsender', baseTableName: 'sent_message' , baseColumnNames: 'client_id',
+                referencedTableSchemaName: 'jsender', referencedTableName: 'client', referencedColumnNames: 'id')
+    }
+
 }
