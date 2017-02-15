@@ -258,17 +258,17 @@ databaseChangeLog {
             column(name: 'id', value: '445157fe-0ea5-4702-94e3-eb9cd4948024')
             column(name: 'category', value: 'REQUISITE')
             column(name: 'name', value: 'organization_name')
-            column(name: 'value', value: '')
+            column(name: 'value', value: 'Название организации')
             column(name: 'type', value: 'STRING')
-            column(name: 'description', value: 'Название')
+            column(name: 'description', value: 'Название организации')
         }
         insert(schemaName: 'jsender', tableName: 'setting') {
             column(name: 'id', value: 'c9a11401-2795-4cac-a172-10ee4ebd5734')
             column(name: 'category', value: 'REQUISITE')
             column(name: 'name', value: 'organization_address')
-            column(name: 'value', value: '')
+            column(name: 'value', value: 'Адрес организации')
             column(name: 'type', value: 'STRING')
-            column(name: 'description', value: 'Адрес')
+            column(name: 'description', value: 'Адрес организации')
         }
     }
 
