@@ -3,7 +3,6 @@ package com.zburzhynski.jsender.impl.jsf.bean;
 import static com.zburzhynski.jsender.api.domain.View.CLIENTS;
 import static com.zburzhynski.jsender.api.domain.View.SENDING;
 import static com.zburzhynski.jsender.api.domain.View.SETTINGS;
-
 import com.zburzhynski.jsender.impl.util.BeanUtils;
 
 import java.io.Serializable;
@@ -23,6 +22,9 @@ import javax.faces.bean.ManagedProperty;
 public class MainMenuBean implements Serializable {
 
     private static final String CLIENT_BEAN = "clientBean";
+
+    @ManagedProperty(value = "#{sendingBean}")
+    private SendingBean sendingBean;
 
     @ManagedProperty(value = "#{settingBean}")
     private SettingBean settingBean;
@@ -46,6 +48,7 @@ public class MainMenuBean implements Serializable {
      * @return path to redirect
      */
     public String sending() {
+        sendingBean.getMessageToSend().setFrom(settingBean.getOrganizationName());
         return SENDING.getPath();
     }
 
@@ -56,6 +59,10 @@ public class MainMenuBean implements Serializable {
      */
     public String settings() {
         return SETTINGS.getPath();
+    }
+
+    public void setSendingBean(SendingBean sendingBean) {
+        this.sendingBean = sendingBean;
     }
 
     public void setSettingBean(SettingBean settingBean) {

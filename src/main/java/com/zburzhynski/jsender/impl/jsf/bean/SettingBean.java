@@ -2,6 +2,7 @@ package com.zburzhynski.jsender.impl.jsf.bean;
 
 import static com.zburzhynski.jsender.api.domain.SettingCategory.COMMON;
 import static com.zburzhynski.jsender.api.domain.SettingCategory.EMAIL_SENDING;
+import static com.zburzhynski.jsender.api.domain.SettingCategory.REQUISITE;
 import static com.zburzhynski.jsender.api.domain.SettingCategory.SMS_SENDING;
 import static com.zburzhynski.jsender.api.domain.SettingCategory.VIEW;
 import static com.zburzhynski.jsender.api.domain.Settings.CLIENTS_PER_PAGE;
@@ -10,6 +11,8 @@ import static com.zburzhynski.jsender.api.domain.Settings.MAIL_PASSWORD;
 import static com.zburzhynski.jsender.api.domain.Settings.MAIL_SMTP_HOST;
 import static com.zburzhynski.jsender.api.domain.Settings.MAIL_SMTP_PORT;
 import static com.zburzhynski.jsender.api.domain.Settings.MAIL_USER_NAME;
+import static com.zburzhynski.jsender.api.domain.Settings.ORGANIZATION_ADDRESS;
+import static com.zburzhynski.jsender.api.domain.Settings.ORGANIZATION_NAME;
 import static com.zburzhynski.jsender.api.domain.Settings.RECIPIENTS_PER_PAGE;
 import static com.zburzhynski.jsender.api.domain.Settings.SMS_PASSWORD;
 import static com.zburzhynski.jsender.api.domain.Settings.SMS_USER_NAME;
@@ -52,6 +55,8 @@ public class SettingBean implements Serializable {
 
     private Set<Setting> emailSendingSettings;
 
+    private Set<Setting> requisiteSettings;
+
     private int tabIndex;
 
     @ManagedProperty(value = "#{settingValidator}")
@@ -74,6 +79,7 @@ public class SettingBean implements Serializable {
         viewSettings = new TreeSet<>(settingService.getByCategory(VIEW));
         smsSendingSettings = new TreeSet<>(settingService.getByCategory(SMS_SENDING));
         emailSendingSettings = new TreeSet<>(settingService.getByCategory(EMAIL_SENDING));
+        requisiteSettings = new TreeSet<>(settingService.getByCategory(REQUISITE));
     }
 
     /**
@@ -158,6 +164,24 @@ public class SettingBean implements Serializable {
     }
 
     /**
+     * Gets organization name.
+     *
+     * @return organization name
+     */
+    public String getOrganizationName() {
+        return settings.get(ORGANIZATION_NAME.name()).getValue();
+    }
+
+    /**
+     * Gets organization address.
+     *
+     * @return organization address
+     */
+    public String getOrganizationAddress() {
+        return settings.get(ORGANIZATION_ADDRESS.name()).getValue();
+    }
+
+    /**
      * Saves setting.
      *
      * @return path for navigating
@@ -210,6 +234,14 @@ public class SettingBean implements Serializable {
 
     public void setEmailSendingSettings(Set<Setting> emailSendingSettings) {
         this.emailSendingSettings = emailSendingSettings;
+    }
+
+    public Set<Setting> getRequisiteSettings() {
+        return requisiteSettings;
+    }
+
+    public void setRequisiteSettings(Set<Setting> requisiteSettings) {
+        this.requisiteSettings = requisiteSettings;
     }
 
     public ISettingService getSettingService() {
