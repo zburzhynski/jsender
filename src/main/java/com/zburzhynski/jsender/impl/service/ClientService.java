@@ -4,7 +4,6 @@ import com.zburzhynski.jsender.api.criteria.ClientSearchCriteria;
 import com.zburzhynski.jsender.api.repository.IClientRepository;
 import com.zburzhynski.jsender.api.service.IClientService;
 import com.zburzhynski.jsender.impl.domain.Client;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

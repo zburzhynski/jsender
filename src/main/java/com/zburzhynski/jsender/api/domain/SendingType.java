@@ -1,20 +1,20 @@
 package com.zburzhynski.jsender.api.domain;
 
 /**
- * Represents phone number type.
+ * Represents sending type.
  * <p/>
- * Date: 23.07.2016
+ * Date: 12.02.2017
  *
  * @author Nikita Shevtsov
  */
-public enum PhoneNumberType {
+public enum SendingType {
 
-    MOBILE("phoneNumberType.mobile"),
-    LANDLINE("phoneNumberType.landline");
+    SMS("sendingType.sms"),
+    EMAIL("sendingType.email");
 
     private String value;
 
-    private PhoneNumberType(String value) {
+    private SendingType(String value) {
         this.value = value;
     }
 

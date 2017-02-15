@@ -11,7 +11,8 @@
             <h:outputText value="#{setting.description}" />
         </p:column>
         <p:column headerText="#{msgs['setting.value']}" width="46%">
-            <h:outputText value="#{setting.value}" />
+            <h:outputText value="#{setting.value}" rendered="#{setting.type != 'PASSWORD'}" />
+            <h:outputText value="*****" rendered="#{setting.type == 'PASSWORD'}"/>
         </p:column>
         <p:column width="4%">
             <h:panelGroup>

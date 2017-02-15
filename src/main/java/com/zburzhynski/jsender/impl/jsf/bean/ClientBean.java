@@ -4,18 +4,23 @@ import static com.zburzhynski.jsender.api.domain.View.CLIENT;
 import static com.zburzhynski.jsender.api.domain.View.CLIENTS;
 import static com.zburzhynski.jsender.api.domain.View.CONTACT_INFO_EMAIL;
 import static com.zburzhynski.jsender.api.domain.View.CONTACT_INFO_PHONE;
+import static com.zburzhynski.jsender.api.domain.View.SENDING;
 import com.zburzhynski.jsender.api.criteria.ClientSearchCriteria;
 import com.zburzhynski.jsender.api.domain.PhoneNumberType;
+import com.zburzhynski.jsender.api.domain.View;
 import com.zburzhynski.jsender.api.service.IClientService;
 import com.zburzhynski.jsender.impl.domain.Client;
 import com.zburzhynski.jsender.impl.domain.ContactInfoEmail;
 import com.zburzhynski.jsender.impl.domain.ContactInfoPhone;
 import com.zburzhynski.jsender.impl.jsf.validator.ClientContactInfoValidator;
+import com.zburzhynski.jsender.impl.jsf.validator.ClientSelectValidator;
+import com.zburzhynski.jsender.impl.util.BeanUtils;
 import com.zburzhynski.jsender.impl.util.SortableUtils;
 import org.apache.commons.lang3.SerializationUtils;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.PostConstruct;
@@ -32,11 +37,17 @@ import javax.faces.bean.SessionScoped;
  */
 @ManagedBean
 @SessionScoped
-public class ClientBean {
+public class ClientBean implements Serializable {
+
+    private static final String SENDING_BEAN = "sendingBean";
+
+    private View redirectFrom = CLIENTS;
 
     private boolean emailAdd;
 
     private boolean phoneAdd;
+
+    private List<Client> selectedClients;
 
     private ContactInfoEmail beforeEditingEmail;
 
@@ -50,8 +61,13 @@ public class ClientBean {
 
     private LazyDataModel<Client> clientModel;
 
+    private List<Client> datasource;
+
     @ManagedProperty(value = "#{clientContactInfoValidator}")
     private ClientContactInfoValidator clientContactInfoValidator;
+
+    @ManagedProperty(value = "#{clientSelectValidator}")
+    private ClientSelectValidator clientSelectValidator;
 
     @ManagedProperty(value = "#{clientService}")
     private IClientService<String, Client> clientService;
@@ -64,19 +80,7 @@ public class ClientBean {
      */
     @PostConstruct
     public void init() {
-        clientModel = new LazyDataModel<Client>() {
-            @Override
-            public List<Client> load(int first, int pageSize, String sortField,
-                                     SortOrder sortOrder, Map<String, Object> filters) {
-                ClientSearchCriteria searchCriteria = new ClientSearchCriteria();
-                searchCriteria.setStart(Long.valueOf(first));
-                searchCriteria.setEnd(Long.valueOf(first + pageSize));
-                List<Client> clients = clientService.getByCriteria(searchCriteria);
-                int count = clientService.countByCriteria(searchCriteria);
-                setRowCount(count);
-                return clients;
-            }
-        };
+        clientModel = new ClientDataModel();
     }
 
     /**
@@ -190,6 +194,29 @@ public class ClientBean {
     }
 
     /**
+     * Select clients.
+     *
+     * @return path for navigation
+     */
+    public String selectClient() {
+        boolean valid = clientSelectValidator.validate(selectedClients);
+        if (!valid) {
+            return null;
+        }
+        selectToSendingForm();
+        return redirectFrom.getPath();
+    }
+
+    /**
+     * Cancel select client.
+     *
+     * @return path for navigation
+     */
+    public String cancelSelectClient() {
+        return redirectFrom.getPath();
+    }
+
+    /**
      * Check that phone is valid.
      *
      * @param infoPhone phone
@@ -263,6 +290,22 @@ public class ClientBean {
         return CLIENT.getPath();
     }
 
+    public View getRedirectFrom() {
+        return redirectFrom;
+    }
+
+    public void setRedirectFrom(View redirectFrom) {
+        this.redirectFrom = redirectFrom;
+    }
+
+    public List<Client> getSelectedClients() {
+        return selectedClients;
+    }
+
+    public void setSelectedClients(List<Client> selectedClients) {
+        this.selectedClients = selectedClients;
+    }
+
     public ContactInfoEmail getEmail() {
         return email;
     }
@@ -303,12 +346,70 @@ public class ClientBean {
         this.clientContactInfoValidator = clientContactInfoValidator;
     }
 
+    public void setClientSelectValidator(ClientSelectValidator clientSelectValidator) {
+        this.clientSelectValidator = clientSelectValidator;
+    }
+
     public void setClientService(IClientService<String, Client> clientService) {
         this.clientService = clientService;
     }
 
     public void setSettingBean(SettingBean settingBean) {
         this.settingBean = settingBean;
+    }
+
+    private void selectToSendingForm() {
+        if (SENDING.equals(redirectFrom)) {
+            SendingBean sendingBean = BeanUtils.getSessionBean(SENDING_BEAN);
+            if (sendingBean != null) {
+                for (Client object : selectedClients) {
+                    object = clientService.getById(object.getId());
+                    if (!sendingBean.getRecipients().contains(object)) {
+                        sendingBean.getRecipients().add(object);
+                    }
+                }
+            }
+        }
+    }
+
+    private class ClientDataModel extends LazyDataModel<Client> {
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public List<Client> load(int first, int pageSize, String sortField,
+                                 SortOrder sortOrder, Map<String, Object> filters) {
+            ClientSearchCriteria searchCriteria = new ClientSearchCriteria();
+            searchCriteria.setStart(Long.valueOf(first));
+            searchCriteria.setEnd(Long.valueOf(first + pageSize));
+            datasource = clientService.getByCriteria(searchCriteria);
+            int count = clientService.countByCriteria(searchCriteria);
+            setRowCount(count);
+            return datasource;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public Client getRowData(String rowKey) {
+            for (Client object : datasource) {
+                if (object.getId().equals(rowKey)) {
+                    return object;
+                }
+            }
+            return null;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public Object getRowKey(Client object) {
+            return object.getId();
+        }
+
     }
 
 }

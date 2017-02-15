@@ -223,4 +223,34 @@ databaseChangeLog {
         }
     }
 
+    changeSet(id: '2017-02-12-01', author: 'Nikita Shevtsov <shevtsou@gmail.com>') {
+        insert(schemaName: 'jsender', tableName: 'setting') {
+            column(name: 'id', value: '3806dd31-ba70-4e53-8577-9f2105cfb1cb')
+            column(name: 'category', value: 'SMS_SENDING')
+            column(name: 'name', value: 'sms_user_name')
+            column(name: 'value', value: 'username')
+            column(name: 'type', value: 'STRING')
+            column(name: 'description', value: 'Имя пользователя')
+        }
+        insert(schemaName: 'jsender', tableName: 'setting') {
+            column(name: 'id', value: 'df859fcb-ed4f-4073-83e7-1901f6489d60')
+            column(name: 'category', value: 'SMS_SENDING')
+            column(name: 'name', value: 'sms_password')
+            column(name: 'value', value: 'password')
+            column(name: 'type', value: 'PASSWORD')
+            column(name: 'description', value: 'Пароль')
+        }
+    }
+
+    changeSet(id: '2017-02-12-02', author: 'Nikita Shevtsov <shevtsou@gmail.com>') {
+        insert(schemaName: 'jsender', tableName: 'setting') {
+            column(name: 'id', value: '6b3c3a1a-8332-445d-8e83-2491c5cef5d6')
+            column(name: 'category', value: 'VIEW')
+            column(name: 'name', value: 'recipients_per_page')
+            column(name: 'value', value: '20')
+            column(name: 'type', value: 'INTEGER')
+            column(name: 'description', value: 'Количество получателей на странице')
+        }
+    }
+
 }

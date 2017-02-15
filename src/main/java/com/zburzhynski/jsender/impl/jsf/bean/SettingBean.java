@@ -10,6 +10,9 @@ import static com.zburzhynski.jsender.api.domain.Settings.MAIL_PASSWORD;
 import static com.zburzhynski.jsender.api.domain.Settings.MAIL_SMTP_HOST;
 import static com.zburzhynski.jsender.api.domain.Settings.MAIL_SMTP_PORT;
 import static com.zburzhynski.jsender.api.domain.Settings.MAIL_USER_NAME;
+import static com.zburzhynski.jsender.api.domain.Settings.RECIPIENTS_PER_PAGE;
+import static com.zburzhynski.jsender.api.domain.Settings.SMS_PASSWORD;
+import static com.zburzhynski.jsender.api.domain.Settings.SMS_USER_NAME;
 import com.zburzhynski.jsender.api.domain.View;
 import com.zburzhynski.jsender.api.service.ISettingService;
 import com.zburzhynski.jsender.impl.domain.Setting;
@@ -89,6 +92,33 @@ public class SettingBean implements Serializable {
      */
     public int getClientsPerPage() {
         return Integer.parseInt(settings.get(CLIENTS_PER_PAGE.name()).getValue());
+    }
+
+    /**
+     * Gets recipients per page.
+     *
+     * @return recipients per page
+     */
+    public int getRecipientsPerPage() {
+        return Integer.parseInt(settings.get(RECIPIENTS_PER_PAGE.name()).getValue());
+    }
+
+    /**
+     * Gets sms user name.
+     *
+     * @return sms user name
+     */
+    public String getSMSUserName() {
+        return settings.get(SMS_USER_NAME.name()).getValue();
+    }
+
+    /**
+     * Gets sms password.
+     *
+     * @return sms password
+     */
+    public String getSMSPassword() {
+        return settings.get(SMS_PASSWORD.name()).getValue();
     }
 
     /**
