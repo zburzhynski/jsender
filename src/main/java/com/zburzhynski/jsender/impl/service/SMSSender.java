@@ -25,9 +25,9 @@ import java.net.URLEncoder;
  */
 @Service("smsSender")
 @Transactional(readOnly = true)
-public class SMSSender implements ISender {
+public class SmsSender implements ISender {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(SMSSender.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(SmsSender.class);
 
     private static final String PROTOCOL = "http";
 
