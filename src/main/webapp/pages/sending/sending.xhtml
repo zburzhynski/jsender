@@ -101,6 +101,12 @@
                             </h:panelGrid>
                         </p:tab>
                     </p:tabView>
+                    <h:panelGrid columns="2" columnClasses="name,val,msg" width="50%">
+                        <h:outputLabel for="from" value="#{msgs['sending.from']}:" />
+                        <p:inputText id="from" value="#{sendingBean.messageToSend.from}"
+                                     style="width: 100%"
+                                     label="#{msgs['sending.from']}" />
+                    </h:panelGrid>
                     <h:panelGrid style="float: right">
                         <h:commandButton action="#{sendingBean.send}" value="#{msgs['sending.send']}" />
                     </h:panelGrid>

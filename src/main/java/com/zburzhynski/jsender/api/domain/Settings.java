@@ -28,6 +28,11 @@ public enum Settings {
 
     MAIL_USER_NAME,
 
-    MAIL_PASSWORD
+    MAIL_PASSWORD,
+
+
+    ORGANIZATION_NAME,
+
+    ORGANIZATION_ADDRESS,
 
 }

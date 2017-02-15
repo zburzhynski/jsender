@@ -15,6 +15,8 @@ public enum SettingCategory {
 
     EMAIL_SENDING,
 
-    SMS_SENDING
+    SMS_SENDING,
+
+    REQUISITE
 
 }
