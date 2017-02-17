@@ -1,12 +1,14 @@
 package com.zburzhynski.jsender.impl.service;
 
-import static com.zburzhynski.jsender.api.domain.CommonConstant.COMMA;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
-import static org.apache.commons.lang3.StringUtils.join;
+import com.zburzhynski.jsender.api.domain.SendingType;
 import com.zburzhynski.jsender.api.domain.Settings;
 import com.zburzhynski.jsender.api.dto.Message;
+import com.zburzhynski.jsender.api.dto.Recipient;
+import com.zburzhynski.jsender.api.repository.ISentMessageRepository;
 import com.zburzhynski.jsender.api.repository.ISettingRepository;
 import com.zburzhynski.jsender.api.service.ISender;
+import com.zburzhynski.jsender.impl.domain.SentMessage;
 import com.zburzhynski.jsender.impl.domain.Setting;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,7 +16,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
+import javax.mail.MessagingException;
 import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Transport;
@@ -37,32 +43,48 @@ public class EmailSender implements ISender {
     private Session session;
 
     @Autowired
+    private ISentMessageRepository<String, SentMessage> sentMessageRepository;
+
+    @Autowired
     private ISettingRepository<String, Setting> settingRepository;
 
     /**
      * Send email.
      *
      * @param email email to send
-     * @return true if sending is successful, else false
+     * @return sending response
      */
     @Override
-    public boolean send(Message email) {
+    @Transactional(readOnly = false)
+    public Map<Recipient, String> send(Message email) {
         LOGGER.info("Sending email {} ", email);
-        try {
-            buildSession();
-            javax.mail.Message message = new MimeMessage(session);
-            message.setFrom(isNotBlank(email.getFrom()) ? new InternetAddress(email.getFrom()) : null);
-            message.setRecipients(javax.mail.Message.RecipientType.TO, InternetAddress.parse(
-                join(email.getRecipients(), COMMA)));
-            message.setSubject(isNotBlank(email.getSubject()) ? email.getSubject() : null);
-            message.setText(isNotBlank(email.getText()) ? email.getText() : null);
-            Transport.send(message);
-            LOGGER.info("Email sent successfully");
-        } catch (Exception e) {
-            LOGGER.error("An error occurred while sending email", e);
-            return false;
+        buildSession();
+        Map<Recipient, String> response = new HashMap<>();
+        for (Recipient recipient : email.getRecipients()) {
+            try {
+                javax.mail.Message message = new MimeMessage(session);
+                message.setFrom(isNotBlank(email.getFrom()) ? new InternetAddress(email.getFrom()) : null);
+                message.setRecipients(javax.mail.Message.RecipientType.TO,
+                    InternetAddress.parse(recipient.getContactInfo()));
+                message.setSubject(isNotBlank(email.getSubject()) ? email.getSubject() : null);
+                message.setText(isNotBlank(email.getText()) ? email.getText() : null);
+                Transport.send(message);
+                LOGGER.info("Email sent successfully, recipient = " + recipient.getContactInfo());
+            } catch (MessagingException e) {
+                response.put(recipient, e.getMessage());
+                LOGGER.error("An error occurred while sending email", e);
+            }
+            SentMessage sentMessage = new SentMessage();
+            sentMessage.setSentDate(new Date());
+            sentMessage.setRecipientId(recipient.getClientId());
+            sentMessage.setContactInfo(recipient.getContactInfo());
+            sentMessage.setSubject(email.getSubject());
+            sentMessage.setText(email.getText());
+            sentMessage.setStatus(response.get(recipient));
+            sentMessage.setType(SendingType.EMAIL);
+            sentMessageRepository.saveOrUpdate(sentMessage);
         }
-        return true;
+        return response;
     }
 
     private void buildSession() {

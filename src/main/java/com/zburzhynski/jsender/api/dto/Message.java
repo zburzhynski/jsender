@@ -15,7 +15,7 @@ public class Message implements Serializable {
 
     private String from;
 
-    private List<String> recipients;
+    private List<Recipient> recipients;
 
     private String subject;
 
@@ -34,14 +34,14 @@ public class Message implements Serializable {
      *
      * @return recipients
      */
-    public List<String> getRecipients() {
+    public List<Recipient> getRecipients() {
         if (recipients == null) {
             recipients = new ArrayList<>();
         }
         return recipients;
     }
 
-    public void setRecipients(List<String> recipients) {
+    public void setRecipients(List<Recipient> recipients) {
         this.recipients = recipients;
     }
 

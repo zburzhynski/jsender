@@ -16,7 +16,7 @@ import java.util.List;
  *
  * @author Nikita Shevtsov
  */
-@Service("settingService")
+@Service("sentMessageService")
 @Transactional(readOnly = true)
 public class SentMessageService implements ISentMessageService<String, SentMessage> {
 

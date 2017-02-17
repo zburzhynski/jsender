@@ -10,9 +10,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 /**
@@ -29,9 +26,8 @@ public class SentMessage extends Domain {
     @Column(name = "sent_date")
     private Date sentDate = new Date();
 
-    @ManyToOne(fetch = FetchType.LAZY, targetEntity = Client.class)
-    @JoinColumn(name = "recipient_id")
-    private Client recipient;
+    @Column(name = "recipient_id")
+    private String recipientId;
 
     @Column(name = "contact_info")
     private String contactInfo;
@@ -41,6 +37,9 @@ public class SentMessage extends Domain {
 
     @Column(name = "text")
     private String text;
+
+    @Column(name = "status")
+    private String status;
 
     @Enumerated(value = EnumType.STRING)
     private SendingType type;
@@ -53,12 +52,12 @@ public class SentMessage extends Domain {
         this.sentDate = sentDate;
     }
 
-    public Client getRecipient() {
-        return recipient;
+    public String getRecipientId() {
+        return recipientId;
     }
 
-    public void setRecipient(Client recipient) {
-        this.recipient = recipient;
+    public void setRecipientId(String recipientId) {
+        this.recipientId = recipientId;
     }
 
     public String getContactInfo() {
@@ -83,6 +82,14 @@ public class SentMessage extends Domain {
 
     public void setText(String text) {
         this.text = text;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public SendingType getType() {
@@ -110,9 +117,12 @@ public class SentMessage extends Domain {
         return new EqualsBuilder()
             .appendSuper(super.equals(o))
             .append(sentDate, that.sentDate)
+            .append(recipientId, that.recipientId)
             .append(contactInfo, that.contactInfo)
             .append(subject, that.subject)
             .append(text, that.text)
+            .append(status, that.status)
+            .append(type, that.type)
             .isEquals();
     }
 
@@ -124,9 +134,12 @@ public class SentMessage extends Domain {
         return new HashCodeBuilder()
             .appendSuper(super.hashCode())
             .append(sentDate)
+            .append(recipientId)
             .append(contactInfo)
             .append(subject)
             .append(text)
+            .append(status)
+            .append(type)
             .toHashCode();
     }
 
@@ -138,9 +151,12 @@ public class SentMessage extends Domain {
         return new ToStringBuilder(this)
             .appendSuper(super.toString())
             .append("sentDate", sentDate)
+            .append("recipientId", recipientId)
             .append("contactInfo", contactInfo)
             .append("subject", subject)
             .append("text", text)
+            .append("status", status)
+            .append("type", type)
             .toString();
     }
 

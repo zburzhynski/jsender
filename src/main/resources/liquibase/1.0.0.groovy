@@ -277,7 +277,7 @@ databaseChangeLog {
             column(name: 'id', type: 'VARCHAR(128)', remarks: 'The unique identifier for message') {
                 constraints(nullable: false)
             }
-            column(name: 'sentDate', type: 'TIMESTAMP', remarks: 'The sent date') {
+            column(name: 'sent_date', type: 'TIMESTAMP', remarks: 'The sent date') {
                 constraints(nullable: false)
             }
             column(name: 'recipient_id', type: 'VARCHAR(128)', remarks: 'The reference to client table') {
@@ -290,7 +290,7 @@ databaseChangeLog {
             column(name: 'text', type: 'VARCHAR(1000)', remarks: 'Message sent text') {
                 constraints(nullable: false)
             }
-            column(name: 'status', type: 'VARCHAR(30)', remarks: 'Message status') {
+            column(name: 'status', type: 'VARCHAR(1000)', remarks: 'Message status') {
                 constraints(nullable: false)
             }
             column(name: 'type', type: 'VARCHAR(5)', remarks: 'Message type') {
