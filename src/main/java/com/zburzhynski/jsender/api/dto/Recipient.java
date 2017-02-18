@@ -13,7 +13,7 @@ public class Recipient {
 
     private String fullName;
 
-    private String contact;
+    private String contactInfo;
 
     public String getClientId() {
         return clientId;
@@ -31,12 +31,12 @@ public class Recipient {
         this.fullName = fullName;
     }
 
-    public String getContact() {
-        return contact;
+    public String getContactInfo() {
+        return contactInfo;
     }
 
-    public void setContact(String contact) {
-        this.contact = contact;
+    public void setContactInfo(String contactInfo) {
+        this.contactInfo = contactInfo;
     }
 
 }

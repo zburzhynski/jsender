@@ -29,11 +29,15 @@ public class SentMessage extends Domain {
     @Column(name = "sent_date")
     private Date sentDate = new Date();
 
+    @Column(name = "sending_type")
     @Enumerated(value = EnumType.STRING)
     private SendingType sendingType;
 
+    @Column(name = "client_id")
+    private String clientId;
+
     @ManyToOne(fetch = FetchType.LAZY, targetEntity = Client.class)
-    @JoinColumn(name = "client_id")
+    @JoinColumn(name = "client_id", insertable = false, updatable = false)
     private Client client;
 
     @Column(name = "contact_info")
@@ -62,6 +66,14 @@ public class SentMessage extends Domain {
 
     public void setSendingType(SendingType sendingType) {
         this.sendingType = sendingType;
+    }
+
+    public String getClientId() {
+        return clientId;
+    }
+
+    public void setClientId(String clientId) {
+        this.clientId = clientId;
     }
 
     public Client getClient() {
@@ -122,6 +134,7 @@ public class SentMessage extends Domain {
             .appendSuper(super.equals(o))
             .append(sentDate, that.sentDate)
             .append(sendingType, that.sendingType)
+            .append(clientId, that.clientId)
             .append(contactInfo, that.contactInfo)
             .append(subject, that.subject)
             .append(text, that.text)
@@ -138,6 +151,7 @@ public class SentMessage extends Domain {
             .appendSuper(super.hashCode())
             .append(sentDate)
             .append(sendingType)
+            .append(clientId)
             .append(contactInfo)
             .append(subject)
             .append(text)
@@ -154,6 +168,7 @@ public class SentMessage extends Domain {
             .appendSuper(super.toString())
             .append("sentDate", sentDate)
             .append("sendingType", sendingType)
+            .append("clientId", clientId)
             .append("contactInfo", contactInfo)
             .append("subject", subject)
             .append("text", text)

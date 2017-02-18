@@ -1,8 +1,5 @@
 package com.zburzhynski.jsender.impl.domain;
 
-import static com.zburzhynski.jsender.api.domain.CommonConstant.LEFT_PARENTHESIS;
-import static com.zburzhynski.jsender.api.domain.CommonConstant.RIGHT_PARENTHESIS;
-import static com.zburzhynski.jsender.api.domain.CommonConstant.SPACE;
 import com.zburzhynski.jsender.api.domain.ISortable;
 import com.zburzhynski.jsender.api.domain.PhoneNumberType;
 import org.apache.commons.lang3.StringUtils;
@@ -68,7 +65,7 @@ public class ContactInfoPhone extends Domain implements Comparable<ContactInfoPh
             fullNumber += countryCode;
         }
         if (StringUtils.isNotBlank(cityCode)) {
-            fullNumber += LEFT_PARENTHESIS + cityCode + RIGHT_PARENTHESIS + SPACE;
+            fullNumber += cityCode;
         }
         fullNumber += phoneNumber;
         return fullNumber;
