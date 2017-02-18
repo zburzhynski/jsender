@@ -66,7 +66,7 @@ public class SmsSender implements ISender {
             String status;
             try {
                 URL url = new URL(PROTOCOL, "api.smsfeedback.ru", PORT, "/messages/v2/send/?phone=%2B" +
-                    recipient + "&text=" + URLEncoder.encode(sms.getText(), "UTF-8")
+                    recipient.getContactInfo() + "&text=" + URLEncoder.encode(sms.getText(), "UTF-8")
                     + "&sender=" + sms.getFrom());
                 URLConnection urlConnection = url.openConnection();
                 urlConnection.setRequestProperty("Authorization", authString);
