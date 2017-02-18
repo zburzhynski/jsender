@@ -72,7 +72,6 @@ public class SmsSender implements ISender {
                 urlConnection.setRequestProperty("Authorization", authString);
                 InputStream is = urlConnection.getInputStream();
                 InputStreamReader isr = new InputStreamReader(is);
-
                 int numCharsRead;
                 char[] charArray = new char[RESPONSE_ARRAY_SIZE];
                 StringBuffer sb = new StringBuffer();
