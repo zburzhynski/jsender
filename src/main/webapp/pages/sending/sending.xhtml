@@ -47,12 +47,14 @@
                         </p:selectOneMenu>
                         <h:outputLabel for="subject" value="#{msgs['sending.subject']}:" />
                         <p:inputText id="subject" value="#{sendingBean.messageToSend.subject}"
+                                     maxlength="200"
                                      style="width: 100%" required="#{sendingBean.sendingType == 'EMAIL'}"
                                      label="#{msgs['sending.subject']}" />
                     </h:panelGrid>
                     <p:tabView activeIndex="#{sendingBean.tabIndex}">
                         <p:tab title="#{msgs['sending.text']}">
                             <p:inputTextarea value="#{sendingBean.messageToSend.text}" styleClass="area"
+                                             maxlength="1000"
                                              required="true" label="#{msgs['sending.text']}" />
                         </p:tab>
                         <p:tab title="#{msgs['sending.recipients']}">
@@ -90,8 +92,7 @@
                             <h:panelGrid columns="2" style="padding-top: 5px">
                                 <h:commandButton action="#{sendingBean.addRecipients}"
                                                  image="/resources/css/css-images/add.gif"
-                                                 title="#{msgs['button.add']}"
-                                                 immediate="true" />
+                                                 title="#{msgs['button.add']}" />
                                 <p:commandLink action="#{sendingBean.removeAllRecipients}" immediate="true">
                                     <p:graphicImage url="/resources/css/css-images/delete_all.png" title="#{msgs['sending.button.removeAllRecipients']}" />
                                     <p:confirm header="#{msgs['removeAllRecipientConfirm.header']}"

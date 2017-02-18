@@ -4,9 +4,11 @@ import static com.zburzhynski.jsender.api.domain.CommonConstant.COMMA;
 import static com.zburzhynski.jsender.api.domain.CommonConstant.SPACE;
 import static com.zburzhynski.jsender.api.domain.View.CLIENTS;
 import static com.zburzhynski.jsender.api.domain.View.SENDING;
+import static com.zburzhynski.jsender.api.domain.View.SENDING_STATUS;
 import static javax.faces.application.FacesMessage.SEVERITY_ERROR;
 import com.zburzhynski.jsender.api.domain.SendingType;
 import com.zburzhynski.jsender.api.dto.Message;
+import com.zburzhynski.jsender.api.dto.Recipient;
 import com.zburzhynski.jsender.api.service.ISender;
 import com.zburzhynski.jsender.impl.domain.Client;
 import com.zburzhynski.jsender.impl.domain.ContactInfoEmail;
@@ -19,6 +21,8 @@ import org.slf4j.Logger;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -40,13 +44,13 @@ public class SendingBean implements Serializable {
 
     private static final String RECIPIENTS_NOT_SPECIFIED = "sendingValidator.recipientsNotSpecified";
 
-    private static final String SEND_MESSAGE_ERROR = "sendingValidator.sendMessageError";
-
     private int tabIndex;
 
     private Message messageToSend = new Message();
 
     private SendingType sendingType;
+
+    private Map<Recipient, String> sendingStatus;
 
     private List<Client> recipients = new ArrayList<>();
 
@@ -67,38 +71,45 @@ public class SendingBean implements Serializable {
 
     /**
      * Sends message.
+     *
+     * @return path for navigation
      */
-    public void send() {
-        boolean successful = true;
-        List<String> contacts = new ArrayList<>();
+    public String send() {
+        List<Recipient> contacts = new ArrayList<>();
         if (SendingType.SMS.equals(sendingType)) {
             for (Client recipient : recipients) {
                 for (ContactInfoPhone phone : recipient.getContactInfo().getPhones()) {
-                    contacts.add(phone.getFullNumber());
+                    Recipient contact = new Recipient();
+                    contact.setClientId(recipient.getId());
+                    contact.setContactInfo(phone.getFullNumber());
+                    contact.setFullName(recipient.getPerson().getFullName());
+                    contacts.add(contact);
                 }
             }
             messageToSend.setRecipients(contacts);
             if (CollectionUtils.isEmpty(messageToSend.getRecipients())) {
                 addMessage(RECIPIENTS_NOT_SPECIFIED);
-                return;
+                return null;
             }
-            successful = smsSender.send(messageToSend);
+            sendingStatus = smsSender.send(messageToSend);
         } else if (SendingType.EMAIL.equals(sendingType)) {
             for (Client recipient : recipients) {
                 for (ContactInfoEmail email : recipient.getContactInfo().getEmails()) {
-                    contacts.add(email.getAddress());
+                    Recipient contact = new Recipient();
+                    contact.setClientId(recipient.getId());
+                    contact.setContactInfo(email.getAddress());
+                    contact.setFullName(recipient.getPerson().getFullName());
+                    contacts.add(contact);
                 }
             }
             messageToSend.setRecipients(contacts);
             if (CollectionUtils.isEmpty(messageToSend.getRecipients())) {
                 addMessage(RECIPIENTS_NOT_SPECIFIED);
-                return;
+                return null;
             }
-            successful = emailSender.send(messageToSend);
+            sendingStatus = emailSender.send(messageToSend);
         }
-        if (!successful) {
-            addMessage(SEND_MESSAGE_ERROR);
-        }
+        return SENDING_STATUS.getPath();
     }
 
     /**
@@ -183,6 +194,10 @@ public class SendingBean implements Serializable {
 
     public void setSendingType(SendingType sendingType) {
         this.sendingType = sendingType;
+    }
+
+    public Set<Map.Entry<Recipient, String>> getSendingStatus() {
+        return sendingStatus.entrySet();
     }
 
     public List<Client> getRecipients() {
