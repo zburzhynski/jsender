@@ -1,5 +1,6 @@
 package com.zburzhynski.jsender.impl.service;
 
+import com.zburzhynski.jsender.api.criteria.SentMessageSearchCriteria;
 import com.zburzhynski.jsender.api.repository.ISentMessageRepository;
 import com.zburzhynski.jsender.api.service.ISentMessageService;
 import com.zburzhynski.jsender.impl.domain.SentMessage;
@@ -29,6 +30,22 @@ public class SentMessageService implements ISentMessageService<String, SentMessa
     @Override
     public SentMessage getById(String id) {
         return sentMessageRepository.findById(id);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<SentMessage> getByCriteria(SentMessageSearchCriteria searchCriteria) {
+        return sentMessageRepository.findByCriteria(searchCriteria);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int countByCriteria(SentMessageSearchCriteria searchCriteria) {
+        return sentMessageRepository.countByCriteria(searchCriteria);
     }
 
     /**

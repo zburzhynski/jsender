@@ -73,7 +73,7 @@ public class EmailSender implements ISender {
                 status = "Email sent successfully";
                 LOGGER.info("Email sent successfully, recipient = " + recipient.getContactInfo());
             } catch (MessagingException e) {
-                status = e.getClass().toString();
+                status = e.getClass().getName();
                 LOGGER.error("An error occurred while sending email", e);
             }
             SentMessage sentMessage = new SentMessage();

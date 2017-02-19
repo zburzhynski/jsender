@@ -308,4 +308,15 @@ databaseChangeLog {
                 referencedTableSchemaName: 'jsender', referencedTableName: 'client', referencedColumnNames: 'id')
     }
 
+    changeSet(id: '2017-02-19-01', author: 'Nikita Shevtsov <shevtsou@gmail.com>') {
+        insert(schemaName: 'jsender', tableName: 'setting') {
+            column(name: 'id', value: '571b6b24-90ae-4f00-8a96-b94e97ccee8f')
+            column(name: 'category', value: 'VIEW')
+            column(name: 'name', value: 'sent_messages_per_page')
+            column(name: 'value', value: '20')
+            column(name: 'type', value: 'INTEGER')
+            column(name: 'description', value: 'Количество отправленных сообщений на странице')
+        }
+    }
+
 }

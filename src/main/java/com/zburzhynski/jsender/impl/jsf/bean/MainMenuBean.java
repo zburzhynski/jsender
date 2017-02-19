@@ -2,6 +2,7 @@ package com.zburzhynski.jsender.impl.jsf.bean;
 
 import static com.zburzhynski.jsender.api.domain.View.CLIENTS;
 import static com.zburzhynski.jsender.api.domain.View.SENDING;
+import static com.zburzhynski.jsender.api.domain.View.SENT_MESSAGES;
 import static com.zburzhynski.jsender.api.domain.View.SETTINGS;
 import com.zburzhynski.jsender.impl.util.BeanUtils;
 
@@ -50,6 +51,15 @@ public class MainMenuBean implements Serializable {
     public String sending() {
         sendingBean.getMessageToSend().setFrom(settingBean.getOrganizationName());
         return SENDING.getPath();
+    }
+
+    /**
+     * Redirects to sent_messages.xhtml page.
+     *
+     * @return path to redirect
+     */
+    public String sentMessages() {
+        return SENT_MESSAGES.getPath();
     }
 
     /**

@@ -26,6 +26,8 @@ import javax.persistence.Table;
 @Table(name = "sent_message")
 public class SentMessage extends Domain {
 
+    public static final String P_CLIENT = "client";
+
     @Column(name = "sent_date")
     private Date sentDate = new Date();
 
