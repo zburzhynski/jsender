@@ -14,7 +14,7 @@
                 <p:focus />
                 <p:dataTable value="#{sendingBean.sendingStatus}"
                              var="statusEntry">
-                    <p:column headerText="#{msgs['person.recipient.fullName']}" style="width: 30%">
+                    <p:column headerText="#{msgs['person.fullName']}" style="width: 30%">
                         <h:outputText value="#{statusEntry.key.fullName}" />
                     </p:column>
                     <p:column headerText="#{msgs['person.recipient.contactInfo']}" style="width: 30%">

@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/pages/template/layout_template.xhtml">
+
+    <ui:define name="content">
+        <p:panel>
+            <h:form id="sentMessageForm">
+                <h4>#{msgs['sentMessages.header']}</h4>
+                <p:dataTable value="#{sentMessageBean.sentMessageModel}"
+                             var="sentMessage"
+                             paginator="true"
+                             paginatorPosition="bottom"
+                             paginatorAlwaysVisible="false"
+                             lazy="true"
+                             emptyMessage="#{msgs['sentMessages.empty']}"
+                             rows="#{sentMessageBean.rowCount}">
+                    <p:column headerText="#{msgs['sentMessage.sentDate']}" width="15%">
+                        <h:outputText value="#{sentMessage.sentDate}">
+                            <f:convertDateTime pattern="HH:mm dd.MM.yyyy" />
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="#{msgs['sentMessage.sendingType']}" width="10%" style="text-align: center">
+                        <h:outputText value="#{msgs[sentMessage.sendingType.value]}" />
+                    </p:column>
+                    <p:column headerText="#{msgs['person.fullName']}" width="30%">
+                        <h:outputText value="#{sentMessage.client.person.fullName}" />
+                    </p:column>
+                    <p:column headerText="#{msgs['sentMessage.contactInfo']}" width="20%">
+                        <h:outputText value="#{sentMessage.contactInfo}" />
+                    </p:column>
+                    <p:column headerText="#{msgs['sentMessage.status']}" width="19%">
+                        <h:outputText value="#{sentMessage.status}" />
+                    </p:column>
+                    <p:column width="6%">
+                        <h:panelGroup>
+                            <p:commandLink action="#{sentMessageBean.showMessageDetailDialog}" update="sentMessageDialog" style="padding-right: 5px">
+                                <p:graphicImage url="/resources/css/css-images/text.png" title="#{msgs['button.remove']}" />
+                                <f:setPropertyActionListener
+                                        target="#{sentMessageBean.sentMessage}" value="#{sentMessage}" />
+                            </p:commandLink>
+                            <p:commandLink action="#{sentMessageBean.removeSentMessage}" style="padding-right: 5px">
+                                <p:graphicImage url="/resources/css/css-images/delete.png" title="#{msgs['button.remove']}" />
+                                <p:confirm header="#{msgs['removeSentMessageConfirm.header']}"
+                                           message="#{msgs['removeSentMessageConfirm.message']}?"
+                                           icon="ui-icon-alert" />
+                                <f:setPropertyActionListener
+                                        target="#{sentMessageBean.sentMessage}" value="#{sentMessage}" />
+                            </p:commandLink>
+                        </h:panelGroup>
+                    </p:column>
+                </p:dataTable>
+                <p:confirmDialog global="true" closeOnEscape="true">
+                    <p:commandButton value="#{msgs['button.ok']}"
+                                     type="button"
+                                     styleClass="ui-confirmdialog-yes"
+                                     icon="ui-icon-check" />
+                    <p:commandButton value="#{msgs['button.cancel']}"
+                                     type="button"
+                                     styleClass="ui-confirmdialog-no"
+                                     icon="ui-icon-close" />
+                </p:confirmDialog>
+            </h:form>
+            <ui:include src="message_detail.xhtml" />
+        </p:panel>
+    </ui:define>
+
+</ui:composition>

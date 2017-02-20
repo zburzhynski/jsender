@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui">
+
+    <style type="text/css">
+        .name {
+            font-weight: bold;
+            width: 27%;
+        }
+        .val {
+            width: 38%;
+        }
+        .msg {
+            width: 35%;
+        }
+        .cal .ui-inputfield {
+            width: 97%;
+        }
+        .area {
+            width: 100% !important;
+            height: 200px !important;
+            resize: none;
+        }
+    </style>
+    <p:dialog id="sentMessageDialog"
+              header="#{msgs['sentMessage.showDetail']}"
+              width="520"
+              closable="false"
+              position="center"
+              resizable="false"
+              modal="true"
+              binding="#{sentMessageBean.sentMessageDetailDialog}">
+        <h:form id="sentMessageDialogForm">
+            <h:panelGrid columns="2" columnClasses="name,val" width="40%">
+                <h:outputLabel for="sentDate" value="#{msgs['sentMessage.sentDate']}:" />
+                <p:inputText id="sentDate" value="#{sentMessageBean.sentMessage.sentDate}" readonly="true">
+                    <f:convertDateTime pattern="HH:mm dd.MM.yyyy" />
+                </p:inputText>
+                <h:outputLabel for="sendingType" value="#{msgs['sentMessage.sendingType']}:" />
+                <p:inputText id="sendingType" value="#{sentMessageBean.sentMessage.sendingType}" readonly="true" />
+                <h:outputLabel for="fullName" value="#{msgs['person.fullName']}:" />
+                <p:inputText id="fullName" value="#{sentMessageBean.sentMessage.client.person.fullName}" readonly="true" />
+                <h:outputLabel for="contactInfo" value="#{msgs['sentMessage.contactInfo']}:" />
+                <p:inputText id="contactInfo" value="#{sentMessageBean.sentMessage.contactInfo}" readonly="true" />
+                <h:outputLabel for="status" value="#{msgs['sentMessage.status']}:" />
+                <p:inputText id="status" value="#{sentMessageBean.sentMessage.status}" readonly="true" />
+                <h:outputLabel for="subject" value="#{msgs['sentMessage.subject']}:" />
+                <p:inputText id="subject" value="#{sentMessageBean.sentMessage.subject}" readonly="true" />
+                <h:outputLabel for="text" value="#{msgs['sentMessage.text']}:" />
+                <p:inputTextarea id="text" value="#{sentMessageBean.sentMessage.text}" readonly="true" styleClass="area" />
+            </h:panelGrid>
+            <h:panelGrid width="100%" style="text-align: center">
+                <h:commandButton value="#{msgs['button.ok']}"
+                                 action="#{sentMessageBean.hideMessageDetailDialog()}"
+                                 style="height: 25px; font-weight: bold" />
+            </h:panelGrid>
+        </h:form>
+    </p:dialog>
+
+</ui:composition>

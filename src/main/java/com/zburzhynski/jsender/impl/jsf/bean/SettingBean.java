@@ -14,6 +14,7 @@ import static com.zburzhynski.jsender.api.domain.Settings.MAIL_USER_NAME;
 import static com.zburzhynski.jsender.api.domain.Settings.ORGANIZATION_ADDRESS;
 import static com.zburzhynski.jsender.api.domain.Settings.ORGANIZATION_NAME;
 import static com.zburzhynski.jsender.api.domain.Settings.RECIPIENTS_PER_PAGE;
+import static com.zburzhynski.jsender.api.domain.Settings.SENT_MESSAGES_PER_PAGE;
 import static com.zburzhynski.jsender.api.domain.Settings.SMS_PASSWORD;
 import static com.zburzhynski.jsender.api.domain.Settings.SMS_USER_NAME;
 import com.zburzhynski.jsender.api.domain.View;
@@ -107,6 +108,15 @@ public class SettingBean implements Serializable {
      */
     public int getRecipientsPerPage() {
         return Integer.parseInt(settings.get(RECIPIENTS_PER_PAGE.name()).getValue());
+    }
+
+    /**
+     * Gets sent messages per page.
+     *
+     * @return sent messages per page
+     */
+    public int getSentMessagesPerPage() {
+        return Integer.parseInt(settings.get(SENT_MESSAGES_PER_PAGE.name()).getValue());
     }
 
     /**

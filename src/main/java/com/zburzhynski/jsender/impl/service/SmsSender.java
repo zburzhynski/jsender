@@ -57,6 +57,7 @@ public class SmsSender implements ISender {
      * @return sending response
      */
     @Override
+    @Transactional(readOnly = false)
     public Map<Recipient, String> send(Message sms) {
         Map<Recipient, String> response = new HashMap<>();
         String name = settingRepository.findByName(Settings.SMS_USER_NAME).getValue();
@@ -80,7 +81,7 @@ public class SmsSender implements ISender {
                 }
                 status = "SMS sent successfully";
             } catch (Exception ex) {
-                status = ex.getClass().toString();
+                status = ex.getClass().getName();
                 LOGGER.error("Error sending sms", ex);
             }
             SentMessage sentMessage = new SentMessage();

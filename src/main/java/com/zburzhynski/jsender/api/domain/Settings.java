@@ -16,6 +16,8 @@ public enum Settings {
 
     RECIPIENTS_PER_PAGE,
 
+    SENT_MESSAGES_PER_PAGE,
+
 
     SMS_USER_NAME,
 
