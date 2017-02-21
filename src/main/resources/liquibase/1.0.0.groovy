@@ -289,8 +289,8 @@ databaseChangeLog {
             column(name: 'contact_info', type: 'VARCHAR(50)', remarks: 'The message contact info') {
                 constraints(nullable: false)
             }
-            column(name: 'subject', type: 'VARCHAR(200)', remarks: 'Message subject')
-            column(name: 'text', type: 'VARCHAR(1000)', remarks: 'Message sent text') {
+            column(name: 'subject', type: 'VARCHAR(250)', remarks: 'Message subject')
+            column(name: 'text', type: 'VARCHAR(2000)', remarks: 'Message sent text') {
                 constraints(nullable: false)
             }
             column(name: 'status', type: 'VARCHAR(20)', remarks: 'Message status') {
@@ -316,6 +316,33 @@ databaseChangeLog {
             column(name: 'value', value: '20')
             column(name: 'type', value: 'INTEGER')
             column(name: 'description', value: 'Количество отправленных сообщений на странице')
+        }
+    }
+
+    changeSet(id: '2017-02-21-01', author: 'Nikita Shevtsov <shevtsou@gmail.com>') {
+        createTable(schemaName: 'jsender', tableName: 'message_template', tablespace: 'jsender_data', remarks: 'Message template') {
+            column(name: 'id', type: 'VARCHAR(128)', remarks: 'The unique identifier for message template') {
+                constraints(nullable: false)
+            }
+            column(name: 'subject', type: 'VARCHAR(250)', remarks: 'Message template subject') {
+                constraints(nullable: false)
+            }
+            column(name: 'text', type: 'VARCHAR(2000)', remarks: 'Message template text') {
+                constraints(nullable: false)
+            }
+        }
+        addPrimaryKey(schemaName: 'jsender', tableName: 'message_template', tablespace: 'jsender_index',
+                columnNames: 'id', constraintName: 'PK_message_template')
+    }
+
+    changeSet(id: '2017-02-21-02', author: 'Nikita Shevtsov <shevtsou@gmail.com>') {
+        insert(schemaName: 'jsender', tableName: 'setting') {
+            column(name: 'id', value: 'f8ea9abe-b5b3-4147-a936-4811d588063c')
+            column(name: 'category', value: 'VIEW')
+            column(name: 'name', value: 'message_templates_per_page')
+            column(name: 'value', value: '20')
+            column(name: 'type', value: 'INTEGER')
+            column(name: 'description', value: 'Количество шаблонов сообщений на странице')
         }
     }
 

@@ -18,6 +18,7 @@ public enum Settings {
 
     SENT_MESSAGES_PER_PAGE,
 
+    MESSAGE_TEMPLATES_PER_PAGE,
 
     SMS_USER_NAME,
 

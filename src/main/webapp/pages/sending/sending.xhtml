@@ -47,14 +47,14 @@
                         </p:selectOneMenu>
                         <h:outputLabel for="subject" value="#{msgs['sending.subject']}:" />
                         <p:inputText id="subject" value="#{sendingBean.messageToSend.subject}"
-                                     maxlength="200"
+                                     maxlength="250"
                                      style="width: 100%" required="#{sendingBean.sendingType == 'EMAIL'}"
                                      label="#{msgs['sending.subject']}" />
                     </h:panelGrid>
                     <p:tabView activeIndex="#{sendingBean.tabIndex}">
                         <p:tab title="#{msgs['sending.text']}">
                             <p:inputTextarea value="#{sendingBean.messageToSend.text}" styleClass="area"
-                                             maxlength="1000"
+                                             maxlength="2000"
                                              required="true" label="#{msgs['sending.text']}" />
                         </p:tab>
                         <p:tab title="#{msgs['sending.recipients']}">
