@@ -37,7 +37,10 @@
                     </p:column>
                     <p:column width="6%">
                         <h:panelGroup>
-                            <p:commandLink action="#{sentMessageBean.showMessageDetailDialog}" update="sentMessageDialog" style="padding-right: 5px">
+                            <p:commandLink update="sentMessageForm:sentMessageDialog"
+                                           action="#{sentMessageBean.selectSentMessage(sentMessage)}"
+                                           oncomplete="PF('sentMessageDialog').show();"
+                                           style="padding-right: 5px">
                                 <p:graphicImage url="/resources/css/css-images/text.png" title="#{msgs['button.remove']}" />
                                 <f:setPropertyActionListener
                                         target="#{sentMessageBean.sentMessage}" value="#{sentMessage}" />
@@ -63,8 +66,8 @@
                                      styleClass="ui-confirmdialog-no"
                                      icon="ui-icon-close" />
                 </p:confirmDialog>
+                <ui:include src="message_detail.xhtml" />
             </h:form>
-            <ui:include src="message_detail.xhtml" />
         </p:panel>
     </ui:define>
 
