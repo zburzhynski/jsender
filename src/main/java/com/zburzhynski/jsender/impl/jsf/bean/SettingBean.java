@@ -11,6 +11,7 @@ import static com.zburzhynski.jsender.api.domain.Settings.MAIL_PASSWORD;
 import static com.zburzhynski.jsender.api.domain.Settings.MAIL_SMTP_HOST;
 import static com.zburzhynski.jsender.api.domain.Settings.MAIL_SMTP_PORT;
 import static com.zburzhynski.jsender.api.domain.Settings.MAIL_USER_NAME;
+import static com.zburzhynski.jsender.api.domain.Settings.MESSAGE_TEMPLATES_PER_PAGE;
 import static com.zburzhynski.jsender.api.domain.Settings.ORGANIZATION_ADDRESS;
 import static com.zburzhynski.jsender.api.domain.Settings.ORGANIZATION_NAME;
 import static com.zburzhynski.jsender.api.domain.Settings.RECIPIENTS_PER_PAGE;
@@ -117,6 +118,15 @@ public class SettingBean implements Serializable {
      */
     public int getSentMessagesPerPage() {
         return Integer.parseInt(settings.get(SENT_MESSAGES_PER_PAGE.name()).getValue());
+    }
+
+    /**
+     * Gets message templates per page.
+     *
+     * @return message templates per page
+     */
+    public int getMessageTemplatesPerPage() {
+        return Integer.parseInt(settings.get(MESSAGE_TEMPLATES_PER_PAGE.name()).getValue());
     }
 
     /**
@@ -258,6 +268,10 @@ public class SettingBean implements Serializable {
         return settingService;
     }
 
+    public void setSettingService(ISettingService settingService) {
+        this.settingService = settingService;
+    }
+
     public Setting getSetting() {
         return setting;
     }
@@ -276,10 +290,6 @@ public class SettingBean implements Serializable {
 
     public void setSettingValidator(SettingValidator settingValidator) {
         this.settingValidator = settingValidator;
-    }
-
-    public void setSettingService(ISettingService settingService) {
-        this.settingService = settingService;
     }
 
 }

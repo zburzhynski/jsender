@@ -13,6 +13,8 @@ public enum View {
     SENDING("/pages/sending/sending?faces-redirect=true"),
     SENDING_STATUS("/pages/sending/sending_status?faces-redirect=true"),
     SENT_MESSAGES("/pages/sent_message/sent_messages?faces-redirect=true"),
+    MESSAGE_TEMPLATES("/pages/message_template/message_templates?faces-redirect=true"),
+    MESSAGE_TEMPLATE("/pages/message_template/message_template?faces-redirect=true"),
     CLIENT("/pages/client/client?faces-redirect=true"),
     CONTACT_INFO_EMAIL("/pages/client/email?faces-redirect=true"),
     CONTACT_INFO_PHONE("/pages/client/phone?faces-redirect=true"),

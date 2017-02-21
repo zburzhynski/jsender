@@ -1,6 +1,7 @@
 package com.zburzhynski.jsender.impl.jsf.bean;
 
 import static com.zburzhynski.jsender.api.domain.View.CLIENTS;
+import static com.zburzhynski.jsender.api.domain.View.MESSAGE_TEMPLATES;
 import static com.zburzhynski.jsender.api.domain.View.SENDING;
 import static com.zburzhynski.jsender.api.domain.View.SENT_MESSAGES;
 import static com.zburzhynski.jsender.api.domain.View.SETTINGS;
@@ -60,6 +61,15 @@ public class MainMenuBean implements Serializable {
      */
     public String sentMessages() {
         return SENT_MESSAGES.getPath();
+    }
+
+    /**
+     * Redirects to message templates.xhtml page.
+     *
+     * @return path to redirect
+     */
+    public String messageTempalates() {
+        return MESSAGE_TEMPLATES.getPath();
     }
 
     /**

@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/pages/template/layout_template.xhtml">
+
+    <ui:define name="content">
+        <style type="text/css">
+            .name {
+                font-weight: bold;
+                width: 6%;
+            }
+            .val {
+                width: 59%;
+            }
+            .msg {
+                width: 35%;
+            }
+            .cal .ui-inputfield {
+                width: 97%;
+            }
+            .area {
+                width: 100% !important;
+                height: 200px !important;
+                resize: none;
+            }
+        </style>
+        <p:panel>
+            <h:form id="messageTemplateForm">
+                <p:focus />
+                <h:panelGrid columns="3" columnClasses="name,val,msg" width="100%">
+                    <h:outputLabel for="subject" value="#{msgs['messageTemplate.subject']}:" />
+                    <p:inputText id="subject" value="#{messageTemplateBean.messageTemplate.subject}" required="true" maxlength="250" style="width: 100%" />
+                    <p:message for="subject" />
+                    <h:outputLabel for="text" value="#{msgs['messageTemplate.text']}:" />
+                    <p:inputTextarea id="text" value="#{messageTemplateBean.messageTemplate.text}" required="true" maxlength="2000" styleClass="area" style="width: 97%" />
+                    <p:message for="text" />
+                </h:panelGrid>
+                <h:panelGrid columns="2">
+                    <h:commandButton id="saveMessageTemplate" value="#{msgs['button.save']}"
+                                     action="#{messageTemplateBean.saveMessageTemplate}" />
+                    <h:commandButton id="cancelUpdateMessageTemplate" value="#{msgs['button.cancel']}"
+                                     action="/pages/message_template/message_templates?faces-redirect=true"
+                                     immediate="true" />
+                </h:panelGrid>
+                <p:confirmDialog global="true" closeOnEscape="true">
+                    <p:commandButton value="#{msgs['button.ok']}"
+                                     type="button"
+                                     styleClass="ui-confirmdialog-yes"
+                                     icon="ui-icon-check" />
+                    <p:commandButton value="#{msgs['button.cancel']}"
+                                     type="button"
+                                     styleClass="ui-confirmdialog-no"
+                                     icon="ui-icon-close" />
+                </p:confirmDialog>
+            </h:form>
+        </p:panel>
+    </ui:define>
+
+</ui:composition>
