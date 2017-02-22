@@ -16,6 +16,10 @@
                              paginator="true"
                              paginatorPosition="bottom"
                              paginatorAlwaysVisible="false"
+                             disabledSelection="#{messageTemplateBean.redirectFrom == 'MESSAGE_TEMPLATES'}"
+                             rowKey="#{messageTemplate.id}"
+                             selection="#{messageTemplateBean.selectedMessageTemplate}"
+                             selectionMode="single"
                              lazy="true"
                              emptyMessage="#{msgs['messageTemplates.empty']}"
                              rows="#{messageTemplateBean.rowCount}">
@@ -48,6 +52,14 @@
                     <h:commandButton action="#{messageTemplateBean.addMessageTemplate}"
                                      image="/resources/css/css-images/add.gif"
                                      title="#{msgs['button.add']}" />
+                </h:panelGrid>
+                <h:panelGrid columns="2" style="padding-top: 5px;">
+                    <h:commandButton id="select" value="#{msgs['button.select']}"
+                                     action="#{messageTemplateBean.selectMessageTemplate}"
+                                     rendered="#{messageTemplateBean.redirectFrom != 'MESSAGE_TEMPLATES'}"/>
+                    <h:commandButton id="cancelSelect" value="#{msgs['button.cancel']}"
+                                     action="#{messageTemplateBean.cancelMessageTemplate}"
+                                     rendered="#{messageTemplateBean.redirectFrom != 'MESSAGE_TEMPLATES'}"/>
                 </h:panelGrid>
                 <p:confirmDialog global="true" closeOnEscape="true">
                     <p:commandButton value="#{msgs['button.ok']}"

@@ -38,4 +38,5 @@ public enum Settings {
 
     ORGANIZATION_ADDRESS,
 
+    ORGANIZATION_MOBILE_PHONE_NUMBER,
 }

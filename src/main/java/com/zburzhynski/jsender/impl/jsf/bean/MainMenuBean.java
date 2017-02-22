@@ -25,6 +25,8 @@ public class MainMenuBean implements Serializable {
 
     private static final String CLIENT_BEAN = "clientBean";
 
+    private static final String MESSAGE_TEMPLATE_BEAN = "messageTemplateBean";
+
     @ManagedProperty(value = "#{sendingBean}")
     private SendingBean sendingBean;
 
@@ -50,7 +52,7 @@ public class MainMenuBean implements Serializable {
      * @return path to redirect
      */
     public String sending() {
-        sendingBean.getMessageToSend().setFrom(settingBean.getOrganizationName());
+        sendingBean.setFrom(settingBean.getOrganizationName());
         return SENDING.getPath();
     }
 
@@ -68,7 +70,11 @@ public class MainMenuBean implements Serializable {
      *
      * @return path to redirect
      */
-    public String messageTempalates() {
+    public String messageTemplates() {
+        MessageTemplateBean messageTemplateBean = BeanUtils.getSessionBean(MESSAGE_TEMPLATE_BEAN);
+        if (messageTemplateBean != null) {
+            messageTemplateBean.setRedirectFrom(MESSAGE_TEMPLATES);
+        }
         return MESSAGE_TEMPLATES.getPath();
     }
 

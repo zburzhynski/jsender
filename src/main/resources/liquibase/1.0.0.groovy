@@ -270,6 +270,14 @@ databaseChangeLog {
             column(name: 'type', value: 'STRING')
             column(name: 'description', value: 'Адрес организации')
         }
+        insert(schemaName: 'jsender', tableName: 'setting') {
+            column(name: 'id', value: '3226f6cb-314e-4c7a-91a2-5993469de0b0')
+            column(name: 'category', value: 'REQUISITE')
+            column(name: 'name', value: 'organization_mobile_phone_number')
+            column(name: 'value', value: 'Мобильный телефон организации')
+            column(name: 'type', value: 'STRING')
+            column(name: 'description', value: 'Мобильный телефон организации')
+        }
     }
 
     changeSet(id: '2017-02-16-01', author: 'Nikita Shevtsov <shevtsou@gmail.com>') {

@@ -13,6 +13,7 @@ import static com.zburzhynski.jsender.api.domain.Settings.MAIL_SMTP_PORT;
 import static com.zburzhynski.jsender.api.domain.Settings.MAIL_USER_NAME;
 import static com.zburzhynski.jsender.api.domain.Settings.MESSAGE_TEMPLATES_PER_PAGE;
 import static com.zburzhynski.jsender.api.domain.Settings.ORGANIZATION_ADDRESS;
+import static com.zburzhynski.jsender.api.domain.Settings.ORGANIZATION_MOBILE_PHONE_NUMBER;
 import static com.zburzhynski.jsender.api.domain.Settings.ORGANIZATION_NAME;
 import static com.zburzhynski.jsender.api.domain.Settings.RECIPIENTS_PER_PAGE;
 import static com.zburzhynski.jsender.api.domain.Settings.SENT_MESSAGES_PER_PAGE;
@@ -199,6 +200,15 @@ public class SettingBean implements Serializable {
      */
     public String getOrganizationAddress() {
         return settings.get(ORGANIZATION_ADDRESS.name()).getValue();
+    }
+
+    /**
+     * Gets organization phone number.
+     *
+     * @return organization phone number
+     */
+    public String getOrganizationPhoneNumber() {
+        return settings.get(ORGANIZATION_MOBILE_PHONE_NUMBER.name()).getValue();
     }
 
     /**

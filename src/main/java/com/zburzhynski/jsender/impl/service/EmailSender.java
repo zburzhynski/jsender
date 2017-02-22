@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import javax.mail.MessagingException;
@@ -51,41 +52,41 @@ public class EmailSender implements ISender {
     /**
      * Send email.
      *
-     * @param email email to send
+     * @param emails emails to send
      * @return sending response
      */
     @Override
     @Transactional(readOnly = false)
-    public Map<Recipient, String> send(Message email) {
-        LOGGER.info("Sending email {} ", email);
+    public Map<Recipient, String> send(List<Message> emails) {
         buildSession();
         Map<Recipient, String> response = new HashMap<>();
-        for (Recipient recipient : email.getRecipients()) {
+        for (Message email : emails) {
+            LOGGER.info("Sending email {} ", email);
             String status;
             try {
                 javax.mail.Message message = new MimeMessage(session);
                 message.setFrom(isNotBlank(email.getFrom()) ? new InternetAddress(email.getFrom()) : null);
                 message.setRecipients(javax.mail.Message.RecipientType.TO,
-                    InternetAddress.parse(recipient.getContactInfo()));
+                    InternetAddress.parse(email.getRecipient().getContactInfo()));
                 message.setSubject(isNotBlank(email.getSubject()) ? email.getSubject() : null);
                 message.setText(isNotBlank(email.getText()) ? email.getText() : null);
                 Transport.send(message);
                 status = "Email sent successfully";
-                LOGGER.info("Email sent successfully, recipient = " + recipient.getContactInfo());
+                LOGGER.info("Email sent successfully, recipient = " + email.getRecipient().getContactInfo());
             } catch (MessagingException e) {
                 status = e.getClass().getName();
                 LOGGER.error("An error occurred while sending email", e);
             }
             SentMessage sentMessage = new SentMessage();
             sentMessage.setSentDate(new Date());
-            sentMessage.setClientId(recipient.getClientId());
-            sentMessage.setContactInfo(recipient.getContactInfo());
+            sentMessage.setClientId(email.getRecipient().getClientId());
+            sentMessage.setContactInfo(email.getRecipient().getContactInfo());
             sentMessage.setSubject(email.getSubject());
             sentMessage.setText(email.getText());
             sentMessage.setStatus(status);
             sentMessage.setSendingType(SendingType.EMAIL);
             sentMessageRepository.saveOrUpdate(sentMessage);
-            response.put(recipient, status);
+            response.put(email.getRecipient(), status);
         }
         return response;
     }
