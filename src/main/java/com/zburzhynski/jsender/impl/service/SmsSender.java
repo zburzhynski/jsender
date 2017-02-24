@@ -23,6 +23,7 @@ import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -53,21 +54,21 @@ public class SmsSender implements ISender {
     /**
      * Send sms.
      *
-     * @param sms sms to send
+     * @param smsList sms to send
      * @return sending response
      */
     @Override
     @Transactional(readOnly = false)
-    public Map<Recipient, String> send(Message sms) {
+    public Map<Recipient, String> send(List<Message> smsList) {
         Map<Recipient, String> response = new HashMap<>();
         String name = settingRepository.findByName(Settings.SMS_USER_NAME).getValue();
         String password = settingRepository.findByName(Settings.SMS_PASSWORD).getValue();
         String authString = name + COLON + password;
-        for (Recipient recipient : sms.getRecipients()) {
+        for (Message sms : smsList) {
             String status;
             try {
                 URL url = new URL(PROTOCOL, "api.smsfeedback.ru", PORT, "/messages/v2/send/?phone=%2B" +
-                    recipient.getContactInfo() + "&text=" + URLEncoder.encode(sms.getText(), "UTF-8")
+                    sms.getRecipient().getContactInfo() + "&text=" + URLEncoder.encode(sms.getText(), "UTF-8")
                     + "&sender=" + sms.getFrom());
                 URLConnection urlConnection = url.openConnection();
                 urlConnection.setRequestProperty("Authorization", authString);
@@ -86,14 +87,14 @@ public class SmsSender implements ISender {
             }
             SentMessage sentMessage = new SentMessage();
             sentMessage.setSentDate(new Date());
-            sentMessage.setClientId(recipient.getClientId());
-            sentMessage.setContactInfo(recipient.getContactInfo());
+            sentMessage.setClientId(sms.getRecipient().getClientId());
+            sentMessage.setContactInfo(sms.getRecipient().getContactInfo());
             sentMessage.setSubject(sms.getSubject());
             sentMessage.setText(sms.getText());
             sentMessage.setStatus(status);
             sentMessage.setSendingType(SendingType.SMS);
             sentMessageRepository.saveOrUpdate(sentMessage);
-            response.put(recipient, status);
+            response.put(sms.getRecipient(), status);
 
         }
         return response;

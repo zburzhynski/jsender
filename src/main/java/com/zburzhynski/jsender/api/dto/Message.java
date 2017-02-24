@@ -1,8 +1,6 @@
 package com.zburzhynski.jsender.api.dto;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Message.
@@ -15,7 +13,7 @@ public class Message implements Serializable {
 
     private String from;
 
-    private List<Recipient> recipients;
+    private Recipient recipient;
 
     private String subject;
 
@@ -29,20 +27,13 @@ public class Message implements Serializable {
         this.from = from;
     }
 
-    /**
-     * Gets recipients.
-     *
-     * @return recipients
-     */
-    public List<Recipient> getRecipients() {
-        if (recipients == null) {
-            recipients = new ArrayList<>();
-        }
-        return recipients;
+
+    public Recipient getRecipient() {
+        return recipient;
     }
 
-    public void setRecipients(List<Recipient> recipients) {
-        this.recipients = recipients;
+    public void setRecipient(Recipient recipient) {
+        this.recipient = recipient;
     }
 
     public String getSubject() {

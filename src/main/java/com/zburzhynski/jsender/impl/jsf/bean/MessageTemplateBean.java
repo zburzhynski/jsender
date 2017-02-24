@@ -2,9 +2,13 @@ package com.zburzhynski.jsender.impl.jsf.bean;
 
 import static com.zburzhynski.jsender.api.domain.View.MESSAGE_TEMPLATE;
 import static com.zburzhynski.jsender.api.domain.View.MESSAGE_TEMPLATES;
+import static com.zburzhynski.jsender.api.domain.View.SENDING;
 import com.zburzhynski.jsender.api.criteria.MessageTemplateSearchCriteria;
+import com.zburzhynski.jsender.api.domain.View;
 import com.zburzhynski.jsender.api.service.IMessageTemplateService;
 import com.zburzhynski.jsender.impl.domain.MessageTemplate;
+import com.zburzhynski.jsender.impl.jsf.validator.MessageTemplateSelectValidator;
+import com.zburzhynski.jsender.impl.util.BeanUtils;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
 
@@ -26,9 +30,20 @@ import javax.faces.bean.SessionScoped;
 @SessionScoped
 public class MessageTemplateBean {
 
+    private static final String SENDING_BEAN = "sendingBean";
+
+    private View redirectFrom = MESSAGE_TEMPLATES;
+
     private MessageTemplate messageTemplate;
 
+    private MessageTemplate selectedMessageTemplate;
+
     private LazyDataModel<MessageTemplate> messageTemplateModel;
+
+    private List<MessageTemplate> datasource;
+
+    @ManagedProperty(value = "#{messageTemplateSelectValidator}")
+    private MessageTemplateSelectValidator templateSelectValidator;
 
     @ManagedProperty(value = "#{messageTemplateService}")
     private IMessageTemplateService<String, MessageTemplate> messageTemplateService;
@@ -41,19 +56,8 @@ public class MessageTemplateBean {
      */
     @PostConstruct
     public void init() {
-        messageTemplateModel = new LazyDataModel<MessageTemplate>() {
-            @Override
-            public List<MessageTemplate> load(int first, int pageSize, String sortField, SortOrder sortOrder,
-                                              Map<String, Object> filters) {
-                MessageTemplateSearchCriteria searchCriteria = new MessageTemplateSearchCriteria();
-                int count = messageTemplateService.countByCriteria(searchCriteria);
-                setRowCount(count);
-                return messageTemplateService.getByCriteria(searchCriteria, Long.valueOf(first),
-                    Long.valueOf(first + pageSize));
-            }
-        };
+        messageTemplateModel = new MessageTemplateDataModel();
     }
-
 
     /**
      * Adds message template.
@@ -85,8 +89,39 @@ public class MessageTemplateBean {
         return MESSAGE_TEMPLATES.getPath();
     }
 
+    /**
+     * Select message template.
+     *
+     * @return path for navigation
+     */
+    public String selectMessageTemplate() {
+        boolean valid = templateSelectValidator.validate(selectedMessageTemplate);
+        if (!valid) {
+            return null;
+        }
+        selectToSendingForm();
+        return redirectFrom.getPath();
+    }
+
+    /**
+     * Cancel select message template.
+     *
+     * @return path for navigation
+     */
+    public String cancelMessageTemplate() {
+        return redirectFrom.getPath();
+    }
+
     public Integer getRowCount() {
         return settingBean.getMessageTemplatesPerPage();
+    }
+
+    public View getRedirectFrom() {
+        return redirectFrom;
+    }
+
+    public void setRedirectFrom(View redirectFrom) {
+        this.redirectFrom = redirectFrom;
     }
 
     public MessageTemplate getMessageTemplate() {
@@ -105,12 +140,73 @@ public class MessageTemplateBean {
         this.messageTemplateModel = messageTemplateModel;
     }
 
+    public MessageTemplate getSelectedMessageTemplate() {
+        return selectedMessageTemplate;
+    }
+
+    public void setSelectedMessageTemplate(MessageTemplate selectedMessageTemplate) {
+        this.selectedMessageTemplate = selectedMessageTemplate;
+    }
+
+    public void setTemplateSelectValidator(MessageTemplateSelectValidator templateSelectValidator) {
+        this.templateSelectValidator = templateSelectValidator;
+    }
+
     public void setMessageTemplateService(IMessageTemplateService<String, MessageTemplate> messageTemplateService) {
         this.messageTemplateService = messageTemplateService;
     }
 
     public void setSettingBean(SettingBean settingBean) {
         this.settingBean = settingBean;
+    }
+
+    private void selectToSendingForm() {
+        if (SENDING.equals(redirectFrom)) {
+            SendingBean sendingBean = BeanUtils.getSessionBean(SENDING_BEAN);
+            if (sendingBean != null) {
+                sendingBean.setSubject(selectedMessageTemplate.getSubject());
+                sendingBean.setText(selectedMessageTemplate.getText());
+            }
+        }
+    }
+
+    private class MessageTemplateDataModel extends LazyDataModel<MessageTemplate> {
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public List<MessageTemplate> load(int first, int pageSize, String sortField, SortOrder sortOrder,
+                                          Map<String, Object> filters) {
+            MessageTemplateSearchCriteria searchCriteria = new MessageTemplateSearchCriteria();
+            int count = messageTemplateService.countByCriteria(searchCriteria);
+            setRowCount(count);
+            datasource = messageTemplateService.getByCriteria(searchCriteria, Long.valueOf(first),
+                Long.valueOf(first + pageSize));
+            return datasource;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public MessageTemplate getRowData(String rowKey) {
+            for (MessageTemplate object : datasource) {
+                if (object.getId().equals(rowKey)) {
+                    return object;
+                }
+            }
+            return null;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public Object getRowKey(MessageTemplate object) {
+            return object.getId();
+        }
+
     }
 
 }

@@ -3,6 +3,7 @@ package com.zburzhynski.jsender.impl.jsf.bean;
 import static com.zburzhynski.jsender.api.domain.CommonConstant.COMMA;
 import static com.zburzhynski.jsender.api.domain.CommonConstant.SPACE;
 import static com.zburzhynski.jsender.api.domain.View.CLIENTS;
+import static com.zburzhynski.jsender.api.domain.View.MESSAGE_TEMPLATES;
 import static com.zburzhynski.jsender.api.domain.View.SENDING;
 import static com.zburzhynski.jsender.api.domain.View.SENDING_STATUS;
 import static javax.faces.application.FacesMessage.SEVERITY_ERROR;
@@ -44,9 +45,15 @@ public class SendingBean implements Serializable {
 
     private static final String RECIPIENTS_NOT_SPECIFIED = "sendingValidator.recipientsNotSpecified";
 
+    private static final String MESSAGE_TEMPLATE_BEAN = "messageTemplateBean";
+
     private int tabIndex;
 
-    private Message messageToSend = new Message();
+    private String subject;
+
+    private String text;
+
+    private String from;
 
     private SendingType sendingType;
 
@@ -54,8 +61,14 @@ public class SendingBean implements Serializable {
 
     private List<Client> recipients = new ArrayList<>();
 
+    @ManagedProperty(value = "#{templateReplaceBean}")
+    private TemplateReplaceBean templateReplaceBean;
+
     @ManagedProperty(value = "#{clientBean}")
     private ClientBean clientBean;
+
+    @ManagedProperty(value = "#{messageTemplateBean}")
+    private MessageTemplateBean messageTemplateBean;
 
     @ManagedProperty(value = "#{emailSender}")
     private ISender emailSender;
@@ -75,39 +88,49 @@ public class SendingBean implements Serializable {
      * @return path for navigation
      */
     public String send() {
-        List<Recipient> contacts = new ArrayList<>();
+        List<Message> messages = new ArrayList<>();
         if (SendingType.SMS.equals(sendingType)) {
             for (Client recipient : recipients) {
                 for (ContactInfoPhone phone : recipient.getContactInfo().getPhones()) {
+                    Message sms = new Message();
+                    sms.setSubject(subject);
+                    sms.setText(text);
+                    sms.setFrom(from);
                     Recipient contact = new Recipient();
                     contact.setClientId(recipient.getId());
                     contact.setContactInfo(phone.getFullNumber());
                     contact.setFullName(recipient.getPerson().getFullName());
-                    contacts.add(contact);
+                    sms.setRecipient(contact);
+                    templateReplaceBean.formatTemplate(sms);
+                    messages.add(sms);
                 }
             }
-            messageToSend.setRecipients(contacts);
-            if (CollectionUtils.isEmpty(messageToSend.getRecipients())) {
+            if (CollectionUtils.isEmpty(messages)) {
                 addMessage(RECIPIENTS_NOT_SPECIFIED);
                 return null;
             }
-            sendingStatus = smsSender.send(messageToSend);
+            sendingStatus = smsSender.send(messages);
         } else if (SendingType.EMAIL.equals(sendingType)) {
             for (Client recipient : recipients) {
                 for (ContactInfoEmail email : recipient.getContactInfo().getEmails()) {
+                    Message message = new Message();
+                    message.setSubject(subject);
+                    message.setText(text);
+                    message.setFrom(from);
                     Recipient contact = new Recipient();
                     contact.setClientId(recipient.getId());
                     contact.setContactInfo(email.getAddress());
                     contact.setFullName(recipient.getPerson().getFullName());
-                    contacts.add(contact);
+                    message.setRecipient(contact);
+                    templateReplaceBean.formatTemplate(message);
+                    messages.add(message);
                 }
             }
-            messageToSend.setRecipients(contacts);
-            if (CollectionUtils.isEmpty(messageToSend.getRecipients())) {
+            if (CollectionUtils.isEmpty(messages)) {
                 addMessage(RECIPIENTS_NOT_SPECIFIED);
                 return null;
             }
-            sendingStatus = emailSender.send(messageToSend);
+            sendingStatus = emailSender.send(messages);
         }
         return SENDING_STATUS.getPath();
     }
@@ -172,6 +195,17 @@ public class SendingBean implements Serializable {
         return SENDING.getPath();
     }
 
+    /**
+     * Selects message template.
+     *
+     * @return path for navigation
+     */
+    public String selectMessageTemplate() {
+        messageTemplateBean.setRedirectFrom(SENDING);
+        messageTemplateBean.setSelectedMessageTemplate(null);
+        return MESSAGE_TEMPLATES.getPath();
+    }
+
     public int getTabIndex() {
         return tabIndex;
     }
@@ -180,12 +214,28 @@ public class SendingBean implements Serializable {
         this.tabIndex = tabIndex;
     }
 
-    public Message getMessageToSend() {
-        return messageToSend;
+    public String getSubject() {
+        return subject;
     }
 
-    public void setMessageToSend(Message messageToSend) {
-        this.messageToSend = messageToSend;
+    public void setSubject(String subject) {
+        this.subject = subject;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public String getFrom() {
+        return from;
+    }
+
+    public void setFrom(String from) {
+        this.from = from;
     }
 
     public SendingType getSendingType() {
@@ -212,8 +262,16 @@ public class SendingBean implements Serializable {
         return settingBean.getRecipientsPerPage();
     }
 
+    public void setTemplateReplaceBean(TemplateReplaceBean templateReplaceBean) {
+        this.templateReplaceBean = templateReplaceBean;
+    }
+
     public void setClientBean(ClientBean clientBean) {
         this.clientBean = clientBean;
+    }
+
+    public void setMessageTemplateBean(MessageTemplateBean messageTemplateBean) {
+        this.messageTemplateBean = messageTemplateBean;
     }
 
     public void setEmailSender(ISender emailSender) {
