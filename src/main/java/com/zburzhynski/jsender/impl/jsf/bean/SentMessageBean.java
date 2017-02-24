@@ -4,7 +4,6 @@ import static com.zburzhynski.jsender.api.domain.View.SENT_MESSAGES;
 import com.zburzhynski.jsender.api.criteria.SentMessageSearchCriteria;
 import com.zburzhynski.jsender.api.service.ISentMessageService;
 import com.zburzhynski.jsender.impl.domain.SentMessage;
-import org.primefaces.component.dialog.Dialog;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
 
@@ -29,8 +28,6 @@ public class SentMessageBean {
     private SentMessage sentMessage;
 
     private LazyDataModel<SentMessage> sentMessageModel;
-
-    private Dialog sentMessageDetailDialog = new Dialog();
 
     @ManagedProperty(value = "#{sentMessageService}")
     private ISentMessageService<String, SentMessage> sentMessageService;
@@ -58,17 +55,12 @@ public class SentMessageBean {
     }
 
     /**
-     * Shows message detail dialog.
+     * Select current sent message.
+     *
+     * @param selectedMessage sent message to select
      */
-    public void showMessageDetailDialog() {
-        sentMessageDetailDialog.setVisible(true);
-    }
-
-    /**
-     * Hides message detail dialog.
-     */
-    public void hideMessageDetailDialog() {
-        sentMessageDetailDialog.setVisible(false);
+    public void selectSentMessage(SentMessage selectedMessage) {
+        this.sentMessage = selectedMessage;
     }
 
     /**
@@ -99,14 +91,6 @@ public class SentMessageBean {
 
     public void setSentMessageModel(LazyDataModel<SentMessage> sentMessageModel) {
         this.sentMessageModel = sentMessageModel;
-    }
-
-    public Dialog getSentMessageDetailDialog() {
-        return sentMessageDetailDialog;
-    }
-
-    public void setSentMessageDetailDialog(Dialog sentMessageDetailDialog) {
-        this.sentMessageDetailDialog = sentMessageDetailDialog;
     }
 
     public void setSentMessageService(ISentMessageService<String, SentMessage> sentMessageService) {
