@@ -10,10 +10,12 @@ import static javax.faces.application.FacesMessage.SEVERITY_ERROR;
 import com.zburzhynski.jsender.api.domain.SendingType;
 import com.zburzhynski.jsender.api.dto.Message;
 import com.zburzhynski.jsender.api.dto.Recipient;
+import com.zburzhynski.jsender.api.service.IMessagePreparer;
 import com.zburzhynski.jsender.api.service.ISender;
 import com.zburzhynski.jsender.impl.domain.Client;
 import com.zburzhynski.jsender.impl.domain.ContactInfoEmail;
 import com.zburzhynski.jsender.impl.domain.ContactInfoPhone;
+import com.zburzhynski.jsender.impl.service.MessagePreparer;
 import com.zburzhynski.jsender.impl.util.PropertyReader;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
@@ -61,8 +63,8 @@ public class SendingBean implements Serializable {
 
     private List<Client> recipients = new ArrayList<>();
 
-    @ManagedProperty(value = "#{templateReplaceBean}")
-    private TemplateReplaceBean templateReplaceBean;
+    @ManagedProperty(value = "#{messagePreparer}")
+    private IMessagePreparer messagePreparer;
 
     @ManagedProperty(value = "#{clientBean}")
     private ClientBean clientBean;
@@ -101,7 +103,7 @@ public class SendingBean implements Serializable {
                     contact.setContactInfo(phone.getFullNumber());
                     contact.setFullName(recipient.getPerson().getFullName());
                     sms.setRecipient(contact);
-                    templateReplaceBean.formatTemplate(sms);
+                    messagePreparer.prepareMessage(sms);
                     messages.add(sms);
                 }
             }
@@ -122,7 +124,7 @@ public class SendingBean implements Serializable {
                     contact.setContactInfo(email.getAddress());
                     contact.setFullName(recipient.getPerson().getFullName());
                     message.setRecipient(contact);
-                    templateReplaceBean.formatTemplate(message);
+                    messagePreparer.prepareMessage(message);
                     messages.add(message);
                 }
             }
@@ -262,9 +264,6 @@ public class SendingBean implements Serializable {
         return settingBean.getRecipientsPerPage();
     }
 
-    public void setTemplateReplaceBean(TemplateReplaceBean templateReplaceBean) {
-        this.templateReplaceBean = templateReplaceBean;
-    }
 
     public void setClientBean(ClientBean clientBean) {
         this.clientBean = clientBean;
@@ -272,6 +271,10 @@ public class SendingBean implements Serializable {
 
     public void setMessageTemplateBean(MessageTemplateBean messageTemplateBean) {
         this.messageTemplateBean = messageTemplateBean;
+    }
+
+    public void setMessagePreparer(IMessagePreparer messagePreparer) {
+        this.messagePreparer = messagePreparer;
     }
 
     public void setEmailSender(ISender emailSender) {
