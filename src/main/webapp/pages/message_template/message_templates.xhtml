@@ -27,7 +27,7 @@
                         <h:outputText value="#{messageTemplate.subject}" />
                     </p:column>
                     <p:column headerText="#{msgs['messageTemplate.text']}" width="47%">
-                        <h:outputText value="#{messageTemplate.text}" />
+                        <h:outputText value="#{messageTemplate.text}" escape="false" />
                     </p:column>
                     <p:column width="6%">
                         <h:panelGroup>
