@@ -17,6 +17,8 @@ public enum SettingCategory {
 
     SMS_SENDING,
 
-    REQUISITE
+    REQUISITE,
+
+    JDENT
 
 }

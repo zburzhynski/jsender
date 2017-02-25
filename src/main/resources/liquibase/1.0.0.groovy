@@ -354,4 +354,23 @@ databaseChangeLog {
         }
     }
 
+    changeSet(id: '2017-02-25-01', author: 'Nikita Shevtsov <shevtsou@gmail.com>') {
+        insert(schemaName: 'jsender', tableName: 'setting') {
+            column(name: 'id', value: 'a5e0e9f9-98b0-4cfa-a8ac-8adbe4c6afff')
+            column(name: 'category', value: 'JDENT')
+            column(name: 'name', value: 'jdent_integration_enabled')
+            column(name: 'value', value: 'false')
+            column(name: 'type', value: 'BOOLEAN')
+            column(name: 'description', value: 'Интеграция с jDent')
+        }
+        insert(schemaName: 'jsender', tableName: 'setting') {
+            column(name: 'id', value: '6bfc2406-e1cf-4992-91ce-989bcc5f4ff0')
+            column(name: 'category', value: 'JDENT')
+            column(name: 'name', value: 'jdent_url')
+            column(name: 'value', value: 'http://localhost:8080/jdent/')
+            column(name: 'type', value: 'STRING')
+            column(name: 'description', value: 'Ссылка на jDent')
+        }
+    }
+
 }
