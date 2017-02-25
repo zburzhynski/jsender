@@ -15,7 +15,6 @@ import com.zburzhynski.jsender.api.service.ISender;
 import com.zburzhynski.jsender.impl.domain.Client;
 import com.zburzhynski.jsender.impl.domain.ContactInfoEmail;
 import com.zburzhynski.jsender.impl.domain.ContactInfoPhone;
-import com.zburzhynski.jsender.impl.service.MessagePreparer;
 import com.zburzhynski.jsender.impl.util.PropertyReader;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;

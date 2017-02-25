@@ -41,6 +41,8 @@ public class EmailSender implements ISender {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(EmailSender.class);
 
+    private static final String HTML_MESSAGE_FORMAT = "text/html";
+
     private Session session;
 
     @Autowired
@@ -65,11 +67,10 @@ public class EmailSender implements ISender {
             String status;
             try {
                 javax.mail.Message message = new MimeMessage(session);
-                message.setFrom(isNotBlank(email.getFrom()) ? new InternetAddress(email.getFrom()) : null);
                 message.setRecipients(javax.mail.Message.RecipientType.TO,
                     InternetAddress.parse(email.getRecipient().getContactInfo()));
                 message.setSubject(isNotBlank(email.getSubject()) ? email.getSubject() : null);
-                message.setText(isNotBlank(email.getText()) ? email.getText() : null);
+                message.setContent(isNotBlank(email.getText()) ? email.getText() : null, HTML_MESSAGE_FORMAT);
                 Transport.send(message);
                 status = "Email sent successfully";
                 LOGGER.info("Email sent successfully, recipient = " + email.getRecipient().getContactInfo());
