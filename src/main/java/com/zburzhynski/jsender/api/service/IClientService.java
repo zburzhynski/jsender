@@ -32,4 +32,12 @@ public interface IClientService<ID, T extends IDomain> extends IBaseService<ID, 
      */
     int countByCriteria(ClientSearchCriteria searchCriteria);
 
+
+    /**
+     * Replicates client.
+     *
+     * @param client client to replicate
+     */
+    void replicate(T client);
+
 }

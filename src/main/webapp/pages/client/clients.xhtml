@@ -10,7 +10,7 @@
         <p:panel>
             <h:form id="clientsForm">
                 <h4>#{msgs['clients.header']}</h4>
-                <p:messages id="messages" />
+                <p:growl id="messages" showDetail="true" />
                 <p:dataTable value="#{clientBean.clientModel}"
                              var="client"
                              paginator="true"
@@ -54,10 +54,14 @@
                         </h:panelGroup>
                     </p:column>
                 </p:dataTable>
-                <h:panelGrid style="padding-top: 5px">
+                <h:panelGrid columns="2" style="padding-top: 5px">
                     <h:commandButton action="#{clientBean.addClient}"
                                      image="/resources/css/css-images/add.gif"
                                      title="#{msgs['button.add']}" />
+                    <h:commandButton action="#{clientBean.refreshClients}"
+                                     image="/resources/css/css-images/refresh.png"
+                                     title="#{msgs['button.refresh']}"
+                                     rendered="#{settingBean.jdentIntegrationEnabled}" />
                 </h:panelGrid>
                 <h:panelGrid columns="2" style="padding-top: 5px;">
                     <h:commandButton id="select" value="#{msgs['button.select']}"

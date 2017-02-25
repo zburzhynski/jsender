@@ -6,16 +6,25 @@ import static com.zburzhynski.jsender.api.domain.View.CONTACT_INFO_EMAIL;
 import static com.zburzhynski.jsender.api.domain.View.CONTACT_INFO_PHONE;
 import static com.zburzhynski.jsender.api.domain.View.SENDING;
 import com.zburzhynski.jsender.api.criteria.ClientSearchCriteria;
+import com.zburzhynski.jsender.api.domain.Gender;
 import com.zburzhynski.jsender.api.domain.PhoneNumberType;
 import com.zburzhynski.jsender.api.domain.View;
+import com.zburzhynski.jsender.api.rest.client.IPatientRestClient;
 import com.zburzhynski.jsender.api.service.IClientService;
 import com.zburzhynski.jsender.impl.domain.Client;
 import com.zburzhynski.jsender.impl.domain.ContactInfoEmail;
 import com.zburzhynski.jsender.impl.domain.ContactInfoPhone;
+import com.zburzhynski.jsender.impl.domain.Person;
 import com.zburzhynski.jsender.impl.jsf.validator.ClientContactInfoValidator;
 import com.zburzhynski.jsender.impl.jsf.validator.ClientSelectValidator;
+import com.zburzhynski.jsender.impl.rest.domain.PatientDto;
+import com.zburzhynski.jsender.impl.rest.domain.SearchPatientRequest;
+import com.zburzhynski.jsender.impl.rest.domain.SearchPatientResponse;
+import com.zburzhynski.jsender.impl.rest.exception.JdentUnavailableException;
 import com.zburzhynski.jsender.impl.util.BeanUtils;
+import com.zburzhynski.jsender.impl.util.MessageHelper;
 import com.zburzhynski.jsender.impl.util.SortableUtils;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.SerializationUtils;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
@@ -23,6 +32,7 @@ import org.primefaces.model.SortOrder;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -38,6 +48,8 @@ import javax.faces.bean.SessionScoped;
 @ManagedBean
 @SessionScoped
 public class ClientBean implements Serializable {
+
+    private static final String JDENT_UNAVAILABLE_EXCEPTION = "error.jdentUnavailable";
 
     private static final String SENDING_BEAN = "sendingBean";
 
@@ -63,6 +75,9 @@ public class ClientBean implements Serializable {
 
     private List<Client> datasource;
 
+    @ManagedProperty(value = "#{patientRestClient}")
+    private IPatientRestClient patientRestClient;
+
     @ManagedProperty(value = "#{clientContactInfoValidator}")
     private ClientContactInfoValidator clientContactInfoValidator;
 
@@ -71,6 +86,9 @@ public class ClientBean implements Serializable {
 
     @ManagedProperty(value = "#{clientService}")
     private IClientService<String, Client> clientService;
+
+    @ManagedProperty(value = "#{messageHelper}")
+    private MessageHelper messageHelper;
 
     @ManagedProperty(value = "#{settingBean}")
     private SettingBean settingBean;
@@ -84,10 +102,40 @@ public class ClientBean implements Serializable {
     }
 
     /**
+     * Refreshes clients.
+     */
+    public void refreshClients() {
+        try {
+            SearchPatientResponse patientResponse = patientRestClient.getByCriteria(new SearchPatientRequest(),
+                settingBean.getJdentUrl());
+            if (patientResponse != null && CollectionUtils.isNotEmpty(patientResponse.getPatients())) {
+                for (PatientDto patientDto : patientResponse.getPatients()) {
+                    Client clientSrc = (Client) clientService.getById(patientDto.getId());
+                    if (clientSrc == null) {
+                        clientSrc = new Client();
+                        clientSrc.setId(patientDto.getId());
+                        clientSrc.getPerson().setId(UUID.randomUUID().toString());
+                        clientSrc.getContactInfo().setId(UUID.randomUUID().toString());
+                        updateClient(clientSrc, patientDto);
+                        clientService.replicate(clientSrc);
+                    } else {
+                        updateClient(clientSrc, patientDto);
+                        clientService.saveOrUpdate(clientSrc);
+                    }
+                }
+                patientRestClient.getByCriteria(new SearchPatientRequest(), settingBean.getJdentUrl());
+            }
+        } catch (JdentUnavailableException e) {
+            messageHelper.addMessage(JDENT_UNAVAILABLE_EXCEPTION);
+        }
+    }
+
+    /**
      * Adds client.
      *
      * @return path for navigating
      */
+
     public String addClient() {
         client = new Client();
         return CLIENT.getPath();
@@ -342,6 +390,10 @@ public class ClientBean implements Serializable {
         return settingBean.getClientsPerPage();
     }
 
+    public void setPatientRestClient(IPatientRestClient patientRestClient) {
+        this.patientRestClient = patientRestClient;
+    }
+
     public void setClientContactInfoValidator(ClientContactInfoValidator clientContactInfoValidator) {
         this.clientContactInfoValidator = clientContactInfoValidator;
     }
@@ -352,6 +404,10 @@ public class ClientBean implements Serializable {
 
     public void setClientService(IClientService<String, Client> clientService) {
         this.clientService = clientService;
+    }
+
+    public void setMessageHelper(MessageHelper messageHelper) {
+        this.messageHelper = messageHelper;
     }
 
     public void setSettingBean(SettingBean settingBean) {
@@ -370,6 +426,17 @@ public class ClientBean implements Serializable {
                 }
             }
         }
+    }
+
+    private void updateClient(Client clientSrc, PatientDto patientDto) {
+        Person personSrc = clientSrc.getPerson();
+        personSrc.setName(patientDto.getName());
+        personSrc.setSurname(patientDto.getSurname());
+        personSrc.setPatronymic(patientDto.getPatronymic());
+        personSrc.setBirthday(patientDto.getBirthday());
+        personSrc.setGender(patientDto.getGender().equals(Gender.M.name())
+            ? Gender.M : Gender.F);
+        clientSrc.setPerson(personSrc);
     }
 
     private class ClientDataModel extends LazyDataModel<Client> {

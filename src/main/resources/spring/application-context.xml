@@ -11,7 +11,8 @@
     <import resource="hibernate-config.xml" />
 
     <context:component-scan base-package="com.zburzhynski.jsender.impl.service,
-    com.zburzhynski.jsender.impl.repository com.zburzhynski.jsender.impl.util com.zburzhynski.jsender.impl.jsf.validator" />
+    com.zburzhynski.jsender.impl.repository com.zburzhynski.jsender.impl.util com.zburzhynski.jsender.impl.jsf.validator
+    com.zburzhynski.jsender.impl.rest.client" />
 
     <!-- Internationalization -->
     <bean id="messageSource"

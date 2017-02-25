@@ -2,11 +2,14 @@ package com.zburzhynski.jsender.impl.jsf.bean;
 
 import static com.zburzhynski.jsender.api.domain.SettingCategory.COMMON;
 import static com.zburzhynski.jsender.api.domain.SettingCategory.EMAIL_SENDING;
+import static com.zburzhynski.jsender.api.domain.SettingCategory.JDENT;
 import static com.zburzhynski.jsender.api.domain.SettingCategory.REQUISITE;
 import static com.zburzhynski.jsender.api.domain.SettingCategory.SMS_SENDING;
 import static com.zburzhynski.jsender.api.domain.SettingCategory.VIEW;
 import static com.zburzhynski.jsender.api.domain.Settings.CLIENTS_PER_PAGE;
 import static com.zburzhynski.jsender.api.domain.Settings.DEFAULT_COUNTRY_CODE;
+import static com.zburzhynski.jsender.api.domain.Settings.JDENT_INTEGRATION_ENABLED;
+import static com.zburzhynski.jsender.api.domain.Settings.JDENT_URL;
 import static com.zburzhynski.jsender.api.domain.Settings.MAIL_PASSWORD;
 import static com.zburzhynski.jsender.api.domain.Settings.MAIL_SMTP_HOST;
 import static com.zburzhynski.jsender.api.domain.Settings.MAIL_SMTP_PORT;
@@ -23,6 +26,8 @@ import com.zburzhynski.jsender.api.domain.View;
 import com.zburzhynski.jsender.api.service.ISettingService;
 import com.zburzhynski.jsender.impl.domain.Setting;
 import com.zburzhynski.jsender.impl.jsf.validator.SettingValidator;
+
+import org.apache.commons.lang.BooleanUtils;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -60,6 +65,8 @@ public class SettingBean implements Serializable {
 
     private Set<Setting> requisiteSettings;
 
+    private Set<Setting> jdentSettings;
+
     private int tabIndex;
 
     @ManagedProperty(value = "#{settingValidator}")
@@ -83,6 +90,7 @@ public class SettingBean implements Serializable {
         smsSendingSettings = new TreeSet<>(settingService.getByCategory(SMS_SENDING));
         emailSendingSettings = new TreeSet<>(settingService.getByCategory(EMAIL_SENDING));
         requisiteSettings = new TreeSet<>(settingService.getByCategory(REQUISITE));
+        jdentSettings = new TreeSet<>(settingService.getByCategory(JDENT));
     }
 
     /**
@@ -212,6 +220,24 @@ public class SettingBean implements Serializable {
     }
 
     /**
+     * Is jdent integration enabled.
+     *
+     * @return true if jdent integration enabled, else false
+     */
+    public boolean isJdentIntegrationEnabled() {
+        return BooleanUtils.toBoolean(settings.get(JDENT_INTEGRATION_ENABLED.name()).getValue());
+    }
+
+    /**
+     * Jdent integration url.
+     *
+     * @return jdent integration url
+     */
+    public String getJdentUrl() {
+        return settings.get(JDENT_URL.name()).getValue();
+    }
+
+    /**
      * Saves setting.
      *
      * @return path for navigating
@@ -272,6 +298,14 @@ public class SettingBean implements Serializable {
 
     public void setRequisiteSettings(Set<Setting> requisiteSettings) {
         this.requisiteSettings = requisiteSettings;
+    }
+
+    public Set<Setting> getJdentSettings() {
+        return jdentSettings;
+    }
+
+    public void setJdentSettings(Set<Setting> jdentSettings) {
+        this.jdentSettings = jdentSettings;
     }
 
     public ISettingService getSettingService() {

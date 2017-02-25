@@ -67,6 +67,15 @@ public class ClientService implements IClientService<String, Client> {
      */
     @Override
     @Transactional(readOnly = false)
+    public void replicate(Client client) {
+        clientRepository.replicate(client);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    @Transactional(readOnly = false)
     public void delete(Client client) {
         clientRepository.delete(client);
     }
