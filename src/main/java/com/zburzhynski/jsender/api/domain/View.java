@@ -10,13 +10,14 @@ package com.zburzhynski.jsender.api.domain;
 public enum View {
 
     CLIENTS("/pages/client/clients?faces-redirect=true"),
-    CLIENT_SEARCH("/pages/client/client_search?faces-redirect=true"),
+    CLIENT("/pages/client/client?faces-redirect=true"),
     SENDING("/pages/sending/sending?faces-redirect=true"),
     SENDING_STATUS("/pages/sending/sending_status?faces-redirect=true"),
+    RECIPIENTS("/pages/sending/recipients?faces-redirect=true"),
+    SEARCH("/pages/sending/search?faces-redirect=true"),
     SENT_MESSAGES("/pages/sent_message/sent_messages?faces-redirect=true"),
     MESSAGE_TEMPLATES("/pages/message_template/message_templates?faces-redirect=true"),
     MESSAGE_TEMPLATE("/pages/message_template/message_template?faces-redirect=true"),
-    CLIENT("/pages/client/client?faces-redirect=true"),
     CONTACT_INFO_EMAIL("/pages/client/email?faces-redirect=true"),
     CONTACT_INFO_PHONE("/pages/client/phone?faces-redirect=true"),
     SETTINGS("/pages/setting/settings?faces-redirect=true");

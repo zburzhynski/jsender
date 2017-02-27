@@ -2,8 +2,8 @@ package com.zburzhynski.jsender.impl.jsf.bean;
 
 import static com.zburzhynski.jsender.api.domain.CommonConstant.COMMA;
 import static com.zburzhynski.jsender.api.domain.CommonConstant.SPACE;
-import static com.zburzhynski.jsender.api.domain.View.CLIENTS;
 import static com.zburzhynski.jsender.api.domain.View.MESSAGE_TEMPLATES;
+import static com.zburzhynski.jsender.api.domain.View.RECIPIENTS;
 import static com.zburzhynski.jsender.api.domain.View.SENDING;
 import static com.zburzhynski.jsender.api.domain.View.SENDING_STATUS;
 import static javax.faces.application.FacesMessage.SEVERITY_ERROR;
@@ -19,6 +19,7 @@ import com.zburzhynski.jsender.impl.util.PropertyReader;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -42,7 +43,7 @@ import javax.faces.context.FacesContext;
 @SessionScoped
 public class SendingBean implements Serializable {
 
-    private static final Logger LOGGER = org.slf4j.LoggerFactory.getLogger(SendingBean.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(SendingBean.class);
 
     private static final String RECIPIENTS_NOT_SPECIFIED = "sendingValidator.recipientsNotSpecified";
 
@@ -172,7 +173,7 @@ public class SendingBean implements Serializable {
     public String addRecipients() {
         clientBean.setRedirectFrom(SENDING);
         clientBean.setSelectedClients(new ArrayList<Client>());
-        return CLIENTS.getPath();
+        return RECIPIENTS.getPath();
     }
 
     /**

@@ -8,7 +8,6 @@ import com.sun.jersey.api.client.config.DefaultClientConfig;
 import com.zburzhynski.jsender.api.rest.client.IPatientRestClient;
 import com.zburzhynski.jsender.impl.rest.domain.SearchPatientRequest;
 import com.zburzhynski.jsender.impl.rest.domain.SearchPatientResponse;
-import com.zburzhynski.jsender.impl.rest.exception.JdentUnavailableException;
 import org.springframework.stereotype.Component;
 
 import javax.ws.rs.core.MediaType;

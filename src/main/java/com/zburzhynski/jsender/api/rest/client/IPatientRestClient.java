@@ -2,7 +2,6 @@ package com.zburzhynski.jsender.api.rest.client;
 
 import com.zburzhynski.jsender.impl.rest.domain.SearchPatientRequest;
 import com.zburzhynski.jsender.impl.rest.domain.SearchPatientResponse;
-import com.zburzhynski.jsender.impl.rest.exception.JdentUnavailableException;
 
 /**
  * Patient rest client interface.

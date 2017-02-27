@@ -6,7 +6,6 @@ import static com.zburzhynski.jsender.api.domain.View.CONTACT_INFO_EMAIL;
 import static com.zburzhynski.jsender.api.domain.View.CONTACT_INFO_PHONE;
 import static com.zburzhynski.jsender.api.domain.View.SENDING;
 import com.zburzhynski.jsender.api.criteria.ClientSearchCriteria;
-import com.zburzhynski.jsender.api.domain.Gender;
 import com.zburzhynski.jsender.api.domain.PhoneNumberType;
 import com.zburzhynski.jsender.api.domain.View;
 import com.zburzhynski.jsender.api.rest.client.IPatientRestClient;
@@ -14,18 +13,10 @@ import com.zburzhynski.jsender.api.service.IClientService;
 import com.zburzhynski.jsender.impl.domain.Client;
 import com.zburzhynski.jsender.impl.domain.ContactInfoEmail;
 import com.zburzhynski.jsender.impl.domain.ContactInfoPhone;
-import com.zburzhynski.jsender.impl.domain.Person;
-import com.zburzhynski.jsender.impl.jsf.loader.PatientLazyDataLoader;
 import com.zburzhynski.jsender.impl.jsf.validator.ClientContactInfoValidator;
 import com.zburzhynski.jsender.impl.jsf.validator.ClientSelectValidator;
-import com.zburzhynski.jsender.impl.rest.domain.PatientDto;
-import com.zburzhynski.jsender.impl.rest.domain.SearchPatientRequest;
-import com.zburzhynski.jsender.impl.rest.domain.SearchPatientResponse;
-import com.zburzhynski.jsender.impl.rest.exception.JdentUnavailableException;
 import com.zburzhynski.jsender.impl.util.BeanUtils;
-import com.zburzhynski.jsender.impl.util.MessageHelper;
 import com.zburzhynski.jsender.impl.util.SortableUtils;
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.SerializationUtils;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
@@ -33,7 +24,6 @@ import org.primefaces.model.SortOrder;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -57,8 +47,6 @@ public class ClientBean implements Serializable {
     private boolean emailAdd;
 
     private boolean phoneAdd;
-
-    private SearchPatientRequest searchPatientRequest = new SearchPatientRequest();
 
     private List<Client> selectedClients;
 
@@ -96,41 +84,7 @@ public class ClientBean implements Serializable {
      */
     @PostConstruct
     public void init() {
-        searchPatientRequest = new SearchPatientRequest();
-        search();
-    }
-
-    /**
-     * Searches patient by criteria.
-     *
-     * @return path for navigation
-     */
-    public String searchClient() {
-        search();
-        return CLIENTS.getPath();
-    }
-
-    /**
-     * Cancels client search.
-     */
-    public void cancelSearchClient() {
-        searchPatientRequest = new SearchPatientRequest();
-        search();
-    }
-
-    /**
-     * Clears  patient search.
-     */
-    public void clearSearchFilter() {
-        searchPatientRequest = new SearchPatientRequest();
-    }
-
-    public void search() {
-        if (settingBean.isJdentIntegrationEnabled()) {
-            clientModel = new PatientLazyDataLoader(patientRestClient, settingBean, searchPatientRequest);
-        } else {
-            clientModel = new ClientDataModel();
-        }
+        clientModel = new ClientDataModel();
     }
 
     /**
@@ -347,14 +301,6 @@ public class ClientBean implements Serializable {
 
     public void setRedirectFrom(View redirectFrom) {
         this.redirectFrom = redirectFrom;
-    }
-
-    public SearchPatientRequest getSearchPatientRequest() {
-        return searchPatientRequest;
-    }
-
-    public void setSearchPatientRequest(SearchPatientRequest searchPatientRequest) {
-        this.searchPatientRequest = searchPatientRequest;
     }
 
     public List<Client> getSelectedClients() {

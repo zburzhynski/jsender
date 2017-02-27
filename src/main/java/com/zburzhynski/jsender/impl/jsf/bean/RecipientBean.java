@@ -1,7 +1,7 @@
 package com.zburzhynski.jsender.impl.jsf.bean;
 
 import static com.zburzhynski.jsender.api.domain.View.CLIENTS;
-import static com.zburzhynski.jsender.api.domain.View.CLIENT_SEARCH;
+import static com.zburzhynski.jsender.api.domain.View.SEARCH;
 import com.zburzhynski.jsender.api.domain.View;
 import com.zburzhynski.jsender.api.rest.client.IPatientRestClient;
 import com.zburzhynski.jsender.api.service.IClientService;
@@ -11,6 +11,7 @@ import com.zburzhynski.jsender.impl.jsf.validator.ClientSelectValidator;
 import com.zburzhynski.jsender.impl.rest.domain.SearchPatientRequest;
 import org.primefaces.model.LazyDataModel;
 
+import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -26,7 +27,7 @@ import javax.faces.bean.SessionScoped;
  */
 @ManagedBean
 @SessionScoped
-public class ClientSearchBean {
+public class RecipientBean implements Serializable {
 
     private static final String SENDING_BEAN = "sendingBean";
 
@@ -66,7 +67,7 @@ public class ClientSearchBean {
      */
     public String searchClient() {
         search();
-        return CLIENT_SEARCH.getPath();
+        return SEARCH.getPath();
     }
 
     /**
@@ -84,7 +85,7 @@ public class ClientSearchBean {
         searchPatientRequest = new SearchPatientRequest();
     }
 
-    public void search() {
+    private void search() {
         clientModel = new PatientLazyDataLoader(patientRestClient, settingBean, searchPatientRequest);
     }
 

@@ -10,17 +10,17 @@
         <p:panel>
             <h:form id="clientSearchForm">
                 <h4>#{msgs['clientSearch.header']}</h4>
-                <p:dataTable value="#{clientSearchBean.clientModel}"
+                <p:dataTable value="#{recipientBean.clientModel}"
                              var="client"
                              paginator="true"
                              paginatorPosition="bottom"
                              paginatorAlwaysVisible="false"
-                             selection="#{clientSearchBean.selectedClients}"
+                             selection="#{recipientBean.selectedClients}"
                              selectionMode="multiple"
-                             disabledSelection="#{clientSearchBean.redirectFrom == 'CLIENT_SEARCH'}"
+                             disabledSelection="#{recipientBean.redirectFrom == 'SEARCH'}"
                              rowKey="#{client.id}"
                              emptyMessage="#{msgs['clients.empty']}"
-                             rows="#{clientSearchBean.rowCount}">
+                             rows="#{recipientBean.clientModel.rowCount}">
                     <p:column headerText="#{msgs['person.surname']}" width="25%">
                         <h:outputText value="#{client.person.surname}" />
                     </p:column>
@@ -38,11 +38,11 @@
                 </p:dataTable>
                 <h:panelGrid columns="2" style="padding-top: 5px;">
                     <h:commandButton id="select" value="#{msgs['button.select']}"
-                                     action="#{clientSearchBean.selectClient}"
-                                     rendered="#{clientBean.redirectFrom != 'CLIENT_SEARCH'}"/>
+                                     action="#{recipientBean.selectClient}"
+                                     rendered="#{clientBean.redirectFrom != 'SEARCH'}"/>
                     <h:commandButton id="cancelSelect" value="#{msgs['button.cancel']}"
-                                     action="#{clientSearchBean.cancelSelectClient}"
-                                     rendered="#{clientBean.redirectFrom != 'CLIENT_SEARCH'}"/>
+                                     action="#{recipientBean.cancelSelectClient}"
+                                     rendered="#{clientBean.redirectFrom != 'SEARCH'}"/>
                 </h:panelGrid>
             </h:form>
         </p:panel>
