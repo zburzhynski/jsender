@@ -1,0 +1,192 @@
+<?xml version="1.0"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/pages/template/layout_template.xhtml">
+
+    <ui:define name="content">
+        <style type="text/css">
+            .clm1 {
+                width: 45%;
+                text-align: left;
+                font-weight: bold;
+            }
+            .clm2 {
+                width: 55%;
+            }
+            .inputText {
+                width: 96%;
+            }
+            .area {
+                width: 96%;
+                resize: none;
+            }
+            .selectMenu {
+                width: 99%;
+            }
+            .ignoreYear {
+                font-size: 14px;
+                font-weight: bold;
+            }
+        </style>
+        <p:panel>
+            <h:form id="clientSearchForm">
+                <h:panelGrid columns="2" columnClasses="clm1,clm2" width="60%" >
+                    <h:outputText value="#{msgs['clientSearch.cardNumber']}:" />
+                    <p:inputText value="#{clientBean.searchPatientRequest.cardNumber}"
+                                 size="10" />
+                    <h:outputText value="#{msgs['clientSearch.startDentalCardDate']}:" />
+                    <p:calendar value="#{clientBean.searchPatientRequest.startCardDate}"
+                                label="#{msgs['clientSearch.startDentalCardDate']}"
+                                pattern="dd/MM/yyyy"
+                                navigator="true"
+                                locale="ru"
+                                renderAsPopup="true"
+                                converterMessage="#{msgs['dateValidator.invalidDate']}"
+                                style="width:56%">
+                    </p:calendar>
+                    <h:outputText value="#{msgs['clientSearch.endDentalCardDate']}:" />
+                    <p:calendar value="#{clientBean.searchPatientRequest.endCardDate}"
+                                label="#{msgs['clientSearch.endDentalCardDate']}"
+                                       pattern="dd/MM/yyyy"
+                                       navigator="true"
+                                       locale="ru"
+                                       renderAsPopup="true"
+                                       converterMessage="#{msgs['dateValidator.invalidDate']}"
+                                       style="width:56%">
+                    </p:calendar>
+                    <h:outputText value="#{msgs['person.surname']}:" />
+                    <p:inputText value="#{clientBean.searchPatientRequest.surname}"
+                                 styleClass="inputText" />
+                    <h:outputText value="#{msgs['person.name']}:" />
+                    <p:inputText value="#{clientBean.searchPatientRequest.name}"
+                                 styleClass="inputText" />
+                    <h:outputText value="#{msgs['person.patronymic']}:" />
+                    <p:inputText value="#{clientBean.searchPatientRequest.patronymic}"
+                                 styleClass="inputText" />
+                    <h:outputText value="#{msgs['clientSearch.startBirthdayDate']}:" />
+                    <h:panelGroup>
+                        <p:calendar value="#{clientBean.searchPatientRequest.startBirthdayDate}"
+                                    label="#{msgs['clientSearch.startBirthdayDate']}"
+                                    pattern="dd/MM/yyyy"
+                                    navigator="true"
+                                    locale="ru"
+                                    renderAsPopup="true"
+                                    converterMessage="#{msgs['dateValidator.invalidDate']}"
+                                    style="width:56%">
+                        </p:calendar>
+                        <h:selectBooleanCheckbox id="birthdayIgnoreYear" value="#{clientBean.searchPatientRequest.birthdayIgnoreYear}" />
+                        <h:outputLabel for="birthdayIgnoreYear" value="#{msgs['clientSearch.ignoreBirthdayYear']}" styleClass="ignoreYear" />
+                    </h:panelGroup>
+                    <h:outputText value="#{msgs['clientSearch.endBirthdayDate']}:" />
+                    <p:calendar value="#{clientBean.searchPatientRequest.endBirthdayDate}"
+                                label="#{msgs['clientSearch.endBirthdayDate']}"
+                                pattern="dd/MM/yyyy"
+                                navigator="true"
+                                locale="ru"
+                                renderAsPopup="true"
+                                converterMessage="#{msgs['dateValidator.invalidDate']}"
+                                style="width:56%">
+                    </p:calendar>
+                    <h:outputText value="#{msgs['person.gender']}:" />
+                    <p:selectOneRadio style="border: 0"
+                                        value="#{clientBean.searchPatientRequest.gender}">
+                        <p:ajax partialSubmit="true" update="socialStatus" />
+                        <f:selectItems value="#{genderBean.genders}" var="g" itemValue="#{g}"
+                                       itemLabel="#{msgs[g.value]}" />
+                    </p:selectOneRadio>
+                    <h:outputText value="#{msgs['clientSearch.socialStatus']}:" />
+                    <h:selectOneMenu id="socialStatus"
+                                     value="#{clientBean.searchPatientRequest.socialStatus}"
+                                     styleClass="ui-inputfield ui-state-default ui-corner-all selectMenu">
+                        <c:if test="#{clientBean.searchPatientRequest.gender=='M'}">
+                            <f:selectItem itemLabel="" noSelectionOption="true" />
+                            <f:selectItems value="#{socialStatusBean.socialStatuses}" var="status"
+                                           itemValue="#{status}"
+                                           itemLabel="#{msgs[status.male]}" />
+                        </c:if>
+                        <c:if test="#{clientBean.searchPatientRequest.gender=='F'}">
+                            <f:selectItem itemLabel="" noSelectionOption="true" />
+                            <f:selectItems value="#{socialStatusBean.socialStatuses}" var="status"
+                                           itemValue="#{status}"
+                                           itemLabel="#{msgs[status.female]}" />
+                        </c:if>
+                    </h:selectOneMenu>
+                    <h:outputText value="#{msgs['clientSearch.residenceType']}:" />
+                    <h:selectOneMenu value="#{clientBean.searchPatientRequest.residenceType}"
+                                     styleClass="ui-inputfield ui-state-default ui-corner-all selectMenu">
+                        <f:selectItem itemLabel="" noSelectionOption="true" />
+                        <f:selectItems value="#{residenceTypeBean.residenceTypes}" var="residence"
+                                       itemValue="#{residence}"
+                                       itemLabel="#{msgs[residence.value]}" />
+                    </h:selectOneMenu>
+                    <h:outputText value="#{msgs['clientSearch.address']}:" />
+                    <p:inputTextarea value="#{clientBean.searchPatientRequest.address}"
+                                     styleClass="area" />
+                    <h:outputText value="#{msgs['clientSearch.phoneNumber']}:" />
+                    <p:inputText value="#{clientBean.searchPatientRequest.homePhoneNumber}"
+                                 styleClass="inputText" />
+                    <h:outputText value="#{msgs['clientSearch.mobilePhoneNumber']}:" />
+                    <p:inputText value="#{clientBean.searchPatientRequest.mobilePhoneNumber}"
+                                 styleClass="inputText" />
+                    <h:outputText value="#{msgs['clientSearch.job']}:" />
+                    <p:inputText value="#{clientBean.searchPatientRequest.job}"
+                                 styleClass="inputText" />
+                    <h:outputText value="#{msgs['clientSearch.jobPosition']}:" />
+                    <p:inputText value="#{clientBean.searchPatientRequest.jobPosition}"
+                                 styleClass="inputText" />
+                    <h:outputText value="#{msgs['clientSearch.workAddress']}:" />
+                    <p:inputText value="#{clientBean.searchPatientRequest.workAddress}"
+                                 styleClass="inputText" />
+                    <h:outputText value="#{msgs['clientSearch.workPhoneNumber']}:" />
+                    <p:inputText value="#{clientBean.searchPatientRequest.workPhoneNumber}"
+                                 styleClass="inputText" />
+                    <h:outputText value="#{msgs['clientSearch.passportSeries']}:" />
+                    <p:inputText value="#{clientBean.searchPatientRequest.passportSeries}"
+                                 styleClass="inputText" />
+                    <h:outputText value="#{msgs['clientSearch.passportNumber']}:" />
+                    <p:inputText value="#{clientBean.searchPatientRequest.passportNumber}"
+                                 styleClass="inputText" />
+                    <h:outputText value="#{msgs['clientSearch.additionalInformation']}:" />
+                    <p:inputTextarea value="#{clientBean.searchPatientRequest.additionalInformation}"
+                                     styleClass="area" />
+                    <h:outputText value="#{msgs['clientSearch.startVisitDate']}:" />
+                    <p:calendar value="#{clientBean.searchPatientRequest.startVisitDate}"
+                                label="#{msgs['clientSearch.startVisitDate']}"
+                                pattern="dd/MM/yyyy"
+                                navigator="true"
+                                locale="ru"
+                                renderAsPopup="true"
+                                converterMessage="#{msgs['dateValidator.invalidDate']}"
+                                style="width:56%">
+                    </p:calendar>
+                    <h:outputText value="#{msgs['clientSearch.endVisitDate']}:" />
+                    <p:calendar value="#{clientBean.searchPatientRequest.endVisitDate}"
+                                label="#{msgs['clientSearch.endVisitDate']}"
+                                pattern="dd/MM/yyyy"
+                                navigator="true"
+                                locale="ru"
+                                renderAsPopup="true"
+                                converterMessage="#{msgs['dateValidator.invalidDate']}"
+                                style="width:56%">
+                    </p:calendar>
+                </h:panelGrid>
+                <h:panelGrid width="100%">
+                    <h:messages id="validationMessages" style="color:red;" />
+                </h:panelGrid>
+                <h:panelGrid columns="3" style="text-align: center; vertical-align: bottom; padding-top: 5px">
+                    <h:commandButton id="search" value="#{msgs['button.find']}"
+                                     action="#{clientBean.searchClient}" />
+                    <h:commandButton id="clear" value="#{msgs['button.clear']}" action="#{clientBean.clearSearchFilter}" update="clientSearchForm" />
+                    <h:commandButton id="cancelSearch" value="#{msgs['button.cancel']}" action="/pages/patient/patients?faces-redirect=true"
+                                     immediate="true" />
+                </h:panelGrid>
+            </h:form>
+        </p:panel>
+        <ui:include src="/pages/localization/calendar-localization.xhtml" />
+    </ui:define>
+
+</ui:composition>

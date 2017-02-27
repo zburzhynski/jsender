@@ -1,7 +1,5 @@
 package com.zburzhynski.jsender.impl.rest.domain;
 
-import java.io.Serializable;
-
 /**
  * Person.
  * <p/>
@@ -9,21 +7,13 @@ import java.io.Serializable;
  *
  * @author Vladimir Zburzhynski
  */
-public class PatientDto extends PersonDto implements Serializable {
-
-    private String id;
+public class PatientDto extends PersonDto {
 
     private Integer number;
 
     private String address;
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
+    private ContactInfoDto contactInfo;
 
     public Integer getNumber() {
         return number;
@@ -39,6 +29,14 @@ public class PatientDto extends PersonDto implements Serializable {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public ContactInfoDto getContactInfo() {
+        return contactInfo;
+    }
+
+    public void setContactInfo(ContactInfoDto contactInfo) {
+        this.contactInfo = contactInfo;
     }
 
 }

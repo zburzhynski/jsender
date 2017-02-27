@@ -19,8 +19,7 @@ public interface IPatientRestClient {
      * @param request  {@link SearchPatientRequest} search patient request
      * @param jdentUrl jdent url
      * @return {@link SearchPatientResponse} search patient response
-     * @throws JdentUnavailableException if jdent service not available
      */
-    SearchPatientResponse getByCriteria(SearchPatientRequest request, String jdentUrl) throws JdentUnavailableException;
+    SearchPatientResponse getByCriteria(SearchPatientRequest request, String jdentUrl);
 
 }

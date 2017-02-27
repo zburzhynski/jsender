@@ -28,13 +28,12 @@ public class PatientRestClient implements IPatientRestClient {
     private Client client = Client.create(new DefaultClientConfig());
 
     @Override
-    public SearchPatientResponse getByCriteria(SearchPatientRequest request, String jdentUrl)
-        throws JdentUnavailableException {
+    public SearchPatientResponse getByCriteria(SearchPatientRequest request, String jdentUrl) {
         try {
             WebResource webResource = client.resource(jdentUrl + GET_BY_CRITERIA_URL);
             return webResource.accept(MediaType.APPLICATION_XML).post(SearchPatientResponse.class, request);
         } catch (UniformInterfaceException | ClientHandlerException exception) {
-            throw new JdentUnavailableException("Jdent service not available");
+            return new SearchPatientResponse();
         }
     }
 

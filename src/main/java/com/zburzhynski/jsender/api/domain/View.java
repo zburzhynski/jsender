@@ -10,6 +10,7 @@ package com.zburzhynski.jsender.api.domain;
 public enum View {
 
     CLIENTS("/pages/client/clients?faces-redirect=true"),
+    CLIENT_SEARCH("/pages/client/client_search?faces-redirect=true"),
     SENDING("/pages/sending/sending?faces-redirect=true"),
     SENDING_STATUS("/pages/sending/sending_status?faces-redirect=true"),
     SENT_MESSAGES("/pages/sent_message/sent_messages?faces-redirect=true"),
