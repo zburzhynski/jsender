@@ -9,7 +9,7 @@ import java.util.Date;
  *
  * @author Vladimir Zburzhynski
  */
-public class PersonDto {
+public class PersonDto extends BaseDto {
 
     private String name;
 

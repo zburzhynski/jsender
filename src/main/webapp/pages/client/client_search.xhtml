@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/pages/template/layout_template.xhtml">
+
+    <ui:define name="content">
+        <p:panel>
+            <h:form id="clientSearchForm">
+                <h4>#{msgs['clientSearch.header']}</h4>
+                <p:dataTable value="#{clientSearchBean.clientModel}"
+                             var="client"
+                             paginator="true"
+                             paginatorPosition="bottom"
+                             paginatorAlwaysVisible="false"
+                             selection="#{clientSearchBean.selectedClients}"
+                             selectionMode="multiple"
+                             disabledSelection="#{clientSearchBean.redirectFrom == 'CLIENT_SEARCH'}"
+                             rowKey="#{client.id}"
+                             emptyMessage="#{msgs['clients.empty']}"
+                             rows="#{clientSearchBean.rowCount}">
+                    <p:column headerText="#{msgs['person.surname']}" width="25%">
+                        <h:outputText value="#{client.person.surname}" />
+                    </p:column>
+                    <p:column headerText="#{msgs['person.name']}" width="24%">
+                        <h:outputText value="#{client.person.name}" />
+                    </p:column>
+                    <p:column headerText="#{msgs['person.patronymic']}" width="24%">
+                        <h:outputText value="#{client.person.patronymic}" />
+                    </p:column>
+                    <p:column headerText="#{msgs['person.birthday']}" width="23%">
+                        <h:outputText value="#{client.person.birthday}">
+                            <f:convertDateTime pattern="dd.MM.yyyy" />
+                        </h:outputText>
+                    </p:column>
+                </p:dataTable>
+                <h:panelGrid columns="2" style="padding-top: 5px;">
+                    <h:commandButton id="select" value="#{msgs['button.select']}"
+                                     action="#{clientSearchBean.selectClient}"
+                                     rendered="#{clientBean.redirectFrom != 'CLIENT_SEARCH'}"/>
+                    <h:commandButton id="cancelSelect" value="#{msgs['button.cancel']}"
+                                     action="#{clientSearchBean.cancelSelectClient}"
+                                     rendered="#{clientBean.redirectFrom != 'CLIENT_SEARCH'}"/>
+                </h:panelGrid>
+            </h:form>
+        </p:panel>
+    </ui:define>
+
+</ui:composition>

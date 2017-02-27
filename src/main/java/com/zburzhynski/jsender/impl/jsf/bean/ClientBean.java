@@ -15,6 +15,7 @@ import com.zburzhynski.jsender.impl.domain.Client;
 import com.zburzhynski.jsender.impl.domain.ContactInfoEmail;
 import com.zburzhynski.jsender.impl.domain.ContactInfoPhone;
 import com.zburzhynski.jsender.impl.domain.Person;
+import com.zburzhynski.jsender.impl.jsf.loader.PatientLazyDataLoader;
 import com.zburzhynski.jsender.impl.jsf.validator.ClientContactInfoValidator;
 import com.zburzhynski.jsender.impl.jsf.validator.ClientSelectValidator;
 import com.zburzhynski.jsender.impl.rest.domain.PatientDto;
@@ -49,8 +50,6 @@ import javax.faces.bean.SessionScoped;
 @SessionScoped
 public class ClientBean implements Serializable {
 
-    private static final String JDENT_UNAVAILABLE_EXCEPTION = "error.jdentUnavailable";
-
     private static final String SENDING_BEAN = "sendingBean";
 
     private View redirectFrom = CLIENTS;
@@ -58,6 +57,8 @@ public class ClientBean implements Serializable {
     private boolean emailAdd;
 
     private boolean phoneAdd;
+
+    private SearchPatientRequest searchPatientRequest = new SearchPatientRequest();
 
     private List<Client> selectedClients;
 
@@ -87,9 +88,6 @@ public class ClientBean implements Serializable {
     @ManagedProperty(value = "#{clientService}")
     private IClientService<String, Client> clientService;
 
-    @ManagedProperty(value = "#{messageHelper}")
-    private MessageHelper messageHelper;
-
     @ManagedProperty(value = "#{settingBean}")
     private SettingBean settingBean;
 
@@ -98,35 +96,40 @@ public class ClientBean implements Serializable {
      */
     @PostConstruct
     public void init() {
-        clientModel = new ClientDataModel();
+        searchPatientRequest = new SearchPatientRequest();
+        search();
     }
 
     /**
-     * Refreshes clients.
+     * Searches patient by criteria.
+     *
+     * @return path for navigation
      */
-    public void refreshClients() {
-        try {
-            SearchPatientResponse patientResponse = patientRestClient.getByCriteria(new SearchPatientRequest(),
-                settingBean.getJdentUrl());
-            if (patientResponse != null && CollectionUtils.isNotEmpty(patientResponse.getPatients())) {
-                for (PatientDto patientDto : patientResponse.getPatients()) {
-                    Client clientSrc = (Client) clientService.getById(patientDto.getId());
-                    if (clientSrc == null) {
-                        clientSrc = new Client();
-                        clientSrc.setId(patientDto.getId());
-                        clientSrc.getPerson().setId(UUID.randomUUID().toString());
-                        clientSrc.getContactInfo().setId(UUID.randomUUID().toString());
-                        updateClient(clientSrc, patientDto);
-                        clientService.replicate(clientSrc);
-                    } else {
-                        updateClient(clientSrc, patientDto);
-                        clientService.saveOrUpdate(clientSrc);
-                    }
-                }
-                patientRestClient.getByCriteria(new SearchPatientRequest(), settingBean.getJdentUrl());
-            }
-        } catch (JdentUnavailableException e) {
-            messageHelper.addMessage(JDENT_UNAVAILABLE_EXCEPTION);
+    public String searchClient() {
+        search();
+        return CLIENTS.getPath();
+    }
+
+    /**
+     * Cancels client search.
+     */
+    public void cancelSearchClient() {
+        searchPatientRequest = new SearchPatientRequest();
+        search();
+    }
+
+    /**
+     * Clears  patient search.
+     */
+    public void clearSearchFilter() {
+        searchPatientRequest = new SearchPatientRequest();
+    }
+
+    public void search() {
+        if (settingBean.isJdentIntegrationEnabled()) {
+            clientModel = new PatientLazyDataLoader(patientRestClient, settingBean, searchPatientRequest);
+        } else {
+            clientModel = new ClientDataModel();
         }
     }
 
@@ -346,6 +349,14 @@ public class ClientBean implements Serializable {
         this.redirectFrom = redirectFrom;
     }
 
+    public SearchPatientRequest getSearchPatientRequest() {
+        return searchPatientRequest;
+    }
+
+    public void setSearchPatientRequest(SearchPatientRequest searchPatientRequest) {
+        this.searchPatientRequest = searchPatientRequest;
+    }
+
     public List<Client> getSelectedClients() {
         return selectedClients;
     }
@@ -406,10 +417,6 @@ public class ClientBean implements Serializable {
         this.clientService = clientService;
     }
 
-    public void setMessageHelper(MessageHelper messageHelper) {
-        this.messageHelper = messageHelper;
-    }
-
     public void setSettingBean(SettingBean settingBean) {
         this.settingBean = settingBean;
     }
@@ -426,17 +433,6 @@ public class ClientBean implements Serializable {
                 }
             }
         }
-    }
-
-    private void updateClient(Client clientSrc, PatientDto patientDto) {
-        Person personSrc = clientSrc.getPerson();
-        personSrc.setName(patientDto.getName());
-        personSrc.setSurname(patientDto.getSurname());
-        personSrc.setPatronymic(patientDto.getPatronymic());
-        personSrc.setBirthday(patientDto.getBirthday());
-        personSrc.setGender(patientDto.getGender().equals(Gender.M.name())
-            ? Gender.M : Gender.F);
-        clientSrc.setPerson(personSrc);
     }
 
     private class ClientDataModel extends LazyDataModel<Client> {
