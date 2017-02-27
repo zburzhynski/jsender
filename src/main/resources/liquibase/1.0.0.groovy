@@ -294,6 +294,9 @@ databaseChangeLog {
             column(name: 'client_id', type: 'VARCHAR(128)', remarks: 'The reference to client table') {
                 constraints(nullable: false)
             }
+            column(name: 'client_source', type: 'VARCHAR(10)', remarks: 'The client source') {
+                constraints(nullable: false)
+            }
             column(name: 'contact_info', type: 'VARCHAR(50)', remarks: 'The message contact info') {
                 constraints(nullable: false)
             }
@@ -307,13 +310,6 @@ databaseChangeLog {
         }
         addPrimaryKey(schemaName: 'jsender', tableName: 'sent_message', tablespace: 'jsender_index',
                 columnNames: 'id', constraintName: 'PK_sent_message')
-    }
-
-    changeSet(id: '2017-02-16-02', author: 'Nikita Shevtsov <shevtsou@gmail.com>') {
-        comment("Added foreign constraint FK_sent_message_2_client")
-        addForeignKeyConstraint(constraintName: 'FK_sent_message_2_client',
-                baseTableSchemaName: 'jsender', baseTableName: 'sent_message' , baseColumnNames: 'client_id',
-                referencedTableSchemaName: 'jsender', referencedTableName: 'client', referencedColumnNames: 'id')
     }
 
     changeSet(id: '2017-02-19-01', author: 'Nikita Shevtsov <shevtsou@gmail.com>') {

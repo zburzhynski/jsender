@@ -1,6 +1,7 @@
 package com.zburzhynski.jsender.impl.service;
 
 import static com.zburzhynski.jsender.api.domain.CommonConstant.COLON;
+import com.zburzhynski.jsender.api.domain.ClientSourceType;
 import com.zburzhynski.jsender.api.domain.SendingType;
 import com.zburzhynski.jsender.api.domain.Settings;
 import com.zburzhynski.jsender.api.dto.Message;
@@ -88,6 +89,7 @@ public class SmsSender implements ISender {
             SentMessage sentMessage = new SentMessage();
             sentMessage.setSentDate(new Date());
             sentMessage.setClientId(sms.getRecipient().getClientId());
+            sentMessage.setClientSource(ClientSourceType.JSENDER);
             sentMessage.setContactInfo(sms.getRecipient().getContactInfo());
             sentMessage.setSubject(sms.getSubject());
             sentMessage.setText(sms.getText());
