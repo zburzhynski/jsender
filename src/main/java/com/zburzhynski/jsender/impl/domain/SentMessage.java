@@ -1,5 +1,6 @@
 package com.zburzhynski.jsender.impl.domain;
 
+import com.zburzhynski.jsender.api.domain.ClientSourceType;
 import com.zburzhynski.jsender.api.domain.SendingType;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -37,6 +38,10 @@ public class SentMessage extends Domain {
 
     @Column(name = "client_id")
     private String clientId;
+
+    @Column(name = "client_source")
+    @Enumerated(value = EnumType.STRING)
+    private ClientSourceType clientSource;
 
     @ManyToOne(fetch = FetchType.LAZY, targetEntity = Client.class)
     @JoinColumn(name = "client_id", insertable = false, updatable = false)
@@ -76,6 +81,14 @@ public class SentMessage extends Domain {
 
     public void setClientId(String clientId) {
         this.clientId = clientId;
+    }
+
+    public ClientSourceType getClientSource() {
+        return clientSource;
+    }
+
+    public void setClientSource(ClientSourceType clientSource) {
+        this.clientSource = clientSource;
     }
 
     public Client getClient() {
@@ -137,6 +150,7 @@ public class SentMessage extends Domain {
             .append(sentDate, that.sentDate)
             .append(sendingType, that.sendingType)
             .append(clientId, that.clientId)
+            .append(clientSource, that.clientSource)
             .append(contactInfo, that.contactInfo)
             .append(subject, that.subject)
             .append(text, that.text)
@@ -154,6 +168,7 @@ public class SentMessage extends Domain {
             .append(sentDate)
             .append(sendingType)
             .append(clientId)
+            .append(clientSource)
             .append(contactInfo)
             .append(subject)
             .append(text)
@@ -171,6 +186,7 @@ public class SentMessage extends Domain {
             .append("sentDate", sentDate)
             .append("sendingType", sendingType)
             .append("clientId", clientId)
+            .append("clientSource", clientSource)
             .append("contactInfo", contactInfo)
             .append("subject", subject)
             .append("text", text)

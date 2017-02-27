@@ -1,6 +1,7 @@
 package com.zburzhynski.jsender.impl.service;
 
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
+import com.zburzhynski.jsender.api.domain.ClientSourceType;
 import com.zburzhynski.jsender.api.domain.SendingType;
 import com.zburzhynski.jsender.api.domain.Settings;
 import com.zburzhynski.jsender.api.dto.Message;
@@ -81,6 +82,7 @@ public class EmailSender implements ISender {
             SentMessage sentMessage = new SentMessage();
             sentMessage.setSentDate(new Date());
             sentMessage.setClientId(email.getRecipient().getClientId());
+            sentMessage.setClientSource(ClientSourceType.JSENDER);
             sentMessage.setContactInfo(email.getRecipient().getContactInfo());
             sentMessage.setSubject(email.getSubject());
             sentMessage.setText(email.getText());
