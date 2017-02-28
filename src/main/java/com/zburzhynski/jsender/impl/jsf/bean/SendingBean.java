@@ -261,7 +261,7 @@ public class SendingBean implements Serializable {
     }
 
     public Integer getRowCount() {
-        return settingBean.getRecipientsPerPage();
+        return settingBean.getSendingRecipientsPerPage();
     }
 
     public void setRecipientBean(RecipientBean recipientBean) {

@@ -242,17 +242,6 @@ databaseChangeLog {
         }
     }
 
-    changeSet(id: '2017-02-12-02', author: 'Nikita Shevtsov <shevtsou@gmail.com>') {
-        insert(schemaName: 'jsender', tableName: 'setting') {
-            column(name: 'id', value: '6b3c3a1a-8332-445d-8e83-2491c5cef5d6')
-            column(name: 'category', value: 'VIEW')
-            column(name: 'name', value: 'recipients_per_page')
-            column(name: 'value', value: '20')
-            column(name: 'type', value: 'INTEGER')
-            column(name: 'description', value: 'Количество получателей на странице')
-        }
-    }
-
     changeSet(id: '2017-02-15-01', author: 'Nikita Shevtsov <shevtsou@gmail.com>') {
         insert(schemaName: 'jsender', tableName: 'setting') {
             column(name: 'id', value: '445157fe-0ea5-4702-94e3-eb9cd4948024')
@@ -350,7 +339,7 @@ databaseChangeLog {
         }
     }
 
-    changeSet(id: '2017- 02-25-01', author: 'Nikita Shevtsov <shevtsou@gmail.com>') {
+    changeSet(id: '2017-02-25-01', author: 'Nikita Shevtsov <shevtsou@gmail.com>') {
         insert(schemaName: 'jsender', tableName: 'setting') {
             column(name: 'id', value: 'a5e0e9f9-98b0-4cfa-a8ac-8adbe4c6afff')
             column(name: 'category', value: 'JDENT')
@@ -359,6 +348,7 @@ databaseChangeLog {
             column(name: 'type', value: 'BOOLEAN')
             column(name: 'description', value: 'Интеграция с jDent')
         }
+
         insert(schemaName: 'jsender', tableName: 'setting') {
             column(name: 'id', value: '6bfc2406-e1cf-4992-91ce-989bcc5f4ff0')
             column(name: 'category', value: 'JDENT')
@@ -366,6 +356,17 @@ databaseChangeLog {
             column(name: 'value', value: 'http://localhost:8080/jdent/')
             column(name: 'type', value: 'STRING')
             column(name: 'description', value: 'Ссылка на jDent')
+        }
+    }
+
+    changeSet(id: '2017-02-12-02', author: 'Nikita Shevtsov <shevtsou@gmail.com>') {
+        insert(schemaName: 'jsender', tableName: 'setting') {
+            column(name: 'id', value: '6b3c3a1a-8332-445d-8e83-2491c5cef5d6')
+            column(name: 'category', value: 'VIEW')
+            column(name: 'name', value: 'sending_recipients_per_page')
+            column(name: 'value', value: '20')
+            column(name: 'type', value: 'INTEGER')
+            column(name: 'description', value: 'Количество получателей на странице рассылки')
         }
     }
 

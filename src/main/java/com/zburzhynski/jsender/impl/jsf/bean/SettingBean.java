@@ -18,8 +18,8 @@ import static com.zburzhynski.jsender.api.domain.Settings.MESSAGE_TEMPLATES_PER_
 import static com.zburzhynski.jsender.api.domain.Settings.ORGANIZATION_ADDRESS;
 import static com.zburzhynski.jsender.api.domain.Settings.ORGANIZATION_MOBILE_PHONE_NUMBER;
 import static com.zburzhynski.jsender.api.domain.Settings.ORGANIZATION_NAME;
-import static com.zburzhynski.jsender.api.domain.Settings.RECIPIENTS_PER_PAGE;
 import static com.zburzhynski.jsender.api.domain.Settings.SEARCH_RECIPIENTS_PER_PAGE;
+import static com.zburzhynski.jsender.api.domain.Settings.SENDING_RECIPIENTS_PER_PAGE;
 import static com.zburzhynski.jsender.api.domain.Settings.SENT_MESSAGES_PER_PAGE;
 import static com.zburzhynski.jsender.api.domain.Settings.SMS_PASSWORD;
 import static com.zburzhynski.jsender.api.domain.Settings.SMS_USER_NAME;
@@ -27,7 +27,6 @@ import com.zburzhynski.jsender.api.domain.View;
 import com.zburzhynski.jsender.api.service.ISettingService;
 import com.zburzhynski.jsender.impl.domain.Setting;
 import com.zburzhynski.jsender.impl.jsf.validator.SettingValidator;
-
 import org.apache.commons.lang.BooleanUtils;
 
 import java.io.Serializable;
@@ -113,15 +112,6 @@ public class SettingBean implements Serializable {
     }
 
     /**
-     * Gets recipients per page.
-     *
-     * @return recipients per page
-     */
-    public int getRecipientsPerPage() {
-        return Integer.parseInt(settings.get(RECIPIENTS_PER_PAGE.name()).getValue());
-    }
-
-    /**
      * Gets sent messages per page.
      *
      * @return sent messages per page
@@ -137,6 +127,15 @@ public class SettingBean implements Serializable {
      */
     public int getMessageTemplatesPerPage() {
         return Integer.parseInt(settings.get(MESSAGE_TEMPLATES_PER_PAGE.name()).getValue());
+    }
+
+    /**
+     * Gets sending recipients per page.
+     *
+     * @return recipients per page
+     */
+    public int getSendingRecipientsPerPage() {
+        return Integer.parseInt(settings.get(SENDING_RECIPIENTS_PER_PAGE.name()).getValue());
     }
 
     /**
