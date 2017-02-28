@@ -20,6 +20,8 @@ public enum Settings {
 
     MESSAGE_TEMPLATES_PER_PAGE,
 
+    SEARCH_RECIPIENTS_PER_PAGE,
+
     SMS_USER_NAME,
 
     SMS_PASSWORD,

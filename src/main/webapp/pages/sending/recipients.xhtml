@@ -8,8 +8,8 @@
 
     <ui:define name="content">
         <p:panel>
-            <h:form id="clientSearchForm">
-                <h4>#{msgs['clientSearch.header']}</h4>
+            <h:form id="recipientsForm">
+                <h4>#{msgs['recipients.header']}</h4>
                 <p:dataTable value="#{recipientBean.clientModel}"
                              var="client"
                              paginator="true"
@@ -17,10 +17,11 @@
                              paginatorAlwaysVisible="false"
                              selection="#{recipientBean.selectedClients}"
                              selectionMode="multiple"
-                             disabledSelection="#{recipientBean.redirectFrom == 'SEARCH'}"
+                             disabledSelection="#{recipientBean.redirectFrom == 'RECIPIENTS'}"
                              rowKey="#{client.id}"
+                             lazy="true"
                              emptyMessage="#{msgs['clients.empty']}"
-                             rows="#{recipientBean.clientModel.rowCount}">
+                             rows="#{recipientBean.rowCount}">
                     <p:column headerText="#{msgs['person.surname']}" width="25%">
                         <h:outputText value="#{client.person.surname}" />
                     </p:column>
@@ -36,13 +37,21 @@
                         </h:outputText>
                     </p:column>
                 </p:dataTable>
+                <h:panelGrid columns="2">
+                    <h:commandButton action="/pages/sending/search?faces-redirect=true"
+                                     image="/resources/css/css-images/search.png"
+                                     title="#{msgs['button.search']}" />
+                    <h:commandButton action="#{recipientBean.cancelSearchRecipient}"
+                                     image="/resources/css/css-images/cancel.gif"
+                                     title="#{msgs['button.cancel']}" />
+                </h:panelGrid>
                 <h:panelGrid columns="2" style="padding-top: 5px;">
                     <h:commandButton id="select" value="#{msgs['button.select']}"
                                      action="#{recipientBean.selectClient}"
-                                     rendered="#{clientBean.redirectFrom != 'SEARCH'}"/>
+                                     rendered="#{clientBean.redirectFrom != 'RECIPIENTS'}"/>
                     <h:commandButton id="cancelSelect" value="#{msgs['button.cancel']}"
                                      action="#{recipientBean.cancelSelectClient}"
-                                     rendered="#{clientBean.redirectFrom != 'SEARCH'}"/>
+                                     rendered="#{clientBean.redirectFrom != 'RECIPIENTS'}"/>
                 </h:panelGrid>
             </h:form>
         </p:panel>

@@ -66,8 +66,8 @@ public class SendingBean implements Serializable {
     @ManagedProperty(value = "#{messagePreparer}")
     private IMessagePreparer messagePreparer;
 
-    @ManagedProperty(value = "#{clientBean}")
-    private ClientBean clientBean;
+    @ManagedProperty(value = "#{recipientBean}")
+    private RecipientBean recipientBean;
 
     @ManagedProperty(value = "#{messageTemplateBean}")
     private MessageTemplateBean messageTemplateBean;
@@ -171,8 +171,8 @@ public class SendingBean implements Serializable {
      * @return path for navigation
      */
     public String addRecipients() {
-        clientBean.setRedirectFrom(SENDING);
-        clientBean.setSelectedClients(new ArrayList<Client>());
+        recipientBean.setRedirectFrom(SENDING);
+        recipientBean.setSelectedClients(new ArrayList<Client>());
         return RECIPIENTS.getPath();
     }
 
@@ -264,9 +264,8 @@ public class SendingBean implements Serializable {
         return settingBean.getRecipientsPerPage();
     }
 
-
-    public void setClientBean(ClientBean clientBean) {
-        this.clientBean = clientBean;
+    public void setRecipientBean(RecipientBean recipientBean) {
+        this.recipientBean = recipientBean;
     }
 
     public void setMessageTemplateBean(MessageTemplateBean messageTemplateBean) {
