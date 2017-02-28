@@ -14,7 +14,6 @@ public enum View {
     SENDING("/pages/sending/sending?faces-redirect=true"),
     SENDING_STATUS("/pages/sending/sending_status?faces-redirect=true"),
     RECIPIENTS("/pages/sending/recipients?faces-redirect=true"),
-    SEARCH("/pages/sending/search?faces-redirect=true"),
     SENT_MESSAGES("/pages/sent_message/sent_messages?faces-redirect=true"),
     MESSAGE_TEMPLATES("/pages/message_template/message_templates?faces-redirect=true"),
     MESSAGE_TEMPLATE("/pages/message_template/message_template?faces-redirect=true"),

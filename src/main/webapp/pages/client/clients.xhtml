@@ -53,16 +53,10 @@
                         </h:panelGroup>
                     </p:column>
                 </p:dataTable>
-                <h:panelGrid columns="3" style="padding-top: 5px">
+                <h:panelGrid style="padding-top: 5px">
                     <h:commandButton action="#{clientBean.addClient}"
                                      image="/resources/css/css-images/add.gif"
                                      title="#{msgs['button.add']}" />
-                    <h:commandButton action="/pages/patient/search?faces-redirect=true"
-                                     image="/resources/css/css-images/search.png"
-                                     title="#{msgs['button.search']}" />
-                    <h:commandButton action="#{clientBean.cancelSearchClient}"
-                                     image="/resources/css/css-images/cancel.gif"
-                                     title="#{msgs['button.cancel']}" />
                 </h:panelGrid>
                 <h:panelGrid columns="2" style="padding-top: 5px;">
                     <h:commandButton id="select" value="#{msgs['button.select']}"
