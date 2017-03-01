@@ -21,7 +21,7 @@
 
     <!-- Welcome page -->
     <welcome-file-list>
-        <welcome-file>pages/setting/settings.xhtml</welcome-file>
+        <welcome-file>pages/sending/sending.xhtml</welcome-file>
     </welcome-file-list>
 
     <!-- Spring context -->
