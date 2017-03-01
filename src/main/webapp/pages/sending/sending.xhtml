@@ -56,10 +56,9 @@
                             <p:editor value="#{sendingBean.text}" styleClass="area"
                                              maxlength="2000"
                                              required="true" label="#{msgs['sending.text']}" />
-                            <h:commandButton action="#{sendingBean.selectMessageTemplate}"
-                                             immediate="true"
-                                             image="/resources/css/css-images/text.png"
-                                             title="#{msgs['messageTemplate.button.selectTemplate']}" />
+                            <p:commandButton action="#{sendingBean.selectMessageTemplate}"
+                                             title="#{msgs['messageTemplate.button.selectTemplate']}"
+                                             icon="ui-icon-clipboard" />
                         </p:tab>
                         <p:tab title="#{msgs['sending.recipients']}">
                             <p:dataTable value="#{sendingBean.recipients}"
@@ -94,16 +93,17 @@
                                 </p:column>
                             </p:dataTable>
                             <h:panelGrid columns="2" style="padding-top: 5px">
-                                <h:commandButton action="#{sendingBean.addRecipients}"
-                                                 image="/resources/css/css-images/add.gif"
-                                                 title="#{msgs['button.add']}" />
-                                <p:commandLink action="#{sendingBean.removeAllRecipients}"
-                                               rendered="#{not empty sendingBean.recipients}">
-                                    <p:graphicImage url="/resources/css/css-images/delete_all.png" title="#{msgs['sending.button.removeAllRecipients']}" />
+                                <p:commandButton action="#{sendingBean.addRecipients}"
+                                                 title="#{msgs['button.add']}"
+                                                 icon="ui-icon-person" />
+                                <p:commandButton action="#{sendingBean.removeAllRecipients}"
+                                                 title="#{msgs['button.remove']}"
+                                                 rendered="#{not empty sendingBean.recipients}"
+                                                 icon="ui-icon-trash">
                                     <p:confirm header="#{msgs['removeAllRecipientConfirm.header']}"
                                                message="#{msgs['removeAllRecipientConfirm.message']}?"
                                                icon="ui-icon-alert" />
-                                </p:commandLink>
+                                </p:commandButton>
                             </h:panelGrid>
                         </p:tab>
                     </p:tabView>
