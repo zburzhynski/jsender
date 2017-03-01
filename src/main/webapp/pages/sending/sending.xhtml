@@ -11,10 +11,10 @@
         <style type="text/css">
             .name {
                 font-weight: bold;
-                width: 15%;
+                width: 20%;
             }
             .val {
-                width: 60%;
+                width: 80%;
             }
             .msg {
                 width: 25%;
@@ -33,7 +33,7 @@
                 <p:focus />
                 <p:messages id="messages" />
                 <h:panelGrid width="100%" style="height: auto">
-                    <h:panelGrid columns="2" columnClasses="name,val,msg" width="100%">
+                    <h:panelGrid columns="2" columnClasses="name,val" width="100%">
                         <h:outputLabel value="#{msgs['sending.sendingType']}:" />
                         <p:selectOneMenu id="sendingType"
                                          value="#{sendingBean.sendingType}"
@@ -48,7 +48,7 @@
                         <h:outputLabel for="subject" value="#{msgs['sending.subject']}:" />
                         <p:inputText id="subject" value="#{sendingBean.subject}"
                                      maxlength="250"
-                                     style="width: 100%" required="#{sendingBean.sendingType == 'EMAIL'}"
+                                     style="width: 99%" required="#{sendingBean.sendingType == 'EMAIL'}"
                                      label="#{msgs['sending.subject']}" />
                     </h:panelGrid>
                     <p:tabView activeIndex="#{sendingBean.tabIndex}">
@@ -70,16 +70,16 @@
                                          emptyMessage="#{msgs['clients.empty']}"
                                          rowIndexVar="index"
                                          rows="#{sendingBean.rowCount}">
-                                <p:column headerText="#{msgs['sending.recipient.number']}" style="width: 7%">
+                                <p:column headerText="#{msgs['sending.recipient.number']}" style="width: 5%">
                                     <h:outputText value="#{index + 1}" />
                                 </p:column>
-                                <p:column headerText="#{msgs['person.fullName']}" style="width: 25%">
+                                <p:column headerText="#{msgs['person.fullName']}" style="width: 30%">
                                     <h:outputText value="#{recipient.person.fullName}" />
                                 </p:column>
-                                <p:column headerText="#{msgs['sending.recipient.phoneNumbers']}" style="width: 34%">
+                                <p:column headerText="#{msgs['sending.recipient.phoneNumber']}" style="width: 35%">
                                     <h:outputText value="#{sendingBean.getPhoneNumberDescription(recipient)}" />
                                 </p:column>
-                                <p:column headerText="#{msgs['sending.recipient.emails']}" style="width: 30%">
+                                <p:column headerText="#{msgs['sending.recipient.email']}" style="width: 25%">
                                     <h:outputText value="#{sendingBean.getEmailDescription(recipient)}" />
                                 </p:column>
                                 <p:column style="width: 4%">
