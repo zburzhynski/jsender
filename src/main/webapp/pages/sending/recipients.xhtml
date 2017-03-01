@@ -16,12 +16,12 @@
                              paginatorPosition="bottom"
                              paginatorAlwaysVisible="false"
                              selection="#{recipientBean.selectedClients}"
-                             selectionMode="multiple"
                              disabledSelection="#{recipientBean.redirectFrom == 'RECIPIENTS'}"
                              rowKey="#{client.id}"
                              lazy="true"
                              emptyMessage="#{msgs['clients.empty']}"
                              rows="#{recipientBean.rowCount}">
+                    <p:column selectionMode="multiple" style="width:16px;text-align:center"/>
                     <p:column headerText="#{msgs['person.surname']}" width="25%">
                         <h:outputText value="#{client.person.surname}" />
                     </p:column>
