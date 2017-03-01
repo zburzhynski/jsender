@@ -97,7 +97,8 @@
                                 <h:commandButton action="#{sendingBean.addRecipients}"
                                                  image="/resources/css/css-images/add.gif"
                                                  title="#{msgs['button.add']}" />
-                                <p:commandLink action="#{sendingBean.removeAllRecipients}" immediate="true">
+                                <p:commandLink action="#{sendingBean.removeAllRecipients}"
+                                               rendered="#{not empty sendingBean.recipients}">
                                     <p:graphicImage url="/resources/css/css-images/delete_all.png" title="#{msgs['sending.button.removeAllRecipients']}" />
                                     <p:confirm header="#{msgs['removeAllRecipientConfirm.header']}"
                                                message="#{msgs['removeAllRecipientConfirm.message']}?"
