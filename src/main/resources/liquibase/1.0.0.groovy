@@ -280,9 +280,7 @@ databaseChangeLog {
             column(name: 'sending_type', type: 'VARCHAR(5)', remarks: 'Message sending_type') {
                 constraints(nullable: false)
             }
-            column(name: 'client_id', type: 'VARCHAR(128)', remarks: 'The reference to client table') {
-                constraints(nullable: false)
-            }
+            column(name: 'client_id', type: 'VARCHAR(128)', remarks: 'The reference to client table')
             column(name: 'client_source', type: 'VARCHAR(10)', remarks: 'The client source') {
                 constraints(nullable: false)
             }

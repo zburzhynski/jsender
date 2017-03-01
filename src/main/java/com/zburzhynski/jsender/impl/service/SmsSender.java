@@ -24,7 +24,6 @@ import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -36,7 +35,7 @@ import java.util.Map;
  */
 @Service("smsSender")
 @Transactional(readOnly = true)
-public class SmsSender implements ISender {
+public class SmsSender extends AbstractSender implements ISender {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SmsSender.class);
 
@@ -55,22 +54,22 @@ public class SmsSender implements ISender {
     /**
      * Send sms.
      *
-     * @param smsList sms to send
+     * @param message message to send
      * @return sending response
      */
     @Override
     @Transactional(readOnly = false)
-    public Map<Recipient, String> send(List<Message> smsList) {
+    public Map<Recipient, String> send(Message message) {
         Map<Recipient, String> response = new HashMap<>();
         String name = settingRepository.findByName(Settings.SMS_USER_NAME).getValue();
         String password = settingRepository.findByName(Settings.SMS_PASSWORD).getValue();
         String authString = name + COLON + password;
-        for (Message sms : smsList) {
+        for (Recipient recipient : message.getRecipients()) {
             String status;
             try {
                 URL url = new URL(PROTOCOL, "api.smsfeedback.ru", PORT, "/messages/v2/send/?phone=%2B" +
-                    sms.getRecipient().getContactInfo() + "&text=" + URLEncoder.encode(sms.getText(), "UTF-8")
-                    + "&sender=" + sms.getFrom());
+                    recipient.getContactInfo() + "&text=" + URLEncoder.encode(prepareText(message.getText(), recipient),
+                    "UTF-8") + "&sender=" + message.getFrom());
                 URLConnection urlConnection = url.openConnection();
                 urlConnection.setRequestProperty("Authorization", authString);
                 InputStream is = urlConnection.getInputStream();
@@ -88,16 +87,14 @@ public class SmsSender implements ISender {
             }
             SentMessage sentMessage = new SentMessage();
             sentMessage.setSentDate(new Date());
-            sentMessage.setClientId(sms.getRecipient().getClientId());
             sentMessage.setClientSource(ClientSourceType.JSENDER);
-            sentMessage.setContactInfo(sms.getRecipient().getContactInfo());
-            sentMessage.setSubject(sms.getSubject());
-            sentMessage.setText(sms.getText());
+            sentMessage.setContactInfo(recipient.getContactInfo());
+            sentMessage.setSubject(message.getSubject());
+            sentMessage.setText(message.getText());
             sentMessage.setStatus(status);
             sentMessage.setSendingType(SendingType.SMS);
             sentMessageRepository.saveOrUpdate(sentMessage);
-            response.put(sms.getRecipient(), status);
-
+            response.put(recipient, status);
         }
         return response;
     }

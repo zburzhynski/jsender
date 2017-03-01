@@ -52,7 +52,7 @@ public class MainMenuBean implements Serializable {
      * @return path to redirect
      */
     public String sending() {
-        sendingBean.setFrom(settingBean.getOrganizationName());
+        sendingBean.getMessageToSend().setFrom(settingBean.getOrganizationName());
         return SENDING.getPath();
     }
 
