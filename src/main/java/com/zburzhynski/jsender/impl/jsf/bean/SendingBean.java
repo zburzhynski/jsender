@@ -14,6 +14,7 @@ import com.zburzhynski.jsender.api.service.ISender;
 import com.zburzhynski.jsender.impl.domain.Client;
 import com.zburzhynski.jsender.impl.domain.ContactInfoEmail;
 import com.zburzhynski.jsender.impl.domain.ContactInfoPhone;
+import com.zburzhynski.jsender.impl.jsf.validator.SendingValidator;
 import com.zburzhynski.jsender.impl.util.PropertyReader;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
@@ -46,13 +47,13 @@ public class SendingBean implements Serializable {
 
     private static final String RECIPIENTS_NOT_SPECIFIED = "sendingValidator.recipientsNotSpecified";
 
+    private static final String SENDING_TYPE_NOT_SPECIFIED = "sendingValidator.sendingTypeNotSpecified";
+
     private static final String MESSAGE_TEMPLATE_BEAN = "messageTemplateBean";
 
     private int tabIndex;
 
     private Message messageToSend = new Message();
-
-    private SendingType sendingType;
 
     private Map<Recipient, String> sendingStatus;
 
@@ -70,6 +71,9 @@ public class SendingBean implements Serializable {
     @ManagedProperty(value = "#{smsSender}")
     private ISender smsSender;
 
+    @ManagedProperty(value = "#{sendingValidator}")
+    private SendingValidator sendingValidator;
+
     @ManagedProperty(value = "#{propertyReader}")
     private PropertyReader reader;
 
@@ -83,7 +87,15 @@ public class SendingBean implements Serializable {
      */
     public String send() {
         List<Recipient> contacts = new ArrayList<>();
-        if (SendingType.SMS.equals(sendingType)) {
+        if (messageToSend.getSendingType() == null) {
+            addMessage(SENDING_TYPE_NOT_SPECIFIED);
+            return null;
+        }
+        if (CollectionUtils.isEmpty(recipients)) {
+            addMessage(RECIPIENTS_NOT_SPECIFIED);
+            return null;
+        }
+        if (SendingType.SMS.equals(messageToSend.getSendingType())) {
             for (Client recipient : recipients) {
                 for (ContactInfoPhone phone : recipient.getContactInfo().getPhones()) {
                     Recipient contact = new Recipient();
@@ -96,13 +108,13 @@ public class SendingBean implements Serializable {
                     contacts.add(contact);
                 }
             }
-            if (CollectionUtils.isEmpty(contacts)) {
-                addMessage(RECIPIENTS_NOT_SPECIFIED);
+            messageToSend.setRecipients(contacts);
+            boolean valid = sendingValidator.validate(messageToSend);
+            if (!valid) {
                 return null;
             }
-            messageToSend.setRecipients(contacts);
             sendingStatus = smsSender.send(messageToSend);
-        } else if (SendingType.EMAIL.equals(sendingType)) {
+        } else if (SendingType.EMAIL.equals(messageToSend.getSendingType())) {
             for (Client recipient : recipients) {
                 for (ContactInfoEmail email : recipient.getContactInfo().getEmails()) {
                     Recipient contact = new Recipient();
@@ -115,11 +127,11 @@ public class SendingBean implements Serializable {
                     contacts.add(contact);
                 }
             }
-            if (CollectionUtils.isEmpty(contacts)) {
-                addMessage(RECIPIENTS_NOT_SPECIFIED);
+            messageToSend.setRecipients(contacts);
+            boolean valid = sendingValidator.validate(messageToSend);
+            if (!valid) {
                 return null;
             }
-            messageToSend.setRecipients(contacts);
             sendingStatus = emailSender.send(messageToSend);
         }
         return SENDING_STATUS.getPath();
@@ -212,14 +224,6 @@ public class SendingBean implements Serializable {
         this.messageToSend = messageToSend;
     }
 
-    public SendingType getSendingType() {
-        return sendingType;
-    }
-
-    public void setSendingType(SendingType sendingType) {
-        this.sendingType = sendingType;
-    }
-
     public Set<Map.Entry<Recipient, String>> getSendingStatus() {
         return sendingStatus.entrySet();
     }
@@ -250,6 +254,10 @@ public class SendingBean implements Serializable {
 
     public void setSmsSender(ISender smsSender) {
         this.smsSender = smsSender;
+    }
+
+    public void setSendingValidator(SendingValidator sendingValidator) {
+        this.sendingValidator = sendingValidator;
     }
 
     public void setReader(PropertyReader reader) {
