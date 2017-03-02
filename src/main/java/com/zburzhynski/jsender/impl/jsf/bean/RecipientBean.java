@@ -1,13 +1,11 @@
 package com.zburzhynski.jsender.impl.jsf.bean;
 
 import static com.zburzhynski.jsender.api.domain.View.RECIPIENTS;
-import static com.zburzhynski.jsender.api.domain.View.SENDING;
 import com.zburzhynski.jsender.api.domain.View;
 import com.zburzhynski.jsender.api.rest.client.IPatientRestClient;
-import com.zburzhynski.jsender.impl.domain.Client;
 import com.zburzhynski.jsender.impl.jsf.loader.PatientLazyDataLoader;
+import com.zburzhynski.jsender.impl.rest.domain.PatientDto;
 import com.zburzhynski.jsender.impl.rest.domain.SearchPatientRequest;
-import com.zburzhynski.jsender.impl.util.BeanUtils;
 import com.zburzhynski.jsender.impl.util.MessageHelper;
 import org.apache.commons.collections.CollectionUtils;
 import org.primefaces.model.LazyDataModel;
@@ -38,9 +36,9 @@ public class RecipientBean implements Serializable {
 
     private SearchPatientRequest searchPatientRequest = new SearchPatientRequest();
 
-    private List<Client> selectedClients;
+    private List<PatientDto> selectedRecipients;
 
-    private LazyDataModel<Client> clientModel;
+    private LazyDataModel<PatientDto> recipientModel;
 
     @ManagedProperty(value = "#{patientRestClient}")
     private IPatientRestClient patientRestClient;
@@ -86,12 +84,12 @@ public class RecipientBean implements Serializable {
     }
 
     /**
-     * Select clients.
+     * Select recipients.
      *
      * @return path for navigation
      */
-    public String selectClient() {
-        if (CollectionUtils.isEmpty(selectedClients)) {
+    public String selectRecipient() {
+        if (CollectionUtils.isEmpty(selectedRecipients)) {
             messageHelper.addMessage(RECIPIENT_NOT_SELECTED);
             return null;
         }
@@ -100,16 +98,16 @@ public class RecipientBean implements Serializable {
     }
 
     /**
-     * Cancel select client.
+     * Cancel select recipients.
      *
      * @return path for navigation
      */
-    public String cancelSelectClient() {
+    public String cancelSelectRecipient() {
         return redirectFrom.getPath();
     }
 
     private void search() {
-        clientModel = new PatientLazyDataLoader(patientRestClient, settingBean, searchPatientRequest);
+        recipientModel = new PatientLazyDataLoader(patientRestClient, settingBean, searchPatientRequest);
     }
 
     public Integer getRowCount() {
@@ -132,20 +130,20 @@ public class RecipientBean implements Serializable {
         this.searchPatientRequest = searchPatientRequest;
     }
 
-    public List<Client> getSelectedClients() {
-        return selectedClients;
+    public List<PatientDto> getSelectedRecipients() {
+        return selectedRecipients;
     }
 
-    public void setSelectedClients(List<Client> selectedClients) {
-        this.selectedClients = selectedClients;
+    public void setSelectedRecipients(List<PatientDto> selectedRecipients) {
+        this.selectedRecipients = selectedRecipients;
     }
 
-    public LazyDataModel<Client> getClientModel() {
-        return clientModel;
+    public LazyDataModel<PatientDto> getRecipientModel() {
+        return recipientModel;
     }
 
-    public void setClientModel(LazyDataModel<Client> clientModel) {
-        this.clientModel = clientModel;
+    public void setRecipientModel(LazyDataModel<PatientDto> recipientModel) {
+        this.recipientModel = recipientModel;
     }
 
     public void setPatientRestClient(IPatientRestClient patientRestClient) {
@@ -161,16 +159,17 @@ public class RecipientBean implements Serializable {
     }
 
     private void selectToSendingForm() {
-        if (SENDING.equals(redirectFrom)) {
-            SendingBean sendingBean = BeanUtils.getSessionBean(SENDING_BEAN);
-            if (sendingBean != null) {
-                for (Client object : selectedClients) {
-                    if (!sendingBean.getRecipients().contains(object)) {
-                        sendingBean.getRecipients().add(object);
-                    }
-                }
-            }
-        }
+        //TODO:
+//        if (SENDING.equals(redirectFrom)) {
+//            SendingBean sendingBean = BeanUtils.getSessionBean(SENDING_BEAN);
+//            if (sendingBean != null) {
+//                for (PatientDto object : selectedRecipients) {
+//                    if (!sendingBean.getRecipients().contains(object)) {
+//                        sendingBean.getRecipients().add(object);
+//                    }
+//                }
+//            }
+//        }
     }
 
 }

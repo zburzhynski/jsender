@@ -10,31 +10,32 @@
         <p:panel>
             <h:form id="recipientsForm">
                 <h4>#{msgs['recipients.header']}</h4>
-                <p:dataTable value="#{recipientBean.clientModel}"
-                             var="client"
+                <p:dataTable value="#{recipientBean.recipientModel}"
+                             var="recipient"
                              paginator="true"
                              paginatorPosition="bottom"
                              paginatorAlwaysVisible="false"
-                             selection="#{recipientBean.selectedClients}"
+                             selection="#{recipientBean.selectedRecipients}"
                              disabledSelection="#{recipientBean.redirectFrom == 'RECIPIENTS'}"
-                             rowKey="#{client.id}"
+                             rowKey="#{recipient.id}"
                              lazy="true"
                              emptyMessage="#{msgs['clients.empty']}"
                              rows="#{recipientBean.rowCount}">
-                    <p:column selectionMode="multiple" style="width:16px;text-align:center"/>
-                    <p:column headerText="#{msgs['person.surname']}" width="25%">
-                        <h:outputText value="#{client.person.surname}" />
+                    <p:column selectionMode="multiple" style="width:16px;text-align:center" />
+                    <p:column headerText="#{msgs['recipient.number']}" width="6%">
+                        <h:outputText value="#{recipient.number}" />
                     </p:column>
-                    <p:column headerText="#{msgs['person.name']}" width="24%">
-                        <h:outputText value="#{client.person.name}" />
+                    <p:column headerText="#{msgs['person.surname']}" width="20%">
+                        <h:outputText value="#{recipient.surname}" />
                     </p:column>
-                    <p:column headerText="#{msgs['person.patronymic']}" width="24%">
-                        <h:outputText value="#{client.person.patronymic}" />
+                    <p:column headerText="#{msgs['person.name']}" width="15%">
+                        <h:outputText value="#{recipient.name}" />
                     </p:column>
-                    <p:column headerText="#{msgs['person.birthday']}" width="23%">
-                        <h:outputText value="#{client.person.birthday}">
-                            <f:convertDateTime pattern="dd.MM.yyyy" />
-                        </h:outputText>
+                    <p:column headerText="#{msgs['person.patronymic']}" width="15%">
+                        <h:outputText value="#{recipient.patronymic}" />
+                    </p:column>
+                    <p:column headerText="#{msgs['recipient.address']}" width="44%">
+                        <h:outputText value="#{recipient.address}" />
                     </p:column>
                 </p:dataTable>
                 <h:panelGrid columns="2">
@@ -47,10 +48,10 @@
                 </h:panelGrid>
                 <h:panelGrid columns="2" style="padding-top: 5px;">
                     <h:commandButton id="select" value="#{msgs['button.select']}"
-                                     action="#{recipientBean.selectClient}"
+                                     action="#{recipientBean.selectRecipient}"
                                      rendered="#{clientBean.redirectFrom != 'RECIPIENTS'}"/>
                     <h:commandButton id="cancelSelect" value="#{msgs['button.cancel']}"
-                                     action="#{recipientBean.cancelSelectClient}"
+                                     action="#{recipientBean.cancelSelectRecipient}"
                                      rendered="#{clientBean.redirectFrom != 'RECIPIENTS'}"/>
                 </h:panelGrid>
             </h:form>

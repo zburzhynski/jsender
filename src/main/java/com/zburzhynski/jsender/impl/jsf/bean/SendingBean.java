@@ -15,6 +15,7 @@ import com.zburzhynski.jsender.impl.domain.Client;
 import com.zburzhynski.jsender.impl.domain.ContactInfoEmail;
 import com.zburzhynski.jsender.impl.domain.ContactInfoPhone;
 import com.zburzhynski.jsender.impl.jsf.validator.SendingValidator;
+import com.zburzhynski.jsender.impl.rest.domain.PatientDto;
 import com.zburzhynski.jsender.impl.util.PropertyReader;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
@@ -172,7 +173,7 @@ public class SendingBean implements Serializable {
      */
     public String addRecipients() {
         recipientBean.setRedirectFrom(SENDING);
-        recipientBean.setSelectedClients(new ArrayList<Client>());
+        recipientBean.setSelectedRecipients(new ArrayList<PatientDto>());
         return RECIPIENTS.getPath();
     }
 
