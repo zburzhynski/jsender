@@ -46,14 +46,14 @@
                                            itemLabel="#{msgs[type.value]}" />
                         </p:selectOneMenu>
                         <h:outputLabel for="subject" value="#{msgs['sending.subject']}:" />
-                        <p:inputText id="subject" value="#{sendingBean.subject}"
+                        <p:inputText id="subject" value="#{sendingBean.messageToSend.subject}"
                                      maxlength="250"
                                      style="width: 99%" required="#{sendingBean.sendingType == 'EMAIL'}"
                                      label="#{msgs['sending.subject']}" />
                     </h:panelGrid>
                     <p:tabView activeIndex="#{sendingBean.tabIndex}">
                         <p:tab title="#{msgs['sending.text']}">
-                            <p:editor value="#{sendingBean.text}" styleClass="area"
+                            <p:editor value="#{sendingBean.messageToSend.text}" styleClass="area"
                                              maxlength="2000"
                                              required="true" label="#{msgs['sending.text']}" />
                             <p:commandButton action="#{sendingBean.selectMessageTemplate}"
@@ -109,7 +109,7 @@
                     </p:tabView>
                     <h:panelGrid columns="2" columnClasses="name,val,msg" width="50%">
                         <h:outputLabel for="from" value="#{msgs['sending.from']}:" />
-                        <p:inputText id="from" value="#{sendingBean.from}"
+                        <p:inputText id="from" value="#{sendingBean.messageToSend.from}"
                                      style="width: 100%"
                                      label="#{msgs['sending.from']}" />
                     </h:panelGrid>

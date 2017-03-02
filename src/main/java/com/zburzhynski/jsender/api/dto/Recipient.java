@@ -9,18 +9,48 @@ package com.zburzhynski.jsender.api.dto;
  */
 public class Recipient {
 
-    private String clientId;
+    private String id;
+
+    private String surname;
+
+    private String name;
+
+    private String patronymic;
 
     private String fullName;
 
     private String contactInfo;
 
-    public String getClientId() {
-        return clientId;
+    public String getId() {
+        return id;
     }
 
-    public void setClientId(String clientId) {
-        this.clientId = clientId;
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getSurname() {
+        return surname;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getPatronymic() {
+        return patronymic;
+    }
+
+    public void setPatronymic(String patronymic) {
+        this.patronymic = patronymic;
     }
 
     public String getFullName() {

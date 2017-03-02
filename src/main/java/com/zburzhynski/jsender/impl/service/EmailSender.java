@@ -19,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import javax.mail.MessagingException;
@@ -38,7 +37,7 @@ import javax.mail.internet.MimeMessage;
  */
 @Service("emailSender")
 @Transactional(readOnly = true)
-public class EmailSender implements ISender {
+public class EmailSender extends AbstractSender implements ISender {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(EmailSender.class);
 
@@ -55,41 +54,42 @@ public class EmailSender implements ISender {
     /**
      * Send email.
      *
-     * @param emails emails to send
+     * @param email email to send
      * @return sending response
      */
     @Override
     @Transactional(readOnly = false)
-    public Map<Recipient, String> send(List<Message> emails) {
+    public Map<Recipient, String> send(Message email) {
         buildSession();
         Map<Recipient, String> response = new HashMap<>();
-        for (Message email : emails) {
+        for (Recipient recipient : email.getRecipients()) {
             LOGGER.info("Sending email {} ", email);
             String status;
             try {
                 javax.mail.Message message = new MimeMessage(session);
                 message.setRecipients(javax.mail.Message.RecipientType.TO,
-                    InternetAddress.parse(email.getRecipient().getContactInfo()));
+                    InternetAddress.parse(recipient.getContactInfo()));
                 message.setSubject(isNotBlank(email.getSubject()) ? email.getSubject() : null);
-                message.setContent(isNotBlank(email.getText()) ? email.getText() : null, HTML_MESSAGE_FORMAT);
+                message.setContent(isNotBlank(email.getText()) ? prepareText(email.getText(), recipient) : null,
+                    HTML_MESSAGE_FORMAT);
                 Transport.send(message);
                 status = "Email sent successfully";
-                LOGGER.info("Email sent successfully, recipient = " + email.getRecipient().getContactInfo());
+                LOGGER.info("Email sent successfully, recipient = " + recipient.getContactInfo());
             } catch (MessagingException e) {
                 status = e.getClass().getName();
                 LOGGER.error("An error occurred while sending email", e);
             }
             SentMessage sentMessage = new SentMessage();
             sentMessage.setSentDate(new Date());
-            sentMessage.setClientId(email.getRecipient().getClientId());
+            sentMessage.setClientId(recipient.getId());
             sentMessage.setClientSource(ClientSourceType.JSENDER);
-            sentMessage.setContactInfo(email.getRecipient().getContactInfo());
+            sentMessage.setContactInfo(recipient.getContactInfo());
             sentMessage.setSubject(email.getSubject());
             sentMessage.setText(email.getText());
             sentMessage.setStatus(status);
             sentMessage.setSendingType(SendingType.EMAIL);
             sentMessageRepository.saveOrUpdate(sentMessage);
-            response.put(email.getRecipient(), status);
+            response.put(recipient, status);
         }
         return response;
     }

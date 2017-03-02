@@ -164,8 +164,8 @@ public class MessageTemplateBean {
         if (SENDING.equals(redirectFrom)) {
             SendingBean sendingBean = BeanUtils.getSessionBean(SENDING_BEAN);
             if (sendingBean != null) {
-                sendingBean.setSubject(selectedMessageTemplate.getSubject());
-                sendingBean.setText(selectedMessageTemplate.getText());
+                sendingBean.getMessageToSend().setSubject(selectedMessageTemplate.getSubject());
+                sendingBean.getMessageToSend().setText(selectedMessageTemplate.getText());
             }
         }
     }

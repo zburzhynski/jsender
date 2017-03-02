@@ -10,7 +10,6 @@ import static javax.faces.application.FacesMessage.SEVERITY_ERROR;
 import com.zburzhynski.jsender.api.domain.SendingType;
 import com.zburzhynski.jsender.api.dto.Message;
 import com.zburzhynski.jsender.api.dto.Recipient;
-import com.zburzhynski.jsender.api.service.IMessagePreparer;
 import com.zburzhynski.jsender.api.service.ISender;
 import com.zburzhynski.jsender.impl.domain.Client;
 import com.zburzhynski.jsender.impl.domain.ContactInfoEmail;
@@ -51,20 +50,13 @@ public class SendingBean implements Serializable {
 
     private int tabIndex;
 
-    private String subject;
-
-    private String text;
-
-    private String from;
+    private Message messageToSend = new Message();
 
     private SendingType sendingType;
 
     private Map<Recipient, String> sendingStatus;
 
     private List<Client> recipients = new ArrayList<>();
-
-    @ManagedProperty(value = "#{messagePreparer}")
-    private IMessagePreparer messagePreparer;
 
     @ManagedProperty(value = "#{recipientBean}")
     private RecipientBean recipientBean;
@@ -90,49 +82,45 @@ public class SendingBean implements Serializable {
      * @return path for navigation
      */
     public String send() {
-        List<Message> messages = new ArrayList<>();
+        List<Recipient> contacts = new ArrayList<>();
         if (SendingType.SMS.equals(sendingType)) {
             for (Client recipient : recipients) {
                 for (ContactInfoPhone phone : recipient.getContactInfo().getPhones()) {
-                    Message sms = new Message();
-                    sms.setSubject(subject);
-                    sms.setText(text);
-                    sms.setFrom(from);
                     Recipient contact = new Recipient();
-                    contact.setClientId(recipient.getId());
+                    contact.setId(recipient.getId());
+                    contact.setSurname(recipient.getPerson().getSurname());
+                    contact.setName(recipient.getPerson().getName());
+                    contact.setPatronymic(recipient.getPerson().getPatronymic());
                     contact.setContactInfo(phone.getFullNumber());
                     contact.setFullName(recipient.getPerson().getFullName());
-                    sms.setRecipient(contact);
-                    messagePreparer.prepareMessage(sms);
-                    messages.add(sms);
+                    contacts.add(contact);
                 }
             }
-            if (CollectionUtils.isEmpty(messages)) {
+            if (CollectionUtils.isEmpty(contacts)) {
                 addMessage(RECIPIENTS_NOT_SPECIFIED);
                 return null;
             }
-            sendingStatus = smsSender.send(messages);
+            messageToSend.setRecipients(contacts);
+            sendingStatus = smsSender.send(messageToSend);
         } else if (SendingType.EMAIL.equals(sendingType)) {
             for (Client recipient : recipients) {
                 for (ContactInfoEmail email : recipient.getContactInfo().getEmails()) {
-                    Message message = new Message();
-                    message.setSubject(subject);
-                    message.setText(text);
-                    message.setFrom(from);
                     Recipient contact = new Recipient();
-                    contact.setClientId(recipient.getId());
+                    contact.setId(recipient.getId());
+                    contact.setSurname(recipient.getPerson().getSurname());
+                    contact.setName(recipient.getPerson().getName());
+                    contact.setPatronymic(recipient.getPerson().getPatronymic());
                     contact.setContactInfo(email.getAddress());
                     contact.setFullName(recipient.getPerson().getFullName());
-                    message.setRecipient(contact);
-                    messagePreparer.prepareMessage(message);
-                    messages.add(message);
+                    contacts.add(contact);
                 }
             }
-            if (CollectionUtils.isEmpty(messages)) {
+            if (CollectionUtils.isEmpty(contacts)) {
                 addMessage(RECIPIENTS_NOT_SPECIFIED);
                 return null;
             }
-            sendingStatus = emailSender.send(messages);
+            messageToSend.setRecipients(contacts);
+            sendingStatus = emailSender.send(messageToSend);
         }
         return SENDING_STATUS.getPath();
     }
@@ -216,28 +204,12 @@ public class SendingBean implements Serializable {
         this.tabIndex = tabIndex;
     }
 
-    public String getSubject() {
-        return subject;
+    public Message getMessageToSend() {
+        return messageToSend;
     }
 
-    public void setSubject(String subject) {
-        this.subject = subject;
-    }
-
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
-    }
-
-    public String getFrom() {
-        return from;
-    }
-
-    public void setFrom(String from) {
-        this.from = from;
+    public void setMessageToSend(Message messageToSend) {
+        this.messageToSend = messageToSend;
     }
 
     public SendingType getSendingType() {
@@ -270,10 +242,6 @@ public class SendingBean implements Serializable {
 
     public void setMessageTemplateBean(MessageTemplateBean messageTemplateBean) {
         this.messageTemplateBean = messageTemplateBean;
-    }
-
-    public void setMessagePreparer(IMessagePreparer messagePreparer) {
-        this.messagePreparer = messagePreparer;
     }
 
     public void setEmailSender(ISender emailSender) {
