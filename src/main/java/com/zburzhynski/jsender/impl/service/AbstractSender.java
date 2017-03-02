@@ -9,8 +9,6 @@ import com.zburzhynski.jsender.impl.util.PropertyReader;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.regex.Pattern;
-
 /**
  * Abstract sender.
  * <p/>
@@ -35,20 +33,17 @@ public abstract class AbstractSender {
      * @return parepared text
      */
     public String prepareText(String text, Recipient recipient) {
-        Pattern tagPattern = Pattern.compile("\\{.+}");
-        if (tagPattern.matcher(text).find()) {
-            String organizationName = settingRepository.findByName(Settings.ORGANIZATION_NAME).getValue();
-            String organizationMobilePhoneNumber = settingRepository.findByName(
-                Settings.ORGANIZATION_MOBILE_PHONE_NUMBER).getValue();
-            String organizationAddress = settingRepository.findByName(Settings.ORGANIZATION_ADDRESS).getValue();
-            text = replaceTag(TemplateTag.CLIENT_SURNAME, text, recipient.getSurname());
-            text = replaceTag(TemplateTag.CLIENT_NAME, text, recipient.getName());
-            text = replaceTag(TemplateTag.CLIENT_PATRONYMIC, text, recipient.getPatronymic());
-            text = replaceTag(TemplateTag.CLIENT_FULL_NAME, text, recipient.getFullName());
-            text = replaceTag(TemplateTag.ORGANIZATION_NAME, text, organizationName);
-            text = replaceTag(TemplateTag.ORGANIZATION_MOBILE_PHONE_NUMBER, text, organizationMobilePhoneNumber);
-            text = replaceTag(TemplateTag.ORGANIZATION_ADDRESS, text, organizationAddress);
-        }
+        text = replaceTag(TemplateTag.CLIENT_SURNAME, text, recipient.getSurname());
+        text = replaceTag(TemplateTag.CLIENT_NAME, text, recipient.getName());
+        text = replaceTag(TemplateTag.CLIENT_PATRONYMIC, text, recipient.getPatronymic());
+        text = replaceTag(TemplateTag.CLIENT_FULL_NAME, text, recipient.getFullName());
+        String organizationName = settingRepository.findByName(Settings.ORGANIZATION_NAME).getValue();
+        text = replaceTag(TemplateTag.ORGANIZATION_NAME, text, organizationName);
+        String organizationMobilePhoneNumber = settingRepository.findByName(
+            Settings.ORGANIZATION_MOBILE_PHONE_NUMBER).getValue();
+        text = replaceTag(TemplateTag.ORGANIZATION_MOBILE_PHONE_NUMBER, text, organizationMobilePhoneNumber);
+        String organizationAddress = settingRepository.findByName(Settings.ORGANIZATION_ADDRESS).getValue();
+        text = replaceTag(TemplateTag.ORGANIZATION_ADDRESS, text, organizationAddress);
         return text;
     }
 

@@ -87,6 +87,7 @@ public class SendingBean implements Serializable {
             for (Client recipient : recipients) {
                 for (ContactInfoPhone phone : recipient.getContactInfo().getPhones()) {
                     Recipient contact = new Recipient();
+                    contact.setId(recipient.getId());
                     contact.setSurname(recipient.getPerson().getSurname());
                     contact.setName(recipient.getPerson().getName());
                     contact.setPatronymic(recipient.getPerson().getPatronymic());
@@ -105,6 +106,7 @@ public class SendingBean implements Serializable {
             for (Client recipient : recipients) {
                 for (ContactInfoEmail email : recipient.getContactInfo().getEmails()) {
                     Recipient contact = new Recipient();
+                    contact.setId(recipient.getId());
                     contact.setSurname(recipient.getPerson().getSurname());
                     contact.setName(recipient.getPerson().getName());
                     contact.setPatronymic(recipient.getPerson().getPatronymic());

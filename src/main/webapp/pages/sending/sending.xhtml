@@ -11,10 +11,10 @@
         <style type="text/css">
             .name {
                 font-weight: bold;
-                width: 15%;
+                width: 20%;
             }
             .val {
-                width: 60%;
+                width: 80%;
             }
             .msg {
                 width: 25%;
@@ -33,7 +33,7 @@
                 <p:focus />
                 <p:messages id="messages" />
                 <h:panelGrid width="100%" style="height: auto">
-                    <h:panelGrid columns="2" columnClasses="name,val,msg" width="100%">
+                    <h:panelGrid columns="2" columnClasses="name,val" width="100%">
                         <h:outputLabel value="#{msgs['sending.sendingType']}:" />
                         <p:selectOneMenu id="sendingType"
                                          value="#{sendingBean.sendingType}"
@@ -48,18 +48,17 @@
                         <h:outputLabel for="subject" value="#{msgs['sending.subject']}:" />
                         <p:inputText id="subject" value="#{sendingBean.messageToSend.subject}"
                                      maxlength="250"
-                                     style="width: 100%" required="#{sendingBean.sendingType == 'EMAIL'}"
+                                     style="width: 99%" required="#{sendingBean.sendingType == 'EMAIL'}"
                                      label="#{msgs['sending.subject']}" />
                     </h:panelGrid>
                     <p:tabView activeIndex="#{sendingBean.tabIndex}">
                         <p:tab title="#{msgs['sending.text']}">
                             <p:editor value="#{sendingBean.messageToSend.text}" styleClass="area"
-                                      maxlength="2000"
-                                      required="true" label="#{msgs['sending.text']}" />
-                            <h:commandButton action="#{sendingBean.selectMessageTemplate}"
-                                             immediate="true"
-                                             image="/resources/css/css-images/text.png"
-                                             title="#{msgs['messageTemplate.button.selectTemplate']}" />
+                                             maxlength="2000"
+                                             required="true" label="#{msgs['sending.text']}" />
+                            <p:commandButton action="#{sendingBean.selectMessageTemplate}"
+                                             title="#{msgs['messageTemplate.button.selectTemplate']}"
+                                             icon="ui-icon-clipboard" />
                         </p:tab>
                         <p:tab title="#{msgs['sending.recipients']}">
                             <p:dataTable value="#{sendingBean.recipients}"
@@ -70,16 +69,16 @@
                                          emptyMessage="#{msgs['clients.empty']}"
                                          rowIndexVar="index"
                                          rows="#{sendingBean.rowCount}">
-                                <p:column headerText="#{msgs['sending.recipient.number']}" style="width: 7%">
+                                <p:column headerText="#{msgs['sending.recipient.number']}" style="width: 5%">
                                     <h:outputText value="#{index + 1}" />
                                 </p:column>
-                                <p:column headerText="#{msgs['person.fullName']}" style="width: 25%">
+                                <p:column headerText="#{msgs['person.fullName']}" style="width: 30%">
                                     <h:outputText value="#{recipient.person.fullName}" />
                                 </p:column>
-                                <p:column headerText="#{msgs['sending.recipient.phoneNumbers']}" style="width: 34%">
+                                <p:column headerText="#{msgs['sending.recipient.phoneNumber']}" style="width: 35%">
                                     <h:outputText value="#{sendingBean.getPhoneNumberDescription(recipient)}" />
                                 </p:column>
-                                <p:column headerText="#{msgs['sending.recipient.emails']}" style="width: 30%">
+                                <p:column headerText="#{msgs['sending.recipient.email']}" style="width: 25%">
                                     <h:outputText value="#{sendingBean.getEmailDescription(recipient)}" />
                                 </p:column>
                                 <p:column style="width: 4%">
@@ -94,15 +93,17 @@
                                 </p:column>
                             </p:dataTable>
                             <h:panelGrid columns="2" style="padding-top: 5px">
-                                <h:commandButton action="#{sendingBean.addRecipients}"
-                                                 image="/resources/css/css-images/add.gif"
-                                                 title="#{msgs['button.add']}" />
-                                <p:commandLink action="#{sendingBean.removeAllRecipients}" immediate="true">
-                                    <p:graphicImage url="/resources/css/css-images/delete_all.png" title="#{msgs['sending.button.removeAllRecipients']}" />
+                                <p:commandButton action="#{sendingBean.addRecipients}"
+                                                 title="#{msgs['button.add']}"
+                                                 icon="ui-icon-person" />
+                                <p:commandButton action="#{sendingBean.removeAllRecipients}"
+                                                 title="#{msgs['button.remove']}"
+                                                 rendered="#{not empty sendingBean.recipients}"
+                                                 icon="ui-icon-trash">
                                     <p:confirm header="#{msgs['removeAllRecipientConfirm.header']}"
                                                message="#{msgs['removeAllRecipientConfirm.message']}?"
                                                icon="ui-icon-alert" />
-                                </p:commandLink>
+                                </p:commandButton>
                             </h:panelGrid>
                         </p:tab>
                     </p:tabView>
@@ -113,7 +114,7 @@
                                      label="#{msgs['sending.from']}" />
                     </h:panelGrid>
                     <h:panelGrid style="float: right">
-                        <h:commandButton action="#{sendingBean.send}" value="#{msgs['sending.send']}" />
+                        <p:commandButton action="#{sendingBean.send}" value="#{msgs['sending.send']}" icon="ui-icon-mail-closed" />
                     </h:panelGrid>
                 </h:panelGrid>
                 <p:confirmDialog global="true" closeOnEscape="true">

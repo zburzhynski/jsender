@@ -87,6 +87,7 @@ public class SmsSender extends AbstractSender implements ISender {
             }
             SentMessage sentMessage = new SentMessage();
             sentMessage.setSentDate(new Date());
+            sentMessage.setClientId(recipient.getId());
             sentMessage.setClientSource(ClientSourceType.JSENDER);
             sentMessage.setContactInfo(recipient.getContactInfo());
             sentMessage.setSubject(message.getSubject());

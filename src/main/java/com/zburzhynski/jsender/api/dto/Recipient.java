@@ -9,6 +9,8 @@ package com.zburzhynski.jsender.api.dto;
  */
 public class Recipient {
 
+    private String id;
+
     private String surname;
 
     private String name;
@@ -18,6 +20,14 @@ public class Recipient {
     private String fullName;
 
     private String contactInfo;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getSurname() {
         return surname;
