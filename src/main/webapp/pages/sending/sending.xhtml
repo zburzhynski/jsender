@@ -43,12 +43,14 @@
                             <f:selectItems value="#{sendingTypeListBean.sendingTypes}" var="type"
                                            itemValue="#{type}"
                                            itemLabel="#{msgs[type.value]}" />
+                            <p:ajax event="change" update="subject" />
                         </p:selectOneMenu>
                         <h:outputLabel for="subject" value="#{msgs['sending.subject']}:" />
                         <p:inputText id="subject" value="#{sendingBean.messageToSend.subject}"
                                      maxlength="250"
-                                     style="width: 99%"
-                                     label="#{msgs['sending.subject']}" />
+                                     label="#{msgs['sending.subject']}"
+                                     disabled="#{sendingBean.messageToSend.sendingType != 'EMAIL'}"
+                                     style="width: 99%" />
                     </h:panelGrid>
                     <p:tabView activeIndex="#{sendingBean.tabIndex}">
                         <p:tab title="#{msgs['sending.text']}">
@@ -113,7 +115,7 @@
                                      label="#{msgs['sending.from']}" />
                     </h:panelGrid>
                     <h:panelGrid style="float: right">
-                        <p:commandButton update="messages" action="#{sendingBean.send}" value="#{msgs['sending.send']}" icon="ui-icon-mail-closed" />
+                        <p:commandButton action="#{sendingBean.send}" value="#{msgs['sending.send']}" update="messages" icon="ui-icon-mail-closed" />
                     </h:panelGrid>
                 </h:panelGrid>
                 <p:confirmDialog global="true" closeOnEscape="true">
