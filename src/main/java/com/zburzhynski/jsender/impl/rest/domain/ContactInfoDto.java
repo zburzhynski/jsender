@@ -1,5 +1,6 @@
 package com.zburzhynski.jsender.impl.rest.domain;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -15,7 +16,15 @@ public class ContactInfoDto extends BaseDto {
 
     private List<ContactInfoEmailDto> emails;
 
+    /**
+     * Gets phones.
+     *
+     * @return phones
+     */
     public List<ContactInfoPhoneDto> getPhones() {
+        if (phones == null) {
+            phones = new ArrayList<>();
+        }
         return phones;
     }
 
@@ -23,7 +32,15 @@ public class ContactInfoDto extends BaseDto {
         this.phones = phones;
     }
 
+    /**
+     * Gets emails.
+     *
+     * @return emails
+     */
     public List<ContactInfoEmailDto> getEmails() {
+        if (emails == null) {
+            emails = new ArrayList<>();
+        }
         return emails;
     }
 

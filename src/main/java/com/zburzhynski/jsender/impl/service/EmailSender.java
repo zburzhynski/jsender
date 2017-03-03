@@ -25,7 +25,6 @@ import javax.mail.MessagingException;
 import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 /**
@@ -59,6 +58,7 @@ public class EmailSender extends AbstractSender implements ISender {
      */
     @Override
     @Transactional(readOnly = false)
+    //TODO: fix implementation
     public Map<Recipient, String> send(Message email) {
         buildSession();
         Map<Recipient, String> response = new HashMap<>();
@@ -67,14 +67,14 @@ public class EmailSender extends AbstractSender implements ISender {
             String status;
             try {
                 javax.mail.Message message = new MimeMessage(session);
-                message.setRecipients(javax.mail.Message.RecipientType.TO,
-                    InternetAddress.parse(recipient.getContactInfo()));
+//                message.setRecipients(javax.mail.Message.RecipientType.TO,
+//                    InternetAddress.parse(recipient.getContactInfo()));
                 message.setSubject(isNotBlank(email.getSubject()) ? email.getSubject() : null);
                 message.setContent(isNotBlank(email.getText()) ? prepareText(email.getText(), recipient) : null,
                     HTML_MESSAGE_FORMAT);
                 Transport.send(message);
                 status = "Email sent successfully";
-                LOGGER.info("Email sent successfully, recipient = " + recipient.getContactInfo());
+//                LOGGER.info("Email sent successfully, recipient = " + recipient.getContactInfo());
             } catch (MessagingException e) {
                 status = e.getClass().getName();
                 LOGGER.error("An error occurred while sending email", e);
@@ -83,7 +83,7 @@ public class EmailSender extends AbstractSender implements ISender {
             sentMessage.setSentDate(new Date());
             sentMessage.setClientId(recipient.getId());
             sentMessage.setClientSource(ClientSourceType.JSENDER);
-            sentMessage.setContactInfo(recipient.getContactInfo());
+            //sentMessage.setContactInfo(recipient.getContactInfo());
             sentMessage.setSubject(email.getSubject());
             sentMessage.setText(email.getText());
             sentMessage.setStatus(status);

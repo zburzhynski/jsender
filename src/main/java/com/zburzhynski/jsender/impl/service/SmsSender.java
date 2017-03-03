@@ -57,6 +57,7 @@ public class SmsSender extends AbstractSender implements ISender {
      * @param message message to send
      * @return sending response
      */
+    //TODO: fix implementation
     @Override
     @Transactional(readOnly = false)
     public Map<Recipient, String> send(Message message) {
@@ -68,7 +69,7 @@ public class SmsSender extends AbstractSender implements ISender {
             String status;
             try {
                 URL url = new URL(PROTOCOL, "api.smsfeedback.ru", PORT, "/messages/v2/send/?phone=%2B" +
-                    recipient.getContactInfo() + "&text=" + URLEncoder.encode(prepareText(message.getText(), recipient),
+                /*recipient.getContactInfo() + "&text=" +*/ URLEncoder.encode(prepareText(message.getText(), recipient),
                     "UTF-8") + "&sender=" + message.getFrom());
                 URLConnection urlConnection = url.openConnection();
                 urlConnection.setRequestProperty("Authorization", authString);
@@ -89,7 +90,7 @@ public class SmsSender extends AbstractSender implements ISender {
             sentMessage.setSentDate(new Date());
             sentMessage.setClientId(recipient.getId());
             sentMessage.setClientSource(ClientSourceType.JSENDER);
-            sentMessage.setContactInfo(recipient.getContactInfo());
+            //sentMessage.setContactInfo(recipient.getContactInfo());
             sentMessage.setSubject(message.getSubject());
             sentMessage.setText(message.getText());
             sentMessage.setStatus(status);

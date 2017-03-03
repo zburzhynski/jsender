@@ -15,15 +15,41 @@ import java.util.List;
  */
 public class Message implements Serializable {
 
+    private SendingType sendingType;
+
     private String from;
 
-    private List<Recipient> recipients = new ArrayList<>();
+    private List<Recipient> recipients;
 
     private String subject;
 
     private String text;
 
-    private SendingType sendingType;
+    /**
+     * Adds recipient.
+     *
+     * @param recipient recipient to add
+     */
+    public void addRecipient(Recipient recipient) {
+        getRecipients().add(recipient);
+    }
+
+    /**
+     * Removes recipient.
+     *
+     * @param recipient recipient to remove
+     */
+    public void removeRecipient(Recipient recipient) {
+        getRecipients().remove(recipient);
+    }
+
+    public SendingType getSendingType() {
+        return sendingType;
+    }
+
+    public void setSendingType(SendingType sendingType) {
+        this.sendingType = sendingType;
+    }
 
     public String getFrom() {
         return from;
@@ -33,7 +59,15 @@ public class Message implements Serializable {
         this.from = from;
     }
 
+    /**
+     * Gets recipients.
+     *
+     * @return recipients
+     */
     public List<Recipient> getRecipients() {
+        if (recipients == null) {
+            recipients = new ArrayList<>();
+        }
         return recipients;
     }
 
@@ -55,14 +89,6 @@ public class Message implements Serializable {
 
     public void setText(String text) {
         this.text = text;
-    }
-
-    public SendingType getSendingType() {
-        return sendingType;
-    }
-
-    public void setSendingType(SendingType sendingType) {
-        this.sendingType = sendingType;
     }
 
 }

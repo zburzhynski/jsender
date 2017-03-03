@@ -62,7 +62,7 @@
                                              icon="ui-icon-clipboard" />
                         </p:tab>
                         <p:tab title="#{msgs['sending.recipients']}">
-                            <p:dataTable value="#{sendingBean.recipients}"
+                            <p:dataTable value="#{sendingBean.messageToSend.recipients}"
                                          var="recipient"
                                          paginator="true"
                                          paginatorPosition="bottom"
@@ -74,7 +74,7 @@
                                     <h:outputText value="#{index + 1}" />
                                 </p:column>
                                 <p:column headerText="#{msgs['person.fullName']}" style="width: 30%">
-                                    <h:outputText value="#{recipient.person.fullName}" />
+                                    <h:outputText value="#{recipient.getFullName()}" />
                                 </p:column>
                                 <p:column headerText="#{msgs['sending.recipient.phoneNumber']}" style="width: 35%">
                                     <h:outputText value="#{sendingBean.getPhoneNumberDescription(recipient)}" />
@@ -99,7 +99,7 @@
                                                  icon="ui-icon-person" />
                                 <p:commandButton action="#{sendingBean.removeAllRecipients}"
                                                  title="#{msgs['button.remove']}"
-                                                 rendered="#{not empty sendingBean.recipients}"
+                                                 rendered="#{not empty sendingBean.messageToSend.recipients}"
                                                  icon="ui-icon-trash">
                                     <p:confirm header="#{msgs['removeAllRecipientConfirm.header']}"
                                                message="#{msgs['removeAllRecipientConfirm.message']}?"

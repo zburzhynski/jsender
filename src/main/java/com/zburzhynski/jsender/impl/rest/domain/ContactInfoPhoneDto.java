@@ -1,6 +1,7 @@
 package com.zburzhynski.jsender.impl.rest.domain;
 
 import com.zburzhynski.jsender.api.domain.PhoneNumberType;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Contact info phone.
@@ -24,6 +25,23 @@ public class ContactInfoPhoneDto extends BaseDto {
     private String description;
 
     private Long sortOrder;
+
+    /**
+     * Gets phone full number.
+     *
+     * @return phone full number
+     */
+    public String getFullNumber() {
+        String fullNumber = StringUtils.EMPTY;
+        if (StringUtils.isNotBlank(countryCode)) {
+            fullNumber += countryCode;
+        }
+        if (StringUtils.isNotBlank(cityCode)) {
+            fullNumber += cityCode;
+        }
+        fullNumber += phoneNumber;
+        return fullNumber;
+    }
 
     public String getCountryCode() {
         return countryCode;

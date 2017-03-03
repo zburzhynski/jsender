@@ -86,6 +86,7 @@ public class SendingBean implements Serializable {
      *
      * @return path for navigation
      */
+    //TODO: move to service
     public String send() {
         List<Recipient> contacts = new ArrayList<>();
         if (messageToSend.getSendingType() == null) {
@@ -104,8 +105,8 @@ public class SendingBean implements Serializable {
                     contact.setSurname(recipient.getPerson().getSurname());
                     contact.setName(recipient.getPerson().getName());
                     contact.setPatronymic(recipient.getPerson().getPatronymic());
-                    contact.setContactInfo(phone.getFullNumber());
-                    contact.setFullName(recipient.getPerson().getFullName());
+//                    contact.setContactInfo(phone.getFullNumber());
+//                    contact.setFullName(recipient.getPerson().getFullName());
                     contacts.add(contact);
                 }
             }
@@ -123,8 +124,8 @@ public class SendingBean implements Serializable {
                     contact.setSurname(recipient.getPerson().getSurname());
                     contact.setName(recipient.getPerson().getName());
                     contact.setPatronymic(recipient.getPerson().getPatronymic());
-                    contact.setContactInfo(email.getAddress());
-                    contact.setFullName(recipient.getPerson().getFullName());
+//                    contact.setContactInfo(email.getAddress());
+//                    contact.setFullName(recipient.getPerson().getFullName());
                     contacts.add(contact);
                 }
             }
@@ -144,26 +145,18 @@ public class SendingBean implements Serializable {
      * @param recipient recipient
      * @return phone numbers description
      */
-    public String getPhoneNumberDescription(Client recipient) {
-        List<String> phoneNumbers = new ArrayList<>();
-        for (ContactInfoPhone phone : recipient.getContactInfo().getPhones()) {
-            phoneNumbers.add(phone.getFullNumber());
-        }
-        return StringUtils.join(phoneNumbers, COMMA + SPACE);
+    public String getPhoneNumberDescription(Recipient recipient) {
+        return StringUtils.join(recipient.getPhones(), COMMA + SPACE);
     }
 
     /**
-     * Gets email description.
+     * Gets emails description.
      *
      * @param recipient recipient
      * @return emails description
      */
-    public String getEmailDescription(Client recipient) {
-        List<String> emails = new ArrayList<>();
-        for (ContactInfoEmail email : recipient.getContactInfo().getEmails()) {
-            emails.add(email.getAddress());
-        }
-        return StringUtils.join(emails, COMMA + SPACE);
+    public String getEmailDescription(Recipient recipient) {
+        return StringUtils.join(recipient.getEmails(), COMMA + SPACE);
     }
 
     /**
@@ -183,8 +176,8 @@ public class SendingBean implements Serializable {
      * @param recipient recipient to remove
      * @return path for navigation
      */
-    public String removeRecipient(Client recipient) {
-        recipients.remove(recipient);
+    public String removeRecipient(Recipient recipient) {
+        messageToSend.removeRecipient(recipient);
         return SENDING.getPath();
     }
 
@@ -194,7 +187,7 @@ public class SendingBean implements Serializable {
      * @return path for navigation
      */
     public String removeAllRecipients() {
-        recipients.clear();
+        messageToSend.getRecipients().clear();
         return SENDING.getPath();
     }
 
