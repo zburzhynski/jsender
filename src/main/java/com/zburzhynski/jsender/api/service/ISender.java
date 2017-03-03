@@ -1,9 +1,9 @@
 package com.zburzhynski.jsender.api.service;
 
 import com.zburzhynski.jsender.api.dto.Message;
-import com.zburzhynski.jsender.api.dto.Recipient;
+import com.zburzhynski.jsender.api.dto.SendingStatus;
 
-import java.util.Map;
+import java.util.List;
 
 /**
  * Message sender.
@@ -20,6 +20,6 @@ public interface ISender {
      * @param message message to send
      * @return response
      */
-    Map<Recipient, String> send(Message message);
+    List<SendingStatus> send(Message message);
 
 }

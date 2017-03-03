@@ -12,16 +12,16 @@
             <h:form id="sendingStatusForm">
                 <h4>#{msgs['sendingStatus.header']}</h4>
                 <p:focus />
-                <p:dataTable value="#{sendingBean.sendingStatus}"
-                             var="statusEntry">
+                <p:dataTable value="#{sendingBean.sendingStatuses}"
+                             var="status">
                     <p:column headerText="#{msgs['person.fullName']}" style="width: 30%">
-                        <h:outputText value="#{statusEntry.key.fullName}" />
+                        <h:outputText value="#{status.recipientFullName}" />
                     </p:column>
                     <p:column headerText="#{msgs['person.recipient.contactInfo']}" style="width: 30%">
-                        <h:outputText value="#{statusEntry.key.contactInfo}" />
+                        <h:outputText value="#{status.contactInfo}" />
                     </p:column>
                     <p:column headerText="#{msgs['sendingStatus.status']}" style="width: 40%">
-                        <h:outputText value="#{statusEntry.value}" />
+                        <h:outputText value="#{status.description}" />
                     </p:column>
                 </p:dataTable>
                 <h:panelGrid>

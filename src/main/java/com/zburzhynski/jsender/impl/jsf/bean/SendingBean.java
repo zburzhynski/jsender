@@ -7,9 +7,9 @@ import static com.zburzhynski.jsender.api.domain.View.RECIPIENTS;
 import static com.zburzhynski.jsender.api.domain.View.SENDING;
 import static com.zburzhynski.jsender.api.domain.View.SENDING_STATUS;
 import static javax.faces.application.FacesMessage.SEVERITY_ERROR;
-import com.zburzhynski.jsender.api.domain.SendingType;
 import com.zburzhynski.jsender.api.dto.Message;
 import com.zburzhynski.jsender.api.dto.Recipient;
+import com.zburzhynski.jsender.api.dto.SendingStatus;
 import com.zburzhynski.jsender.api.service.ISender;
 import com.zburzhynski.jsender.impl.domain.Client;
 import com.zburzhynski.jsender.impl.domain.ContactInfoEmail;
@@ -17,7 +17,6 @@ import com.zburzhynski.jsender.impl.domain.ContactInfoPhone;
 import com.zburzhynski.jsender.impl.jsf.validator.SendingValidator;
 import com.zburzhynski.jsender.impl.rest.domain.PatientDto;
 import com.zburzhynski.jsender.impl.util.PropertyReader;
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,8 +24,6 @@ import org.slf4j.LoggerFactory;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -46,17 +43,13 @@ public class SendingBean implements Serializable {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SendingBean.class);
 
-    private static final String RECIPIENTS_NOT_SPECIFIED = "sendingValidator.recipientsNotSpecified";
-
-    private static final String SENDING_TYPE_NOT_SPECIFIED = "sendingValidator.sendingTypeNotSpecified";
-
     private static final String MESSAGE_TEMPLATE_BEAN = "messageTemplateBean";
 
     private int tabIndex;
 
     private Message messageToSend = new Message();
 
-    private Map<Recipient, String> sendingStatus;
+    private List<SendingStatus> sendingStatuses;
 
     private List<Client> recipients = new ArrayList<>();
 
@@ -88,55 +81,51 @@ public class SendingBean implements Serializable {
      */
     //TODO: move to service
     public String send() {
-        List<Recipient> contacts = new ArrayList<>();
-        if (messageToSend.getSendingType() == null) {
-            addMessage(SENDING_TYPE_NOT_SPECIFIED);
+        for (Client client : recipients) {
+            Recipient recipient = new Recipient();
+            recipient.setId(client.getId());
+            recipient.setSurname(client.getPerson().getSurname());
+            recipient.setName(client.getPerson().getName());
+            recipient.setPatronymic(client.getPerson().getPatronymic());
+            switch (messageToSend.getSendingType()) {
+                case SMS:
+                    for (ContactInfoPhone phone : client.getContactInfo().getPhones()) {
+                        recipient.addPhone(phone.getFullNumber());
+                    }
+                    break;
+                case EMAIL:
+                    for (ContactInfoEmail email : client.getContactInfo().getEmails()) {
+                        recipient.addEmail(email.getAddress());
+                    }
+                    break;
+                default:
+            }
+            messageToSend.addRecipient(recipient);
+        }
+        boolean valid = sendingValidator.validate(messageToSend);
+        if (!valid) {
             return null;
         }
-        if (CollectionUtils.isEmpty(recipients)) {
-            addMessage(RECIPIENTS_NOT_SPECIFIED);
-            return null;
-        }
-        if (SendingType.SMS.equals(messageToSend.getSendingType())) {
-            for (Client recipient : recipients) {
-                for (ContactInfoPhone phone : recipient.getContactInfo().getPhones()) {
-                    Recipient contact = new Recipient();
-                    contact.setId(recipient.getId());
-                    contact.setSurname(recipient.getPerson().getSurname());
-                    contact.setName(recipient.getPerson().getName());
-                    contact.setPatronymic(recipient.getPerson().getPatronymic());
-//                    contact.setContactInfo(phone.getFullNumber());
-//                    contact.setFullName(recipient.getPerson().getFullName());
-                    contacts.add(contact);
-                }
-            }
-            messageToSend.setRecipients(contacts);
-            boolean valid = sendingValidator.validate(messageToSend);
-            if (!valid) {
-                return null;
-            }
-            sendingStatus = smsSender.send(messageToSend);
-        } else if (SendingType.EMAIL.equals(messageToSend.getSendingType())) {
-            for (Client recipient : recipients) {
-                for (ContactInfoEmail email : recipient.getContactInfo().getEmails()) {
-                    Recipient contact = new Recipient();
-                    contact.setId(recipient.getId());
-                    contact.setSurname(recipient.getPerson().getSurname());
-                    contact.setName(recipient.getPerson().getName());
-                    contact.setPatronymic(recipient.getPerson().getPatronymic());
-//                    contact.setContactInfo(email.getAddress());
-//                    contact.setFullName(recipient.getPerson().getFullName());
-                    contacts.add(contact);
-                }
-            }
-            messageToSend.setRecipients(contacts);
-            boolean valid = sendingValidator.validate(messageToSend);
-            if (!valid) {
-                return null;
-            }
-            sendingStatus = emailSender.send(messageToSend);
+        switch (messageToSend.getSendingType()) {
+            case SMS:
+                sendingStatuses = smsSender.send(messageToSend);
+                break;
+            case EMAIL:
+                sendingStatuses = emailSender.send(messageToSend);
+                break;
+            default:
         }
         return SENDING_STATUS.getPath();
+    }
+
+    /**
+     * Creates new message.
+     *
+     * @return path for navigation
+     */
+    public String createMessage() {
+        messageToSend = new Message();
+        return null;
     }
 
     /**
@@ -218,8 +207,8 @@ public class SendingBean implements Serializable {
         this.messageToSend = messageToSend;
     }
 
-    public Set<Map.Entry<Recipient, String>> getSendingStatus() {
-        return sendingStatus.entrySet();
+    public List<SendingStatus> getSendingStatuses() {
+        return sendingStatuses;
     }
 
     public List<Client> getRecipients() {
