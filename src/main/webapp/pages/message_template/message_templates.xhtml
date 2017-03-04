@@ -23,6 +23,8 @@
                              lazy="true"
                              emptyMessage="#{msgs['messageTemplates.empty']}"
                              rows="#{messageTemplateBean.rowCount}">
+                    <p:ajax event="rowSelect" update="messageTemplatesForm:selectGrid" />
+                    <p:ajax event="rowUnselect" update="messageTemplatesForm:selectGrid" />
                     <p:column headerText="#{msgs['messageTemplate.subject']}" width="47%">
                         <h:outputText value="#{messageTemplate.subject}" />
                     </p:column>
@@ -53,10 +55,11 @@
                                      image="/resources/css/css-images/add.gif"
                                      title="#{msgs['button.add']}" />
                 </h:panelGrid>
-                <h:panelGrid columns="2" style="padding-top: 5px;">
+                <h:panelGrid id="selectGrid" columns="2" style="padding-top: 5px;">
                     <p:commandButton id="select" value="#{msgs['button.select']}"
                                      action="#{messageTemplateBean.selectMessageTemplate}"
-                                     rendered="#{messageTemplateBean.redirectFrom != 'MESSAGE_TEMPLATES'}"/>
+                                     rendered="#{messageTemplateBean.redirectFrom != 'MESSAGE_TEMPLATES'
+                                     and not empty messageTemplateBean.selectedMessageTemplate}" />
                     <p:commandButton id="cancelSelect" value="#{msgs['button.cancel']}"
                                      action="#{messageTemplateBean.cancelMessageTemplate}"
                                      rendered="#{messageTemplateBean.redirectFrom != 'MESSAGE_TEMPLATES'}"/>

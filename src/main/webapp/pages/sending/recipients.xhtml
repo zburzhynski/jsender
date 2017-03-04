@@ -21,6 +21,8 @@
                              lazy="true"
                              emptyMessage="#{msgs['clients.empty']}"
                              rows="#{recipientBean.rowCount}">
+                    <p:ajax event="rowSelect" update="recipientsForm:selectGrid" />
+                    <p:ajax event="rowUnselect" update="recipientsForm:selectGrid" />
                     <p:column selectionMode="multiple" style="width:16px;text-align:center" />
                     <p:column headerText="#{msgs['recipient.number']}" width="6%">
                         <h:outputText value="#{recipient.number}" />
@@ -46,10 +48,11 @@
                                      image="/resources/css/css-images/cancel.gif"
                                      title="#{msgs['button.cancel']}" />
                 </h:panelGrid>
-                <h:panelGrid columns="2" style="padding-top: 5px;">
+                <h:panelGrid id="selectGrid" columns="2" style="padding-top: 5px;">
                     <p:commandButton id="select" value="#{msgs['button.select']}"
                                      action="#{recipientBean.selectRecipient}"
-                                     rendered="#{clientBean.redirectFrom != 'RECIPIENTS'}"/>
+                                     rendered="#{clientBean.redirectFrom != 'RECIPIENTS'
+                                     and not empty recipientBean.selectedRecipients}" />
                     <p:commandButton id="cancelSelect" value="#{msgs['button.cancel']}"
                                      action="#{recipientBean.cancelSelectRecipient}"
                                      rendered="#{clientBean.redirectFrom != 'RECIPIENTS'}"/>
