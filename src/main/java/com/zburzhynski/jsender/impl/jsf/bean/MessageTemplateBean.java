@@ -4,11 +4,13 @@ import static com.zburzhynski.jsender.api.domain.View.MESSAGE_TEMPLATE;
 import static com.zburzhynski.jsender.api.domain.View.MESSAGE_TEMPLATES;
 import static com.zburzhynski.jsender.api.domain.View.SENDING;
 import com.zburzhynski.jsender.api.criteria.MessageTemplateSearchCriteria;
+import com.zburzhynski.jsender.api.domain.TemplateTag;
 import com.zburzhynski.jsender.api.domain.View;
 import com.zburzhynski.jsender.api.service.IMessageTemplateService;
 import com.zburzhynski.jsender.impl.domain.MessageTemplate;
 import com.zburzhynski.jsender.impl.jsf.validator.MessageTemplateSelectValidator;
 import com.zburzhynski.jsender.impl.util.BeanUtils;
+import com.zburzhynski.jsender.impl.util.PropertyReader;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
 
@@ -42,6 +44,9 @@ public class MessageTemplateBean {
 
     private List<MessageTemplate> datasource;
 
+    @ManagedProperty(value = "#{propertyReader}")
+    private PropertyReader reader;
+
     @ManagedProperty(value = "#{messageTemplateSelectValidator}")
     private MessageTemplateSelectValidator templateSelectValidator;
 
@@ -57,6 +62,15 @@ public class MessageTemplateBean {
     @PostConstruct
     public void init() {
         messageTemplateModel = new MessageTemplateDataModel();
+    }
+
+    /**
+     * Inserts template tag.
+     *
+     * @param tag tag to insert
+     */
+    public void insertTag(TemplateTag tag) {
+        messageTemplate.setText(messageTemplate.getText() + reader.readProperty(tag.getValue()));
     }
 
     /**
@@ -146,6 +160,10 @@ public class MessageTemplateBean {
 
     public void setSelectedMessageTemplate(MessageTemplate selectedMessageTemplate) {
         this.selectedMessageTemplate = selectedMessageTemplate;
+    }
+
+    public void setReader(PropertyReader reader) {
+        this.reader = reader;
     }
 
     public void setTemplateSelectValidator(MessageTemplateSelectValidator templateSelectValidator) {

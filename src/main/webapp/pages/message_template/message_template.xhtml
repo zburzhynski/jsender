@@ -34,15 +34,23 @@
                 <h:panelGrid columns="3" columnClasses="name,val,msg" width="100%">
                     <h:outputLabel for="subject" value="#{msgs['messageTemplate.subject']}:" />
                     <p:inputText id="subject" value="#{messageTemplateBean.messageTemplate.subject}" required="true" maxlength="250" style="width: 98%" />
-                    <p:message for="subject" />
+                    <p:message id="subjectMessage" for="subject" />
+                </h:panelGrid>
+                <h:panelGrid columns="3" columnClasses="name,val,msg">
                     <h:outputLabel for="text" value="#{msgs['messageTemplate.text']}:" />
                     <p:editor id="text" value="#{messageTemplateBean.messageTemplate.text}" required="true" maxlength="2000" styleClass="area" style="width: 100%" />
-                    <p:message for="text" />
+                    <p:message id="textMessage" for="text" />
                 </h:panelGrid>
-                <h:panelGrid columns="2">
-                    <h:commandButton id="saveMessageTemplate" value="#{msgs['button.save']}"
+                <h:panelGrid columns="3">
+                    <p:menuButton value="#{msgs['messageTemplate.insertTag']}">
+                        <c:forEach items="#{templateTagListBean.templateTags}" var="tag">
+                            <p:menuitem value="#{msgs[tag.value]}" actionListener="#{messageTemplateBean.insertTag(tag)}" update="text" immediate="true" />
+                        </c:forEach>
+                    </p:menuButton>
+                    <p:commandButton id="saveMessageTemplate" value="#{msgs['button.save']}"
+                                     update="subjectMessage textMessage"
                                      action="#{messageTemplateBean.saveMessageTemplate}" />
-                    <h:commandButton id="cancelUpdateMessageTemplate" value="#{msgs['button.cancel']}"
+                    <p:commandButton id="cancelUpdateMessageTemplate" value="#{msgs['button.cancel']}"
                                      action="/pages/message_template/message_templates?faces-redirect=true"
                                      immediate="true" />
                 </h:panelGrid>
