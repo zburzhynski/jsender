@@ -41,7 +41,7 @@ public class EmailSender extends AbstractSender implements ISender {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(EmailSender.class);
 
-    private static final String HTML_MESSAGE_FORMAT = "text/html";
+    private static final String HTML_MESSAGE_FORMAT = "text/html; charset=UTF-8";
 
     private Session session;
 
