@@ -3,6 +3,8 @@ package com.zburzhynski.jsender.impl.jsf.bean;
 import static com.zburzhynski.jsender.api.domain.View.MESSAGE_TEMPLATE;
 import static com.zburzhynski.jsender.api.domain.View.MESSAGE_TEMPLATES;
 import static com.zburzhynski.jsender.api.domain.View.SENDING;
+import static org.apache.commons.lang3.StringUtils.EMPTY;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import com.zburzhynski.jsender.api.criteria.MessageTemplateSearchCriteria;
 import com.zburzhynski.jsender.api.domain.TemplateTag;
 import com.zburzhynski.jsender.api.domain.View;
@@ -70,7 +72,8 @@ public class MessageTemplateBean {
      * @param tag tag to insert
      */
     public void insertTag(TemplateTag tag) {
-        messageTemplate.setText(messageTemplate.getText() + reader.readProperty(tag.getValue()));
+        String text = isNotBlank(messageTemplate.getText()) ? messageTemplate.getText() : EMPTY;
+        messageTemplate.setText(text + reader.readProperty(tag.getValue()));
     }
 
     /**
