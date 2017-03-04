@@ -1,5 +1,7 @@
 package com.zburzhynski.jsender.impl.rest.domain;
 
+import static com.zburzhynski.jsender.api.domain.CommonConstant.SPACE;
+
 import java.util.Date;
 
 /**
@@ -20,6 +22,15 @@ public class PersonDto extends BaseDto {
     private Date birthday;
 
     private String gender;
+
+    /**
+     * Gets person full name.
+     *
+     * @return recipient full name
+     */
+    public String getFullName() {
+        return getSurname().concat(SPACE).concat(getName()).concat(SPACE).concat(patronymic);
+    }
 
     public String getName() {
         return name;

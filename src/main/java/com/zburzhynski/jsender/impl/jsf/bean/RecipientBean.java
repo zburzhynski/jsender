@@ -3,16 +3,17 @@ package com.zburzhynski.jsender.impl.jsf.bean;
 import static com.zburzhynski.jsender.api.domain.View.RECIPIENTS;
 import static com.zburzhynski.jsender.api.domain.View.SENDING;
 import com.zburzhynski.jsender.api.domain.View;
+import com.zburzhynski.jsender.api.dto.Message;
 import com.zburzhynski.jsender.api.dto.Recipient;
 import com.zburzhynski.jsender.api.rest.client.IPatientRestClient;
 import com.zburzhynski.jsender.impl.jsf.loader.PatientLazyDataLoader;
+import com.zburzhynski.jsender.impl.jsf.validator.RecipientValidator;
 import com.zburzhynski.jsender.impl.rest.domain.ContactInfoEmailDto;
 import com.zburzhynski.jsender.impl.rest.domain.ContactInfoPhoneDto;
 import com.zburzhynski.jsender.impl.rest.domain.PatientDto;
 import com.zburzhynski.jsender.impl.rest.domain.SearchPatientRequest;
 import com.zburzhynski.jsender.impl.util.BeanUtils;
 import com.zburzhynski.jsender.impl.util.MessageHelper;
-import org.apache.commons.collections.CollectionUtils;
 import org.primefaces.model.LazyDataModel;
 
 import java.io.Serializable;
@@ -35,8 +36,6 @@ public class RecipientBean implements Serializable {
 
     private static final String SENDING_BEAN = "sendingBean";
 
-    private static final String RECIPIENT_NOT_SELECTED = "recipientSearch.recipientNotSelected";
-
     private View redirectFrom = RECIPIENTS;
 
     private SearchPatientRequest searchPatientRequest = new SearchPatientRequest();
@@ -50,6 +49,9 @@ public class RecipientBean implements Serializable {
 
     @ManagedProperty(value = "#{messageHelper}")
     private MessageHelper messageHelper;
+
+    @ManagedProperty(value = "#{recipientValidator}")
+    private RecipientValidator recipientValidator;
 
     @ManagedProperty(value = "#{settingBean}")
     private SettingBean settingBean;
@@ -94,11 +96,14 @@ public class RecipientBean implements Serializable {
      * @return path for navigation
      */
     public String selectRecipient() {
-        if (CollectionUtils.isEmpty(selectedRecipients)) {
-            messageHelper.addMessage(RECIPIENT_NOT_SELECTED);
-            return null;
+        SendingBean sendingBean = BeanUtils.getSessionBean(SENDING_BEAN);
+        if (sendingBean != null) {
+            boolean valid = recipientValidator.validate(sendingBean.getMessageToSend(), selectedRecipients);
+            if (!valid) {
+                return null;
+            }
+            selectToSendingForm();
         }
-        selectToSendingForm();
         return redirectFrom.getPath();
     }
 
@@ -159,6 +164,10 @@ public class RecipientBean implements Serializable {
         this.messageHelper = messageHelper;
     }
 
+    public void setRecipientValidator(RecipientValidator recipientValidator) {
+        this.recipientValidator = recipientValidator;
+    }
+
     public void setSettingBean(SettingBean settingBean) {
         this.settingBean = settingBean;
     }
@@ -167,21 +176,20 @@ public class RecipientBean implements Serializable {
         if (SENDING.equals(redirectFrom)) {
             SendingBean sendingBean = BeanUtils.getSessionBean(SENDING_BEAN);
             if (sendingBean != null) {
+                Message newMessage = sendingBean.getMessageToSend();
                 for (PatientDto selected : selectedRecipients) {
-                    if (!sendingBean.getMessageToSend().getRecipients().contains(selected)) {
-                        Recipient recipient = new Recipient();
-                        recipient.setId(selected.getId());
-                        recipient.setSurname(selected.getSurname());
-                        recipient.setName(selected.getName());
-                        recipient.setPatronymic(selected.getPatronymic());
-                        for (ContactInfoPhoneDto phone : selected.getContactInfo().getPhones()) {
-                            recipient.addPhone(phone.getFullNumber());
-                        }
-                        for (ContactInfoEmailDto email : selected.getContactInfo().getEmails()) {
-                            recipient.addEmail(email.getAddress());
-                        }
-                        sendingBean.getMessageToSend().addRecipient(recipient);
+                    Recipient recipient = new Recipient();
+                    recipient.setId(selected.getId());
+                    recipient.setSurname(selected.getSurname());
+                    recipient.setName(selected.getName());
+                    recipient.setPatronymic(selected.getPatronymic());
+                    for (ContactInfoPhoneDto phone : selected.getContactInfo().getPhones()) {
+                        recipient.addPhone(phone.getFullNumber());
                     }
+                    for (ContactInfoEmailDto email : selected.getContactInfo().getEmails()) {
+                        recipient.addEmail(email.getAddress());
+                    }
+                    newMessage.addRecipient(recipient);
                 }
             }
         }
