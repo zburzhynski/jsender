@@ -1,7 +1,6 @@
 package com.zburzhynski.jsender.impl.service;
 
 import static javax.mail.Message.RecipientType;
-import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import com.zburzhynski.jsender.api.domain.ClientSourceType;
 import com.zburzhynski.jsender.api.domain.SendingType;
 import com.zburzhynski.jsender.api.domain.Settings;
@@ -13,6 +12,7 @@ import com.zburzhynski.jsender.api.repository.ISettingRepository;
 import com.zburzhynski.jsender.api.service.ISender;
 import com.zburzhynski.jsender.impl.domain.SentMessage;
 import com.zburzhynski.jsender.impl.domain.Setting;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,9 +73,9 @@ public class EmailSender extends AbstractSender implements ISender {
                     javax.mail.Message message = new MimeMessage(session);
                     message.setFrom(new InternetAddress(null, email.getFrom()));
                     message.setRecipients(RecipientType.TO, InternetAddress.parse(address));
-                    message.setSubject(isNotBlank(email.getSubject()) ? email.getSubject() : null);
-                    message.setContent(isNotBlank(email.getText()) ? prepareText(email.getText(), recipient) : null,
-                        HTML_MESSAGE_FORMAT);
+                    message.setSubject(StringUtils.isNotBlank(email.getSubject()) ? email.getSubject() : null);
+                    message.setContent(StringUtils.isNotBlank(email.getText()) ?
+                        prepareText(email.getText(), recipient) : null, HTML_MESSAGE_FORMAT);
                     Transport.send(message);
                     status.setDescription("Email sent successfully");
                     LOGGER.info("Email sent successfully, address = " + address);
