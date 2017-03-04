@@ -2,6 +2,8 @@ package com.zburzhynski.jsender.api.dto;
 
 import com.zburzhynski.jsender.api.domain.SendingType;
 
+import org.apache.commons.collections.CollectionUtils;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +33,14 @@ public class Message implements Serializable {
      * @param recipient recipient to add
      */
     public void addRecipient(Recipient recipient) {
-        getRecipients().add(recipient);
+        for (Recipient client : getRecipients()) {
+            if (client.getId().equals(recipient.getId())) {
+                return;
+            }
+        }
+        if (CollectionUtils.isNotEmpty(recipient.getPhones()) || CollectionUtils.isNotEmpty(recipient.getEmails())) {
+            getRecipients().add(recipient);
+        }
     }
 
     /**

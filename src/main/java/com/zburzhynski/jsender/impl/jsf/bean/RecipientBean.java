@@ -168,20 +168,18 @@ public class RecipientBean implements Serializable {
             SendingBean sendingBean = BeanUtils.getSessionBean(SENDING_BEAN);
             if (sendingBean != null) {
                 for (PatientDto selected : selectedRecipients) {
-                    if (!sendingBean.getMessageToSend().getRecipients().contains(selected)) {
-                        Recipient recipient = new Recipient();
-                        recipient.setId(selected.getId());
-                        recipient.setSurname(selected.getSurname());
-                        recipient.setName(selected.getName());
-                        recipient.setPatronymic(selected.getPatronymic());
-                        for (ContactInfoPhoneDto phone : selected.getContactInfo().getPhones()) {
-                            recipient.addPhone(phone.getFullNumber());
-                        }
-                        for (ContactInfoEmailDto email : selected.getContactInfo().getEmails()) {
-                            recipient.addEmail(email.getAddress());
-                        }
-                        sendingBean.getMessageToSend().addRecipient(recipient);
+                    Recipient recipient = new Recipient();
+                    recipient.setId(selected.getId());
+                    recipient.setSurname(selected.getSurname());
+                    recipient.setName(selected.getName());
+                    recipient.setPatronymic(selected.getPatronymic());
+                    for (ContactInfoPhoneDto phone : selected.getContactInfo().getPhones()) {
+                        recipient.addPhone(phone.getFullNumber());
                     }
+                    for (ContactInfoEmailDto email : selected.getContactInfo().getEmails()) {
+                        recipient.addEmail(email.getAddress());
+                    }
+                    sendingBean.getMessageToSend().addRecipient(recipient);
                 }
             }
         }
