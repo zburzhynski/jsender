@@ -10,7 +10,6 @@ import com.zburzhynski.jsender.impl.util.BeanUtils;
 import java.io.Serializable;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
 
 /**
  * Main menu bean.
@@ -25,13 +24,9 @@ public class MainMenuBean implements Serializable {
 
     private static final String CLIENT_BEAN = "clientBean";
 
+    private static final String SENDING_BEAN = "sendingBean";
+
     private static final String MESSAGE_TEMPLATE_BEAN = "messageTemplateBean";
-
-    @ManagedProperty(value = "#{sendingBean}")
-    private SendingBean sendingBean;
-
-    @ManagedProperty(value = "#{settingBean}")
-    private SettingBean settingBean;
 
     /**
      * Redirects to clients.xhtml page.
@@ -52,7 +47,10 @@ public class MainMenuBean implements Serializable {
      * @return path to redirect
      */
     public String sending() {
-        sendingBean.getMessageToSend().setFrom(settingBean.getOrganizationName());
+        SendingBean sendingBean = BeanUtils.getSessionBean(SENDING_BEAN);
+        if (sendingBean != null) {
+            sendingBean.createMessage();
+        }
         return SENDING.getPath();
     }
 
@@ -85,14 +83,6 @@ public class MainMenuBean implements Serializable {
      */
     public String settings() {
         return SETTINGS.getPath();
-    }
-
-    public void setSendingBean(SendingBean sendingBean) {
-        this.sendingBean = sendingBean;
-    }
-
-    public void setSettingBean(SettingBean settingBean) {
-        this.settingBean = settingBean;
     }
 
 }

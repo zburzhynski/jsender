@@ -133,9 +133,9 @@
                                      title="#{msgs['button.add']}" />
                 </h:panelGrid>
                 <h:panelGrid columns="2">
-                    <h:commandButton id="saveClient" value="#{msgs['button.save']}"
-                                     action="#{clientBean.saveClient}" />
-                    <h:commandButton id="cancelUpdateClient" value="#{msgs['button.cancel']}"
+                    <p:commandButton id="saveClient" value="#{msgs['button.save']}"
+                                     action="#{clientBean.saveClient}" update="@form" />
+                    <p:commandButton id="cancelUpdateClient" value="#{msgs['button.cancel']}"
                                      action="/pages/client/clients?faces-redirect=true"
                                      immediate="true" />
                 </h:panelGrid>

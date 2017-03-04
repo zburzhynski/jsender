@@ -47,10 +47,10 @@
                                      title="#{msgs['button.cancel']}" />
                 </h:panelGrid>
                 <h:panelGrid columns="2" style="padding-top: 5px;">
-                    <h:commandButton id="select" value="#{msgs['button.select']}"
+                    <p:commandButton id="select" value="#{msgs['button.select']}"
                                      action="#{recipientBean.selectRecipient}"
                                      rendered="#{clientBean.redirectFrom != 'RECIPIENTS'}"/>
-                    <h:commandButton id="cancelSelect" value="#{msgs['button.cancel']}"
+                    <p:commandButton id="cancelSelect" value="#{msgs['button.cancel']}"
                                      action="#{recipientBean.cancelSelectRecipient}"
                                      rendered="#{clientBean.redirectFrom != 'RECIPIENTS'}"/>
                 </h:panelGrid>

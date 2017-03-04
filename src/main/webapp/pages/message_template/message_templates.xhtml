@@ -54,10 +54,10 @@
                                      title="#{msgs['button.add']}" />
                 </h:panelGrid>
                 <h:panelGrid columns="2" style="padding-top: 5px;">
-                    <h:commandButton id="select" value="#{msgs['button.select']}"
+                    <p:commandButton id="select" value="#{msgs['button.select']}"
                                      action="#{messageTemplateBean.selectMessageTemplate}"
                                      rendered="#{messageTemplateBean.redirectFrom != 'MESSAGE_TEMPLATES'}"/>
-                    <h:commandButton id="cancelSelect" value="#{msgs['button.cancel']}"
+                    <p:commandButton id="cancelSelect" value="#{msgs['button.cancel']}"
                                      action="#{messageTemplateBean.cancelMessageTemplate}"
                                      rendered="#{messageTemplateBean.redirectFrom != 'MESSAGE_TEMPLATES'}"/>
                 </h:panelGrid>

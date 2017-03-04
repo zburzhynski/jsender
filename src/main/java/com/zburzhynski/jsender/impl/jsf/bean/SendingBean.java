@@ -24,6 +24,7 @@ import org.slf4j.LoggerFactory;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -43,11 +44,9 @@ public class SendingBean implements Serializable {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SendingBean.class);
 
-    private static final String MESSAGE_TEMPLATE_BEAN = "messageTemplateBean";
-
     private int tabIndex;
 
-    private Message messageToSend = new Message();
+    private Message messageToSend;
 
     private List<SendingStatus> sendingStatuses;
 
@@ -73,6 +72,65 @@ public class SendingBean implements Serializable {
 
     @ManagedProperty(value = "#{settingBean}")
     private SettingBean settingBean;
+
+    /**
+     * Inits bean state.
+     */
+    @PostConstruct
+    public void init() {
+        createMessage();
+    }
+
+    /**
+     * Creates new message.
+     */
+    public void createMessage() {
+        messageToSend = new Message();
+        messageToSend.setFrom(settingBean.getOrganizationName());
+    }
+
+    /**
+     * Adds recipients.
+     *
+     * @return path for navigation
+     */
+    public String addRecipients() {
+        recipientBean.setRedirectFrom(SENDING);
+        recipientBean.setSelectedRecipients(new ArrayList<PatientDto>());
+        return RECIPIENTS.getPath();
+    }
+
+    /**
+     * Removes recipient.
+     *
+     * @param recipient recipient to remove
+     * @return path for navigation
+     */
+    public String removeRecipient(Recipient recipient) {
+        messageToSend.removeRecipient(recipient);
+        return SENDING.getPath();
+    }
+
+    /**
+     * Removes all recipients.
+     *
+     * @return path for navigation
+     */
+    public String removeAllRecipients() {
+        messageToSend.getRecipients().clear();
+        return SENDING.getPath();
+    }
+
+    /**
+     * Selects message template.
+     *
+     * @return path for navigation
+     */
+    public String selectMessageTemplate() {
+        messageTemplateBean.setRedirectFrom(SENDING);
+        messageTemplateBean.setSelectedMessageTemplate(null);
+        return MESSAGE_TEMPLATES.getPath();
+    }
 
     /**
      * Sends message.
@@ -119,16 +177,6 @@ public class SendingBean implements Serializable {
     }
 
     /**
-     * Creates new message.
-     *
-     * @return path for navigation
-     */
-    public String createMessage() {
-        messageToSend = new Message();
-        return null;
-    }
-
-    /**
      * Gets phone numbers description.
      *
      * @param recipient recipient
@@ -146,49 +194,6 @@ public class SendingBean implements Serializable {
      */
     public String getEmailDescription(Recipient recipient) {
         return StringUtils.join(recipient.getEmails(), COMMA + SPACE);
-    }
-
-    /**
-     * Adds recipients.
-     *
-     * @return path for navigation
-     */
-    public String addRecipients() {
-        recipientBean.setRedirectFrom(SENDING);
-        recipientBean.setSelectedRecipients(new ArrayList<PatientDto>());
-        return RECIPIENTS.getPath();
-    }
-
-    /**
-     * Removes recipient.
-     *
-     * @param recipient recipient to remove
-     * @return path for navigation
-     */
-    public String removeRecipient(Recipient recipient) {
-        messageToSend.removeRecipient(recipient);
-        return SENDING.getPath();
-    }
-
-    /**
-     * Removes all recipients.
-     *
-     * @return path for navigation
-     */
-    public String removeAllRecipients() {
-        messageToSend.getRecipients().clear();
-        return SENDING.getPath();
-    }
-
-    /**
-     * Selects message template.
-     *
-     * @return path for navigation
-     */
-    public String selectMessageTemplate() {
-        messageTemplateBean.setRedirectFrom(SENDING);
-        messageTemplateBean.setSelectedMessageTemplate(null);
-        return MESSAGE_TEMPLATES.getPath();
     }
 
     public int getTabIndex() {
