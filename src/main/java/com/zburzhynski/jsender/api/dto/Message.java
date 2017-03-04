@@ -39,7 +39,7 @@ public class Message implements Serializable {
             }
         }
         if (CollectionUtils.isNotEmpty(recipient.getPhones()) || CollectionUtils.isNotEmpty(recipient.getEmails())) {
-            recipients.add(recipient);
+            getRecipients().add(recipient);
         }
     }
 
