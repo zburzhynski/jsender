@@ -1,5 +1,6 @@
 package com.zburzhynski.jsender.impl.service;
 
+import static javax.mail.Message.RecipientType;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import com.zburzhynski.jsender.api.domain.ClientSourceType;
 import com.zburzhynski.jsender.api.domain.SendingType;
@@ -70,9 +71,8 @@ public class EmailSender extends AbstractSender implements ISender {
                 status.setContactInfo(address);
                 try {
                     javax.mail.Message message = new MimeMessage(session);
-                    message.setFrom(new InternetAddress("test@gmail.com", email.getFrom()));
-                    message.setRecipients(javax.mail.Message.RecipientType.TO,
-                        InternetAddress.parse(address));
+                    message.setFrom(new InternetAddress(null, email.getFrom()));
+                    message.setRecipients(RecipientType.TO, InternetAddress.parse(address));
                     message.setSubject(isNotBlank(email.getSubject()) ? email.getSubject() : null);
                     message.setContent(isNotBlank(email.getText()) ? prepareText(email.getText(), recipient) : null,
                         HTML_MESSAGE_FORMAT);
