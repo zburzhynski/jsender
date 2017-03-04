@@ -24,6 +24,10 @@ public class SendingValidator extends BaseValidator {
 
     private static final String EMAIL_NOT_SPECIFIED = "sendingValidator.emailNotSpecified";
 
+    private static final String RECIPIENTS_NOT_SPECIFIED = "sendingValidator.recipientsNotSpecified";
+
+    private static final String SENDING_TYPE_NOT_SPECIFIED = "sendingValidator.sendingTypeNotSpecified";
+
     /**
      * Validates sending.
      *
@@ -35,12 +39,20 @@ public class SendingValidator extends BaseValidator {
     }
 
     private boolean validateRequiredFields(Message message) {
+        if (message.getSendingType() == null) {
+            addMessage(SENDING_TYPE_NOT_SPECIFIED);
+            return false;
+        }
         if (SendingType.EMAIL.equals(message.getSendingType()) && StringUtils.isBlank(message.getSubject())) {
             addMessage(SUBJECT_NOT_SPECIFIED);
             return false;
         }
         if (StringUtils.isBlank(message.getText())) {
             addMessage(TEXT_NOT_SPECIFIED);
+            return false;
+        }
+        if (CollectionUtils.isEmpty(message.getRecipients())) {
+            addMessage(RECIPIENTS_NOT_SPECIFIED);
             return false;
         }
         return true;

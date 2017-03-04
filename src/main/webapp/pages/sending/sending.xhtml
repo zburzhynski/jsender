@@ -27,24 +27,42 @@
                 height: 260px;
                 resize: none;
             }
+            .label {
+                font-weight: bold;
+                width: 33%;
+            }
+            .sendingType {
+                width: 46%;
+            }
+            .createMessage {
+                width: 21%;
+                text-align: center;
+            }
         </style>
         <p:panel>
             <h:form id="sendingForm">
                 <p:focus />
                 <p:messages id="messages" />
                 <h:panelGrid width="100%" style="height: auto">
-                    <h:panelGrid columns="2" columnClasses="name,val" width="100%">
+                    <h:panelGrid columns="3" columnClasses="label, sendingType, createMessage" width="61%">
                         <h:outputLabel value="#{msgs['sending.sendingType']}:" />
                         <p:selectOneMenu id="sendingType"
                                          value="#{sendingBean.messageToSend.sendingType}"
                                          label="#{msgs['sending.sendingType']}"
-                                         style="width: 30%">
+                                         style="width: 100%">
                             <f:selectItem itemLabel="" noSelectionOption="true" />
                             <f:selectItems value="#{sendingTypeListBean.sendingTypes}" var="type"
                                            itemValue="#{type}"
                                            itemLabel="#{msgs[type.value]}" />
                             <p:ajax event="change" update="subject" />
                         </p:selectOneMenu>
+                        <p:commandButton id="createMessage"
+                                         action="#{sendingBean.createMessage}"
+                                         label="#{msgs['sending.button.newSending']}"
+                                         icon="ui-icon-document"
+                                         update="@form" />
+                    </h:panelGrid>
+                    <h:panelGrid columns="2" columnClasses="name,val" width="100%">
                         <h:outputLabel for="subject" value="#{msgs['sending.subject']}:" />
                         <p:inputText id="subject" value="#{sendingBean.messageToSend.subject}"
                                      maxlength="250"

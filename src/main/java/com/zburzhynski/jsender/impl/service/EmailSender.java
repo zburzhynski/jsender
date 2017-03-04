@@ -6,6 +6,7 @@ import com.zburzhynski.jsender.api.domain.SendingType;
 import com.zburzhynski.jsender.api.domain.Settings;
 import com.zburzhynski.jsender.api.dto.Message;
 import com.zburzhynski.jsender.api.dto.Recipient;
+import com.zburzhynski.jsender.api.dto.SendingStatus;
 import com.zburzhynski.jsender.api.repository.ISentMessageRepository;
 import com.zburzhynski.jsender.api.repository.ISettingRepository;
 import com.zburzhynski.jsender.api.service.ISender;
@@ -17,14 +18,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 import java.util.Properties;
-import javax.mail.MessagingException;
 import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 /**
@@ -58,38 +59,42 @@ public class EmailSender extends AbstractSender implements ISender {
      */
     @Override
     @Transactional(readOnly = false)
-    //TODO: fix implementation
-    public Map<Recipient, String> send(Message email) {
+    public List<SendingStatus> send(Message email) {
         buildSession();
-        Map<Recipient, String> response = new HashMap<>();
+        List<SendingStatus> response = new ArrayList<>();
         for (Recipient recipient : email.getRecipients()) {
-            LOGGER.info("Sending email {} ", email);
-            String status;
-            try {
-                javax.mail.Message message = new MimeMessage(session);
-//                message.setRecipients(javax.mail.Message.RecipientType.TO,
-//                    InternetAddress.parse(recipient.getContactInfo()));
-                message.setSubject(isNotBlank(email.getSubject()) ? email.getSubject() : null);
-                message.setContent(isNotBlank(email.getText()) ? prepareText(email.getText(), recipient) : null,
-                    HTML_MESSAGE_FORMAT);
-                Transport.send(message);
-                status = "Email sent successfully";
-//                LOGGER.info("Email sent successfully, recipient = " + recipient.getContactInfo());
-            } catch (MessagingException e) {
-                status = e.getClass().getName();
-                LOGGER.error("An error occurred while sending email", e);
+            for (String address : recipient.getEmails()) {
+                LOGGER.info("Sending email {} ", email);
+                SendingStatus status = new SendingStatus();
+                status.setRecipientFullName(recipient.getFullName());
+                status.setContactInfo(address);
+                try {
+                    javax.mail.Message message = new MimeMessage(session);
+                    message.setFrom(new InternetAddress("test@gmail.com", email.getFrom()));
+                    message.setRecipients(javax.mail.Message.RecipientType.TO,
+                        InternetAddress.parse(address));
+                    message.setSubject(isNotBlank(email.getSubject()) ? email.getSubject() : null);
+                    message.setContent(isNotBlank(email.getText()) ? prepareText(email.getText(), recipient) : null,
+                        HTML_MESSAGE_FORMAT);
+                    Transport.send(message);
+                    status.setDescription("Email sent successfully");
+                    LOGGER.info("Email sent successfully, address = " + address);
+                } catch (Exception e) {
+                    status.setDescription(e.getClass().getName());
+                    LOGGER.error("An error occurred while sending email", e);
+                }
+                SentMessage sentMessage = new SentMessage();
+                sentMessage.setSentDate(new Date());
+                sentMessage.setClientId(recipient.getId());
+                sentMessage.setClientSource(ClientSourceType.JSENDER);
+                sentMessage.setContactInfo(address);
+                sentMessage.setSubject(email.getSubject());
+                sentMessage.setText(email.getText());
+                sentMessage.setStatus(status.getDescription());
+                sentMessage.setSendingType(SendingType.EMAIL);
+                sentMessageRepository.saveOrUpdate(sentMessage);
+                response.add(status);
             }
-            SentMessage sentMessage = new SentMessage();
-            sentMessage.setSentDate(new Date());
-            sentMessage.setClientId(recipient.getId());
-            sentMessage.setClientSource(ClientSourceType.JSENDER);
-            //sentMessage.setContactInfo(recipient.getContactInfo());
-            sentMessage.setSubject(email.getSubject());
-            sentMessage.setText(email.getText());
-            sentMessage.setStatus(status);
-            sentMessage.setSendingType(SendingType.EMAIL);
-            sentMessageRepository.saveOrUpdate(sentMessage);
-            response.put(recipient, status);
         }
         return response;
     }
