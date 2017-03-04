@@ -42,7 +42,7 @@ public class EmailSender extends AbstractSender implements ISender {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(EmailSender.class);
 
-    private static final String HTML_MESSAGE_FORMAT = "text/html; charset=UTF-8";
+    private static final String CONTENT_TYPE = "text/html; charset=UTF-8";
 
     private Session session;
 
@@ -75,7 +75,7 @@ public class EmailSender extends AbstractSender implements ISender {
                     message.setRecipients(RecipientType.TO, InternetAddress.parse(address));
                     message.setSubject(StringUtils.isNotBlank(email.getSubject()) ? email.getSubject() : null);
                     message.setContent(StringUtils.isNotBlank(email.getText()) ?
-                        prepareText(email.getText(), recipient) : null, HTML_MESSAGE_FORMAT);
+                        prepareText(email.getText(), recipient) : null, CONTENT_TYPE);
                     Transport.send(message);
                     status.setDescription("Email sent successfully");
                     LOGGER.info("Email sent successfully, address = " + address);
