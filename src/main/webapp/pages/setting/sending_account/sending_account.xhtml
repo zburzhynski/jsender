@@ -1,0 +1,91 @@
+<?xml version="1.0"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/pages/template/layout_template.xhtml">
+
+    <ui:define name="content">
+        <style type="text/css">
+            .name {
+                font-weight: bold;
+                width: 33%;
+            }
+            .val {
+                width: 67%;
+            }
+            .cal .ui-inputfield {
+                width: 97%;
+            }
+        </style>
+        <p:panel>
+            <h:form id="sendingAccountForm">
+                <p:focus />
+                <p:messages id="messages" />
+                <h:panelGrid columns="2" columnClasses="name, val" width="50%">
+                    <h:outputLabel value="#{msgs['sendingAccount.sendingService']}:" />
+                    <p:selectOneMenu id="sendingService"
+                                     required="true"
+                                     disabled="#{not empty sendingAccountBean.account.id}"
+                                     converter="entityConverter"
+                                     value="#{sendingAccountBean.account.sendingService}"
+                                     label="#{msgs['sendingAccount.sendingService']}"
+                                     style="width: 100%">
+                        <f:selectItem itemLabel="" noSelectionOption="true" />
+                        <f:selectItems value="#{sendingServiceListBean.sendingServices}" var="service"
+                                       itemValue="#{service}"
+                                       itemLabel="#{service.name}" />
+                    </p:selectOneMenu>
+                </h:panelGrid>
+                <h:panelGrid>
+                    <h:outputText value="#{msgs['sendingServiceParams.header']}" styleClass="b" rendered="#{not empty sendingAccountBean.account.id}" />
+                </h:panelGrid>
+                <h:panelGrid>
+                    <p:dataTable value="#{sendingAccountBean.account.serviceParams}"
+                             var="serviceParam"
+                             emptyMessage="#{msgs['sendingServiceParams.empty']}"
+                             rendered="#{not empty sendingAccountBean.account.id}">
+                    <p:column headerText="#{msgs['sendingServiceParam.name']}"
+                              style="width: 48%">
+                        <h:outputText value="#{serviceParam.sendingServiceParam.name}" />
+                    </p:column>
+                    <p:column headerText="#{msgs['sendingServiceParam.value']}"
+                              style="width: 48%">
+                        <h:outputText value="#{serviceParam.value}" />
+                    </p:column>
+                    <p:column style="width: 4%;">
+                        <h:panelGroup>
+                            <p:commandLink action="#{sendingAccountBean.editServiceParam}"
+                                           style="padding-right: 5px">
+                                <p:graphicImage url="/resources/css/css-images/edit.gif" title="#{msgs['button.edit']}" />
+                                <f:setPropertyActionListener
+                                        target="#{sendingAccountBean.serviceParam}" value="#{serviceParam}" />
+                            </p:commandLink>
+                        </h:panelGroup>
+                    </p:column>
+                </p:dataTable>
+                </h:panelGrid>
+                <h:panelGrid columns="2">
+                    <p:commandButton id="saveAccount" value="#{msgs['button.save']}"
+                                     action="#{sendingAccountBean.saveAccount}" update="@form" />
+                    <p:commandButton id="cancelUpdateAccount" value="#{msgs['button.cancel']}"
+                                     action="/pages/setting/settings?faces-redirect=true"
+                                     immediate="true" />
+                </h:panelGrid>
+                <p:confirmDialog global="true" closeOnEscape="true">
+                    <p:commandButton value="#{msgs['button.ok']}"
+                                     type="button"
+                                     styleClass="ui-confirmdialog-yes"
+                                     icon="ui-icon-check" />
+                    <p:commandButton value="#{msgs['button.cancel']}"
+                                     type="button"
+                                     styleClass="ui-confirmdialog-no"
+                                     icon="ui-icon-close" />
+                </p:confirmDialog>
+            </h:form>
+        </p:panel>
+    </ui:define>
+
+</ui:composition>

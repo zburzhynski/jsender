@@ -19,6 +19,9 @@
                     <p:tab id="view" title="#{msgs['settings.view']}">
                         <cm:setting settings="#{settingBean.viewSettings}" />
                     </p:tab>
+                    <p:tab id="senidng_accounts" title="#{msgs['settings.sendingAccounts']}">
+                        <ui:include src="sending_account/sending_accounts.xhtml" />
+                    </p:tab>
                     <p:tab id="smsSending" title="#{msgs['settings.smsSending']}">
                         <cm:setting settings="#{settingBean.smsSendingSettings}" />
                     </p:tab>

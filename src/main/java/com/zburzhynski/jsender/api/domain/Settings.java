@@ -22,6 +22,8 @@ public enum Settings {
 
     SEARCH_RECIPIENTS_PER_PAGE,
 
+    SENDING_ACCOUNTS_PER_PAGE,
+
 
     SMS_USER_NAME,
 
