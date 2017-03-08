@@ -28,6 +28,7 @@
                     <h:outputLabel value="#{msgs['sendingAccount.sendingService']}:" />
                     <p:selectOneMenu id="sendingService"
                                      required="true"
+                                     valueChangeListener="#{sendingAccountBean.sendingServiceChangeListener}"
                                      disabled="#{not empty sendingAccountBean.account.id}"
                                      converter="entityConverter"
                                      value="#{sendingAccountBean.account.sendingService}"
@@ -40,13 +41,12 @@
                     </p:selectOneMenu>
                 </h:panelGrid>
                 <h:panelGrid>
-                    <h:outputText value="#{msgs['sendingServiceParams.header']}" styleClass="b" rendered="#{not empty sendingAccountBean.account.id}" />
+                    <h:outputText value="#{msgs['sendingServiceParams.header']}" styleClass="b" />
                 </h:panelGrid>
                 <h:panelGrid>
                     <p:dataTable value="#{sendingAccountBean.account.serviceParams}"
                              var="serviceParam"
-                             emptyMessage="#{msgs['sendingServiceParams.empty']}"
-                             rendered="#{not empty sendingAccountBean.account.id}">
+                             emptyMessage="#{msgs['sendingServiceParams.empty']}">
                     <p:column headerText="#{msgs['sendingServiceParam.name']}"
                               style="width: 48%">
                         <h:outputText value="#{serviceParam.sendingServiceParam.name}" />

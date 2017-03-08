@@ -11,7 +11,6 @@ import com.zburzhynski.jsender.impl.domain.EmployeeSendingServiceParam;
 import com.zburzhynski.jsender.impl.domain.SendingService;
 import com.zburzhynski.jsender.impl.domain.SendingServiceParam;
 import org.apache.commons.lang3.SerializationUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
 
@@ -21,6 +20,7 @@ import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
+import javax.faces.event.ValueChangeEvent;
 
 /**
  * Sending account bean.
@@ -95,20 +95,8 @@ public class SendingAccountBean {
      * @return path for navigating
      */
     public String saveAccount() {
-        boolean accountAdd = false;
-        if (StringUtils.isBlank(account.getId())) {
-            SendingService service = sendingServiceService.getById(account.getSendingService().getId());
-            account.setSendingService(service);
-            for (SendingServiceParam sendingServiceParam : service.getServiceParams()) {
-                EmployeeSendingServiceParam employeeSendingServiceParam = new EmployeeSendingServiceParam();
-                employeeSendingServiceParam.setSendingServiceParam(sendingServiceParam);
-                employeeSendingServiceParam.setValue(sendingServiceParam.getValue());
-                account.getServiceParams().add(employeeSendingServiceParam);
-            }
-            accountAdd = true;
-        }
         accountService.saveOrUpdate(account);
-        return !accountAdd ? SETTINGS.getPath() : null;
+        return SETTINGS.getPath();
     }
 
     /**
@@ -139,6 +127,25 @@ public class SendingAccountBean {
     public String cancelUpdateServiceParam() {
         serviceParam.setValue(beforeEditingServiceParam.getValue());
         return SENDING_ACCOUNT.getPath();
+    }
+
+    /**
+     * Sending service change listener.
+     *
+     * @param event {@link ValueChangeEvent} event
+     */
+    public void sendingServiceChangeListener(ValueChangeEvent event) {
+        if (event.getNewValue() != null) {
+            SendingService service = (SendingService) event.getNewValue();
+            service = sendingServiceService.getById(service.getId());
+            account.setSendingService(service);
+            for (SendingServiceParam sendingServiceParam : service.getServiceParams()) {
+                EmployeeSendingServiceParam employeeSendingServiceParam = new EmployeeSendingServiceParam();
+                employeeSendingServiceParam.setSendingServiceParam(sendingServiceParam);
+                employeeSendingServiceParam.setValue(sendingServiceParam.getValue());
+                account.getServiceParams().add(employeeSendingServiceParam);
+            }
+        }
     }
 
     public Integer getRowCount() {
