@@ -19,6 +19,7 @@ import static com.zburzhynski.jsender.api.domain.Settings.ORGANIZATION_ADDRESS;
 import static com.zburzhynski.jsender.api.domain.Settings.ORGANIZATION_MOBILE_PHONE_NUMBER;
 import static com.zburzhynski.jsender.api.domain.Settings.ORGANIZATION_NAME;
 import static com.zburzhynski.jsender.api.domain.Settings.SEARCH_RECIPIENTS_PER_PAGE;
+import static com.zburzhynski.jsender.api.domain.Settings.SENDING_ACCOUNTS_PER_PAGE;
 import static com.zburzhynski.jsender.api.domain.Settings.SENDING_RECIPIENTS_PER_PAGE;
 import static com.zburzhynski.jsender.api.domain.Settings.SENT_MESSAGES_PER_PAGE;
 import static com.zburzhynski.jsender.api.domain.Settings.SMS_PASSWORD;
@@ -145,6 +146,15 @@ public class SettingBean implements Serializable {
      */
     public int getSearchRecipientsPerPage() {
         return Integer.parseInt(settings.get(SEARCH_RECIPIENTS_PER_PAGE.name()).getValue());
+    }
+
+    /**
+     * Gets sending accounts per page.
+     *
+     * @return sending accounts per page
+     */
+    public int getSendingAccountsPerPage() {
+        return Integer.parseInt(settings.get(SENDING_ACCOUNTS_PER_PAGE.name()).getValue());
     }
 
     /**

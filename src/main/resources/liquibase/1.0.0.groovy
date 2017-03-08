@@ -381,4 +381,117 @@ databaseChangeLog {
         }
     }
 
+    changeSet(id: '2017-03-05-01', author: 'Nikita Shevtsov <shevtsou@gmail.com>') {
+        createTable(schemaName: 'jsender', tableName: 'sending_service', tablespace: 'jsender_data', remarks: 'Sending service') {
+            column(name: 'id', type: 'VARCHAR(128)', remarks: 'The unique identifier of sending service') {
+                constraints(nullable: false)
+            }
+            column(name: 'name', type: 'VARCHAR(200)', remarks: 'The sending service name') {
+                constraints(nullable: false)
+            }
+            column(name: 'sending_type', type: 'VARCHAR(5)', remarks: 'Service sending type') {
+                constraints(nullable: false)
+            }
+            column(name: 'description', type: 'VARCHAR(1000)', remarks: 'Sending service description') {
+                constraints(nullable: false)
+            }
+        }
+        addPrimaryKey(schemaName: 'jsender', tableName: 'sending_service', tablespace: 'jsender_index',
+                columnNames: 'id', constraintName: 'PK_sending_service')
+    }
+
+    changeSet(id: '2017-03-05-02', author: 'Nikita Shevtsov <shevtsou@gmail.com>') {
+        createTable(schemaName: 'jsender', tableName: 'sending_service_param', tablespace: 'jsender_data', remarks: 'Sending service param') {
+            column(name: 'id', type: 'VARCHAR(128)', remarks: 'The unique identifier of sending service param') {
+                constraints(nullable: false)
+            }
+            column(name: 'sending_service_id', type: 'VARCHAR(128)', remarks: 'The reference to sending_service table') {
+                constraints(nullable: false)
+            }
+            column(name: 'name', type: 'VARCHAR(50)', remarks: 'The sending service param name') {
+                constraints(nullable: false)
+            }
+            column(name: 'type', type: 'VARCHAR(10)', remarks: 'Sending param type') {
+                constraints(nullable: false)
+            }
+            column(name: 'value', type: 'VARCHAR(250)', remarks: 'Sending param value')
+            column(name: 'description', type: 'VARCHAR(1000)', remarks: 'Sending service description') {
+                constraints(nullable: false)
+            }
+        }
+        addPrimaryKey(schemaName: 'jsender', tableName: 'sending_service_param', tablespace: 'jsender_index',
+                columnNames: 'id', constraintName: 'PK_sending_service_param')
+    }
+
+    changeSet(id: '2017-03-05-03', author: 'Nikita Shevtsov <shevtsou@gmail.com>') {
+        comment("Added foreign constraint FK_sending_service_param_2_sending_service")
+        addForeignKeyConstraint(constraintName: 'FK_sending_service_param_2_sending_service',
+                baseTableSchemaName: 'jsender', baseTableName: 'sending_service_param' , baseColumnNames: 'sending_service_id',
+                referencedTableSchemaName: 'jsender', referencedTableName: 'sending_service', referencedColumnNames: 'id')
+    }
+
+    changeSet(id: '2017-03-05-04', author: 'Nikita Shevtsov <shevtsou@gmail.com>') {
+        createTable(schemaName: 'jsender', tableName: 'employee_sending_service', tablespace: 'jsender_data', remarks: 'Employee sending service') {
+            column(name: 'id', type: 'VARCHAR(128)', remarks: 'The unique identifier of sending service') {
+                constraints(nullable: false)
+            }
+            column(name: 'sending_service_id', type: 'VARCHAR(128)', remarks: 'The reference to sending_service table') {
+                constraints(nullable: false)
+            }
+        }
+        addPrimaryKey(schemaName: 'jsender', tableName: 'employee_sending_service', tablespace: 'jsender_index',
+                columnNames: 'id', constraintName: 'PK_employee_sending_service')
+    }
+
+    changeSet(id: '2017-03-05-05', author: 'Nikita Shevtsov <shevtsou@gmail.com>') {
+        comment("Added foreign constraint FK_employee_sending_service_2_sending_service")
+        addForeignKeyConstraint(constraintName: 'FK_employee_sending_service_2_sending_service',
+                baseTableSchemaName: 'jsender', baseTableName: 'employee_sending_service' , baseColumnNames: 'sending_service_id',
+                referencedTableSchemaName: 'jsender', referencedTableName: 'sending_service', referencedColumnNames: 'id')
+    }
+
+    changeSet(id: '2017-03-05-06', author: 'Nikita Shevtsov <shevtsou@gmail.com>') {
+        createTable(schemaName: 'jsender', tableName: 'employee_sending_service_param', tablespace: 'jsender_data', remarks: 'Employee sending service param') {
+            column(name: 'id', type: 'VARCHAR(128)', remarks: 'The unique identifier of employee sending service param') {
+                constraints(nullable: false)
+            }
+            column(name: 'employee_sending_service_id', type: 'VARCHAR(128)', remarks: 'The reference to employee_sending_service table') {
+                constraints(nullable: false)
+            }
+            column(name: 'sending_service_param_id', type: 'VARCHAR(128)', remarks: 'The reference to sending_service_param table') {
+                constraints(nullable: false)
+            }
+            column(name: 'value', type: 'VARCHAR(250)', remarks: 'Employee service sending param value') {
+                constraints(nullable: false)
+            }
+        }
+        addPrimaryKey(schemaName: 'jsender', tableName: 'employee_sending_service_param', tablespace: 'jsender_index',
+                columnNames: 'id', constraintName: 'PK_employee_sending_service_param')
+    }
+
+    changeSet(id: '2017-03-05-07', author: 'Nikita Shevtsov <shevtsou@gmail.com>') {
+        comment("Added foreign constraint FK_employee_sending_service_param_2_employee_sending_service")
+        addForeignKeyConstraint(constraintName: 'FK_employee_sending_service_param_2_employee_sending_service',
+                baseTableSchemaName: 'jsender', baseTableName: 'employee_sending_service_param' , baseColumnNames: 'employee_sending_service_id',
+                referencedTableSchemaName: 'jsender', referencedTableName: 'employee_sending_service', referencedColumnNames: 'id')
+    }
+
+    changeSet(id: '2017-03-05-08', author: 'Nikita Shevtsov <shevtsou@gmail.com>') {
+        comment("Added foreign constraint FK_employee_sending_service_param_2_sending_service_param")
+        addForeignKeyConstraint(constraintName: 'FK_employee_sending_service_param_2_sending_service_param',
+                baseTableSchemaName: 'jsender', baseTableName: 'employee_sending_service_param' , baseColumnNames: 'sending_service_param_id',
+                referencedTableSchemaName: 'jsender', referencedTableName: 'sending_service_param', referencedColumnNames: 'id')
+    }
+
+    changeSet(id: '2017-03-07-01', author: 'Nikita Shevtsov <shevtsou@gmail.com>') {
+        insert(schemaName: 'jsender', tableName: 'setting') {
+            column(name: 'id', value: '8a6e5c45-d915-493d-ac29-2c5abd0e5977')
+            column(name: 'category', value: 'VIEW')
+            column(name: 'name', value: 'sending_accounts_per_page')
+            column(name: 'value', value: '20')
+            column(name: 'type', value: 'INTEGER')
+            column(name: 'description', value: 'Количество аккаунтов на странице')
+        }
+    }
+
 }

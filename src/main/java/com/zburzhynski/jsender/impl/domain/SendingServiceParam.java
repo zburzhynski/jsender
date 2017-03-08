@@ -1,7 +1,5 @@
 package com.zburzhynski.jsender.impl.domain;
 
-import com.zburzhynski.jsender.api.domain.SettingCategory;
-import com.zburzhynski.jsender.api.domain.Settings;
 import com.zburzhynski.jsender.api.domain.ValueType;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -14,35 +12,25 @@ import javax.persistence.Enumerated;
 import javax.persistence.Table;
 
 /**
- * Application setting.
+ * Sending service param.
  * <p/>
- * Date: 02.08.2016
+ * Date: 05.03.2017
  *
- * @author Vladimir Zburzhynski
+ * @author Nikita Shevtsou
  */
 @Entity
-@Table(name = "setting")
-public class Setting extends Domain implements Comparable<Setting> {
-
-    public static final String P_NAME = "name";
-    public static final String P_CATEGORY = "category";
-    public static final String P_VALUE = "value";
-    public static final String P_TYPE = "type";
-    public static final String P_DESCRIPTION = "description";
+@Table(name = "sending_service_param")
+public class SendingServiceParam extends Domain {
 
     @Column(name = "name")
     private String name;
 
-    @Column(name = "category")
-    @Enumerated(value = EnumType.STRING)
-    private SettingCategory category;
-
-    @Column(name = "value")
-    private String value;
-
     @Column(name = "type")
     @Enumerated(value = EnumType.STRING)
     private ValueType type;
+
+    @Column(name = "value")
+    private String value;
 
     @Column(name = "description")
     private String description;
@@ -55,12 +43,12 @@ public class Setting extends Domain implements Comparable<Setting> {
         this.name = name;
     }
 
-    public SettingCategory getCategory() {
-        return category;
+    public ValueType getType() {
+        return type;
     }
 
-    public void setCategory(SettingCategory category) {
-        this.category = category;
+    public void setType(ValueType type) {
+        this.type = type;
     }
 
     public String getValue() {
@@ -71,14 +59,6 @@ public class Setting extends Domain implements Comparable<Setting> {
         this.value = value;
     }
 
-    public ValueType getType() {
-        return type;
-    }
-
-    public void setType(ValueType type) {
-        this.type = type;
-    }
-
     public String getDescription() {
         return description;
     }
@@ -87,52 +67,53 @@ public class Setting extends Domain implements Comparable<Setting> {
         this.description = description;
     }
 
-    @Override
-    public int compareTo(Setting o) {
-        return Settings.valueOf(name.toUpperCase()).compareTo(Settings.valueOf(o.getName().toUpperCase()));
-    }
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;
         }
 
-        if (!(o instanceof Setting)) {
+        if (!(o instanceof SendingServiceParam)) {
             return false;
         }
 
-        Setting that = (Setting) o;
+        SendingServiceParam that = (SendingServiceParam) o;
         return new EqualsBuilder()
             .appendSuper(super.equals(o))
             .append(name, that.name)
-            .append(category, that.category)
-            .append(value, that.value)
             .append(type, that.type)
+            .append(value, that.value)
             .append(description, that.description)
             .isEquals();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int hashCode() {
         return new HashCodeBuilder()
             .appendSuper(super.hashCode())
             .append(name)
-            .append(category)
-            .append(value)
             .append(type)
+            .append(value)
             .append(description)
             .toHashCode();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String toString() {
         return new ToStringBuilder(this)
             .appendSuper(super.toString())
             .append("name", name)
-            .append("category", category)
-            .append("value", value)
             .append("type", type)
+            .append("value", value)
             .append("description", description)
             .toString();
     }

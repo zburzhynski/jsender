@@ -1,7 +1,7 @@
 package com.zburzhynski.jsender.impl.jsf.validator;
 
 import static com.zburzhynski.jsender.api.domain.CommonConstant.DOT;
-import com.zburzhynski.jsender.api.domain.SettingValueType;
+import com.zburzhynski.jsender.api.domain.ValueType;
 import com.zburzhynski.jsender.impl.domain.Setting;
 import com.zburzhynski.jsender.impl.util.DateUtils;
 import org.springframework.stereotype.Component;
@@ -33,7 +33,7 @@ public class SettingValidator extends BaseValidator {
     }
 
     private boolean checkDateFormat(Setting setting) {
-        if (SettingValueType.DATE.equals(setting.getType())) {
+        if (ValueType.DATE.equals(setting.getType())) {
             String[] dateParts = setting.getValue().split("\\" + DOT);
             if (dateParts.length != DATE_PART_SIZE) {
                 addMessage(INCORRECT_DATE_FORMAT);

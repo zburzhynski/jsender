@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui">
+
+        <p:dataTable value="#{sendingAccountBean.accountModel}"
+                     var="account"
+                     paginator="true"
+                     paginatorPosition="bottom"
+                     paginatorAlwaysVisible="false"
+                     lazy="true"
+                     rowKey="#{account.id}"
+                     emptyMessage="#{msgs['sendingAccounts.empty']}"
+                     rows="#{sendingAccountBean.rowCount}">
+            <p:column headerText="#{msgs['sendingAccount.serviceName']}" width="47%">
+                <h:outputText value="#{account.sendingService.name}" />
+            </p:column>
+            <p:column headerText="#{msgs['sendingAccount.serviceType']}" width="47%">
+                <h:outputText value="#{msgs[account.sendingService.sendingType.value]}" />
+            </p:column>
+            <p:column width="6%">
+                <h:panelGroup>
+                    <p:commandLink action="#{sendingAccountBean.editAccount(account.id)}"
+                                   style="padding-right: 5px">
+                        <p:graphicImage url="/resources/css/css-images/edit.gif" title="#{msgs['button.edit']}" />
+                    </p:commandLink>
+                    <p:commandLink action="#{sendingAccountBean.removeAccount}">
+                        <p:graphicImage url="/resources/css/css-images/delete.png" title="#{msgs['button.remove']}" />
+                        <p:confirm header="#{msgs['removeSendingAccountConfirm.header']}"
+                                   message="#{msgs['removeSendingAccountConfirm.message']}?"
+                                   icon="ui-icon-alert" />
+                        <f:setPropertyActionListener
+                                target="#{sendingAccountBean.account}" value="#{account}" />
+                    </p:commandLink>
+                </h:panelGroup>
+            </p:column>
+        </p:dataTable>
+        <h:panelGrid style="padding-top: 5px">
+            <h:commandButton action="#{sendingAccountBean.addAccount}"
+                             image="/resources/css/css-images/add.gif"
+                             title="#{msgs['button.add']}" />
+        </h:panelGrid>
+        <p:confirmDialog global="true" closeOnEscape="true">
+            <p:commandButton value="#{msgs['button.ok']}"
+                             type="button"
+                             styleClass="ui-confirmdialog-yes"
+                             icon="ui-icon-check" />
+            <p:commandButton value="#{msgs['button.cancel']}"
+                             type="button"
+                             styleClass="ui-confirmdialog-no"
+                             icon="ui-icon-close" />
+        </p:confirmDialog>
+
+</ui:composition>
