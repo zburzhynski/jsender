@@ -494,4 +494,17 @@ databaseChangeLog {
         }
     }
 
+    changeSet(id: '2017-03-08-01', author: 'Nikita Shevtsov <shevtsou@gmail.com>') {
+        comment("Insert gmail parameters")
+        sql(stripComments: true, splitStatements: false, endDelimiter: ';') {
+            """
+            insert into jsender.sending_service values('06967298-6360-4d8f-af5f-a20d58dd4414', 'gmail.com', 'EMAIL', 'Сервис для массовой емейл рассылки');
+            insert into jsender.sending_service_param values('797c97ad-0621-401b-9795-8ef5568a9a48', '06967298-6360-4d8f-af5f-a20d58dd4414', 'Сервер SMTP', 'STRING', 'smtp.gmail.com', 'Сервер SMTP');
+            insert into jsender.sending_service_param values('173b22e7-1789-4e96-b03f-73ca8fe97489', '06967298-6360-4d8f-af5f-a20d58dd4414', 'Порт SMTP', 'STRING', '587', 'Сервер SMTP');
+            insert into jsender.sending_service_param values('e9ef8298-8638-4976-bb56-1274d6b9fa73', '06967298-6360-4d8f-af5f-a20d58dd4414', 'Имя пользователя', 'STRING', null, 'Имя пользователя');
+            insert into jsender.sending_service_param values('6e42b739-ff7f-4843-bb81-05d2c009a165', '06967298-6360-4d8f-af5f-a20d58dd4414', 'Пароль', 'PASSWORD', null, 'Пароль');
+            """
+        }
+    }
+
 }
