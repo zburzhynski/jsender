@@ -1,6 +1,6 @@
 package com.zburzhynski.jsender.api.repository;
 
-import com.zburzhynski.jsender.api.criteria.SendingServiceSearchCriteria;
+import com.zburzhynski.jsender.api.criteria.EmployeeSendingServiceSearchCriteria;
 import com.zburzhynski.jsender.api.domain.IDomain;
 
 import java.util.List;
@@ -19,19 +19,19 @@ public interface IEmployeeSendingServiceRepository<ID, T extends IDomain> extend
     /**
      * Finds sending service by criteria.
      *
-     * @param searchCriteria {@link SendingServiceSearchCriteria} sending service search criteria
+     * @param searchCriteria {@link EmployeeSendingServiceSearchCriteria} sending service search criteria
      * @param start          start position
      * @param end            end position
      * @return sending services
      */
-    List<T> findByCriteria(SendingServiceSearchCriteria searchCriteria, Long start, Long end);
+    List<T> findByCriteria(EmployeeSendingServiceSearchCriteria searchCriteria, Long start, Long end);
 
     /**
      * Counts sending service by criteria.
      *
-     * @param searchCriteria {@link SendingServiceSearchCriteria} sending service search criteria
+     * @param searchCriteria {@link EmployeeSendingServiceSearchCriteria} sending service search criteria
      * @return sending services count
      */
-    int countByCriteria(SendingServiceSearchCriteria searchCriteria);
+    int countByCriteria(EmployeeSendingServiceSearchCriteria searchCriteria);
 
 }

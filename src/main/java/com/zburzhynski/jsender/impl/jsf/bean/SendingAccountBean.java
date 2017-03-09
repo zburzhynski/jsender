@@ -3,7 +3,7 @@ package com.zburzhynski.jsender.impl.jsf.bean;
 import static com.zburzhynski.jsender.api.domain.View.SENDING_ACCOUNT;
 import static com.zburzhynski.jsender.api.domain.View.SENDING_SERVICE_PARAM;
 import static com.zburzhynski.jsender.api.domain.View.SETTINGS;
-import com.zburzhynski.jsender.api.criteria.SendingServiceSearchCriteria;
+import com.zburzhynski.jsender.api.criteria.EmployeeSendingServiceSearchCriteria;
 import com.zburzhynski.jsender.api.service.IEmployeeSendingServiceService;
 import com.zburzhynski.jsender.api.service.ISendingServiceService;
 import com.zburzhynski.jsender.impl.domain.EmployeeSendingService;
@@ -63,7 +63,7 @@ public class SendingAccountBean {
             @Override
             public List<EmployeeSendingService> load(int first, int pageSize, String sortField, SortOrder sortOrder,
                                                      Map<String, Object> filters) {
-                SendingServiceSearchCriteria searchCriteria = new SendingServiceSearchCriteria();
+                EmployeeSendingServiceSearchCriteria searchCriteria = new EmployeeSendingServiceSearchCriteria();
                 setRowCount(accountService.countByCriteria(searchCriteria));
                 return accountService.getByCriteria(searchCriteria, Long.valueOf(first),
                     Long.valueOf(first + pageSize));
