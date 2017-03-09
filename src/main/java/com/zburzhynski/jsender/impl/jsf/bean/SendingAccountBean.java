@@ -10,6 +10,7 @@ import com.zburzhynski.jsender.impl.domain.EmployeeSendingService;
 import com.zburzhynski.jsender.impl.domain.EmployeeSendingServiceParam;
 import com.zburzhynski.jsender.impl.domain.SendingService;
 import com.zburzhynski.jsender.impl.domain.SendingServiceParam;
+import com.zburzhynski.jsender.impl.jsf.validator.SendingAccountValidator;
 import org.apache.commons.lang3.SerializationUtils;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
@@ -20,7 +21,6 @@ import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
-import javax.faces.event.ValueChangeEvent;
 
 /**
  * Sending account bean.
@@ -46,6 +46,9 @@ public class SendingAccountBean {
 
     @ManagedProperty(value = "#{sendingServiceService}")
     private ISendingServiceService<String, SendingService> sendingServiceService;
+
+    @ManagedProperty(value = "#{sendingAccountValidator}")
+    private SendingAccountValidator sendingAccountValidator;
 
     @ManagedProperty(value = "#{settingBean}")
     private SettingBean settingBean;
@@ -95,8 +98,13 @@ public class SendingAccountBean {
      * @return path for navigating
      */
     public String saveAccount() {
-        accountService.saveOrUpdate(account);
-        return SETTINGS.getPath();
+        boolean valid = sendingAccountValidator.validate(account);
+        if (valid) {
+            accountService.saveOrUpdate(account);
+            return SETTINGS.getPath();
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -131,15 +139,12 @@ public class SendingAccountBean {
 
     /**
      * Sending service change listener.
-     *
-     * @param event {@link ValueChangeEvent} event
      */
-    public void sendingServiceChangeListener(ValueChangeEvent event) {
-        if (event.getNewValue() != null) {
-            SendingService service = (SendingService) event.getNewValue();
-            service = sendingServiceService.getById(service.getId());
-            account.setSendingService(service);
-            for (SendingServiceParam sendingServiceParam : service.getServiceParams()) {
+    public void sendingServiceChangeListener() {
+        account.getServiceParams().clear();
+        if (account.getSendingService() != null) {
+            account.setSendingService(sendingServiceService.getById(account.getSendingService().getId()));
+            for (SendingServiceParam sendingServiceParam : account.getSendingService().getServiceParams()) {
                 EmployeeSendingServiceParam employeeSendingServiceParam = new EmployeeSendingServiceParam();
                 employeeSendingServiceParam.setSendingServiceParam(sendingServiceParam);
                 employeeSendingServiceParam.setValue(sendingServiceParam.getValue());
@@ -182,6 +187,10 @@ public class SendingAccountBean {
 
     public void setSendingServiceService(ISendingServiceService<String, SendingService> sendingServiceService) {
         this.sendingServiceService = sendingServiceService;
+    }
+
+    public void setSendingAccountValidator(SendingAccountValidator sendingAccountValidator) {
+        this.sendingAccountValidator = sendingAccountValidator;
     }
 
     public void setSettingBean(SettingBean settingBean) {
