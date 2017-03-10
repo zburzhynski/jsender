@@ -11,27 +11,27 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
- * Employee sending service.
+ * Sending account.
  * <p/>
  * Date: 05.03.2017
  *
  * @author Nikita Shevtsou
  */
 @Entity
-@Table(name = "employee_sending_service")
-public class EmployeeSendingService extends Domain {
+@Table(name = "sending_account")
+public class SendingAccount extends Domain {
 
     public static final String P_SENDING_SERVICE = "sendingService";
 
-    public static final String P_SERVICE_PARAMS = "serviceParams";
+    public static final String P_ACCOUNT_PARAMS = "accountParams";
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "sending_service_id")
     private SendingService sendingService;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "employee_sending_service_id", nullable = false)
-    private List<EmployeeSendingServiceParam> serviceParams;
+    @JoinColumn(name = "sending_account_id", nullable = false)
+    private List<SendingAccountParam> accountParams;
 
     public SendingService getSendingService() {
         return sendingService;
@@ -46,15 +46,15 @@ public class EmployeeSendingService extends Domain {
      *
      * @return service params
      */
-    public List<EmployeeSendingServiceParam> getServiceParams() {
-        if (serviceParams == null) {
-            serviceParams = new ArrayList<>();
+    public List<SendingAccountParam> getAccountParams() {
+        if (accountParams == null) {
+            accountParams = new ArrayList<>();
         }
-        return serviceParams;
+        return accountParams;
     }
 
-    public void setServiceParams(List<EmployeeSendingServiceParam> serviceParams) {
-        this.serviceParams = serviceParams;
+    public void setAccountParams(List<SendingAccountParam> accountParams) {
+        this.accountParams = accountParams;
     }
 
 }

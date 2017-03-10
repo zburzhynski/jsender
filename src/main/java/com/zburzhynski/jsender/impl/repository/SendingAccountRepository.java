@@ -2,13 +2,13 @@ package com.zburzhynski.jsender.impl.repository;
 
 import static com.zburzhynski.jsender.api.domain.CommonConstant.DOT;
 import static com.zburzhynski.jsender.impl.domain.Domain.P_ID;
-import static com.zburzhynski.jsender.impl.domain.EmployeeSendingService.P_SENDING_SERVICE;
-import static com.zburzhynski.jsender.impl.domain.EmployeeSendingServiceParam.P_SENDING_SERVICE_PARAM;
+import static com.zburzhynski.jsender.impl.domain.SendingAccount.P_ACCOUNT_PARAMS;
+import static com.zburzhynski.jsender.impl.domain.SendingAccount.P_SENDING_SERVICE;
+import static com.zburzhynski.jsender.impl.domain.SendingAccountParam.P_SENDING_SERVICE_PARAM;
 import static com.zburzhynski.jsender.impl.domain.SendingService.P_SENDING_TYPE;
-import static com.zburzhynski.jsender.impl.domain.SendingService.P_SERVICE_PARAMS;
-import com.zburzhynski.jsender.api.criteria.EmployeeSendingServiceSearchCriteria;
-import com.zburzhynski.jsender.api.repository.IEmployeeSendingServiceRepository;
-import com.zburzhynski.jsender.impl.domain.EmployeeSendingService;
+import com.zburzhynski.jsender.api.criteria.SendingAccountSearchCriteria;
+import com.zburzhynski.jsender.api.repository.ISendingAccountRepository;
+import com.zburzhynski.jsender.impl.domain.SendingAccount;
 import com.zburzhynski.jsender.impl.util.CriteriaHelper;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Projections;
@@ -21,36 +21,36 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Implementation of {@link IEmployeeSendingServiceRepository} interface.
+ * Implementation of {@link ISendingAccountRepository} interface.
  * <p/>
  * Date: 05.03.2017
  *
  * @author Nikita Shevtsou
  */
 @Repository
-public class EmployeeSendingServiceRepository extends AbstractBaseRepository<String, EmployeeSendingService>
-    implements IEmployeeSendingServiceRepository<String, EmployeeSendingService> {
+public class SendingAccountRepository extends AbstractBaseRepository<String, SendingAccount>
+    implements ISendingAccountRepository<String, SendingAccount> {
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public EmployeeSendingService findById(String id) {
+    public SendingAccount findById(String id) {
         Criteria criteria = getSession().createCriteria(getDomainClass());
         criteria.createAlias(P_SENDING_SERVICE, P_SENDING_SERVICE);
-        criteria.createAlias(P_SERVICE_PARAMS, P_SERVICE_PARAMS, JoinType.LEFT_OUTER_JOIN);
-        criteria.createAlias(P_SERVICE_PARAMS + DOT + P_SENDING_SERVICE_PARAM, P_SENDING_SERVICE_PARAM,
+        criteria.createAlias(P_ACCOUNT_PARAMS, P_ACCOUNT_PARAMS, JoinType.LEFT_OUTER_JOIN);
+        criteria.createAlias(P_ACCOUNT_PARAMS + DOT + P_SENDING_SERVICE_PARAM, P_SENDING_SERVICE_PARAM,
             JoinType.LEFT_OUTER_JOIN);
         criteria.add(Restrictions.eq(P_ID, id));
-        return (EmployeeSendingService) criteria.uniqueResult();
+        return (SendingAccount) criteria.uniqueResult();
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public List<EmployeeSendingService> findByCriteria(EmployeeSendingServiceSearchCriteria searchCriteria,
-                                                       Long start, Long end) {
+    public List<SendingAccount> findByCriteria(SendingAccountSearchCriteria searchCriteria,
+                                               Long start, Long end) {
         Criteria criteria = getSession().createCriteria(getDomainClass());
         criteria.createAlias(P_SENDING_SERVICE, P_SENDING_SERVICE);
         if (searchCriteria.getSendingType() != null) {
@@ -65,7 +65,7 @@ public class EmployeeSendingServiceRepository extends AbstractBaseRepository<Str
      * {@inheritDoc}
      */
     @Override
-    public int countByCriteria(EmployeeSendingServiceSearchCriteria searchCriteria) {
+    public int countByCriteria(SendingAccountSearchCriteria searchCriteria) {
         Criteria criteria = getSession().createCriteria(getDomainClass());
         criteria.setProjection(Projections.rowCount());
         Object uniqueResult = criteria.uniqueResult();
@@ -76,8 +76,8 @@ public class EmployeeSendingServiceRepository extends AbstractBaseRepository<Str
      * {@inheritDoc}
      */
     @Override
-    protected Class<? extends EmployeeSendingService> getDomainClass() {
-        return EmployeeSendingService.class;
+    protected Class<? extends SendingAccount> getDomainClass() {
+        return SendingAccount.class;
     }
 
     /**

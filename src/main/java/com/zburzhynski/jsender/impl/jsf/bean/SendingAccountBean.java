@@ -3,11 +3,11 @@ package com.zburzhynski.jsender.impl.jsf.bean;
 import static com.zburzhynski.jsender.api.domain.View.SENDING_ACCOUNT;
 import static com.zburzhynski.jsender.api.domain.View.SENDING_SERVICE_PARAM;
 import static com.zburzhynski.jsender.api.domain.View.SETTINGS;
-import com.zburzhynski.jsender.api.criteria.EmployeeSendingServiceSearchCriteria;
-import com.zburzhynski.jsender.api.service.IEmployeeSendingServiceService;
+import com.zburzhynski.jsender.api.criteria.SendingAccountSearchCriteria;
+import com.zburzhynski.jsender.api.service.ISendingAccountService;
 import com.zburzhynski.jsender.api.service.ISendingServiceService;
-import com.zburzhynski.jsender.impl.domain.EmployeeSendingService;
-import com.zburzhynski.jsender.impl.domain.EmployeeSendingServiceParam;
+import com.zburzhynski.jsender.impl.domain.SendingAccount;
+import com.zburzhynski.jsender.impl.domain.SendingAccountParam;
 import com.zburzhynski.jsender.impl.domain.SendingService;
 import com.zburzhynski.jsender.impl.domain.SendingServiceParam;
 import com.zburzhynski.jsender.impl.jsf.validator.SendingAccountValidator;
@@ -33,16 +33,16 @@ import javax.faces.bean.SessionScoped;
 @SessionScoped
 public class SendingAccountBean {
 
-    private EmployeeSendingService account;
+    private SendingAccount account;
 
-    private EmployeeSendingServiceParam serviceParam;
+    private SendingAccountParam serviceParam;
 
-    private EmployeeSendingServiceParam beforeEditingServiceParam;
+    private SendingAccountParam beforeEditingServiceParam;
 
-    private LazyDataModel<EmployeeSendingService> accountModel;
+    private LazyDataModel<SendingAccount> accountModel;
 
-    @ManagedProperty(value = "#{employeeSendingServiceService}")
-    private IEmployeeSendingServiceService<String, EmployeeSendingService> accountService;
+    @ManagedProperty(value = "#{sendingAccountService}")
+    private ISendingAccountService<String, SendingAccount> accountService;
 
     @ManagedProperty(value = "#{sendingServiceService}")
     private ISendingServiceService<String, SendingService> sendingServiceService;
@@ -59,11 +59,11 @@ public class SendingAccountBean {
      */
     @PostConstruct
     public void init() {
-        accountModel = new LazyDataModel<EmployeeSendingService>() {
+        accountModel = new LazyDataModel<SendingAccount>() {
             @Override
-            public List<EmployeeSendingService> load(int first, int pageSize, String sortField, SortOrder sortOrder,
-                                                     Map<String, Object> filters) {
-                EmployeeSendingServiceSearchCriteria searchCriteria = new EmployeeSendingServiceSearchCriteria();
+            public List<SendingAccount> load(int first, int pageSize, String sortField, SortOrder sortOrder,
+                                             Map<String, Object> filters) {
+                SendingAccountSearchCriteria searchCriteria = new SendingAccountSearchCriteria();
                 setRowCount(accountService.countByCriteria(searchCriteria));
                 return accountService.getByCriteria(searchCriteria, Long.valueOf(first),
                     Long.valueOf(first + pageSize));
@@ -77,7 +77,7 @@ public class SendingAccountBean {
      * @return path for navigating
      */
     public String addAccount() {
-        account = new EmployeeSendingService();
+        account = new SendingAccount();
         return SENDING_ACCOUNT.getPath();
     }
 
@@ -141,14 +141,14 @@ public class SendingAccountBean {
      * Sending service change listener.
      */
     public void sendingServiceChangeListener() {
-        account.getServiceParams().clear();
+        account.getAccountParams().clear();
         if (account.getSendingService() != null) {
             account.setSendingService(sendingServiceService.getById(account.getSendingService().getId()));
             for (SendingServiceParam sendingServiceParam : account.getSendingService().getServiceParams()) {
-                EmployeeSendingServiceParam employeeSendingServiceParam = new EmployeeSendingServiceParam();
-                employeeSendingServiceParam.setSendingServiceParam(sendingServiceParam);
-                employeeSendingServiceParam.setValue(sendingServiceParam.getValue());
-                account.getServiceParams().add(employeeSendingServiceParam);
+                SendingAccountParam sendingAccountParam = new SendingAccountParam();
+                sendingAccountParam.setSendingServiceParam(sendingServiceParam);
+                sendingAccountParam.setValue(sendingServiceParam.getValue());
+                account.getAccountParams().add(sendingAccountParam);
             }
         }
     }
@@ -157,31 +157,31 @@ public class SendingAccountBean {
         return settingBean.getSendingAccountsPerPage();
     }
 
-    public EmployeeSendingService getAccount() {
+    public SendingAccount getAccount() {
         return account;
     }
 
-    public void setAccount(EmployeeSendingService account) {
+    public void setAccount(SendingAccount account) {
         this.account = account;
     }
 
-    public EmployeeSendingServiceParam getServiceParam() {
+    public SendingAccountParam getServiceParam() {
         return serviceParam;
     }
 
-    public void setServiceParam(EmployeeSendingServiceParam serviceParam) {
+    public void setServiceParam(SendingAccountParam serviceParam) {
         this.serviceParam = serviceParam;
     }
 
-    public LazyDataModel<EmployeeSendingService> getAccountModel() {
+    public LazyDataModel<SendingAccount> getAccountModel() {
         return accountModel;
     }
 
-    public void setAccountModel(LazyDataModel<EmployeeSendingService> accountModel) {
+    public void setAccountModel(LazyDataModel<SendingAccount> accountModel) {
         this.accountModel = accountModel;
     }
 
-    public void setAccountService(IEmployeeSendingServiceService<String, EmployeeSendingService> accountService) {
+    public void setAccountService(ISendingAccountService<String, SendingAccount> accountService) {
         this.accountService = accountService;
     }
 

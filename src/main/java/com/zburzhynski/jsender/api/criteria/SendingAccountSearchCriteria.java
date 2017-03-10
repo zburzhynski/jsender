@@ -3,13 +3,13 @@ package com.zburzhynski.jsender.api.criteria;
 import com.zburzhynski.jsender.api.domain.SendingType;
 
 /**
- * Employee sending service search criteria.
+ * Sending account search criteria.
  * <p/>
  * Date: 07.03.2017
  *
  * @author Nikita Shevtsou
  */
-public class EmployeeSendingServiceSearchCriteria {
+public class SendingAccountSearchCriteria {
 
     private SendingType sendingType;
 
