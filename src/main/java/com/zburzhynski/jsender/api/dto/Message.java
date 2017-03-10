@@ -17,6 +17,8 @@ import java.util.List;
  */
 public class Message implements Serializable {
 
+    private String sendingAccountId;
+
     private SendingType sendingType;
 
     private String from;
@@ -50,6 +52,14 @@ public class Message implements Serializable {
      */
     public void removeRecipient(Recipient recipient) {
         getRecipients().remove(recipient);
+    }
+
+    public String getSendingAccountId() {
+        return sendingAccountId;
+    }
+
+    public void setSendingAccountId(String sendingAccountId) {
+        this.sendingAccountId = sendingAccountId;
     }
 
     public SendingType getSendingType() {

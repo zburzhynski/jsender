@@ -10,6 +10,8 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
@@ -28,12 +30,15 @@ public class SendingService extends Domain {
 
     public static final String P_NAME = "name";
 
+    public static final String P_SENDING_TYPE = "sendingType";
+
     public static final String P_SERVICE_PARAMS = "serviceParams";
 
     @Column(name = "name")
     private String name;
 
     @Column(name = "sending_type")
+    @Enumerated(value = EnumType.STRING)
     private SendingType sendingType;
 
     @Column(name = "description")

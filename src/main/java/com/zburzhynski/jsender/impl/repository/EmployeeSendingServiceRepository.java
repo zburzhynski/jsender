@@ -4,8 +4,9 @@ import static com.zburzhynski.jsender.api.domain.CommonConstant.DOT;
 import static com.zburzhynski.jsender.impl.domain.Domain.P_ID;
 import static com.zburzhynski.jsender.impl.domain.EmployeeSendingService.P_SENDING_SERVICE;
 import static com.zburzhynski.jsender.impl.domain.EmployeeSendingServiceParam.P_SENDING_SERVICE_PARAM;
+import static com.zburzhynski.jsender.impl.domain.SendingService.P_SENDING_TYPE;
 import static com.zburzhynski.jsender.impl.domain.SendingService.P_SERVICE_PARAMS;
-import com.zburzhynski.jsender.api.criteria.SendingServiceSearchCriteria;
+import com.zburzhynski.jsender.api.criteria.EmployeeSendingServiceSearchCriteria;
 import com.zburzhynski.jsender.api.repository.IEmployeeSendingServiceRepository;
 import com.zburzhynski.jsender.impl.domain.EmployeeSendingService;
 import com.zburzhynski.jsender.impl.util.CriteriaHelper;
@@ -48,10 +49,14 @@ public class EmployeeSendingServiceRepository extends AbstractBaseRepository<Str
      * {@inheritDoc}
      */
     @Override
-    public List<EmployeeSendingService> findByCriteria(SendingServiceSearchCriteria searchCriteria,
+    public List<EmployeeSendingService> findByCriteria(EmployeeSendingServiceSearchCriteria searchCriteria,
                                                        Long start, Long end) {
         Criteria criteria = getSession().createCriteria(getDomainClass());
         criteria.createAlias(P_SENDING_SERVICE, P_SENDING_SERVICE);
+        if (searchCriteria.getSendingType() != null) {
+            criteria.add(Restrictions.eq(P_SENDING_SERVICE + DOT + P_SENDING_TYPE,
+                searchCriteria.getSendingType()));
+        }
         CriteriaHelper.addPagination(criteria, start, end);
         return criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();
     }
@@ -60,7 +65,7 @@ public class EmployeeSendingServiceRepository extends AbstractBaseRepository<Str
      * {@inheritDoc}
      */
     @Override
-    public int countByCriteria(SendingServiceSearchCriteria searchCriteria) {
+    public int countByCriteria(EmployeeSendingServiceSearchCriteria searchCriteria) {
         Criteria criteria = getSession().createCriteria(getDomainClass());
         criteria.setProjection(Projections.rowCount());
         Object uniqueResult = criteria.uniqueResult();

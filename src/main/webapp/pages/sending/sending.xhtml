@@ -38,6 +38,20 @@
                 width: 21%;
                 text-align: center;
             }
+            .serviceName {
+                font-weight: bold;
+                width: 15%;
+            }
+            .serviceValue {
+                width: 35%;
+            }
+            .senderName {
+                font-weight: bold;
+                width: 10%;
+            }
+            .senderValue {
+                width: 40%;
+            }
         </style>
         <p:panel>
             <h:form id="sendingForm">
@@ -47,9 +61,11 @@
                     <h:panelGrid columns="3" columnClasses="label, sendingType, createMessage" width="61%">
                         <h:outputLabel value="#{msgs['sending.sendingType']}:" />
                         <p:selectOneMenu id="sendingType"
+                                         valueChangeListener="#{sendingBean.sendingTypeChangeListener}"
                                          value="#{sendingBean.messageToSend.sendingType}"
                                          label="#{msgs['sending.sendingType']}"
                                          style="width: 100%">
+                            <p:ajax listener="#{sendingBean.sendingTypeChangeListener}" update="@form" />
                             <f:selectItem itemLabel="" noSelectionOption="true" />
                             <f:selectItems value="#{sendingTypeListBean.sendingTypes}" var="type"
                                            itemValue="#{type}"
@@ -126,7 +142,18 @@
                             </h:panelGrid>
                         </p:tab>
                     </p:tabView>
-                    <h:panelGrid columns="2" columnClasses="name,val,msg" width="50%">
+                    <h:panelGrid columns="4" columnClasses="serviceName, serviceValue, senderName, senderValue">
+                        <h:outputLabel value="#{msgs['sending.sendingAccount']}:" />
+                        <p:selectOneMenu id="sendingService"
+                                         value="#{sendingBean.messageToSend.sendingAccountId}"
+                                         label="#{msgs['sending.sendingAccount']}"
+                                         style="width: 50%">
+                            <f:selectItem itemLabel="" noSelectionOption="true" />
+                            <f:selectItems value="#{sendingAccountListBean.serviceAccounts}"
+                                           var="account"
+                                           itemValue="#{account.id}"
+                                           itemLabel="#{account.sendingService.name}" />
+                        </p:selectOneMenu>
                         <h:outputLabel for="from" value="#{msgs['sending.from']}:" />
                         <p:inputText id="from" value="#{sendingBean.messageToSend.from}"
                                      style="width: 100%"

@@ -67,6 +67,9 @@ public class SendingBean implements Serializable {
     @ManagedProperty(value = "#{sendingValidator}")
     private SendingValidator sendingValidator;
 
+    @ManagedProperty(value = "#{sendingAccountListBean}")
+    private SendingAccountListBean sendingAccountListBean;
+
     @ManagedProperty(value = "#{propertyReader}")
     private PropertyReader reader;
 
@@ -87,6 +90,7 @@ public class SendingBean implements Serializable {
     public void createMessage() {
         messageToSend = new Message();
         messageToSend.setFrom(settingBean.getOrganizationName());
+        sendingAccountListBean.findByServiceSendingType(null);
     }
 
     /**
@@ -196,6 +200,13 @@ public class SendingBean implements Serializable {
         return StringUtils.join(recipient.getEmails(), COMMA + SPACE);
     }
 
+    /**
+     * Sending type change listener.
+     */
+    public void sendingTypeChangeListener() {
+        sendingAccountListBean.findByServiceSendingType(messageToSend.getSendingType());
+    }
+
     public int getTabIndex() {
         return tabIndex;
     }
@@ -246,6 +257,10 @@ public class SendingBean implements Serializable {
 
     public void setSendingValidator(SendingValidator sendingValidator) {
         this.sendingValidator = sendingValidator;
+    }
+
+    public void setSendingAccountListBean(SendingAccountListBean sendingAccountListBean) {
+        this.sendingAccountListBean = sendingAccountListBean;
     }
 
     public void setReader(PropertyReader reader) {

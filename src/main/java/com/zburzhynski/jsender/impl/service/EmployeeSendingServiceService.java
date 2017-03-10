@@ -1,6 +1,6 @@
 package com.zburzhynski.jsender.impl.service;
 
-import com.zburzhynski.jsender.api.criteria.SendingServiceSearchCriteria;
+import com.zburzhynski.jsender.api.criteria.EmployeeSendingServiceSearchCriteria;
 import com.zburzhynski.jsender.api.repository.IEmployeeSendingServiceRepository;
 import com.zburzhynski.jsender.api.service.IEmployeeSendingServiceService;
 import com.zburzhynski.jsender.impl.domain.EmployeeSendingService;
@@ -28,7 +28,7 @@ public class EmployeeSendingServiceService implements IEmployeeSendingServiceSer
      * {@inheritDoc}
      */
     @Override
-    public List<EmployeeSendingService> getByCriteria(SendingServiceSearchCriteria searchCriteria,
+    public List<EmployeeSendingService> getByCriteria(EmployeeSendingServiceSearchCriteria searchCriteria,
                                                       Long start, Long end) {
         return serviceRepository.findByCriteria(searchCriteria, start, end);
     }
@@ -37,7 +37,7 @@ public class EmployeeSendingServiceService implements IEmployeeSendingServiceSer
      * {@inheritDoc}
      */
     @Override
-    public int countByCriteria(SendingServiceSearchCriteria searchCriteria) {
+    public int countByCriteria(EmployeeSendingServiceSearchCriteria searchCriteria) {
         return serviceRepository.countByCriteria(searchCriteria);
     }
 
