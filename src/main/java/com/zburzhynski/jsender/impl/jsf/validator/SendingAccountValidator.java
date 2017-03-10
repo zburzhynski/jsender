@@ -1,7 +1,7 @@
 package com.zburzhynski.jsender.impl.jsf.validator;
 
-import com.zburzhynski.jsender.impl.domain.EmployeeSendingService;
-import com.zburzhynski.jsender.impl.domain.EmployeeSendingServiceParam;
+import com.zburzhynski.jsender.impl.domain.SendingAccount;
+import com.zburzhynski.jsender.impl.domain.SendingAccountParam;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
@@ -22,15 +22,15 @@ public class SendingAccountValidator extends BaseValidator {
     /**
      * Validates sending service account.
      *
-     * @param account {@link EmployeeSendingService} to validates
+     * @param account {@link SendingAccount} to validates
      * @return true if account valid, else false
      */
-    public boolean validate(EmployeeSendingService account) {
+    public boolean validate(SendingAccount account) {
         if (account.getSendingService() == null) {
             addMessage(SENDING_SERVICE_NOT_SPECIFIED);
             return false;
         }
-        for (EmployeeSendingServiceParam param : account.getServiceParams()) {
+        for (SendingAccountParam param : account.getAccountParams()) {
             if (StringUtils.isBlank(param.getValue())) {
                 addMessage(PARAM_VALUE_NOT_SPECIFIED);
                 return false;

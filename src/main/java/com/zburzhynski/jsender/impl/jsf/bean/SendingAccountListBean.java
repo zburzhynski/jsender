@@ -1,9 +1,9 @@
 package com.zburzhynski.jsender.impl.jsf.bean;
 
-import com.zburzhynski.jsender.api.criteria.EmployeeSendingServiceSearchCriteria;
+import com.zburzhynski.jsender.api.criteria.SendingAccountSearchCriteria;
 import com.zburzhynski.jsender.api.domain.SendingType;
-import com.zburzhynski.jsender.api.service.IEmployeeSendingServiceService;
-import com.zburzhynski.jsender.impl.domain.EmployeeSendingService;
+import com.zburzhynski.jsender.api.service.ISendingAccountService;
+import com.zburzhynski.jsender.impl.domain.SendingAccount;
 
 import java.util.List;
 import javax.faces.bean.ManagedBean;
@@ -21,10 +21,10 @@ import javax.faces.bean.SessionScoped;
 @SessionScoped
 public class SendingAccountListBean {
 
-    private List<EmployeeSendingService> serviceAccounts;
+    private List<SendingAccount> serviceAccounts;
 
-    @ManagedProperty(value = "#{employeeSendingServiceService}")
-    private IEmployeeSendingServiceService<String, EmployeeSendingService> accountService;
+    @ManagedProperty(value = "#{sendingAccountService}")
+    private ISendingAccountService<String, SendingAccount> accountService;
 
     /**
      * Finds accounts by sending type.
@@ -32,20 +32,20 @@ public class SendingAccountListBean {
      * @param sendingType {@link SendingType} service sending type
      */
     public void findByServiceSendingType(SendingType sendingType) {
-        EmployeeSendingServiceSearchCriteria searchCriteria = new EmployeeSendingServiceSearchCriteria();
+        SendingAccountSearchCriteria searchCriteria = new SendingAccountSearchCriteria();
         searchCriteria.setSendingType(sendingType);
         serviceAccounts = accountService.getByCriteria(searchCriteria, null, null);
     }
 
-    public List<EmployeeSendingService> getServiceAccounts() {
+    public List<SendingAccount> getServiceAccounts() {
         return serviceAccounts;
     }
 
-    public void setServiceAccounts(List<EmployeeSendingService> serviceAccounts) {
+    public void setServiceAccounts(List<SendingAccount> serviceAccounts) {
         this.serviceAccounts = serviceAccounts;
     }
 
-    public void setAccountService(IEmployeeSendingServiceService<String, EmployeeSendingService> accountService) {
+    public void setAccountService(ISendingAccountService<String, SendingAccount> accountService) {
         this.accountService = accountService;
     }
 

@@ -44,7 +44,7 @@
                     <h:outputText value="#{msgs['sendingServiceParams.header']}" styleClass="b" />
                 </h:panelGrid>
                 <h:panelGrid>
-                    <p:dataTable value="#{sendingAccountBean.account.serviceParams}"
+                    <p:dataTable value="#{sendingAccountBean.account.accountParams}"
                              var="serviceParam"
                              emptyMessage="#{msgs['sendingServiceParams.empty']}">
                     <p:column headerText="#{msgs['sendingServiceParam.name']}"

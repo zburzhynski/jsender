@@ -12,15 +12,15 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 /**
- * Employee sending service param.
+ * Sending account param.
  * <p/>
  * Date: 05.03.2017
  *
  * @author Nikita Shevtsou
  */
 @Entity
-@Table(name = "employee_sending_service_param")
-public class EmployeeSendingServiceParam extends Domain {
+@Table(name = "sending_account_param")
+public class SendingAccountParam extends Domain {
 
     public static final String P_SENDING_SERVICE_PARAM = "sendingServiceParam";
 
@@ -56,11 +56,11 @@ public class EmployeeSendingServiceParam extends Domain {
             return true;
         }
 
-        if (!(o instanceof EmployeeSendingServiceParam)) {
+        if (!(o instanceof SendingAccountParam)) {
             return false;
         }
 
-        EmployeeSendingServiceParam that = (EmployeeSendingServiceParam) o;
+        SendingAccountParam that = (SendingAccountParam) o;
         return new EqualsBuilder()
             .appendSuper(super.equals(o))
             .append(value, that.value)
