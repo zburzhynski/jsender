@@ -177,41 +177,6 @@ databaseChangeLog {
         }
     }
 
-    changeSet(id: '2017-02-04-14', author: 'Nikita Shevtsov <shevtsou@gmail.com>') {
-        insert(schemaName: 'jsender', tableName: 'setting') {
-            column(name: 'id', value: 'a039ad9b-4a0a-4622-a549-ce355c45cea1')
-            column(name: 'category', value: 'EMAIL_SENDING')
-            column(name: 'name', value: 'mail_smtp_host')
-            column(name: 'value', value: 'smtp.gmail.com')
-            column(name: 'type', value: 'STRING')
-            column(name: 'description', value: 'Сервер SMTP')
-        }
-        insert(schemaName: 'jsender', tableName: 'setting') {
-            column(name: 'id', value: '5c2c2cbe-c3d3-4161-8daf-c13c6da2b849')
-            column(name: 'category', value: 'EMAIL_SENDING')
-            column(name: 'name', value: 'mail_smtp_port')
-            column(name: 'value', value: '587')
-            column(name: 'type', value: 'STRING')
-            column(name: 'description', value: 'Порт SMTP')
-        }
-        insert(schemaName: 'jsender', tableName: 'setting') {
-            column(name: 'id', value: '2e995ca7-3bce-4705-85ac-822c6fbd317e')
-            column(name: 'category', value: 'EMAIL_SENDING')
-            column(name: 'name', value: 'mail_user_name')
-            column(name: 'value', value: 'username')
-            column(name: 'type', value: 'STRING')
-            column(name: 'description', value: 'Имя пользователя')
-        }
-        insert(schemaName: 'jsender', tableName: 'setting') {
-            column(name: 'id', value: '0112434e-3885-4d13-9d6e-14706195fba3')
-            column(name: 'category', value: 'EMAIL_SENDING')
-            column(name: 'name', value: 'mail_password')
-            column(name: 'value', value: 'password')
-            column(name: 'type', value: 'PASSWORD')
-            column(name: 'description', value: 'Пароль')
-        }
-    }
-
     changeSet(id: '2017-02-11-01', author: 'Nikita Shevtsov <shevtsou@gmail.com>') {
         insert(schemaName: 'jsender', tableName: 'setting') {
             column(name: 'id', value: '75e3f5a0-4395-4f7d-831d-874aa38b4bf8')
@@ -220,25 +185,6 @@ databaseChangeLog {
             column(name: 'value', value: '+375')
             column(name: 'type', value: 'STRING')
             column(name: 'description', value: 'Код страны по умолчанию')
-        }
-    }
-
-    changeSet(id: '2017-02-12-01', author: 'Nikita Shevtsov <shevtsou@gmail.com>') {
-        insert(schemaName: 'jsender', tableName: 'setting') {
-            column(name: 'id', value: '3806dd31-ba70-4e53-8577-9f2105cfb1cb')
-            column(name: 'category', value: 'SMS_SENDING')
-            column(name: 'name', value: 'sms_user_name')
-            column(name: 'value', value: 'username')
-            column(name: 'type', value: 'STRING')
-            column(name: 'description', value: 'Имя пользователя')
-        }
-        insert(schemaName: 'jsender', tableName: 'setting') {
-            column(name: 'id', value: 'df859fcb-ed4f-4073-83e7-1901f6489d60')
-            column(name: 'category', value: 'SMS_SENDING')
-            column(name: 'name', value: 'sms_password')
-            column(name: 'value', value: 'password')
-            column(name: 'type', value: 'PASSWORD')
-            column(name: 'description', value: 'Пароль')
         }
     }
 
@@ -494,16 +440,43 @@ databaseChangeLog {
         }
     }
 
-    changeSet(id: '2017-03-08-01', author: 'Nikita Shevtsov <shevtsou@gmail.com>') {
-        comment("Insert gmail parameters")
-        sql(stripComments: true, splitStatements: false, endDelimiter: ';') {
-            """
-            insert into jsender.sending_service values('06967298-6360-4d8f-af5f-a20d58dd4414', 'gmail.com', 'EMAIL', 'Сервис для массовой емейл рассылки');
-            insert into jsender.sending_service_param values('797c97ad-0621-401b-9795-8ef5568a9a48', '06967298-6360-4d8f-af5f-a20d58dd4414', 'Сервер SMTP', 'STRING', 'smtp.gmail.com', 'Сервер SMTP');
-            insert into jsender.sending_service_param values('173b22e7-1789-4e96-b03f-73ca8fe97489', '06967298-6360-4d8f-af5f-a20d58dd4414', 'Порт SMTP', 'STRING', '587', 'Сервер SMTP');
-            insert into jsender.sending_service_param values('e9ef8298-8638-4976-bb56-1274d6b9fa73', '06967298-6360-4d8f-af5f-a20d58dd4414', 'Имя пользователя', 'STRING', null, 'Имя пользователя');
-            insert into jsender.sending_service_param values('6e42b739-ff7f-4843-bb81-05d2c009a165', '06967298-6360-4d8f-af5f-a20d58dd4414', 'Пароль', 'PASSWORD', null, 'Пароль');
-            """
+    changeSet(id: '2017-02-04-14', author: 'Nikita Shevtsov <shevtsou@gmail.com>') {
+        comment("Insert gmail.com account")
+        insert(schemaName: 'jsender', tableName: 'sending_service') {
+            column(name: 'id', value: '06967298-6360-4d8f-af5f-a20d58dd4414')
+            column(name: 'name', value: 'gmail.com')
+            column(name: 'sending_type', value: 'EMAIL')
+            column(name: 'description', value: 'Рассылка электронной почты')
+        }
+        insert(schemaName: 'jsender', tableName: 'sending_service_param') {
+            column(name: 'id', value: 'a039ad9b-4a0a-4622-a549-ce355c45cea1')
+            column(name: 'sending_service_id', value: '06967298-6360-4d8f-af5f-a20d58dd4414')
+            column(name: 'name', value: 'mail_smtp_host')
+            column(name: 'type', value: 'STRING')
+            column(name: 'value', value: 'smtp.gmail.com')
+            column(name: 'description', value: 'Сервер SMTP')
+        }
+        insert(schemaName: 'jsender', tableName: 'sending_service_param') {
+            column(name: 'id', value: '5c2c2cbe-c3d3-4161-8daf-c13c6da2b849')
+            column(name: 'sending_service_id', value: '06967298-6360-4d8f-af5f-a20d58dd4414')
+            column(name: 'name', value: 'mail_smtp_port')
+            column(name: 'type', value: 'STRING')
+            column(name: 'value', value: '587')
+            column(name: 'description', value: 'Порт SMTP')
+        }
+        insert(schemaName: 'jsender', tableName: 'sending_service_param') {
+            column(name: 'id', value: '2e995ca7-3bce-4705-85ac-822c6fbd317e')
+            column(name: 'sending_service_id', value: '06967298-6360-4d8f-af5f-a20d58dd4414')
+            column(name: 'name', value: 'mail_user_name')
+            column(name: 'type', value: 'STRING')
+            column(name: 'description', value: 'Имя пользователя')
+        }
+        insert(schemaName: 'jsender', tableName: 'sending_service_param') {
+            column(name: 'id', value: '0112434e-3885-4d13-9d6e-14706195fba3')
+            column(name: 'sending_service_id', value: '06967298-6360-4d8f-af5f-a20d58dd4414')
+            column(name: 'name', value: 'mail_password')
+            column(name: 'type', value: 'PASSWORD')
+            column(name: 'description', value: 'Пароль')
         }
     }
 

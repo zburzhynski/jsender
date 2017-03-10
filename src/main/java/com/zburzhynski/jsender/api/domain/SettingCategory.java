@@ -13,10 +13,6 @@ public enum SettingCategory {
 
     VIEW,
 
-    EMAIL_SENDING,
-
-    SMS_SENDING,
-
     REQUISITE,
 
     JDENT

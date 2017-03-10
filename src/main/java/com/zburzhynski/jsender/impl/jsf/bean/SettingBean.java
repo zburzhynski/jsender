@@ -1,10 +1,8 @@
 package com.zburzhynski.jsender.impl.jsf.bean;
 
 import static com.zburzhynski.jsender.api.domain.SettingCategory.COMMON;
-import static com.zburzhynski.jsender.api.domain.SettingCategory.EMAIL_SENDING;
 import static com.zburzhynski.jsender.api.domain.SettingCategory.JDENT;
 import static com.zburzhynski.jsender.api.domain.SettingCategory.REQUISITE;
-import static com.zburzhynski.jsender.api.domain.SettingCategory.SMS_SENDING;
 import static com.zburzhynski.jsender.api.domain.SettingCategory.VIEW;
 import static com.zburzhynski.jsender.api.domain.Settings.CLIENTS_PER_PAGE;
 import static com.zburzhynski.jsender.api.domain.Settings.DEFAULT_COUNTRY_CODE;
@@ -60,10 +58,6 @@ public class SettingBean implements Serializable {
 
     private Set<Setting> viewSettings;
 
-    private Set<Setting> smsSendingSettings;
-
-    private Set<Setting> emailSendingSettings;
-
     private Set<Setting> requisiteSettings;
 
     private Set<Setting> jdentSettings;
@@ -88,8 +82,6 @@ public class SettingBean implements Serializable {
         }
         commonSettings = new TreeSet<>(settingService.getByCategory(COMMON));
         viewSettings = new TreeSet<>(settingService.getByCategory(VIEW));
-        smsSendingSettings = new TreeSet<>(settingService.getByCategory(SMS_SENDING));
-        emailSendingSettings = new TreeSet<>(settingService.getByCategory(EMAIL_SENDING));
         requisiteSettings = new TreeSet<>(settingService.getByCategory(REQUISITE));
         jdentSettings = new TreeSet<>(settingService.getByCategory(JDENT));
     }
@@ -293,22 +285,6 @@ public class SettingBean implements Serializable {
 
     public void setViewSettings(Set<Setting> viewSettings) {
         this.viewSettings = viewSettings;
-    }
-
-    public Set<Setting> getSmsSendingSettings() {
-        return smsSendingSettings;
-    }
-
-    public void setSmsSendingSettings(Set<Setting> smsSendingSettings) {
-        this.smsSendingSettings = smsSendingSettings;
-    }
-
-    public Set<Setting> getEmailSendingSettings() {
-        return emailSendingSettings;
-    }
-
-    public void setEmailSendingSettings(Set<Setting> emailSendingSettings) {
-        this.emailSendingSettings = emailSendingSettings;
     }
 
     public Set<Setting> getRequisiteSettings() {

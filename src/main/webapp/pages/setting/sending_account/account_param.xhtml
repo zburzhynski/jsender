@@ -25,12 +25,12 @@
                 <p:focus />
                 <p:messages id="messages" />
                 <h:panelGrid columns="2" columnClasses="name,val" width="40%">
-                    <h:outputLabel for="name" value="#{msgs['sendingServiceParam.name']}:" />
+                    <h:outputLabel for="name" value="#{msgs['sendingAccountParam.name']}:" />
                     <p:inputText id="name" value="#{sendingAccountBean.serviceParam.sendingServiceParam.name}"
-                                 label="#{msgs['sendingServiceParam.name']}"
+                                 label="#{msgs['sendingAccountParam.name']}"
                                  style="width: 97%"
                                  disabled="true" />
-                    <h:outputLabel value="#{msgs['sendingServiceParam.value']}:" />
+                    <h:outputLabel value="#{msgs['sendingAccountParam.value']}:" />
                     <c:if test="#{sendingAccountBean.serviceParam.sendingServiceParam.type == 'STRING'}">
                         <p:inputTextarea id="stringValue"
                                          value="#{sendingAccountBean.serviceParam.value}"
@@ -71,7 +71,7 @@
                                        maxlength="250"
                                        style="width: 97%" />
                     </c:if>
-                    <h:outputLabel value="#{msgs['sendingServiceParam.description']}:" />
+                    <h:outputLabel value="#{msgs['sendingAccountParam.description']}:" />
                     <p:inputTextarea id="description"
                                      value="#{sendingAccountBean.serviceParam.sendingServiceParam.description}"
                                      maxlength="250"

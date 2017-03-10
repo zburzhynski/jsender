@@ -9,13 +9,6 @@
 
     <ui:define name="content">
         <style type="text/css">
-            .name {
-                font-weight: bold;
-                width: 33%;
-            }
-            .val {
-                width: 67%;
-            }
             .cal .ui-inputfield {
                 width: 97%;
             }
@@ -24,8 +17,8 @@
             <h:form id="sendingAccountForm">
                 <p:focus />
                 <p:messages id="messages" />
-                <h:panelGrid columns="2" columnClasses="name, val" width="50%">
-                    <h:outputLabel value="#{msgs['sendingAccount.sendingService']}:" />
+                <h:panelGrid >
+                    <h:outputLabel value="#{msgs['sendingAccount.sendingService']}:" styleClass="b" />
                     <p:selectOneMenu id="sendingService"
                                      valueChangeListener="#{sendingAccountBean.sendingServiceChangeListener}"
                                      disabled="#{not empty sendingAccountBean.account.id}"
@@ -41,17 +34,17 @@
                     </p:selectOneMenu>
                 </h:panelGrid>
                 <h:panelGrid>
-                    <h:outputText value="#{msgs['sendingServiceParams.header']}" styleClass="b" />
+                    <h:outputText value="#{msgs['sendingAccountParams.header']}:" styleClass="b" />
                 </h:panelGrid>
                 <h:panelGrid>
                     <p:dataTable value="#{sendingAccountBean.account.accountParams}"
                              var="serviceParam"
-                             emptyMessage="#{msgs['sendingServiceParams.empty']}">
-                    <p:column headerText="#{msgs['sendingServiceParam.name']}"
+                             emptyMessage="#{msgs['sendingAccountParams.empty']}">
+                    <p:column headerText="#{msgs['sendingAccountParam.description']}"
                               style="width: 48%">
-                        <h:outputText value="#{serviceParam.sendingServiceParam.name}" />
+                        <h:outputText value="#{serviceParam.sendingServiceParam.description}" />
                     </p:column>
-                    <p:column headerText="#{msgs['sendingServiceParam.value']}"
+                    <p:column headerText="#{msgs['sendingAccountParam.value']}"
                               style="width: 48%">
                         <h:outputText value="#{serviceParam.value}" />
                     </p:column>
