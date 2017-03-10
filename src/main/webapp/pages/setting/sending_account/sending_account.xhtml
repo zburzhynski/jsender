@@ -27,13 +27,13 @@
                 <h:panelGrid columns="2" columnClasses="name, val" width="50%">
                     <h:outputLabel value="#{msgs['sendingAccount.sendingService']}:" />
                     <p:selectOneMenu id="sendingService"
-                                     required="true"
                                      valueChangeListener="#{sendingAccountBean.sendingServiceChangeListener}"
                                      disabled="#{not empty sendingAccountBean.account.id}"
                                      converter="entityConverter"
                                      value="#{sendingAccountBean.account.sendingService}"
                                      label="#{msgs['sendingAccount.sendingService']}"
                                      style="width: 100%">
+                        <p:ajax listener="#{sendingAccountBean.sendingServiceChangeListener}" update="@form"/>
                         <f:selectItem itemLabel="" noSelectionOption="true" />
                         <f:selectItems value="#{sendingServiceListBean.sendingServices}" var="service"
                                        itemValue="#{service}"
