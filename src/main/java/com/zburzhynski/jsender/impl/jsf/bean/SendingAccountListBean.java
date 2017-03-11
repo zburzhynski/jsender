@@ -5,6 +5,7 @@ import com.zburzhynski.jsender.api.domain.SendingType;
 import com.zburzhynski.jsender.api.service.ISendingAccountService;
 import com.zburzhynski.jsender.impl.domain.SendingAccount;
 
+import java.io.Serializable;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -19,12 +20,12 @@ import javax.faces.bean.SessionScoped;
  */
 @ManagedBean
 @SessionScoped
-public class SendingAccountListBean {
+public class SendingAccountListBean implements Serializable {
 
     private List<SendingAccount> serviceAccounts;
 
     @ManagedProperty(value = "#{sendingAccountService}")
-    private ISendingAccountService<String, SendingAccount> accountService;
+    private ISendingAccountService accountService;
 
     /**
      * Finds accounts by sending type.
@@ -39,10 +40,6 @@ public class SendingAccountListBean {
 
     public List<SendingAccount> getServiceAccounts() {
         return serviceAccounts;
-    }
-
-    public void setServiceAccounts(List<SendingAccount> serviceAccounts) {
-        this.serviceAccounts = serviceAccounts;
     }
 
     public void setAccountService(ISendingAccountService<String, SendingAccount> accountService) {

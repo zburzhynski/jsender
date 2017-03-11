@@ -10,7 +10,8 @@ package com.zburzhynski.jsender.api.domain;
 public enum SendingType {
 
     EMAIL("sendingType.email"),
-    SMS("sendingType.sms");
+    SMS("sendingType.sms"),
+    EMAIL_SMS("sendingType.emailSms");
 
     private String value;
 

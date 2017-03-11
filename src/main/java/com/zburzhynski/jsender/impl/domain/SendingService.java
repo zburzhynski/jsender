@@ -41,9 +41,6 @@ public class SendingService extends Domain {
     @Enumerated(value = EnumType.STRING)
     private SendingType sendingType;
 
-    @Column(name = "description")
-    private String description;
-
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "sending_service_id", nullable = false)
     private List<SendingServiceParam> serviceParams = new ArrayList<>();
@@ -62,14 +59,6 @@ public class SendingService extends Domain {
 
     public void setSendingType(SendingType sendingType) {
         this.sendingType = sendingType;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public List<SendingServiceParam> getServiceParams() {
@@ -98,7 +87,6 @@ public class SendingService extends Domain {
             .appendSuper(super.equals(o))
             .append(name, that.name)
             .append(sendingType, that.sendingType)
-            .append(description, that.description)
             .isEquals();
     }
 
@@ -111,7 +99,6 @@ public class SendingService extends Domain {
             .appendSuper(super.hashCode())
             .append(name)
             .append(sendingType)
-            .append(description)
             .toHashCode();
     }
 
@@ -124,7 +111,6 @@ public class SendingService extends Domain {
             .appendSuper(super.toString())
             .append("name", name)
             .append("sendingType", sendingType)
-            .append("description", description)
             .toString();
     }
 

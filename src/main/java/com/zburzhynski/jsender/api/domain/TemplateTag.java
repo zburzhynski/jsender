@@ -14,8 +14,8 @@ public enum TemplateTag {
     CLIENT_PATRONYMIC("templateTag.clientPatronymic"),
     CLIENT_FULL_NAME("templateTag.clientFullName"),
     ORGANIZATION_NAME("templateTag.organizationName"),
-    ORGANIZATION_MOBILE_PHONE_NUMBER("templateTag.organizationMobilePhoneNumber"),
-    ORGANIZATION_ADDRESS("templateTag.organizationAddress");
+    ORGANIZATION_ADDRESS("templateTag.organizationAddress"),
+    ORGANIZATION_MOBILE_PHONE_NUMBER("templateTag.organizationMobilePhoneNumber");
 
     private String value;
 

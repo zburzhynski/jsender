@@ -2,6 +2,9 @@ package com.zburzhynski.jsender.impl.jsf.bean;
 
 import com.zburzhynski.jsender.api.domain.SendingType;
 
+import java.io.Serializable;
+import java.util.EnumSet;
+import java.util.Set;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 
@@ -14,16 +17,15 @@ import javax.faces.bean.ViewScoped;
  */
 @ManagedBean
 @ViewScoped
-public class SendingTypeListBean {
-
+public class SendingTypeListBean implements Serializable {
 
     /**
      * Gets sending types.
      *
      * @return sending types
      */
-    public SendingType[] getSendingTypes() {
-        return SendingType.values();
+    public Set<SendingType> getSendingTypes() {
+        return EnumSet.of(SendingType.EMAIL, SendingType.SMS);
     }
 
 }
