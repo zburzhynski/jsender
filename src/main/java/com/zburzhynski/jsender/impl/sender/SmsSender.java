@@ -1,4 +1,4 @@
-package com.zburzhynski.jsender.impl.service;
+package com.zburzhynski.jsender.impl.sender;
 
 import static com.zburzhynski.jsender.api.domain.CommonConstant.COLON;
 import com.zburzhynski.jsender.api.domain.ClientSourceType;
@@ -7,15 +7,16 @@ import com.zburzhynski.jsender.api.domain.Settings;
 import com.zburzhynski.jsender.api.dto.Message;
 import com.zburzhynski.jsender.api.dto.Recipient;
 import com.zburzhynski.jsender.api.dto.SendingStatus;
-import com.zburzhynski.jsender.api.repository.ISentMessageRepository;
-import com.zburzhynski.jsender.api.repository.ISettingRepository;
-import com.zburzhynski.jsender.api.service.ISender;
+import com.zburzhynski.jsender.api.sender.ISender;
+import com.zburzhynski.jsender.api.service.ISentMessageService;
+import com.zburzhynski.jsender.api.service.ISettingService;
 import com.zburzhynski.jsender.impl.domain.SentMessage;
 import com.zburzhynski.jsender.impl.domain.Setting;
+import com.zburzhynski.jsender.impl.service.AbstractSender;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.InputStream;
@@ -34,8 +35,7 @@ import java.util.List;
  *
  * @author Nikita Shevtsov
  */
-@Service("smsSender")
-@Transactional(readOnly = true)
+@Component
 public class SmsSender extends AbstractSender implements ISender {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SmsSender.class);
@@ -47,10 +47,10 @@ public class SmsSender extends AbstractSender implements ISender {
     private static final Integer RESPONSE_ARRAY_SIZE = 1024;
 
     @Autowired
-    private ISentMessageRepository<String, SentMessage> sentMessageRepository;
+    private ISentMessageService sentMessageService;
 
     @Autowired
-    private ISettingRepository<String, Setting> settingRepository;
+    private ISettingService settingService;
 
     /**
      * Send sms.
@@ -62,8 +62,8 @@ public class SmsSender extends AbstractSender implements ISender {
     @Transactional(readOnly = false)
     public List<SendingStatus> send(Message message) {
         List<SendingStatus> response = new ArrayList<>();
-        String name = settingRepository.findByName(Settings.SMS_USER_NAME).getValue();
-        String password = settingRepository.findByName(Settings.SMS_PASSWORD).getValue();
+        String name = ((Setting) settingService.getByName(Settings.SMS_USER_NAME)).getValue();
+        String password = ((Setting) settingService.getByName(Settings.SMS_PASSWORD)).getValue();
         String authString = name + COLON + password;
         for (Recipient recipient : message.getRecipients()) {
             for (String phoneNumber : recipient.getPhones()) {
@@ -98,7 +98,7 @@ public class SmsSender extends AbstractSender implements ISender {
                 sentMessage.setText(message.getText());
                 sentMessage.setStatus(status.getDescription());
                 sentMessage.setSendingType(SendingType.SMS);
-                sentMessageRepository.saveOrUpdate(sentMessage);
+                sentMessageService.saveOrUpdate(sentMessage);
                 response.add(status);
             }
         }

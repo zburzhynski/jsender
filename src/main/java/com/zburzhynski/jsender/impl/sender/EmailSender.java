@@ -1,4 +1,4 @@
-package com.zburzhynski.jsender.impl.service;
+package com.zburzhynski.jsender.impl.sender;
 
 import static javax.mail.Message.RecipientType;
 import com.zburzhynski.jsender.api.domain.ClientSourceType;
@@ -7,17 +7,18 @@ import com.zburzhynski.jsender.api.domain.SendingType;
 import com.zburzhynski.jsender.api.dto.Message;
 import com.zburzhynski.jsender.api.dto.Recipient;
 import com.zburzhynski.jsender.api.dto.SendingStatus;
-import com.zburzhynski.jsender.api.repository.ISendingAccountRepository;
-import com.zburzhynski.jsender.api.repository.ISentMessageRepository;
-import com.zburzhynski.jsender.api.service.ISender;
+import com.zburzhynski.jsender.api.sender.ISender;
+import com.zburzhynski.jsender.api.service.ISendingAccountService;
+import com.zburzhynski.jsender.api.service.ISentMessageService;
 import com.zburzhynski.jsender.impl.domain.SendingAccount;
 import com.zburzhynski.jsender.impl.domain.SendingAccountParam;
 import com.zburzhynski.jsender.impl.domain.SentMessage;
+import com.zburzhynski.jsender.impl.service.AbstractSender;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
@@ -40,21 +41,18 @@ import javax.mail.internet.MimeMessage;
  *
  * @author Vladimir Zburzhynski
  */
-@Service("emailSender")
-@Transactional(readOnly = true)
+@Component
 public class EmailSender extends AbstractSender implements ISender {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(EmailSender.class);
 
     private static final String CONTENT_TYPE = "text/html;charset=UTF-8";
 
-    private Session session;
+    @Autowired
+    private ISentMessageService sentMessageService;
 
     @Autowired
-    private ISentMessageRepository sentMessageRepository;
-
-    @Autowired
-    private ISendingAccountRepository accountRepository;
+    private ISendingAccountService accountService;
 
     /**
      * Send email.
@@ -65,7 +63,7 @@ public class EmailSender extends AbstractSender implements ISender {
     @Override
     @Transactional(readOnly = false)
     public List<SendingStatus> send(Message email) {
-        buildSession(email);
+        Session session = buildSession(email);
         List<SendingStatus> response = new ArrayList<>();
         for (Recipient recipient : email.getRecipients()) {
             for (String address : recipient.getEmails()) {
@@ -96,15 +94,15 @@ public class EmailSender extends AbstractSender implements ISender {
                 sentMessage.setText(email.getText());
                 sentMessage.setStatus(status.getDescription());
                 sentMessage.setSendingType(SendingType.EMAIL);
-                sentMessageRepository.saveOrUpdate(sentMessage);
+                sentMessageService.saveOrUpdate(sentMessage);
                 response.add(status);
             }
         }
         return response;
     }
 
-    private void buildSession(Message email) {
-        SendingAccount account = (SendingAccount) accountRepository.findById(email.getSendingAccountId());
+    private Session buildSession(Message email) {
+        SendingAccount account = (SendingAccount) accountService.getById(email.getSendingAccountId());
         Map<Params, SendingAccountParam> map = new HashMap<>();
         for (SendingAccountParam param : account.getAccountParams()) {
             map.put(Params.valueOf(param.getParam().getName().toUpperCase()), param);
@@ -118,7 +116,7 @@ public class EmailSender extends AbstractSender implements ISender {
         props.put("mail.smtp.starttls.enable", "true");
         props.put("mail.smtp.host", smtpHost);
         props.put("mail.smtp.port", smtpPort);
-        session = Session.getInstance(props, new Authenticator() {
+        return Session.getInstance(props, new Authenticator() {
             protected PasswordAuthentication getPasswordAuthentication() {
                 return new PasswordAuthentication(userName, password);
             }

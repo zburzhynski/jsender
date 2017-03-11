@@ -1,4 +1,4 @@
-package com.zburzhynski.jsender.api.service;
+package com.zburzhynski.jsender.api.sender;
 
 import com.zburzhynski.jsender.api.dto.Message;
 import com.zburzhynski.jsender.api.dto.SendingStatus;
