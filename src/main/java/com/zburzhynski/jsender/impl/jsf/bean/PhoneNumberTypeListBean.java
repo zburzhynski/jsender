@@ -2,6 +2,7 @@ package com.zburzhynski.jsender.impl.jsf.bean;
 
 import com.zburzhynski.jsender.api.domain.PhoneNumberType;
 
+import java.io.Serializable;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 
@@ -14,7 +15,7 @@ import javax.faces.bean.ViewScoped;
  */
 @ManagedBean
 @ViewScoped
-public class PhoneNumberTypeListBean {
+public class PhoneNumberTypeListBean implements Serializable {
 
     /**
      * Gets phone number types.

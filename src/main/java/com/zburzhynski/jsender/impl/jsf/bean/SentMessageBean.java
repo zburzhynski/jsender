@@ -30,7 +30,7 @@ public class SentMessageBean {
     private LazyDataModel<SentMessage> sentMessageModel;
 
     @ManagedProperty(value = "#{sentMessageService}")
-    private ISentMessageService<String, SentMessage> sentMessageService;
+    private ISentMessageService sentMessageService;
 
     @ManagedProperty(value = "#{settingBean}")
     private SettingBean settingBean;
@@ -93,7 +93,7 @@ public class SentMessageBean {
         this.sentMessageModel = sentMessageModel;
     }
 
-    public void setSentMessageService(ISentMessageService<String, SentMessage> sentMessageService) {
+    public void setSentMessageService(ISentMessageService sentMessageService) {
         this.sentMessageService = sentMessageService;
     }
 

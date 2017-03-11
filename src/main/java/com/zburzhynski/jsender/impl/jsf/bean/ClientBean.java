@@ -74,7 +74,7 @@ public class ClientBean implements Serializable {
     private ClientSelectValidator clientSelectValidator;
 
     @ManagedProperty(value = "#{clientService}")
-    private IClientService<String, Client> clientService;
+    private IClientService clientService;
 
     @ManagedProperty(value = "#{settingBean}")
     private SettingBean settingBean;
@@ -105,7 +105,7 @@ public class ClientBean implements Serializable {
      * @return path for navigating
      */
     public String editClient(String id) {
-        client = clientService.getById(id);
+        client = (Client) clientService.getById(id);
         return CLIENT.getPath();
     }
 
@@ -359,7 +359,7 @@ public class ClientBean implements Serializable {
         this.clientSelectValidator = clientSelectValidator;
     }
 
-    public void setClientService(IClientService<String, Client> clientService) {
+    public void setClientService(IClientService clientService) {
         this.clientService = clientService;
     }
 
@@ -372,7 +372,7 @@ public class ClientBean implements Serializable {
             SendingBean sendingBean = BeanUtils.getSessionBean(SENDING_BEAN);
             if (sendingBean != null) {
                 for (Client object : selectedClients) {
-                    object = clientService.getById(object.getId());
+                    object = (Client) clientService.getById(object.getId());
                     if (!sendingBean.getRecipients().contains(object)) {
                         sendingBean.getRecipients().add(object);
                     }

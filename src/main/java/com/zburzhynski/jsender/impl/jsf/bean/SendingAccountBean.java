@@ -15,6 +15,7 @@ import org.apache.commons.lang3.SerializationUtils;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.PostConstruct;
@@ -31,7 +32,7 @@ import javax.faces.bean.SessionScoped;
  */
 @ManagedBean
 @SessionScoped
-public class SendingAccountBean {
+public class SendingAccountBean implements Serializable {
 
     private SendingAccount account;
 
@@ -42,10 +43,10 @@ public class SendingAccountBean {
     private LazyDataModel<SendingAccount> accountModel;
 
     @ManagedProperty(value = "#{sendingAccountService}")
-    private ISendingAccountService<String, SendingAccount> accountService;
+    private ISendingAccountService accountService;
 
     @ManagedProperty(value = "#{sendingServiceService}")
-    private ISendingServiceService<String, SendingService> sendingServiceService;
+    private ISendingServiceService sendingServiceService;
 
     @ManagedProperty(value = "#{sendingAccountValidator}")
     private SendingAccountValidator sendingAccountValidator;
@@ -88,7 +89,7 @@ public class SendingAccountBean {
      * @return path for navigating
      */
     public String editAccount(String id) {
-        account = accountService.getById(id);
+        account = (SendingAccount) accountService.getById(id);
         return SENDING_ACCOUNT.getPath();
     }
 
@@ -143,7 +144,8 @@ public class SendingAccountBean {
     public void sendingServiceChangeListener() {
         if (account.getSendingService() != null) {
             account.getAccountParams().clear();
-            account.setSendingService(sendingServiceService.getById(account.getSendingService().getId()));
+            account.setSendingService((SendingService) sendingServiceService.getById(account
+                .getSendingService().getId()));
             for (SendingServiceParam sendingServiceParam : account.getSendingService().getServiceParams()) {
                 SendingAccountParam sendingAccountParam = new SendingAccountParam();
                 sendingAccountParam.setParam(sendingServiceParam.getParam());
@@ -181,11 +183,11 @@ public class SendingAccountBean {
         this.accountModel = accountModel;
     }
 
-    public void setAccountService(ISendingAccountService<String, SendingAccount> accountService) {
+    public void setAccountService(ISendingAccountService accountService) {
         this.accountService = accountService;
     }
 
-    public void setSendingServiceService(ISendingServiceService<String, SendingService> sendingServiceService) {
+    public void setSendingServiceService(ISendingServiceService sendingServiceService) {
         this.sendingServiceService = sendingServiceService;
     }
 

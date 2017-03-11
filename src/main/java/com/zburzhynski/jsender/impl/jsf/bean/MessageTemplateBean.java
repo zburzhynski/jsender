@@ -53,7 +53,7 @@ public class MessageTemplateBean {
     private MessageTemplateSelectValidator templateSelectValidator;
 
     @ManagedProperty(value = "#{messageTemplateService}")
-    private IMessageTemplateService<String, MessageTemplate> messageTemplateService;
+    private IMessageTemplateService messageTemplateService;
 
     @ManagedProperty(value = "#{settingBean}")
     private SettingBean settingBean;
@@ -173,7 +173,7 @@ public class MessageTemplateBean {
         this.templateSelectValidator = templateSelectValidator;
     }
 
-    public void setMessageTemplateService(IMessageTemplateService<String, MessageTemplate> messageTemplateService) {
+    public void setMessageTemplateService(IMessageTemplateService messageTemplateService) {
         this.messageTemplateService = messageTemplateService;
     }
 
