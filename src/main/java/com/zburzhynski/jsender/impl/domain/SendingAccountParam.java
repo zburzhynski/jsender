@@ -22,7 +22,7 @@ import javax.persistence.Table;
 @Table(name = "sending_account_param")
 public class SendingAccountParam extends Domain {
 
-    public static final String P_SENDING_SERVICE_PARAM = "sendingServiceParam";
+    public static final String P_PARAM = "param";
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "param_id")

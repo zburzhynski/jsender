@@ -326,7 +326,7 @@ databaseChangeLog {
         insert(schemaName: 'jsender', tableName: 'param') {
             column(name: 'id', value: '5c2c2cbe-c3d3-4161-8daf-c13c6da2b849')
             column(name: 'name', value: 'mail_smtp_port')
-            column(name: 'type', value: 'STRING')
+            column(name: 'type', value: 'INTEGER')
             column(name: 'description', value: 'Порт SMTP')
         }
         insert(schemaName: 'jsender', tableName: 'param') {
