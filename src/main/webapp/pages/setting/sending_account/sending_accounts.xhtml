@@ -14,11 +14,11 @@
                      rowKey="#{account.id}"
                      emptyMessage="#{msgs['sendingAccounts.empty']}"
                      rows="#{sendingAccountBean.rowCount}">
-            <p:column headerText="#{msgs['sendingAccount.serviceName']}" width="47%">
-                <h:outputText value="#{account.sendingService.name}" />
+            <p:column headerText="#{msgs['sendingAccount.name']}" width="47%">
+                <h:outputText value="#{account.name}" />
             </p:column>
-            <p:column headerText="#{msgs['sendingAccount.serviceType']}" width="47%">
-                <h:outputText value="#{msgs[account.sendingService.sendingType.value]}" />
+            <p:column headerText="#{msgs['sendingAccount.description']}" width="47%">
+                <h:outputText value="#{account.description}" />
             </p:column>
             <p:column width="6%">
                 <h:panelGroup>
