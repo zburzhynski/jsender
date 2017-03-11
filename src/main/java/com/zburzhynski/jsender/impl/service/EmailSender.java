@@ -2,16 +2,17 @@ package com.zburzhynski.jsender.impl.service;
 
 import static javax.mail.Message.RecipientType;
 import com.zburzhynski.jsender.api.domain.ClientSourceType;
+import com.zburzhynski.jsender.api.domain.Params;
 import com.zburzhynski.jsender.api.domain.SendingType;
-import com.zburzhynski.jsender.api.domain.Settings;
 import com.zburzhynski.jsender.api.dto.Message;
 import com.zburzhynski.jsender.api.dto.Recipient;
 import com.zburzhynski.jsender.api.dto.SendingStatus;
+import com.zburzhynski.jsender.api.repository.ISendingAccountRepository;
 import com.zburzhynski.jsender.api.repository.ISentMessageRepository;
-import com.zburzhynski.jsender.api.repository.ISettingRepository;
 import com.zburzhynski.jsender.api.service.ISender;
+import com.zburzhynski.jsender.impl.domain.SendingAccount;
+import com.zburzhynski.jsender.impl.domain.SendingAccountParam;
 import com.zburzhynski.jsender.impl.domain.SentMessage;
-import com.zburzhynski.jsender.impl.domain.Setting;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,7 +22,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
@@ -47,10 +50,10 @@ public class EmailSender extends AbstractSender implements ISender {
     private Session session;
 
     @Autowired
-    private ISentMessageRepository<String, SentMessage> sentMessageRepository;
+    private ISentMessageRepository sentMessageRepository;
 
     @Autowired
-    private ISettingRepository<String, Setting> settingRepository;
+    private ISendingAccountRepository accountRepository;
 
     /**
      * Send email.
@@ -61,7 +64,7 @@ public class EmailSender extends AbstractSender implements ISender {
     @Override
     @Transactional(readOnly = false)
     public List<SendingStatus> send(Message email) {
-        buildSession();
+        buildSession(email);
         List<SendingStatus> response = new ArrayList<>();
         for (Recipient recipient : email.getRecipients()) {
             for (String address : recipient.getEmails()) {
@@ -99,11 +102,16 @@ public class EmailSender extends AbstractSender implements ISender {
         return response;
     }
 
-    private void buildSession() {
-        String smtpHost = settingRepository.findByName(Settings.MAIL_SMTP_HOST).getValue();
-        String smtpPort = settingRepository.findByName(Settings.MAIL_SMTP_PORT).getValue();
-        final String userName = settingRepository.findByName(Settings.MAIL_USER_NAME).getValue();
-        final String password = settingRepository.findByName(Settings.MAIL_PASSWORD).getValue();
+    private void buildSession(Message email) {
+        SendingAccount account = (SendingAccount) accountRepository.findById(email.getSendingAccountId());
+        Map<Params, SendingAccountParam> map = new HashMap<>();
+        for (SendingAccountParam param : account.getAccountParams()) {
+            map.put(Params.valueOf(param.getParam().getName().toUpperCase()), param);
+        }
+        String smtpHost = map.get(Params.MAIL_SMTP_HOST).getValue();
+        String smtpPort = map.get(Params.MAIL_SMTP_PORT).getValue();
+        final String userName = map.get(Params.USER_NAME).getValue();
+        final String password = map.get(Params.USER_PASSWORD).getValue();
         Properties props = new Properties();
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.starttls.enable", "true");
