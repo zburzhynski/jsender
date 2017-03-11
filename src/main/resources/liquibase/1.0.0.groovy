@@ -194,22 +194,6 @@ databaseChangeLog {
     }
 
     changeSet(id: '2017-03-11-10', author: 'Vladimir Zburzhynski <zburzhynski@gmail.com>') {
-        createTable(schemaName: 'jsender', tableName: 'sending_service', tablespace: 'jsender_data', remarks: 'Sending service') {
-            column(name: 'id', type: 'VARCHAR(128)', remarks: 'The unique identifier of sending service') {
-                constraints(nullable: false)
-            }
-            column(name: 'name', type: 'VARCHAR(100)', remarks: 'The sending service name') {
-                constraints(nullable: false)
-            }
-            column(name: 'sending_type', type: 'VARCHAR(10)', remarks: 'Service sending type') {
-                constraints(nullable: false)
-            }
-        }
-        addPrimaryKey(schemaName: 'jsender', tableName: 'sending_service', tablespace: 'jsender_index',
-                columnNames: 'id', constraintName: 'PK_sending_service')
-    }
-
-    changeSet(id: '2017-03-11-11', author: 'Vladimir Zburzhynski <zburzhynski@gmail.com>') {
         createTable(schemaName: 'jsender', tableName: 'param', tablespace: 'jsender_data', remarks: 'Param') {
             column(name: 'id', type: 'VARCHAR(128)', remarks: 'The unique identifier of param') {
                 constraints(nullable: false)
@@ -226,6 +210,22 @@ databaseChangeLog {
         }
         addPrimaryKey(schemaName: 'jsender', tableName: 'param', tablespace: 'jsender_index',
                 columnNames: 'id', constraintName: 'PK_param')
+    }
+
+    changeSet(id: '2017-03-11-11', author: 'Vladimir Zburzhynski <zburzhynski@gmail.com>') {
+        createTable(schemaName: 'jsender', tableName: 'sending_service', tablespace: 'jsender_data', remarks: 'Sending service') {
+            column(name: 'id', type: 'VARCHAR(128)', remarks: 'The unique identifier of sending service') {
+                constraints(nullable: false)
+            }
+            column(name: 'name', type: 'VARCHAR(100)', remarks: 'The sending service name') {
+                constraints(nullable: false)
+            }
+            column(name: 'sending_type', type: 'VARCHAR(10)', remarks: 'Service sending type') {
+                constraints(nullable: false)
+            }
+        }
+        addPrimaryKey(schemaName: 'jsender', tableName: 'sending_service', tablespace: 'jsender_index',
+                columnNames: 'id', constraintName: 'PK_sending_service')
     }
 
     changeSet(id: '2017-03-11-12', author: 'Nikita Shevtsov <shevtsou@gmail.com>') {
@@ -316,44 +316,62 @@ databaseChangeLog {
                 referencedTableSchemaName: 'jsender', referencedTableName: 'param', referencedColumnNames: 'id')
     }
 
-//    changeSet(id: '2017-02-04-14', author: 'Nikita Shevtsov <shevtsou@gmail.com>') {
-//        comment("Insert gmail.com account")
-//        insert(schemaName: 'jsender', tableName: 'sending_service') {
-//            column(name: 'id', value: '06967298-6360-4d8f-af5f-a20d58dd4414')
-//            column(name: 'name', value: 'gmail.com')
-//            column(name: 'sending_type', value: 'EMAIL')
-//            column(name: 'description', value: 'Рассылка электронной почты')
-//        }
-//        insert(schemaName: 'jsender', tableName: 'sending_service_param') {
-//            column(name: 'id', value: 'a039ad9b-4a0a-4622-a549-ce355c45cea1')
-//            column(name: 'sending_service_id', value: '06967298-6360-4d8f-af5f-a20d58dd4414')
-//            column(name: 'name', value: 'mail_smtp_host')
-//            column(name: 'type', value: 'STRING')
-//            column(name: 'value', value: 'smtp.gmail.com')
-//            column(name: 'description', value: 'Сервер SMTP')
-//        }
-//        insert(schemaName: 'jsender', tableName: 'sending_service_param') {
-//            column(name: 'id', value: '5c2c2cbe-c3d3-4161-8daf-c13c6da2b849')
-//            column(name: 'sending_service_id', value: '06967298-6360-4d8f-af5f-a20d58dd4414')
-//            column(name: 'name', value: 'mail_smtp_port')
-//            column(name: 'type', value: 'STRING')
-//            column(name: 'value', value: '587')
-//            column(name: 'description', value: 'Порт SMTP')
-//        }
-//        insert(schemaName: 'jsender', tableName: 'sending_service_param') {
-//            column(name: 'id', value: '2e995ca7-3bce-4705-85ac-822c6fbd317e')
-//            column(name: 'sending_service_id', value: '06967298-6360-4d8f-af5f-a20d58dd4414')
-//            column(name: 'name', value: 'mail_user_name')
-//            column(name: 'type', value: 'STRING')
-//            column(name: 'description', value: 'Имя пользователя')
-//        }
-//        insert(schemaName: 'jsender', tableName: 'sending_service_param') {
-//            column(name: 'id', value: '0112434e-3885-4d13-9d6e-14706195fba3')
-//            column(name: 'sending_service_id', value: '06967298-6360-4d8f-af5f-a20d58dd4414')
-//            column(name: 'name', value: 'mail_password')
-//            column(name: 'type', value: 'PASSWORD')
-//            column(name: 'description', value: 'Пароль')
-//        }
-//    }
+    changeSet(id: '2017-02-04-20', author: 'Nikita Shevtsov <shevtsou@gmail.com>') {
+        insert(schemaName: 'jsender', tableName: 'param') {
+            column(name: 'id', value: 'a039ad9b-4a0a-4622-a549-ce355c45cea1')
+            column(name: 'name', value: 'mail_smtp_host')
+            column(name: 'type', value: 'STRING')
+            column(name: 'description', value: 'Сервер SMTP')
+        }
+        insert(schemaName: 'jsender', tableName: 'param') {
+            column(name: 'id', value: '5c2c2cbe-c3d3-4161-8daf-c13c6da2b849')
+            column(name: 'name', value: 'mail_smtp_port')
+            column(name: 'type', value: 'STRING')
+            column(name: 'description', value: 'Порт SMTP')
+        }
+        insert(schemaName: 'jsender', tableName: 'param') {
+            column(name: 'id', value: '2e995ca7-3bce-4705-85ac-822c6fbd317e')
+            column(name: 'name', value: 'user_name')
+            column(name: 'type', value: 'STRING')
+            column(name: 'description', value: 'Имя пользователя')
+        }
+        insert(schemaName: 'jsender', tableName: 'param') {
+            column(name: 'id', value: '0112434e-3885-4d13-9d6e-14706195fba3')
+            column(name: 'name', value: 'user_password')
+            column(name: 'type', value: 'PASSWORD')
+            column(name: 'description', value: 'Пароль')
+        }
+    }
+
+    changeSet(id: '2017-02-04-21', author: 'Nikita Shevtsov <shevtsou@gmail.com>') {
+        comment("Insert gmail.com account")
+        insert(schemaName: 'jsender', tableName: 'sending_service') {
+            column(name: 'id', value: '06967298-6360-4d8f-af5f-a20d58dd4414')
+            column(name: 'name', value: 'gmail.com')
+            column(name: 'sending_type', value: 'EMAIL')
+        }
+        insert(schemaName: 'jsender', tableName: 'sending_service_param') {
+            column(name: 'id', value: '0843e81b-bc29-4ff9-8e7f-949df4b20a99')
+            column(name: 'sending_service_id', value: '06967298-6360-4d8f-af5f-a20d58dd4414')
+            column(name: 'param_id', value: 'a039ad9b-4a0a-4622-a549-ce355c45cea1')
+            column(name: 'value', value: 'smtp.gmail.com')
+        }
+        insert(schemaName: 'jsender', tableName: 'sending_service_param') {
+            column(name: 'id', value: '60a7e314-1e73-4b80-8869-cf32cd2835c1')
+            column(name: 'sending_service_id', value: '06967298-6360-4d8f-af5f-a20d58dd4414')
+            column(name: 'param_id', value: '5c2c2cbe-c3d3-4161-8daf-c13c6da2b849')
+            column(name: 'value', value: '587')
+        }
+        insert(schemaName: 'jsender', tableName: 'sending_service_param') {
+            column(name: 'id', value: 'd63ea4f9-a9ee-4a1c-a4d7-ced387194c22')
+            column(name: 'sending_service_id', value: '06967298-6360-4d8f-af5f-a20d58dd4414')
+            column(name: 'param_id', value: '2e995ca7-3bce-4705-85ac-822c6fbd317e')
+        }
+        insert(schemaName: 'jsender', tableName: 'sending_service_param') {
+            column(name: 'id', value: 'acc18b72-cf5e-4525-acee-32bf1d75abbb')
+            column(name: 'sending_service_id', value: '06967298-6360-4d8f-af5f-a20d58dd4414')
+            column(name: 'param_id', value: '0112434e-3885-4d13-9d6e-14706195fba3')
+        }
+    }
 
 }
