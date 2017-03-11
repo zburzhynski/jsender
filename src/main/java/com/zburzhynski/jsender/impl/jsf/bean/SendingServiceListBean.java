@@ -3,6 +3,7 @@ package com.zburzhynski.jsender.impl.jsf.bean;
 import com.zburzhynski.jsender.api.service.ISendingServiceService;
 import com.zburzhynski.jsender.impl.domain.SendingService;
 
+import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -18,12 +19,12 @@ import javax.faces.bean.ViewScoped;
  */
 @ManagedBean
 @ViewScoped
-public class SendingServiceListBean {
+public class SendingServiceListBean implements Serializable {
 
     private List<SendingService> sendingServices;
 
     @ManagedProperty(value = "#{sendingServiceService}")
-    private ISendingServiceService<String, SendingService> sendingServiceService;
+    private ISendingServiceService sendingServiceService;
 
     /**
      * Inits state bean.
@@ -42,7 +43,7 @@ public class SendingServiceListBean {
         return sendingServices;
     }
 
-    public void setSendingServiceService(ISendingServiceService<String, SendingService> sendingServiceService) {
+    public void setSendingServiceService(ISendingServiceService sendingServiceService) {
         this.sendingServiceService = sendingServiceService;
     }
 

@@ -141,8 +141,8 @@ public class SendingAccountBean {
      * Sending service change listener.
      */
     public void sendingServiceChangeListener() {
-        account.getAccountParams().clear();
         if (account.getSendingService() != null) {
+            account.getAccountParams().clear();
             account.setSendingService(sendingServiceService.getById(account.getSendingService().getId()));
             for (SendingServiceParam sendingServiceParam : account.getSendingService().getServiceParams()) {
                 SendingAccountParam sendingAccountParam = new SendingAccountParam();
