@@ -26,6 +26,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import javax.mail.Authenticator;
 import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Transport;
@@ -117,7 +118,7 @@ public class EmailSender extends AbstractSender implements ISender {
         props.put("mail.smtp.starttls.enable", "true");
         props.put("mail.smtp.host", smtpHost);
         props.put("mail.smtp.port", smtpPort);
-        session = Session.getDefaultInstance(props, new javax.mail.Authenticator() {
+        session = Session.getInstance(props, new Authenticator() {
             protected PasswordAuthentication getPasswordAuthentication() {
                 return new PasswordAuthentication(userName, password);
             }
