@@ -2,8 +2,10 @@ package com.zburzhynski.jsender.api.dto;
 
 import static com.zburzhynski.jsender.api.domain.CommonConstant.SPACE;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.zburzhynski.jsender.api.domain.RecipientSourceType;
+
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 /**
  * Recipient.
@@ -22,9 +24,11 @@ public class Recipient {
 
     private String patronymic;
 
-    private List<String> phones;
+    private RecipientSourceType recipientSource;
 
-    private List<String> emails;
+    private Set<String> phones;
+
+    private Set<String> emails;
 
     /**
      * Adds phone number.
@@ -103,19 +107,27 @@ public class Recipient {
         this.patronymic = patronymic;
     }
 
+    public RecipientSourceType getRecipientSource() {
+        return recipientSource;
+    }
+
+    public void setRecipientSource(RecipientSourceType recipientSource) {
+        this.recipientSource = recipientSource;
+    }
+
     /**
      * Gets phone numbers.
      *
      * @return phone numbers
      */
-    public List<String> getPhones() {
+    public Set<String> getPhones() {
         if (phones == null) {
-            phones = new ArrayList<>();
+            phones = new LinkedHashSet<>();
         }
         return phones;
     }
 
-    public void setPhones(List<String> phones) {
+    public void setPhones(Set<String> phones) {
         this.phones = phones;
     }
 
@@ -124,14 +136,14 @@ public class Recipient {
      *
      * @return mail addresses
      */
-    public List<String> getEmails() {
+    public Set<String> getEmails() {
         if (emails == null) {
-            emails = new ArrayList<>();
+            emails = new LinkedHashSet<>();
         }
         return emails;
     }
 
-    public void setEmails(List<String> emails) {
+    public void setEmails(Set<String> emails) {
         this.emails = emails;
     }
 

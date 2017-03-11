@@ -1,7 +1,6 @@
 package com.zburzhynski.jsender.impl.sender;
 
 import static com.zburzhynski.jsender.api.domain.CommonConstant.COLON;
-import com.zburzhynski.jsender.api.domain.ClientSourceType;
 import com.zburzhynski.jsender.api.domain.SendingType;
 import com.zburzhynski.jsender.api.domain.Settings;
 import com.zburzhynski.jsender.api.dto.Message;
@@ -17,7 +16,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -59,7 +57,6 @@ public class SmsSender extends AbstractSender implements ISender {
      * @return sending response
      */
     @Override
-    @Transactional(readOnly = false)
     public List<SendingStatus> send(Message message) {
         List<SendingStatus> response = new ArrayList<>();
         String name = ((Setting) settingService.getByName(Settings.SMS_USER_NAME)).getValue();
@@ -86,17 +83,17 @@ public class SmsSender extends AbstractSender implements ISender {
                     }
                     status.setDescription("SMS sent successfully");
                 } catch (Exception ex) {
-                     status.setDescription(ex.getClass().getName());
+                    status.setDescription(ex.getClass().getName());
                     LOGGER.error("Error sending sms", ex);
                 }
                 SentMessage sentMessage = new SentMessage();
                 sentMessage.setSentDate(new Date());
-                sentMessage.setClientId(recipient.getId());
-                sentMessage.setClientSource(ClientSourceType.JSENDER);
+                sentMessage.setRecipientId(recipient.getId());
+                sentMessage.setRecipientSource(recipient.getRecipientSource());
+                sentMessage.setRecipientFullName(recipient.getFullName());
                 sentMessage.setContactInfo(phoneNumber);
                 sentMessage.setSubject(message.getSubject());
                 sentMessage.setText(message.getText());
-                sentMessage.setStatus(status.getDescription());
                 sentMessage.setSendingType(SendingType.SMS);
                 sentMessageService.saveOrUpdate(sentMessage);
                 response.add(status);

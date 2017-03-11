@@ -1,13 +1,13 @@
 package com.zburzhynski.jsender.api.domain;
 
 /**
- * Represents client source type.
+ * Represents recipient source type.
  * <p/>
  * Date: 27.02.2017
  *
  * @author Nikita Shevtsou
  */
-public enum ClientSourceType {
+public enum RecipientSourceType {
 
     JDENT,
     JSENDER

@@ -4,6 +4,7 @@ import static com.zburzhynski.jsender.api.domain.View.RECIPIENTS;
 import static com.zburzhynski.jsender.api.domain.View.SENDING;
 import static org.apache.commons.collections.CollectionUtils.isEmpty;
 import com.zburzhynski.jsender.api.domain.PhoneNumberType;
+import com.zburzhynski.jsender.api.domain.RecipientSourceType;
 import com.zburzhynski.jsender.api.domain.View;
 import com.zburzhynski.jsender.api.dto.Recipient;
 import com.zburzhynski.jsender.api.rest.client.IPatientRestClient;
@@ -179,6 +180,7 @@ public class RecipientBean implements Serializable {
                     recipient.setSurname(selected.getSurname());
                     recipient.setName(selected.getName());
                     recipient.setPatronymic(selected.getPatronymic());
+                    recipient.setRecipientSource(RecipientSourceType.JDENT);
                     for (ContactInfoPhoneDto phone : contactInfo.getPhones()) {
                         recipient.addPhone(phone.getFullNumber());
                     }

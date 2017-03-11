@@ -3,7 +3,7 @@ package com.zburzhynski.jsender.impl.service;
 import com.zburzhynski.jsender.api.domain.Settings;
 import com.zburzhynski.jsender.api.domain.TemplateTag;
 import com.zburzhynski.jsender.api.dto.Recipient;
-import com.zburzhynski.jsender.api.repository.ISettingRepository;
+import com.zburzhynski.jsender.api.service.ISettingService;
 import com.zburzhynski.jsender.impl.domain.Setting;
 import com.zburzhynski.jsender.impl.util.PropertyReader;
 import org.apache.commons.lang.StringUtils;
@@ -22,7 +22,7 @@ public abstract class AbstractSender {
     private PropertyReader propertyReader;
 
     @Autowired
-    private ISettingRepository<String, Setting> settingRepository;
+    private ISettingService<String, Setting> settingService;
 
     /**
      * Prepares message text.
@@ -37,12 +37,12 @@ public abstract class AbstractSender {
         text = replaceTag(TemplateTag.CLIENT_NAME, text, recipient.getName());
         text = replaceTag(TemplateTag.CLIENT_PATRONYMIC, text, recipient.getPatronymic());
         text = replaceTag(TemplateTag.CLIENT_FULL_NAME, text, recipient.getFullName());
-        String organizationName = settingRepository.findByName(Settings.ORGANIZATION_NAME).getValue();
+        String organizationName = settingService.getByName(Settings.ORGANIZATION_NAME).getValue();
         text = replaceTag(TemplateTag.ORGANIZATION_NAME, text, organizationName);
-        String organizationMobilePhoneNumber = settingRepository.findByName(
+        String organizationMobilePhoneNumber = settingService.getByName(
             Settings.ORGANIZATION_MOBILE_PHONE_NUMBER).getValue();
         text = replaceTag(TemplateTag.ORGANIZATION_MOBILE_PHONE_NUMBER, text, organizationMobilePhoneNumber);
-        String organizationAddress = settingRepository.findByName(Settings.ORGANIZATION_ADDRESS).getValue();
+        String organizationAddress = settingService.getByName(Settings.ORGANIZATION_ADDRESS).getValue();
         text = replaceTag(TemplateTag.ORGANIZATION_ADDRESS, text, organizationAddress);
         return text;
     }

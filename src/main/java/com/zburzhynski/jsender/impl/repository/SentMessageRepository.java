@@ -1,6 +1,5 @@
 package com.zburzhynski.jsender.impl.repository;
 
-import static com.zburzhynski.jsender.impl.domain.SentMessage.P_CLIENT;
 import com.zburzhynski.jsender.api.criteria.SentMessageSearchCriteria;
 import com.zburzhynski.jsender.api.repository.ISentMessageRepository;
 import com.zburzhynski.jsender.impl.domain.SentMessage;
@@ -30,7 +29,6 @@ public class SentMessageRepository extends AbstractBaseRepository<String, SentMe
     @Override
     public List<SentMessage> findByCriteria(SentMessageSearchCriteria searchCriteria) {
         Criteria criteria = getSession().createCriteria(getDomainClass());
-        criteria.createAlias(P_CLIENT, P_CLIENT);
         CriteriaHelper.addPagination(criteria, searchCriteria.getStart(), searchCriteria.getEnd());
         return criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();
     }

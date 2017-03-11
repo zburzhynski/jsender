@@ -1,6 +1,6 @@
 package com.zburzhynski.jsender.impl.domain;
 
-import com.zburzhynski.jsender.api.domain.ClientSourceType;
+import com.zburzhynski.jsender.api.domain.RecipientSourceType;
 import com.zburzhynski.jsender.api.domain.SendingType;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -11,9 +11,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 /**
@@ -27,8 +24,6 @@ import javax.persistence.Table;
 @Table(name = "sent_message")
 public class SentMessage extends Domain {
 
-    public static final String P_CLIENT = "client";
-
     @Column(name = "sent_date")
     private Date sentDate = new Date();
 
@@ -36,16 +31,15 @@ public class SentMessage extends Domain {
     @Enumerated(value = EnumType.STRING)
     private SendingType sendingType;
 
-    @Column(name = "client_id")
-    private String clientId;
+    @Column(name = "recipient_id")
+    private String recipientId;
 
-    @Column(name = "client_source")
+    @Column(name = "recipient_source")
     @Enumerated(value = EnumType.STRING)
-    private ClientSourceType clientSource;
+    private RecipientSourceType recipientSource;
 
-    @ManyToOne(fetch = FetchType.LAZY, targetEntity = Client.class)
-    @JoinColumn(name = "client_id", insertable = false, updatable = false)
-    private Client client;
+    @Column(name = "recipient_fullname")
+    private String recipientFullName;
 
     @Column(name = "contact_info")
     private String contactInfo;
@@ -55,9 +49,6 @@ public class SentMessage extends Domain {
 
     @Column(name = "text")
     private String text;
-
-    @Column(name = "status")
-    private String status;
 
     public Date getSentDate() {
         return sentDate;
@@ -75,28 +66,28 @@ public class SentMessage extends Domain {
         this.sendingType = sendingType;
     }
 
-    public String getClientId() {
-        return clientId;
+    public String getRecipientId() {
+        return recipientId;
     }
 
-    public void setClientId(String clientId) {
-        this.clientId = clientId;
+    public void setRecipientId(String recipientId) {
+        this.recipientId = recipientId;
     }
 
-    public ClientSourceType getClientSource() {
-        return clientSource;
+    public RecipientSourceType getRecipientSource() {
+        return recipientSource;
     }
 
-    public void setClientSource(ClientSourceType clientSource) {
-        this.clientSource = clientSource;
+    public void setRecipientSource(RecipientSourceType recipientSource) {
+        this.recipientSource = recipientSource;
     }
 
-    public Client getClient() {
-        return client;
+    public String getRecipientFullName() {
+        return recipientFullName;
     }
 
-    public void setClient(Client client) {
-        this.client = client;
+    public void setRecipientFullName(String recipientFullName) {
+        this.recipientFullName = recipientFullName;
     }
 
     public String getContactInfo() {
@@ -123,14 +114,6 @@ public class SentMessage extends Domain {
         this.text = text;
     }
 
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
     /**
      * {@inheritDoc}
      */
@@ -149,12 +132,12 @@ public class SentMessage extends Domain {
             .appendSuper(super.equals(o))
             .append(sentDate, that.sentDate)
             .append(sendingType, that.sendingType)
-            .append(clientId, that.clientId)
-            .append(clientSource, that.clientSource)
+            .append(recipientId, that.recipientId)
+            .append(recipientSource, that.recipientSource)
+            .append(recipientFullName, that.recipientFullName)
             .append(contactInfo, that.contactInfo)
             .append(subject, that.subject)
             .append(text, that.text)
-            .append(status, that.status)
             .isEquals();
     }
 
@@ -167,12 +150,12 @@ public class SentMessage extends Domain {
             .appendSuper(super.hashCode())
             .append(sentDate)
             .append(sendingType)
-            .append(clientId)
-            .append(clientSource)
+            .append(recipientId)
+            .append(recipientSource)
+            .append(recipientFullName)
             .append(contactInfo)
             .append(subject)
             .append(text)
-            .append(status)
             .toHashCode();
     }
 
@@ -185,12 +168,12 @@ public class SentMessage extends Domain {
             .appendSuper(super.toString())
             .append("sentDate", sentDate)
             .append("sendingType", sendingType)
-            .append("clientId", clientId)
-            .append("clientSource", clientSource)
+            .append("recipientId", recipientId)
+            .append("recipientSource", recipientSource)
+            .append("recipientFullName", recipientFullName)
             .append("contactInfo", contactInfo)
             .append("subject", subject)
             .append("text", text)
-            .append("status", status)
             .toString();
     }
 

@@ -18,7 +18,7 @@
                              lazy="true"
                              emptyMessage="#{msgs['sentMessages.empty']}"
                              rows="#{sentMessageBean.rowCount}">
-                    <p:column headerText="#{msgs['sentMessage.sentDate']}" width="15%">
+                    <p:column headerText="#{msgs['sentMessage.sentDate']}" width="17%">
                         <h:outputText value="#{sentMessage.sentDate}">
                             <f:convertDateTime pattern="HH:mm dd.MM.yyyy" />
                         </h:outputText>
@@ -26,14 +26,11 @@
                     <p:column headerText="#{msgs['sentMessage.sendingType']}" width="10%" style="text-align: center">
                         <h:outputText value="#{msgs[sentMessage.sendingType.value]}" />
                     </p:column>
-                    <p:column headerText="#{msgs['person.fullName']}" width="30%">
-                        <h:outputText value="#{sentMessage.client.person.fullName}" />
+                    <p:column headerText="#{msgs['person.fullName']}" width="35%">
+                        <h:outputText value="#{sentMessage.recipientFullName}" />
                     </p:column>
-                    <p:column headerText="#{msgs['sentMessage.contactInfo']}" width="20%">
+                    <p:column headerText="#{msgs['sentMessage.contactInfo']}" width="32%">
                         <h:outputText value="#{sentMessage.contactInfo}" />
-                    </p:column>
-                    <p:column headerText="#{msgs['sentMessage.status']}" width="19%">
-                        <h:outputText value="#{sentMessage.status}" />
                     </p:column>
                     <p:column width="6%">
                         <h:panelGroup>

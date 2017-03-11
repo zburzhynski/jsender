@@ -172,10 +172,13 @@ databaseChangeLog {
             column(name: 'sending_type', type: 'VARCHAR(5)', remarks: 'Message sending_type') {
                 constraints(nullable: false)
             }
-            column(name: 'client_id', type: 'VARCHAR(128)', remarks: 'The reference to client table') {
+            column(name: 'recipient_id', type: 'VARCHAR(128)', remarks: 'Unique identifier of recipient ') {
                 constraints(nullable: false)
             }
-            column(name: 'client_source', type: 'VARCHAR(10)', remarks: 'The client source') {
+            column(name: 'recipient_source', type: 'VARCHAR(10)', remarks: 'The recipient source') {
+                constraints(nullable: false)
+            }
+            column(name: 'recipient_fullname', type: 'VARCHAR(100)', remarks: 'The recipient fullname') {
                 constraints(nullable: false)
             }
             column(name: 'contact_info', type: 'VARCHAR(50)', remarks: 'The message contact info') {
@@ -183,9 +186,6 @@ databaseChangeLog {
             }
             column(name: 'subject', type: 'VARCHAR(250)', remarks: 'Message subject')
             column(name: 'text', type: 'VARCHAR(2000)', remarks: 'Message sent text') {
-                constraints(nullable: false)
-            }
-            column(name: 'status', type: 'VARCHAR(20)', remarks: 'Message status') {
                 constraints(nullable: false)
             }
         }
