@@ -32,7 +32,7 @@ public class SendingAccountValidator extends BaseValidator {
         }
         for (SendingAccountParam param : account.getAccountParams()) {
             if (StringUtils.isBlank(param.getValue())) {
-                addMessage(PARAM_VALUE_NOT_SPECIFIED);
+                addMessage(PARAM_VALUE_NOT_SPECIFIED, param.getParam().getDescription());
                 return false;
             }
         }

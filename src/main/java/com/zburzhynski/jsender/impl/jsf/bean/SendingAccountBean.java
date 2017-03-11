@@ -100,6 +100,7 @@ public class SendingAccountBean implements Serializable {
      */
     public String saveAccount() {
         boolean valid = sendingAccountValidator.validate(account);
+        account.setName(account.getSendingService().getName());
         if (valid) {
             accountService.saveOrUpdate(account);
             return SETTINGS.getPath();

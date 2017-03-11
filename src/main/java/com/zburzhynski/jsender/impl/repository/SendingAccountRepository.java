@@ -4,7 +4,7 @@ import static com.zburzhynski.jsender.api.domain.CommonConstant.DOT;
 import static com.zburzhynski.jsender.impl.domain.Domain.P_ID;
 import static com.zburzhynski.jsender.impl.domain.SendingAccount.P_ACCOUNT_PARAMS;
 import static com.zburzhynski.jsender.impl.domain.SendingAccount.P_SENDING_SERVICE;
-import static com.zburzhynski.jsender.impl.domain.SendingAccountParam.P_SENDING_SERVICE_PARAM;
+import static com.zburzhynski.jsender.impl.domain.SendingAccountParam.P_PARAM;
 import static com.zburzhynski.jsender.impl.domain.SendingService.P_SENDING_TYPE;
 import com.zburzhynski.jsender.api.criteria.SendingAccountSearchCriteria;
 import com.zburzhynski.jsender.api.repository.ISendingAccountRepository;
@@ -39,7 +39,7 @@ public class SendingAccountRepository extends AbstractBaseRepository<String, Sen
         Criteria criteria = getSession().createCriteria(getDomainClass());
         criteria.createAlias(P_SENDING_SERVICE, P_SENDING_SERVICE);
         criteria.createAlias(P_ACCOUNT_PARAMS, P_ACCOUNT_PARAMS, JoinType.LEFT_OUTER_JOIN);
-        criteria.createAlias(P_ACCOUNT_PARAMS + DOT + P_SENDING_SERVICE_PARAM, P_SENDING_SERVICE_PARAM,
+        criteria.createAlias(P_ACCOUNT_PARAMS + DOT + P_PARAM, P_PARAM,
             JoinType.LEFT_OUTER_JOIN);
         criteria.add(Restrictions.eq(P_ID, id));
         return (SendingAccount) criteria.uniqueResult();

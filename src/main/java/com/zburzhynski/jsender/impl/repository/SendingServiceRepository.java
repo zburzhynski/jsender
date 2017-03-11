@@ -1,7 +1,9 @@
 package com.zburzhynski.jsender.impl.repository;
 
+import static com.zburzhynski.jsender.api.domain.CommonConstant.DOT;
 import static com.zburzhynski.jsender.impl.domain.Domain.P_ID;
 import static com.zburzhynski.jsender.impl.domain.SendingService.P_SERVICE_PARAMS;
+import static com.zburzhynski.jsender.impl.domain.SendingServiceParam.P_PARAM;
 import com.zburzhynski.jsender.api.repository.ISendingServiceRepository;
 import com.zburzhynski.jsender.impl.domain.SendingService;
 import org.hibernate.Criteria;
@@ -30,6 +32,7 @@ public class SendingServiceRepository extends AbstractBaseRepository<String, Sen
     public SendingService findById(String id) {
         Criteria criteria = getSession().createCriteria(getDomainClass());
         criteria.createAlias(P_SERVICE_PARAMS, P_SERVICE_PARAMS, JoinType.LEFT_OUTER_JOIN);
+        criteria.createAlias(P_SERVICE_PARAMS + DOT + P_PARAM, P_PARAM);
         criteria.add(Restrictions.eq(P_ID, id));
         return (SendingService) criteria.uniqueResult();
     }

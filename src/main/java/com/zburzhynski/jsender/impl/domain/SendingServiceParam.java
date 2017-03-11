@@ -22,6 +22,8 @@ import javax.persistence.Table;
 @Table(name = "sending_service_param")
 public class SendingServiceParam extends Domain {
 
+    public static final String P_PARAM = "param";
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "param_id")
     private Param param;

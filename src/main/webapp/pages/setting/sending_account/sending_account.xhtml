@@ -34,19 +34,20 @@
                     </p:selectOneMenu>
                 </h:panelGrid>
                 <h:panelGrid>
-                    <h:outputText value="#{msgs['sendingAccountParams.header']}:" styleClass="b" />
+                    <h:outputText value="#{msgs['sendingAccountParams.header']}:" styleClass="b" rendered="#{sendingAccountBean.account.sendingService != null}" />
                 </h:panelGrid>
-                <h:panelGrid>
+                <h:panelGrid rendered="#{sendingAccountBean.account.sendingService != null}">
                     <p:dataTable value="#{sendingAccountBean.account.accountParams}"
                              var="serviceParam"
                              emptyMessage="#{msgs['sendingAccountParams.empty']}">
                     <p:column headerText="#{msgs['sendingAccountParam.description']}"
                               style="width: 48%">
-                        <h:outputText value="#{serviceParam.sendingServiceParam.description}" />
+                        <h:outputText value="#{serviceParam.param.description}" />
                     </p:column>
                     <p:column headerText="#{msgs['sendingAccountParam.value']}"
                               style="width: 48%">
-                        <h:outputText value="#{serviceParam.value}" />
+                        <h:outputText value="#{serviceParam.value}" rendered="#{serviceParam.param.type != 'PASSWORD'}" />
+                        <h:outputText value="*****" rendered="#{serviceParam.param.type == 'PASSWORD'}"/>
                     </p:column>
                     <p:column style="width: 4%;">
                         <h:panelGroup>
