@@ -152,7 +152,7 @@
                             <f:selectItems value="#{sendingAccountListBean.serviceAccounts}"
                                            var="account"
                                            itemValue="#{account.id}"
-                                           itemLabel="#{account.sendingService.name}" />
+                                           itemLabel="#{sendingBean.getSendingAccountDescription(account)}" />
                         </p:selectOneMenu>
                         <h:outputLabel for="from" value="#{msgs['sending.from']}:" />
                         <p:inputText id="from" value="#{sendingBean.messageToSend.from}"

@@ -30,9 +30,6 @@ public class SendingAccount extends Domain {
     @JoinColumn(name = "sending_service_id")
     private SendingService sendingService;
 
-    @Column(name = "name")
-    private String name;
-
     @Column(name = "description")
     private String description;
 
@@ -46,14 +43,6 @@ public class SendingAccount extends Domain {
 
     public void setSendingService(SendingService sendingService) {
         this.sendingService = sendingService;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getDescription() {
