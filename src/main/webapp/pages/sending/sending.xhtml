@@ -9,37 +9,26 @@
 
     <ui:define name="content">
         <style type="text/css">
-            .name {
+            .clm1 {
+                width: 14%;
                 font-weight: bold;
-                width: 18%;
             }
-            .val {
-                width: 82%;
+            .clm2 {
+                width: 21%;
             }
-            .nameSelect {
+            .clm3 {
+                width: 15%;
                 font-weight: bold;
-                width: 35%;
             }
-            .selectMenu {
-                width: 65%;
+            .clm4 {
+                width: 50%;
             }
-            .msg {
-                width: 25%;
-            }
-            .cal .ui-inputfield {
-                width: 97%;
-            }
-            .area {
-                width: 100%;
-                height: 260px;
-                resize: none;
-            }
-            .label {
+            .clm5 {
+                width: 14%;
                 font-weight: bold;
-                width: 33%;
             }
-            .sendingType {
-                width: 46%;
+            .clm6 {
+                width: 86%;
             }
         </style>
         <p:panel>
@@ -47,30 +36,31 @@
                 <p:focus />
                 <p:messages id="messages" />
                 <h:panelGrid width="100%" style="height: auto">
-                    <p:commandButton id="createMessage"
-                                     action="#{sendingBean.createMessage}"
-                                     value="#{msgs['sending.button.newSending']}"
-                                     icon="ui-icon-document"
-                                     update="@form" />
-                    <h:panelGrid columns="2" columnClasses="nameSelect, selectMenu" width="52%">
+                    <h:panelGrid>
+                        <p:commandButton id="createMessage"
+                                         action="#{sendingBean.createMessage}"
+                                         value="#{msgs['sending.button.newSending']}"
+                                         icon="ui-icon-document"
+                                         update="@form" />
+                    </h:panelGrid>
+                    <h:panelGrid columns="4" columnClasses="clm1,clm2,clm3,clm4"  width="100%">
                         <h:outputLabel value="#{msgs['sending.sendingType']}:" />
                         <p:selectOneMenu id="sendingType"
                                          valueChangeListener="#{sendingBean.sendingTypeChangeListener}"
                                          value="#{sendingBean.messageToSend.sendingType}"
                                          label="#{msgs['sending.sendingType']}"
-                                         style="width: 72%">
-                            <p:ajax listener="#{sendingBean.sendingTypeChangeListener}" update="@form" />
+                                         style="width: 75%">
                             <f:selectItem itemLabel="" noSelectionOption="true" />
                             <f:selectItems value="#{sendingTypeListBean.sendingTypes}" var="type"
                                            itemValue="#{type}"
                                            itemLabel="#{msgs[type.value]}" />
-                            <p:ajax event="change" update="subject" />
+                            <p:ajax listener="#{sendingBean.sendingTypeChangeListener}" update="@form" />
                         </p:selectOneMenu>
                         <h:outputLabel value="#{msgs['sending.sendingAccount']}:" />
                         <p:selectOneMenu id="sendingService"
                                          value="#{sendingBean.messageToSend.sendingAccountId}"
                                          label="#{msgs['sending.sendingAccount']}"
-                                         style="width: 60%">
+                                         style="width: 93%">
                             <f:selectItem itemLabel="" noSelectionOption="true" />
                             <f:selectItems value="#{sendingAccountListBean.serviceAccounts}"
                                            var="account"
@@ -78,12 +68,11 @@
                                            itemLabel="#{sendingBean.getSendingAccountDescription(account)}" />
                         </p:selectOneMenu>
                     </h:panelGrid>
-                    <h:panelGrid columns="2" columnClasses="name,val" width="100%">
+                    <h:panelGrid columns="2" columnClasses="clm5,clm6" width="100%">
                         <h:outputLabel for="subject" value="#{msgs['sending.subject']}:" />
                         <p:inputText id="subject" value="#{sendingBean.messageToSend.subject}"
                                      maxlength="250"
                                      label="#{msgs['sending.subject']}"
-                                     disabled="#{sendingBean.messageToSend.sendingType != 'EMAIL'}"
                                      style="width: 99%" />
                     </h:panelGrid>
                     <p:tabView activeIndex="#{sendingBean.tabIndex}">
@@ -91,9 +80,11 @@
                             <p:editor value="#{sendingBean.messageToSend.text}" styleClass="area"
                                              maxlength="2000"
                                              label="#{msgs['sending.text']}" />
-                            <p:commandButton action="#{sendingBean.selectMessageTemplate}"
-                                             title="#{msgs['messageTemplate.button.selectTemplate']}"
-                                             icon="ui-icon-clipboard" />
+                            <h:panelGrid style="padding-top: 5px">
+                                <p:commandButton action="#{sendingBean.selectMessageTemplate}"
+                                                 title="#{msgs['messageTemplate.button.selectTemplate']}"
+                                                 icon="ui-icon-clipboard" />
+                            </h:panelGrid>
                         </p:tab>
                         <p:tab title="#{msgs['sending.recipients']}">
                             <p:dataTable value="#{sendingBean.messageToSend.recipients}"
@@ -142,10 +133,10 @@
                             </h:panelGrid>
                         </p:tab>
                     </p:tabView>
-                    <h:panelGrid columns="2" columnClasses="name, val">
+                    <h:panelGrid columns="2" columnClasses="clm5,clm6" style="padding-top: 5px" width="95%">
                         <h:outputLabel for="from" value="#{msgs['sending.from']}:" />
                         <p:inputText id="from" value="#{sendingBean.messageToSend.from}"
-                                     style="width: 65%"
+                                     style="width: 55%"
                                      label="#{msgs['sending.from']}" />
                     </h:panelGrid>
                     <h:panelGrid style="float: right">
