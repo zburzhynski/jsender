@@ -319,8 +319,8 @@ databaseChangeLog {
     }
 
     changeSet(id: '2017-03-11-10', author: 'Nikita Shevtsov <shevtsou@gmail.com>') {
-        comment("Added foreign constraint FK_sending_account_param_2_aram")
-        addForeignKeyConstraint(constraintName: 'FK_sending_account_param_2_aram',
+        comment("Added foreign constraint FK_sending_account_param_2_param")
+        addForeignKeyConstraint(constraintName: 'FK_sending_account_param_2_param',
                 baseTableSchemaName: 'jsender', baseTableName: 'sending_account_param' , baseColumnNames: 'param_id',
                 referencedTableSchemaName: 'jsender', referencedTableName: 'param', referencedColumnNames: 'id')
     }
