@@ -146,7 +146,7 @@ public class SendingAccountBean {
             account.setSendingService(sendingServiceService.getById(account.getSendingService().getId()));
             for (SendingServiceParam sendingServiceParam : account.getSendingService().getServiceParams()) {
                 SendingAccountParam sendingAccountParam = new SendingAccountParam();
-                sendingAccountParam.setSendingServiceParam(sendingServiceParam);
+                sendingAccountParam.setParam(sendingServiceParam.getParam());
                 sendingAccountParam.setValue(sendingServiceParam.getValue());
                 account.getAccountParams().add(sendingAccountParam);
             }
