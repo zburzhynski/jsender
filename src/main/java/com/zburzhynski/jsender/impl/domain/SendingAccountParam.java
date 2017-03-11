@@ -24,12 +24,20 @@ public class SendingAccountParam extends Domain {
 
     public static final String P_SENDING_SERVICE_PARAM = "sendingServiceParam";
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "param_id")
+    private Param param;
+
     @Column(name = "value")
     private String value;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "sending_service_param_id")
-    private SendingServiceParam sendingServiceParam;
+    public Param getParam() {
+        return param;
+    }
+
+    public void setParam(Param param) {
+        this.param = param;
+    }
 
     public String getValue() {
         return value;
@@ -39,13 +47,6 @@ public class SendingAccountParam extends Domain {
         this.value = value;
     }
 
-    public SendingServiceParam getSendingServiceParam() {
-        return sendingServiceParam;
-    }
-
-    public void setSendingServiceParam(SendingServiceParam sendingServiceParam) {
-        this.sendingServiceParam = sendingServiceParam;
-    }
 
     /**
      * {@inheritDoc}
