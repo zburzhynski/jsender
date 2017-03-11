@@ -12,12 +12,18 @@
             .cal .ui-inputfield {
                 width: 97%;
             }
+            .lbl {
+                width: 35%;
+            }
+            .val {
+                width: 65%;
+            }
         </style>
         <p:panel>
             <h:form id="sendingAccountForm">
                 <p:focus />
                 <p:messages id="messages" />
-                <h:panelGrid columns="2">
+                <h:panelGrid columns="2" style="width: 50%" columnClasses="lbl,val">
                     <h:outputLabel value="#{msgs['sendingAccount.sendingService']}:" styleClass="b" />
                     <p:selectOneMenu id="sendingService"
                                      valueChangeListener="#{sendingAccountBean.sendingServiceChangeListener}"
@@ -25,7 +31,7 @@
                                      converter="entityConverter"
                                      value="#{sendingAccountBean.account.sendingService}"
                                      label="#{msgs['sendingAccount.sendingService']}"
-                                     style="width: 87%">
+                                     style="width: 90%">
                         <p:ajax listener="#{sendingAccountBean.sendingServiceChangeListener}" update="@form"/>
                         <f:selectItem itemLabel="" noSelectionOption="true" />
                         <f:selectItems value="#{sendingServiceListBean.sendingServices}" var="service"
@@ -37,10 +43,7 @@
                                      value="#{sendingAccountBean.account.description}"
                                      label="#{msgs['sendingAccount.description']}"
                                      maxlength="1000"
-                                     style="width: 100%" />
-                </h:panelGrid>
-                <h:panelGrid>
-                    <h:outputText value="#{msgs['sendingAccountParams.header']}:" styleClass="b" rendered="#{sendingAccountBean.account.sendingService != null}" />
+                                     style="width: 98%" />
                 </h:panelGrid>
                 <h:panelGrid rendered="#{sendingAccountBean.account.sendingService != null}">
                     <p:dataTable value="#{sendingAccountBean.account.accountParams}"
