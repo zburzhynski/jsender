@@ -16,11 +16,11 @@
                     <p:tab id="common" title="#{msgs['settings.common']}">
                         <cm:setting settings="#{settingBean.commonSettings}" />
                     </p:tab>
-                    <p:tab id="view" title="#{msgs['settings.view']}">
-                        <cm:setting settings="#{settingBean.viewSettings}" />
-                    </p:tab>
                     <p:tab id="senidng_accounts" title="#{msgs['settings.sendingAccounts']}">
                         <ui:include src="sending_account/sending_accounts.xhtml" />
+                    </p:tab>
+                    <p:tab id="view" title="#{msgs['settings.view']}">
+                        <cm:setting settings="#{settingBean.viewSettings}" />
                     </p:tab>
                     <p:tab id="requsite" title="#{msgs['settings.requisite']}">
                         <cm:setting settings="#{settingBean.requisiteSettings}" />
