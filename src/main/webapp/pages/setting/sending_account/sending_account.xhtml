@@ -17,7 +17,7 @@
             <h:form id="sendingAccountForm">
                 <p:focus />
                 <p:messages id="messages" />
-                <h:panelGrid >
+                <h:panelGrid columns="2">
                     <h:outputLabel value="#{msgs['sendingAccount.sendingService']}:" styleClass="b" />
                     <p:selectOneMenu id="sendingService"
                                      valueChangeListener="#{sendingAccountBean.sendingServiceChangeListener}"
@@ -32,6 +32,13 @@
                                        itemValue="#{service}"
                                        itemLabel="#{service.name}" />
                     </p:selectOneMenu>
+                    <h:outputLabel value="#{msgs['sendingAccount.description']}:" styleClass="b" />
+                    <p:inputTextarea id="descipriotn"
+                                     value="#{sendingAccountBean.account.description}"
+                                     required="true"
+                                     label="#{msgs['sendingAccount.description']}"
+                                     maxlength="1000"
+                                     style="width: 97%" />
                 </h:panelGrid>
                 <h:panelGrid>
                     <h:outputText value="#{msgs['sendingAccountParams.header']}:" styleClass="b" rendered="#{sendingAccountBean.account.sendingService != null}" />
