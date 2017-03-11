@@ -1,6 +1,8 @@
 package com.zburzhynski.jsender.impl.jsf.bean;
 
 import static com.zburzhynski.jsender.api.domain.CommonConstant.COMMA;
+import static com.zburzhynski.jsender.api.domain.CommonConstant.LEFT_PARENTHESIS;
+import static com.zburzhynski.jsender.api.domain.CommonConstant.RIGHT_PARENTHESIS;
 import static com.zburzhynski.jsender.api.domain.CommonConstant.SPACE;
 import static com.zburzhynski.jsender.api.domain.View.MESSAGE_TEMPLATES;
 import static com.zburzhynski.jsender.api.domain.View.RECIPIENTS;
@@ -14,6 +16,7 @@ import com.zburzhynski.jsender.api.service.ISender;
 import com.zburzhynski.jsender.impl.domain.Client;
 import com.zburzhynski.jsender.impl.domain.ContactInfoEmail;
 import com.zburzhynski.jsender.impl.domain.ContactInfoPhone;
+import com.zburzhynski.jsender.impl.domain.SendingAccount;
 import com.zburzhynski.jsender.impl.jsf.validator.SendingValidator;
 import com.zburzhynski.jsender.impl.rest.domain.PatientDto;
 import com.zburzhynski.jsender.impl.util.PropertyReader;
@@ -198,6 +201,18 @@ public class SendingBean implements Serializable {
      */
     public String getEmailDescription(Recipient recipient) {
         return StringUtils.join(recipient.getEmails(), COMMA + SPACE);
+    }
+
+    /**
+     * Gets sending account description.
+     *
+     * @param account sending account
+     * @return account description
+     */
+    public String getSendingAccountDescription(SendingAccount account) {
+        return StringUtils.isBlank(account.getDescription()) ? account.getSendingService().getName() :
+            account.getSendingService().getName() + SPACE + LEFT_PARENTHESIS + account.getDescription() +
+                RIGHT_PARENTHESIS;
     }
 
     /**

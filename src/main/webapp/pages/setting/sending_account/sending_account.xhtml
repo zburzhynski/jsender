@@ -25,7 +25,7 @@
                                      converter="entityConverter"
                                      value="#{sendingAccountBean.account.sendingService}"
                                      label="#{msgs['sendingAccount.sendingService']}"
-                                     style="width: 100%">
+                                     style="width: 87%">
                         <p:ajax listener="#{sendingAccountBean.sendingServiceChangeListener}" update="@form"/>
                         <f:selectItem itemLabel="" noSelectionOption="true" />
                         <f:selectItems value="#{sendingServiceListBean.sendingServices}" var="service"
@@ -35,10 +35,9 @@
                     <h:outputLabel value="#{msgs['sendingAccount.description']}:" styleClass="b" />
                     <p:inputTextarea id="description"
                                      value="#{sendingAccountBean.account.description}"
-                                     required="true"
                                      label="#{msgs['sendingAccount.description']}"
                                      maxlength="1000"
-                                     style="width: 97%" />
+                                     style="width: 100%" />
                 </h:panelGrid>
                 <h:panelGrid>
                     <h:outputText value="#{msgs['sendingAccountParams.header']}:" styleClass="b" rendered="#{sendingAccountBean.account.sendingService != null}" />

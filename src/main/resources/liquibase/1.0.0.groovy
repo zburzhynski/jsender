@@ -267,9 +267,6 @@ databaseChangeLog {
             column(name: 'sending_service_id', type: 'VARCHAR(128)', remarks: 'The reference to sending_service table') {
                 constraints(nullable: false)
             }
-            column(name: 'name', type: 'VARCHAR(100)', remarks: 'Sending account name') {
-                constraints(nullable: false)
-            }
             column(name: 'description', type: 'VARCHAR(1000)', remarks: 'Sending account description')
         }
         addPrimaryKey(schemaName: 'jsender', tableName: 'sending_account', tablespace: 'jsender_index',
