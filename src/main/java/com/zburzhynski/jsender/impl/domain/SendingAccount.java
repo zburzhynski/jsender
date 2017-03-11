@@ -3,6 +3,7 @@ package com.zburzhynski.jsender.impl.domain;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
@@ -29,6 +30,12 @@ public class SendingAccount extends Domain {
     @JoinColumn(name = "sending_service_id")
     private SendingService sendingService;
 
+    @Column(name = "name")
+    private String name;
+
+    @Column(name = "description")
+    private String description;
+
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "sending_account_id", nullable = false)
     private List<SendingAccountParam> accountParams;
@@ -39,6 +46,22 @@ public class SendingAccount extends Domain {
 
     public void setSendingService(SendingService sendingService) {
         this.sendingService = sendingService;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     /**
