@@ -1,43 +1,34 @@
 package com.zburzhynski.jsender.impl.domain;
 
 import com.zburzhynski.jsender.api.domain.ValueType;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 /**
- * Sending service param.
+ * Param.
  * <p/>
- * Date: 05.03.2017
+ * Date: 11.03.2017
  *
  * @author Nikita Shevtsou
  */
 @Entity
-@Table(name = "sending_service_param")
-public class SendingServiceParam extends Domain {
+@Table(name = "param")
+public class Param extends Domain {
 
     @Column(name = "name")
     private String name;
 
     @Column(name = "type")
-    @Enumerated(value = EnumType.STRING)
     private ValueType type;
 
-    @Column(name = "value")
-    private String value;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "param_id")
-    private Param param;
+    @Column(name = "description")
+    private String description;
 
     public String getName() {
         return name;
@@ -55,20 +46,12 @@ public class SendingServiceParam extends Domain {
         this.type = type;
     }
 
-    public String getValue() {
-        return value;
+    public String getDescription() {
+        return description;
     }
 
-    public void setValue(String value) {
-        this.value = value;
-    }
-
-    public Param getParam() {
-        return param;
-    }
-
-    public void setParam(Param param) {
-        this.param = param;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     /**
@@ -80,16 +63,16 @@ public class SendingServiceParam extends Domain {
             return true;
         }
 
-        if (!(o instanceof SendingServiceParam)) {
+        if (!(o instanceof Param)) {
             return false;
         }
 
-        SendingServiceParam that = (SendingServiceParam) o;
+        Param that = (Param) o;
         return new EqualsBuilder()
             .appendSuper(super.equals(o))
             .append(name, that.name)
             .append(type, that.type)
-            .append(value, that.value)
+            .append(description, that.description)
             .isEquals();
     }
 
@@ -102,7 +85,7 @@ public class SendingServiceParam extends Domain {
             .appendSuper(super.hashCode())
             .append(name)
             .append(type)
-            .append(value)
+            .append(description)
             .toHashCode();
     }
 
@@ -115,7 +98,7 @@ public class SendingServiceParam extends Domain {
             .appendSuper(super.toString())
             .append("name", name)
             .append("type", type)
-            .append("value", value)
+            .append("description", description)
             .toString();
     }
 
