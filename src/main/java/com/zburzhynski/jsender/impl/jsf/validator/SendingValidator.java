@@ -16,17 +16,21 @@ import org.springframework.stereotype.Component;
 @Component
 public class SendingValidator extends BaseValidator {
 
+    private static final String SENDING_TYPE_NOT_SPECIFIED = "sendingValidator.sendingTypeNotSpecified";
+
+    private static final String SENDING_ACCOUNT_NOT_SPECIFIED = "sendingValidator.sendingAccountNotSpecified";
+
+    private static final String FROM_NOT_SPECIFIED = "sendingValidator.fromNotSpecified";
+
     private static final String SUBJECT_NOT_SPECIFIED = "sendingValidator.subjectNotSpecified";
 
     private static final String TEXT_NOT_SPECIFIED = "sendingValidator.textNotSpecified";
 
+    private static final String RECIPIENTS_NOT_SPECIFIED = "sendingValidator.recipientsNotSpecified";
+
     private static final String MOBILE_PHONE_NUMBER_NOT_SPECIFIED = "sendingValidator.mobilePhoneNumberNotSpecified";
 
     private static final String EMAIL_NOT_SPECIFIED = "sendingValidator.emailNotSpecified";
-
-    private static final String RECIPIENTS_NOT_SPECIFIED = "sendingValidator.recipientsNotSpecified";
-
-    private static final String SENDING_TYPE_NOT_SPECIFIED = "sendingValidator.sendingTypeNotSpecified";
 
     /**
      * Validates sending.
@@ -41,6 +45,14 @@ public class SendingValidator extends BaseValidator {
     private boolean validateRequiredFields(Message message) {
         if (message.getSendingType() == null) {
             addMessage(SENDING_TYPE_NOT_SPECIFIED);
+            return false;
+        }
+        if (StringUtils.isBlank(message.getSendingAccountId())) {
+            addMessage(SENDING_ACCOUNT_NOT_SPECIFIED);
+            return false;
+        }
+        if (StringUtils.isBlank(message.getFrom())) {
+            addMessage(FROM_NOT_SPECIFIED);
             return false;
         }
         if (SendingType.EMAIL.equals(message.getSendingType()) && StringUtils.isBlank(message.getSubject())) {
