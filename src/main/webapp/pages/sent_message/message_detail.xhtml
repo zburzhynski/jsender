@@ -22,11 +22,9 @@
             <h:outputLabel for="sendingType" value="#{msgs['sentMessage.sendingType']}:" />
             <p:inputText id="sendingType" value="#{sentMessageBean.sentMessage.sendingType}" readonly="true" />
             <h:outputLabel for="fullName" value="#{msgs['person.fullName']}:" />
-            <p:inputText id="fullName" value="#{sentMessageBean.sentMessage.client.person.fullName}" readonly="true" />
+            <p:inputText id="fullName" value="#{sentMessageBean.sentMessage.recipientFullName}" readonly="true" />
             <h:outputLabel for="contactInfo" value="#{msgs['sentMessage.contactInfo']}:" />
             <p:inputText id="contactInfo" value="#{sentMessageBean.sentMessage.contactInfo}" readonly="true" />
-            <h:outputLabel for="status" value="#{msgs['sentMessage.status']}:" />
-            <p:inputText id="status" value="#{sentMessageBean.sentMessage.status}" readonly="true" />
             <h:outputLabel for="subject" value="#{msgs['sentMessage.subject']}:" />
             <p:inputText id="subject" value="#{sentMessageBean.sentMessage.subject}" readonly="true" />
             <h:outputLabel for="text" value="#{msgs['sentMessage.text']}:" />

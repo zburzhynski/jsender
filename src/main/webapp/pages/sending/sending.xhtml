@@ -75,7 +75,7 @@
                                      label="#{msgs['sending.subject']}"
                                      style="width: 99%" />
                     </h:panelGrid>
-                    <p:tabView activeIndex="#{sendingBean.tabIndex}">
+                    <p:tabView dynamic="true" activeIndex="#{sendingBean.tabIndex}">
                         <p:tab title="#{msgs['sending.text']}">
                             <p:editor value="#{sendingBean.messageToSend.text}" styleClass="area"
                                              maxlength="2000"
