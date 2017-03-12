@@ -2,6 +2,7 @@ package com.zburzhynski.jsender.impl.sender;
 
 import static javax.mail.Message.RecipientType;
 import com.zburzhynski.jsender.api.domain.Params;
+import com.zburzhynski.jsender.api.domain.SendingServices;
 import com.zburzhynski.jsender.api.domain.SendingType;
 import com.zburzhynski.jsender.api.dto.Message;
 import com.zburzhynski.jsender.api.dto.Recipient;
@@ -21,10 +22,12 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 import javax.mail.Authenticator;
 import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
@@ -96,6 +99,11 @@ public class EmailSender extends AbstractSender implements ISender {
             }
         }
         return response;
+    }
+
+    @Override
+    public Set<SendingServices> getSendingServices() {
+        return EnumSet.of(SendingServices.GMAIL_COM, SendingServices.YANDEX_RU, SendingServices.MAIL_RU);
     }
 
     private Session buildSession(Message email) {

@@ -1,6 +1,7 @@
 package com.zburzhynski.jsender.impl.sender;
 
 import static com.zburzhynski.jsender.api.domain.CommonConstant.COLON;
+import com.zburzhynski.jsender.api.domain.SendingServices;
 import com.zburzhynski.jsender.api.domain.SendingType;
 import com.zburzhynski.jsender.api.domain.Settings;
 import com.zburzhynski.jsender.api.dto.Message;
@@ -24,7 +25,9 @@ import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.EnumSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * SMS sender.
@@ -102,5 +105,9 @@ public class SmsSender extends AbstractSender implements ISender {
         return response;
     }
 
+    @Override
+    public Set<SendingServices> getSendingServices() {
+        return EnumSet.of(SendingServices.UNISENDER_BY);
+    }
 
 }

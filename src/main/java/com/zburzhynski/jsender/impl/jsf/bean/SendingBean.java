@@ -12,11 +12,11 @@ import static javax.faces.application.FacesMessage.SEVERITY_ERROR;
 import com.zburzhynski.jsender.api.dto.Message;
 import com.zburzhynski.jsender.api.dto.Recipient;
 import com.zburzhynski.jsender.api.dto.SendingStatus;
-import com.zburzhynski.jsender.api.sender.ISender;
 import com.zburzhynski.jsender.impl.domain.Client;
 import com.zburzhynski.jsender.impl.domain.SendingAccount;
 import com.zburzhynski.jsender.impl.jsf.validator.SendingValidator;
 import com.zburzhynski.jsender.impl.rest.domain.PatientDto;
+import com.zburzhynski.jsender.impl.sender.MessageSender;
 import com.zburzhynski.jsender.impl.util.PropertyReader;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -59,11 +59,8 @@ public class SendingBean implements Serializable {
     @ManagedProperty(value = "#{messageTemplateBean}")
     private MessageTemplateBean messageTemplateBean;
 
-    @ManagedProperty(value = "#{emailSender}")
-    private ISender emailSender;
-
-    @ManagedProperty(value = "#{smsSender}")
-    private ISender smsSender;
+    @ManagedProperty(value = "#{messageSender}")
+    private MessageSender messageSender;
 
     @ManagedProperty(value = "#{sendingValidator}")
     private SendingValidator sendingValidator;
@@ -142,21 +139,12 @@ public class SendingBean implements Serializable {
      *
      * @return path for navigation
      */
-    //TODO: move to service
     public String send() {
         boolean valid = sendingValidator.validate(messageToSend);
         if (!valid) {
             return null;
         }
-        switch (messageToSend.getSendingType()) {
-            case SMS:
-                sendingStatuses = smsSender.send(messageToSend);
-                break;
-            case EMAIL:
-                sendingStatuses = emailSender.send(messageToSend);
-                break;
-            default:
-        }
+        sendingStatuses = messageSender.send(messageToSend);
         return SENDING_STATUS.getPath();
     }
 
@@ -239,12 +227,8 @@ public class SendingBean implements Serializable {
         this.messageTemplateBean = messageTemplateBean;
     }
 
-    public void setEmailSender(ISender emailSender) {
-        this.emailSender = emailSender;
-    }
-
-    public void setSmsSender(ISender smsSender) {
-        this.smsSender = smsSender;
+    public void setMessageSender(MessageSender messageSender) {
+        this.messageSender = messageSender;
     }
 
     public void setSendingValidator(SendingValidator sendingValidator) {
