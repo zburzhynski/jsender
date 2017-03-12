@@ -14,8 +14,6 @@ import com.zburzhynski.jsender.api.dto.Recipient;
 import com.zburzhynski.jsender.api.dto.SendingStatus;
 import com.zburzhynski.jsender.api.sender.ISender;
 import com.zburzhynski.jsender.impl.domain.Client;
-import com.zburzhynski.jsender.impl.domain.ContactInfoEmail;
-import com.zburzhynski.jsender.impl.domain.ContactInfoPhone;
 import com.zburzhynski.jsender.impl.domain.SendingAccount;
 import com.zburzhynski.jsender.impl.jsf.validator.SendingValidator;
 import com.zburzhynski.jsender.impl.rest.domain.PatientDto;
@@ -146,27 +144,6 @@ public class SendingBean implements Serializable {
      */
     //TODO: move to service
     public String send() {
-        for (Client client : recipients) {
-            Recipient recipient = new Recipient();
-            recipient.setId(client.getId());
-            recipient.setSurname(client.getPerson().getSurname());
-            recipient.setName(client.getPerson().getName());
-            recipient.setPatronymic(client.getPerson().getPatronymic());
-            switch (messageToSend.getSendingType()) {
-                case SMS:
-                    for (ContactInfoPhone phone : client.getContactInfo().getPhones()) {
-                        recipient.addPhone(phone.getFullNumber());
-                    }
-                    break;
-                case EMAIL:
-                    for (ContactInfoEmail email : client.getContactInfo().getEmails()) {
-                        recipient.addEmail(email.getAddress());
-                    }
-                    break;
-                default:
-            }
-            messageToSend.addRecipient(recipient);
-        }
         boolean valid = sendingValidator.validate(messageToSend);
         if (!valid) {
             return null;
