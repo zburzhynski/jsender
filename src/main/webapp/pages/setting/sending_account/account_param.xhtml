@@ -32,7 +32,7 @@
                         <p:inputTextarea id="stringValue"
                                          value="#{sendingAccountBean.serviceParam.value}"
                                          required="true"
-                                         label="#{sendingAccountBean.serviceParam.param.name}"
+                                         label="#{sendingAccountBean.serviceParam.param.description}"
                                          maxlength="250"
                                          style="width: 97%" />
                     </c:if>
@@ -40,7 +40,7 @@
                         <p:inputText id="integerValue"
                                      value="#{sendingAccountBean.serviceParam.value}"
                                      required="true"
-                                     label="#{sendingAccountBean.serviceParam.param.name}"
+                                     label="#{sendingAccountBean.serviceParam.param.description}"
                                      maxlength="250"
                                      style="width: 97%">
                             <f:convertNumber integerOnly="true" />
@@ -54,7 +54,7 @@
                         <p:inputMask id="dateValue"
                                      mask="99.99.9999"
                                      value="#{sendingAccountBean.serviceParam.value}"
-                                     label="#{sendingAccountBean.serviceParam.param.name}"
+                                     label="#{sendingAccountBean.serviceParam.param.description}"
                                      required="true"
                                      maxlength="250"
                                      style="width: 97%">
@@ -63,7 +63,7 @@
                     <c:if test="#{sendingAccountBean.serviceParam.param.type == 'PASSWORD'}">
                         <h:inputSecret id="passwordValue"
                                        value="#{sendingAccountBean.serviceParam.value}"
-                                       label="#{sendingAccountBean.serviceParam.param.name}"
+                                       label="#{sendingAccountBean.serviceParam.param.description}"
                                        required="true"
                                        maxlength="250"
                                        style="width: 97%" />
