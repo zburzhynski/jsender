@@ -4,6 +4,7 @@ import static com.zburzhynski.jsender.api.domain.CommonConstant.DOT;
 import com.zburzhynski.jsender.api.domain.ValueType;
 import com.zburzhynski.jsender.impl.domain.Setting;
 import com.zburzhynski.jsender.impl.util.DateUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
 /**
@@ -20,6 +21,8 @@ public class SettingValidator extends BaseValidator {
 
     private static final int MONTHS_IN_YEAR = 12;
 
+    private static final String VALUE_NOT_SPECIFIED = "settingValidator.valueNotSpecified";
+
     private static final String INCORRECT_DATE_FORMAT = "settingValidator.incorrectDateFormat";
 
     /**
@@ -29,7 +32,15 @@ public class SettingValidator extends BaseValidator {
      * @return false if setting not valid, else true
      */
     public boolean validate(Setting setting) {
-        return checkDateFormat(setting);
+        return checkNotEmpty(setting) && checkDateFormat(setting);
+    }
+
+    private boolean checkNotEmpty(Setting setting) {
+        if (StringUtils.isBlank(setting.getValue())) {
+            addMessage(VALUE_NOT_SPECIFIED, setting.getDescription());
+            return false;
+        }
+        return true;
     }
 
     private boolean checkDateFormat(Setting setting) {
