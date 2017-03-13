@@ -25,7 +25,7 @@ import javax.faces.bean.SessionScoped;
 @SessionScoped
 public class SentMessageBean {
 
-    private SentMessage sentMessage;
+    private SentMessage sentMessage = new SentMessage();
 
     private LazyDataModel<SentMessage> sentMessageModel;
 
