@@ -19,6 +19,7 @@ public enum View {
     MESSAGE_TEMPLATE("/pages/message_template/message_template?faces-redirect=true"),
     CONTACT_INFO_EMAIL("/pages/client/email?faces-redirect=true"),
     CONTACT_INFO_PHONE("/pages/client/phone?faces-redirect=true"),
+    SETTING("/pages/setting/setting?faces-redirect=true"),
     SETTINGS("/pages/setting/settings?faces-redirect=true"),
     SENDING_ACCOUNT("/pages/setting/sending_account/sending_account?faces-redirect=true"),
     SENDING_SERVICE_PARAM("/pages/setting/sending_account/account_param?faces-redirect=true");
