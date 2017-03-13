@@ -249,6 +249,16 @@ public class SettingBean implements Serializable {
     }
 
     /**
+     * Edits setting.
+     *
+     * @param id setting id
+     * @return path for navigation
+     */
+    public String editSetting(String id) {
+        setting = (Setting) settingService.getById(id);
+        return View.SETTING.getPath();
+    }
+    /**
      * Saves setting.
      *
      * @return path for navigating

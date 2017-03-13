@@ -16,11 +16,9 @@
         </p:column>
         <p:column width="4%">
             <h:panelGroup>
-                <p:commandLink action="/pages/setting/setting?faces-redirect=true"
+                <p:commandLink action="#{settingBean.editSetting(setting.id)}"
                                style="padding-right: 5px">
                     <p:graphicImage url="/resources/css/css-images/edit.gif" title="#{msgs['button.edit']}" />
-                    <f:setPropertyActionListener
-                            target="#{settingBean.setting}" value="#{setting}" />
                 </p:commandLink>
             </h:panelGroup>
         </p:column>
