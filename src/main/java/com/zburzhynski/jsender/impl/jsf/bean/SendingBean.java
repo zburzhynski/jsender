@@ -87,6 +87,7 @@ public class SendingBean implements Serializable {
      */
     public void createMessage() {
         messageToSend = new Message();
+        tabIndex = 0;
         messageToSend.setFrom(settingBean.getOrganizationName());
         sendingAccountListBean.findByServiceSendingType(null);
     }
