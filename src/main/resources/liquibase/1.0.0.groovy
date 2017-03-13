@@ -371,4 +371,66 @@ databaseChangeLog {
         }
     }
 
+    changeSet(id: '2017-03-12-01', author: 'Nikita Shevtsov <shevtsou@gmail.com>') {
+        comment("Insert yandex.ru account")
+        insert(schemaName: 'jsender', tableName: 'sending_service') {
+            column(name: 'id', value: '543e6b2e-cb4d-4b64-a26a-e31820473af2')
+            column(name: 'name', value: 'yandex.ru')
+            column(name: 'sending_type', value: 'EMAIL')
+        }
+        insert(schemaName: 'jsender', tableName: 'sending_service_param') {
+            column(name: 'id', value: '52dd4cba-08ea-4b1f-b6ff-4674691fd0d8')
+            column(name: 'sending_service_id', value: '543e6b2e-cb4d-4b64-a26a-e31820473af2')
+            column(name: 'param_id', value: 'a039ad9b-4a0a-4622-a549-ce355c45cea1')
+            column(name: 'value', value: 'smtp.yandex.ru')
+        }
+        insert(schemaName: 'jsender', tableName: 'sending_service_param') {
+            column(name: 'id', value: 'c0fcb43b-0a96-4bf1-a5b7-40d366da73a7')
+            column(name: 'sending_service_id', value: '543e6b2e-cb4d-4b64-a26a-e31820473af2')
+            column(name: 'param_id', value: '5c2c2cbe-c3d3-4161-8daf-c13c6da2b849')
+            column(name: 'value', value: '465')
+        }
+        insert(schemaName: 'jsender', tableName: 'sending_service_param') {
+            column(name: 'id', value: '8fb48099-f2df-434c-a273-d9a7bdfd42fc')
+            column(name: 'sending_service_id', value: '543e6b2e-cb4d-4b64-a26a-e31820473af2')
+            column(name: 'param_id', value: '2e995ca7-3bce-4705-85ac-822c6fbd317e')
+        }
+        insert(schemaName: 'jsender', tableName: 'sending_service_param') {
+            column(name: 'id', value: '63cb3bed-064a-40ec-b32f-fd6c82f2b77d')
+            column(name: 'sending_service_id', value: '543e6b2e-cb4d-4b64-a26a-e31820473af2')
+            column(name: 'param_id', value: '0112434e-3885-4d13-9d6e-14706195fba3')
+        }
+    }
+
+    changeSet(id: '2017-03-12-02', author: 'Nikita Shevtsov <shevtsou@gmail.com>') {
+        comment("Insert mail.ru account")
+        insert(schemaName: 'jsender', tableName: 'sending_service') {
+            column(name: 'id', value: 'e152bd93-43c4-4ed8-ac4d-d3a4ea0b509b')
+            column(name: 'name', value: 'mail.ru')
+            column(name: 'sending_type', value: 'EMAIL')
+        }
+        insert(schemaName: 'jsender', tableName: 'sending_service_param') {
+            column(name: 'id', value: '24f9ec04-e44e-476b-bd63-eaa21f61e22d')
+            column(name: 'sending_service_id', value: 'e152bd93-43c4-4ed8-ac4d-d3a4ea0b509b')
+            column(name: 'param_id', value: 'a039ad9b-4a0a-4622-a549-ce355c45cea1')
+            column(name: 'value', value: 'smtp.mail.ru')
+        }
+        insert(schemaName: 'jsender', tableName: 'sending_service_param') {
+            column(name: 'id', value: '63c8d298-f63f-480e-abfd-2aba62bf82b7')
+            column(name: 'sending_service_id', value: 'e152bd93-43c4-4ed8-ac4d-d3a4ea0b509b')
+            column(name: 'param_id', value: '5c2c2cbe-c3d3-4161-8daf-c13c6da2b849')
+            column(name: 'value', value: '465')
+        }
+        insert(schemaName: 'jsender', tableName: 'sending_service_param') {
+            column(name: 'id', value: '41a39c86-3a3a-42fc-be00-a2d003494cbe')
+            column(name: 'sending_service_id', value: 'e152bd93-43c4-4ed8-ac4d-d3a4ea0b509b')
+            column(name: 'param_id', value: '2e995ca7-3bce-4705-85ac-822c6fbd317e')
+        }
+        insert(schemaName: 'jsender', tableName: 'sending_service_param') {
+            column(name: 'id', value: '6993e87f-90fb-49be-bcea-648d2591f7eb')
+            column(name: 'sending_service_id', value: 'e152bd93-43c4-4ed8-ac4d-d3a4ea0b509b')
+            column(name: 'param_id', value: '0112434e-3885-4d13-9d6e-14706195fba3')
+        }
+    }
+
 }
