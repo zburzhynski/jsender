@@ -8,10 +8,6 @@ import static com.zburzhynski.jsender.api.domain.Settings.CLIENTS_PER_PAGE;
 import static com.zburzhynski.jsender.api.domain.Settings.DEFAULT_COUNTRY_CODE;
 import static com.zburzhynski.jsender.api.domain.Settings.JDENT_INTEGRATION_ENABLED;
 import static com.zburzhynski.jsender.api.domain.Settings.JDENT_URL;
-import static com.zburzhynski.jsender.api.domain.Settings.MAIL_PASSWORD;
-import static com.zburzhynski.jsender.api.domain.Settings.MAIL_SMTP_HOST;
-import static com.zburzhynski.jsender.api.domain.Settings.MAIL_SMTP_PORT;
-import static com.zburzhynski.jsender.api.domain.Settings.MAIL_USER_NAME;
 import static com.zburzhynski.jsender.api.domain.Settings.MESSAGE_TEMPLATES_PER_PAGE;
 import static com.zburzhynski.jsender.api.domain.Settings.ORGANIZATION_ADDRESS;
 import static com.zburzhynski.jsender.api.domain.Settings.ORGANIZATION_MOBILE_PHONE_NUMBER;
@@ -20,8 +16,6 @@ import static com.zburzhynski.jsender.api.domain.Settings.SEARCH_RECIPIENTS_PER_
 import static com.zburzhynski.jsender.api.domain.Settings.SENDING_ACCOUNTS_PER_PAGE;
 import static com.zburzhynski.jsender.api.domain.Settings.SENDING_RECIPIENTS_PER_PAGE;
 import static com.zburzhynski.jsender.api.domain.Settings.SENT_MESSAGES_PER_PAGE;
-import static com.zburzhynski.jsender.api.domain.Settings.SMS_PASSWORD;
-import static com.zburzhynski.jsender.api.domain.Settings.SMS_USER_NAME;
 import com.zburzhynski.jsender.api.domain.View;
 import com.zburzhynski.jsender.api.service.ISettingService;
 import com.zburzhynski.jsender.impl.domain.Setting;
@@ -84,6 +78,32 @@ public class SettingBean implements Serializable {
         viewSettings = new TreeSet<>(settingService.getByCategory(VIEW));
         requisiteSettings = new TreeSet<>(settingService.getByCategory(REQUISITE));
         jdentSettings = new TreeSet<>(settingService.getByCategory(JDENT));
+    }
+
+    /**
+     * Edits setting.
+     *
+     * @param id setting id
+     * @return path for navigation
+     */
+    public String editSetting(String id) {
+        setting = (Setting) settingService.getById(id);
+        return View.SETTING.getPath();
+    }
+
+    /**
+     * Saves setting.
+     *
+     * @return path for navigating
+     */
+    public String saveSetting() {
+        boolean valid = settingValidator.validate(setting);
+        if (!valid) {
+            return null;
+        }
+        settingService.saveOrUpdate(setting);
+        init();
+        return View.SETTINGS.getPath();
     }
 
     /**
@@ -150,60 +170,6 @@ public class SettingBean implements Serializable {
     }
 
     /**
-     * Gets sms user name.
-     *
-     * @return sms user name
-     */
-    public String getSMSUserName() {
-        return settings.get(SMS_USER_NAME.name()).getValue();
-    }
-
-    /**
-     * Gets sms password.
-     *
-     * @return sms password
-     */
-    public String getSMSPassword() {
-        return settings.get(SMS_PASSWORD.name()).getValue();
-    }
-
-    /**
-     * Gets mail smtp host.
-     *
-     * @return mail smtp host
-     */
-    public String getMailSmtpHost() {
-        return settings.get(MAIL_SMTP_HOST.name()).getValue();
-    }
-
-    /**
-     * Gets mail smtp port.
-     *
-     * @return mail smtp port
-     */
-    public String getMailSmtpPort() {
-        return settings.get(MAIL_SMTP_PORT.name()).getValue();
-    }
-
-    /**
-     * Gets mail user name.
-     *
-     * @return mail user name
-     */
-    public String getMailUserName() {
-        return settings.get(MAIL_USER_NAME.name()).getValue();
-    }
-
-    /**
-     * Gets mail password.
-     *
-     * @return mail password
-     */
-    public String getMailPassword() {
-        return settings.get(MAIL_PASSWORD.name()).getValue();
-    }
-
-    /**
      * Gets organization name.
      *
      * @return organization name
@@ -248,30 +214,6 @@ public class SettingBean implements Serializable {
         return settings.get(JDENT_URL.name()).getValue();
     }
 
-    /**
-     * Edits setting.
-     *
-     * @param id setting id
-     * @return path for navigation
-     */
-    public String editSetting(String id) {
-        setting = (Setting) settingService.getById(id);
-        return View.SETTING.getPath();
-    }
-    /**
-     * Saves setting.
-     *
-     * @return path for navigating
-     */
-    public String saveSetting() {
-        boolean valid = settingValidator.validate(setting);
-        if (!valid) {
-            return null;
-        }
-        settingService.saveOrUpdate(setting);
-        init();
-        return View.SETTINGS.getPath();
-    }
 
     public Map<String, Setting> getSettings() {
         return settings;

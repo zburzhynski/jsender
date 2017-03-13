@@ -3,7 +3,6 @@ package com.zburzhynski.jsender.impl.sender;
 import static com.zburzhynski.jsender.api.domain.CommonConstant.COLON;
 import com.zburzhynski.jsender.api.domain.SendingServices;
 import com.zburzhynski.jsender.api.domain.SendingType;
-import com.zburzhynski.jsender.api.domain.Settings;
 import com.zburzhynski.jsender.api.dto.Message;
 import com.zburzhynski.jsender.api.dto.Recipient;
 import com.zburzhynski.jsender.api.dto.SendingStatus;
@@ -11,7 +10,6 @@ import com.zburzhynski.jsender.api.sender.ISender;
 import com.zburzhynski.jsender.api.service.ISentMessageService;
 import com.zburzhynski.jsender.api.service.ISettingService;
 import com.zburzhynski.jsender.impl.domain.SentMessage;
-import com.zburzhynski.jsender.impl.domain.Setting;
 import com.zburzhynski.jsender.impl.service.AbstractSender;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -62,8 +60,8 @@ public class SmsSender extends AbstractSender implements ISender {
     @Override
     public List<SendingStatus> send(Message message) {
         List<SendingStatus> response = new ArrayList<>();
-        String name = ((Setting) settingService.getByName(Settings.SMS_USER_NAME)).getValue();
-        String password = ((Setting) settingService.getByName(Settings.SMS_PASSWORD)).getValue();
+        String name = null /*((Setting) settingService.getByName(Settings.SMS_USER_NAME)).getValue()*/;
+        String password = null /*((Setting) settingService.getByName(Settings.SMS_PASSWORD)).getValue()*/;
         String authString = name + COLON + password;
         for (Recipient recipient : message.getRecipients()) {
             for (String phoneNumber : recipient.getPhones()) {

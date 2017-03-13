@@ -25,20 +25,6 @@ public enum Settings {
     CLIENTS_PER_PAGE,
 
 
-    SMS_USER_NAME,
-
-    SMS_PASSWORD,
-
-
-    MAIL_SMTP_HOST,
-
-    MAIL_SMTP_PORT,
-
-    MAIL_USER_NAME,
-
-    MAIL_PASSWORD,
-
-
     ORGANIZATION_NAME,
 
     ORGANIZATION_ADDRESS,
