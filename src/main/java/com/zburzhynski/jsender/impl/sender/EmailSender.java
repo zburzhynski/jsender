@@ -64,7 +64,12 @@ public class EmailSender extends AbstractSender implements ISender {
     @Override
     public List<SendingStatus> send(Message email) {
         List<SendingStatus> response = new ArrayList<>();
-        Session session = buildSession(email);
+        SendingAccount account = (SendingAccount) accountService.getById(email.getSendingAccountId());
+        Map<Params, SendingAccountParam> map = new HashMap<>();
+        for (SendingAccountParam param : account.getAccountParams()) {
+            map.put(Params.valueOf(param.getParam().getName().toUpperCase()), param);
+        }
+        Session session = buildSession(map);
         for (Recipient recipient : email.getRecipients()) {
             for (String address : recipient.getEmails()) {
                 LOGGER.info("Sending email {} ", email);
@@ -73,7 +78,7 @@ public class EmailSender extends AbstractSender implements ISender {
                 status.setContactInfo(address);
                 try {
                     javax.mail.Message message = new MimeMessage(session);
-                    message.setFrom(new InternetAddress(null, email.getFrom()));
+                    message.setFrom(new InternetAddress(map.get(Params.USER_NAME).getValue(), email.getFrom()));
                     message.setRecipients(RecipientType.TO, InternetAddress.parse(address));
                     message.setSubject(StringUtils.isNotBlank(email.getSubject()) ? email.getSubject() : null);
                     message.setContent(StringUtils.isNotBlank(email.getText()) ?
@@ -106,12 +111,7 @@ public class EmailSender extends AbstractSender implements ISender {
         return EnumSet.of(SendingServices.GMAIL_COM, SendingServices.YANDEX_RU, SendingServices.MAIL_RU);
     }
 
-    private Session buildSession(Message email) {
-        SendingAccount account = (SendingAccount) accountService.getById(email.getSendingAccountId());
-        Map<Params, SendingAccountParam> map = new HashMap<>();
-        for (SendingAccountParam param : account.getAccountParams()) {
-            map.put(Params.valueOf(param.getParam().getName().toUpperCase()), param);
-        }
+    private Session buildSession(Map<Params, SendingAccountParam> map) {
         String smtpHost = map.get(Params.MAIL_SMTP_HOST).getValue();
         String smtpPort = map.get(Params.MAIL_SMTP_PORT).getValue();
         final String userName = map.get(Params.USER_NAME).getValue();
@@ -121,6 +121,8 @@ public class EmailSender extends AbstractSender implements ISender {
         props.put("mail.smtp.starttls.enable", "true");
         props.put("mail.smtp.host", smtpHost);
         props.put("mail.smtp.port", smtpPort);
+        props.put("mail.smtp.socketFactory.port", smtpPort);
+        props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
         return Session.getInstance(props, new Authenticator() {
             protected PasswordAuthentication getPasswordAuthentication() {
                 return new PasswordAuthentication(userName, password);
