@@ -370,6 +370,7 @@ databaseChangeLog {
             column(name: 'param_id', value: '0112434e-3885-4d13-9d6e-14706195fba3')
         }
     }
+
     changeSet(id: '2017-03-12-01', author: 'Nikita Shevtsov <shevtsou@gmail.com>') {
         comment("Insert yandex.ru account")
         insert(schemaName: 'jsender', tableName: 'sending_service') {
