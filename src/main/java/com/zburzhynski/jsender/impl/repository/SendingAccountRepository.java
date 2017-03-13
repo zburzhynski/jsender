@@ -10,6 +10,7 @@ import com.zburzhynski.jsender.api.criteria.SendingAccountSearchCriteria;
 import com.zburzhynski.jsender.api.repository.ISendingAccountRepository;
 import com.zburzhynski.jsender.impl.domain.SendingAccount;
 import com.zburzhynski.jsender.impl.util.CriteriaHelper;
+import org.apache.commons.collections.CollectionUtils;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
@@ -53,9 +54,9 @@ public class SendingAccountRepository extends AbstractBaseRepository<String, Sen
                                                Long start, Long end) {
         Criteria criteria = getSession().createCriteria(getDomainClass());
         criteria.createAlias(P_SENDING_SERVICE, P_SENDING_SERVICE);
-        if (searchCriteria.getSendingType() != null) {
-            criteria.add(Restrictions.eq(P_SENDING_SERVICE + DOT + P_SENDING_TYPE,
-                searchCriteria.getSendingType()));
+        if (CollectionUtils.isNotEmpty(searchCriteria.getSendingTypes())) {
+            criteria.add(Restrictions.in(P_SENDING_SERVICE + DOT + P_SENDING_TYPE,
+                searchCriteria.getSendingTypes()));
         }
         CriteriaHelper.addPagination(criteria, start, end);
         return criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();

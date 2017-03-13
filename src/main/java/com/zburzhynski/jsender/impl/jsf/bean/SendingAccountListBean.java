@@ -6,7 +6,10 @@ import com.zburzhynski.jsender.api.service.ISendingAccountService;
 import com.zburzhynski.jsender.impl.domain.SendingAccount;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
@@ -33,9 +36,16 @@ public class SendingAccountListBean implements Serializable {
      * @param sendingType {@link SendingType} service sending type
      */
     public void findByServiceSendingType(SendingType sendingType) {
-        SendingAccountSearchCriteria searchCriteria = new SendingAccountSearchCriteria();
-        searchCriteria.setSendingType(sendingType);
-        serviceAccounts = accountService.getByCriteria(searchCriteria, null, null);
+        if (sendingType != null) {
+            SendingAccountSearchCriteria searchCriteria = new SendingAccountSearchCriteria();
+            Set<SendingType> sendingTypes = new HashSet<>();
+            sendingTypes.add(sendingType);
+            sendingTypes.add(SendingType.EMAIL_SMS);
+            searchCriteria.setSendingTypes(sendingTypes);
+            serviceAccounts = accountService.getByCriteria(searchCriteria, null, null);
+        } else {
+            serviceAccounts = new ArrayList<>();
+        }
     }
 
     public List<SendingAccount> getServiceAccounts() {

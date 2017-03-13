@@ -2,6 +2,8 @@ package com.zburzhynski.jsender.api.criteria;
 
 import com.zburzhynski.jsender.api.domain.SendingType;
 
+import java.util.Set;
+
 /**
  * Sending account search criteria.
  * <p/>
@@ -11,14 +13,14 @@ import com.zburzhynski.jsender.api.domain.SendingType;
  */
 public class SendingAccountSearchCriteria {
 
-    private SendingType sendingType;
+    private Set<SendingType> sendingTypes;
 
-    public SendingType getSendingType() {
-        return sendingType;
+    public Set<SendingType> getSendingTypes() {
+        return sendingTypes;
     }
 
-    public void setSendingType(SendingType sendingType) {
-        this.sendingType = sendingType;
+    public void setSendingTypes(Set<SendingType> sendingTypes) {
+        this.sendingTypes = sendingTypes;
     }
 
 }

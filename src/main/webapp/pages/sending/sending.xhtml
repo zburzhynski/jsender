@@ -54,7 +54,7 @@
                             <f:selectItems value="#{sendingTypeListBean.sendingTypes}" var="type"
                                            itemValue="#{type}"
                                            itemLabel="#{msgs[type.value]}" />
-                            <p:ajax listener="#{sendingBean.sendingTypeChangeListener}" update="@form" />
+                            <p:ajax listener="#{sendingBean.sendingTypeChangeListener}" update="sendingService" />
                         </p:selectOneMenu>
                         <h:outputLabel value="#{msgs['sending.sendingAccount']}:" />
                         <p:selectOneMenu id="sendingService"
