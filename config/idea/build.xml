@@ -6,6 +6,7 @@
         <native2ascii src="src/main/resources/config"
                       dest="out/artifacts/jsender/WEB-INF/classes/config"
                       includes="**/*.properties" />
+        <copy file="changelog.txt" todir="out/artifacts/jsender/WEB-INF/classes/" />
     </target>
 
 </project>
