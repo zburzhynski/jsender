@@ -3,7 +3,10 @@ package com.zburzhynski.jsender.impl.jsf.bean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Serializable;
 import java.nio.charset.Charset;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -18,11 +21,11 @@ import javax.faces.bean.ViewScoped;
  */
 @ManagedBean
 @ViewScoped
-public class AboutInformationBean {
+public class ChangelogBean implements Serializable {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(AboutInformationBean.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ChangelogBean.class);
 
-    private static final String CHANGELOG_FILE_NAME = "/../../resources/changelog.txt";
+    private static final String CHANGELOG_FILE = "changelog.txt";
 
     private static final String UTF_8_ENCODING = "utf-8";
 
@@ -37,11 +40,8 @@ public class AboutInformationBean {
     public void init() {
         try {
             ClassLoader classLoader = getClass().getClassLoader();
-            java.io.BufferedReader in =
-                new java.io.BufferedReader(
-                    new java.io.InputStreamReader(
-                        classLoader.getResourceAsStream(CHANGELOG_FILE_NAME), Charset.forName(UTF_8_ENCODING)
-                        .newDecoder()));
+            BufferedReader in = new BufferedReader(new InputStreamReader(classLoader
+                .getResourceAsStream(CHANGELOG_FILE), Charset.forName(UTF_8_ENCODING).newDecoder()));
             StringBuilder changelog = new StringBuilder();
             String line;
             while ((line = in.readLine()) != null) {
@@ -51,16 +51,12 @@ public class AboutInformationBean {
             in.close();
             text = changelog.toString();
         } catch (IOException e) {
-            LOGGER.error("Error read changelog file" + e);
+            LOGGER.error("Error read changelog file", e);
         }
     }
 
     public String getText() {
         return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
     }
 
 }

@@ -196,10 +196,11 @@ task native2ascii << {
             encoding: 'UTF-8')
 }
 
-war.dependsOn 'copyChangelogToResources'
-task copyChangelogToResources(type: Copy) {
+war.dependsOn 'copyChangelog'
+
+task copyChangelog(type: Copy) {
     from "./"
-    into "./src/main/webapp/resources"
+    into "${processResources.destinationDir}"
     include "changelog.txt"
 }
 
