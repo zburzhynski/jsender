@@ -20,6 +20,9 @@
                     <p:submenu id="mSettings" label="#{msgs['mainMenu.settings']}" icon="ui-icon ui-icon-gear">
                         <p:menuitem id="smSettings" value="#{msgs['mainMenu.settings']}" action="#{mainMenuBean.settings}" />
                     </p:submenu>
+                    <p:submenu id="mHelp" label="#{msgs['mainMenu.help']}" icon="ui-icon ui-icon-help">
+                        <p:menuitem id="smsAbout" value="#{msgs['mainMenu.help.about']}" action="#{mainMenuBean.about}" />
+                    </p:submenu>
                 </p:menubar>
             </h:form>
         </ui:composition>
