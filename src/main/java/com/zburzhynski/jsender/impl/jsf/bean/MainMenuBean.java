@@ -1,5 +1,6 @@
 package com.zburzhynski.jsender.impl.jsf.bean;
 
+import static com.zburzhynski.jsender.api.domain.View.ABOUT_VIEW;
 import static com.zburzhynski.jsender.api.domain.View.CLIENTS;
 import static com.zburzhynski.jsender.api.domain.View.MESSAGE_TEMPLATES;
 import static com.zburzhynski.jsender.api.domain.View.SENDING;
@@ -85,4 +86,12 @@ public class MainMenuBean implements Serializable {
         return SETTINGS.getPath();
     }
 
+    /**
+     * Redirects to about.xhtml page.
+     *
+     * @return path to redirect
+     */
+    public String about() {
+        return ABOUT_VIEW.getPath();
+    }
 }

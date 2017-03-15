@@ -21,6 +21,7 @@ public enum View {
     CONTACT_INFO_PHONE("/pages/client/phone?faces-redirect=true"),
     SETTINGS("/pages/setting/settings?faces-redirect=true"),
     SETTING("/pages/setting/setting?faces-redirect=true"),
+    ABOUT_VIEW("/pages/help/about?faces-redirect=true"),
     SENDING_ACCOUNT("/pages/setting/sending_account/sending_account?faces-redirect=true"),
     SENDING_SERVICE_PARAM("/pages/setting/sending_account/account_param?faces-redirect=true");
 
