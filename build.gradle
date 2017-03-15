@@ -196,6 +196,13 @@ task native2ascii << {
             encoding: 'UTF-8')
 }
 
+war.dependsOn 'copyChangelogToResources'
+task copyChangelogToResources(type: Copy) {
+    from "./"
+    into "./src/main/webapp/resources"
+    include "changelog.txt"
+}
+
 /* ---------------- liquibase setup---------------------- */
 buildscript {
     repositories {
