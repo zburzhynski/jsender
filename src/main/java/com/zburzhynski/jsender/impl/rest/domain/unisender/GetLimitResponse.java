@@ -1,4 +1,4 @@
-package com.zburzhynski.jsender.impl.rest.domain;
+package com.zburzhynski.jsender.impl.rest.domain.unisender;
 
 import java.io.Serializable;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -11,7 +11,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Vladimir Zburzhynski
  */
 @XmlRootElement
-public class LimitAmountDto implements Serializable {
+public class GetLimitResponse implements Serializable {
 
     private String limit;
 

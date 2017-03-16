@@ -5,7 +5,7 @@ import com.sun.jersey.api.client.ClientHandlerException;
 import com.sun.jersey.api.client.UniformInterfaceException;
 import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.api.client.config.DefaultClientConfig;
-import com.zburzhynski.jsender.impl.rest.domain.LimitAmountDto;
+import com.zburzhynski.jsender.impl.rest.domain.unisender.GetLimitResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -31,17 +31,16 @@ public class UnisenderRestClient {
     /**
      * Gets sms limit amount.
      *
-     * @return sms limit amount
+     * @param token token
+     * @return {@link GetLimitResponse}
      */
-    public int getLimit() {
+    public GetLimitResponse getLimit(String token) {
         try {
-            String token = "b374580e1efce9b53c881487275cd3b0";
             WebResource webResource = client.resource(GET_LIMIT_URL + token);
-            LimitAmountDto limitAmountDto = webResource.accept(MediaType.APPLICATION_XML).get(LimitAmountDto.class);
-            return Integer.valueOf(limitAmountDto.getLimit());
+            return webResource.accept(MediaType.APPLICATION_XML).get(GetLimitResponse.class);
         } catch (UniformInterfaceException | ClientHandlerException exception) {
             LOGGER.error("Get limit amount exception", exception);
-            return 0;
+            return null;
         }
     }
 
