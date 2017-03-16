@@ -7,6 +7,7 @@ import com.sun.jersey.api.client.UniformInterfaceException;
 import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.api.client.config.DefaultClientConfig;
 import com.zburzhynski.jsender.impl.rest.domain.unisender.CheckSmsResponse;
+import com.zburzhynski.jsender.impl.rest.domain.unisender.ErrorResponse;
 import com.zburzhynski.jsender.impl.rest.domain.unisender.GetLimitResponse;
 import com.zburzhynski.jsender.impl.rest.exception.unisender.NotFoundException;
 import org.slf4j.Logger;
@@ -69,6 +70,7 @@ public class UnisenderRestClient {
             if (response.getStatus() == Response.Status.NOT_FOUND.getStatusCode()) {
                 throw new NotFoundException();
             }
+            ErrorResponse errorResponse = response.getEntity(ErrorResponse.class);
             LOGGER.error("Exception", exception);
             return null;
         } catch (ClientHandlerException exception) {
