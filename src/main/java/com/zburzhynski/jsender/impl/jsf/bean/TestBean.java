@@ -1,7 +1,8 @@
 package com.zburzhynski.jsender.impl.jsf.bean;
 
 import com.zburzhynski.jsender.impl.rest.client.UnisenderRestClient;
-import com.zburzhynski.jsender.impl.rest.domain.unisender.GetLimitResponse;
+import com.zburzhynski.jsender.impl.rest.domain.unisender.CheckSmsResponse;
+import com.zburzhynski.jsender.impl.rest.exception.unisender.NotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,8 +29,13 @@ public class TestBean implements Serializable {
 
     public void getLimit() {
         String token = "b374580e1efce9b53c881487275cd3b0";
-        GetLimitResponse response =  unisenderRestClient.getLimit(token);
-        LOGGER.info(response.getLimit());
+        int smsId = 1;
+        try {
+            CheckSmsResponse response = unisenderRestClient.checkSms(token, smsId);
+            LOGGER.info(response.toString());
+        } catch (NotFoundException e) {
+            LOGGER.warn("", e);
+        }
     }
 
     public void setUnisenderRestClient(UnisenderRestClient unisenderRestClient) {

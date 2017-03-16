@@ -4,9 +4,9 @@ import java.io.Serializable;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * LimitAmountDto.
+ * Get limit response.
  * <p/>
- * Date: 3/16/2017
+ * Date: 16.03.2017
  *
  * @author Vladimir Zburzhynski
  */
