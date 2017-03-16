@@ -338,6 +338,12 @@ databaseChangeLog {
             column(name: 'type', value: 'PASSWORD')
             column(name: 'description', value: 'Пароль')
         }
+        insert(schemaName: 'jsender', tableName: 'param') {
+            column(name: 'id', value: '1a4259ce-0797-4ce6-a215-fbb9b2eb62e6')
+            column(name: 'name', value: 'token')
+            column(name: 'type', value: 'PASSWORD')
+            column(name: 'description', value: 'API ключ')
+        }
     }
 
     changeSet(id: '2017-02-04-21', author: 'Nikita Shevtsov <shevtsou@gmail.com>') {
@@ -430,6 +436,20 @@ databaseChangeLog {
             column(name: 'id', value: '6993e87f-90fb-49be-bcea-648d2591f7eb')
             column(name: 'sending_service_id', value: 'e152bd93-43c4-4ed8-ac4d-d3a4ea0b509b')
             column(name: 'param_id', value: '0112434e-3885-4d13-9d6e-14706195fba3')
+        }
+    }
+
+    changeSet(id: '2017-03-16-01', author: 'Nikita Shevtsov <shevtsou@gmail.com>') {
+        comment("Insert unisender.by account")
+        insert(schemaName: 'jsender', tableName: 'sending_service') {
+            column(name: 'id', value: 'a12a3869-3f68-49a6-af42-fe999519b5c4')
+            column(name: 'name', value: 'unisender.by')
+            column(name: 'sending_type', value: 'SMS')
+        }
+        insert(schemaName: 'jsender', tableName: 'sending_service_param') {
+            column(name: 'id', value: '1f679dc9-b88c-4ecb-b4d5-33220fd68df1')
+            column(name: 'sending_service_id', value: 'a12a3869-3f68-49a6-af42-fe999519b5c4')
+            column(name: 'param_id', value: '1a4259ce-0797-4ce6-a215-fbb9b2eb62e6')
         }
     }
 
