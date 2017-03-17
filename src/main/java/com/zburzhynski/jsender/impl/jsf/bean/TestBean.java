@@ -1,6 +1,7 @@
 package com.zburzhynski.jsender.impl.jsf.bean;
 
 import com.zburzhynski.jsender.impl.rest.client.UnisenderRestClient;
+import com.zburzhynski.jsender.impl.rest.domain.unisender.CheckSmsRequest;
 import com.zburzhynski.jsender.impl.rest.domain.unisender.CheckSmsResponse;
 import com.zburzhynski.jsender.impl.rest.exception.unisender.NotFoundException;
 import org.slf4j.Logger;
@@ -27,14 +28,15 @@ public class TestBean implements Serializable {
     @ManagedProperty(value = "#{unisenderRestClient}")
     private UnisenderRestClient unisenderRestClient;
 
-    public void getLimit() {
-        String token = "b374580e1efce9b53c881487275cd3b0";
-        int smsId = 1;
+    public void checkSms() {
         try {
-            CheckSmsResponse response = unisenderRestClient.checkSms(token, smsId);
+            CheckSmsRequest request = new CheckSmsRequest();
+            request.setToken("b374580e1efce9b53c881487275cd3b0");
+            request.setSmsId(1);
+            CheckSmsResponse response = unisenderRestClient.checkSms(request);
             LOGGER.info(response.toString());
         } catch (NotFoundException e) {
-            LOGGER.warn("", e);
+            LOGGER.warn("Error occurred", e);
         }
     }
 

@@ -6,8 +6,10 @@ import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.UniformInterfaceException;
 import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.api.client.config.DefaultClientConfig;
+import com.zburzhynski.jsender.impl.rest.domain.unisender.CheckSmsRequest;
 import com.zburzhynski.jsender.impl.rest.domain.unisender.CheckSmsResponse;
 import com.zburzhynski.jsender.impl.rest.domain.unisender.ErrorResponse;
+import com.zburzhynski.jsender.impl.rest.domain.unisender.GetLimitRequest;
 import com.zburzhynski.jsender.impl.rest.domain.unisender.GetLimitResponse;
 import com.zburzhynski.jsender.impl.rest.exception.unisender.NotFoundException;
 import org.slf4j.Logger;
@@ -38,12 +40,12 @@ public class UnisenderRestClient {
     /**
      * Gets sms limit amount.
      *
-     * @param token token
-     * @return {@link GetLimitResponse}
+     * @param request {@link GetLimitRequest} request
+     * @return {@link GetLimitResponse} response
      */
-    public GetLimitResponse getLimit(String token) {
+    public GetLimitResponse getLimit(GetLimitRequest request) {
         try {
-            String url = String.format(GET_LIMIT_URL, token);
+            String url = String.format(GET_LIMIT_URL, request.getToken());
             WebResource webResource = client.resource(url);
             return webResource.accept(MediaType.APPLICATION_XML).get(GetLimitResponse.class);
         } catch (UniformInterfaceException | ClientHandlerException exception) {
@@ -55,27 +57,31 @@ public class UnisenderRestClient {
     /**
      * Checks sms delivery status.
      *
-     * @param token token
-     * @param smsId unique identifier of sms
-     * @return {@link CheckSmsResponse}
+     * @param request {@link CheckSmsRequest} request
+     * @return {@link CheckSmsResponse} response
      * @throws NotFoundException if sms not found
      */
-    public CheckSmsResponse checkSms(String token, int smsId) throws NotFoundException {
+    public CheckSmsResponse checkSms(CheckSmsRequest request) throws NotFoundException {
         try {
-            String url = String.format(CHECK_SMS_URL, token, smsId);
+            String url = String.format(CHECK_SMS_URL, request.getToken(), request.getSmsId());
             WebResource webResource = client.resource(url);
             return webResource.accept(MediaType.APPLICATION_XML).get(CheckSmsResponse.class);
         } catch (UniformInterfaceException exception) {
-            ClientResponse response = exception.getResponse();
-            if (response.getStatus() == Response.Status.NOT_FOUND.getStatusCode()) {
-                throw new NotFoundException();
-            }
-            ErrorResponse errorResponse = response.getEntity(ErrorResponse.class);
-            LOGGER.error("Exception", exception);
+            throwError(exception.getResponse());
+            LOGGER.error("UniformInterfaceException", exception);
             return null;
         } catch (ClientHandlerException exception) {
-            LOGGER.error("Exception", exception);
+            LOGGER.error("ClientHandlerException", exception);
             return null;
+        }
+    }
+
+    public void throwError(ClientResponse response) throws NotFoundException {
+        if (response.getStatus() == Response.Status.NOT_FOUND.getStatusCode()) {
+            throw new NotFoundException();
+        } else if (response.getStatus() == Response.Status.INTERNAL_SERVER_ERROR.getStatusCode())  {
+            ErrorResponse errorResponse = response.getEntity(ErrorResponse.class);
+            //TODO: parse error response and throws exception
         }
     }
 
