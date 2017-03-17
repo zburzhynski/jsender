@@ -10,7 +10,20 @@
     <ui:define name="content">
         <p:panel>
             <h:form id="testForm">
-                <p:commandButton action="#{testBean.checkSms}" value="checkSms" />
+                <h:panelGrid columns="2">
+                    <h:outputLabel for="token" value="token" />
+                    <p:inputText id="token" value="#{testBean.token}" />
+                    <h:outputLabel for="messageId" value="messageId" />
+                    <p:inputText id="messageId" value="#{testBean.messageId}" />
+                    <h:outputLabel for="result" value="result" />
+                    <p:inputTextarea id="result" disabled="true" value="#{testBean.result}" />
+                </h:panelGrid>
+                <p:commandButton action="#{testBean.checkSms}" value="checkSms" update="result" />
+                <p:commandButton action="#{testBean.createSmsMessage}" value="createSMSMessage" update="result" />
+                <p:commandButton action="#{testBean.checkSmsMessageStatus}" value="checkSmsMessageStatus" update="result" />
+                <p:commandButton action="#{testBean.getMessagesList}" value="getMessagesList" update="result" />
+                <p:commandButton action="#{testBean.sendSms}" value="sendSms" update="result" />
+                <p:commandButton action="#{testBean.getLimit}" value="getLimit" update="result" />
             </h:form>
         </p:panel>
     </ui:define>
