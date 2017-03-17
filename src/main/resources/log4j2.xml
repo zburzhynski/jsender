@@ -8,7 +8,7 @@
     <Appenders>
         <RollingFile name="jsender"
                      fileName="${baseDir}/jsender.log"
-                     filePattern="${baseDir}/$${date:yyyy-MM-dd}/jdent-%d{yyyy-MM-dd}-%i.log">
+                     filePattern="${baseDir}/$${date:yyyy-MM-dd}/jsender-%d{yyyy-MM-dd}-%i.log">
             <PatternLayout>
                 <pattern>%d{dd-MM-yyyy HH:mm:ss.SSS} %-5p [%t] %C{1} - %m%n</pattern>
             </PatternLayout>
