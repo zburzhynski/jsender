@@ -15,7 +15,9 @@ public enum Params {
 
     MAIL_SMTP_HOST,
 
-    MAIL_SMTP_PORT;
+    MAIL_SMTP_PORT,
+
+    TOKEN
 
 }
 
