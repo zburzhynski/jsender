@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration xmlns="http://logging.apache.org/log4j/2.0/config">
+
+    <Properties>
+        <Property name="baseDir">/jsender/logs/</Property>
+    </Properties>
+
+    <Appenders>
+        <RollingFile name="jsender"
+                     fileName="${baseDir}/jsender.log"
+                     filePattern="${baseDir}/$${date:yyyy-MM-dd}/jdent-%d{yyyy-MM-dd}-%i.log">
+            <PatternLayout>
+                <pattern>%d{dd-MM-yyyy HH:mm:ss.SSS} %-5p [%t] %C{1} - %m%n</pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                <SizeBasedTriggeringPolicy size="20 MB"/>
+            </Policies>
+        </RollingFile>
+        <File name="file" fileName="${baseDir}/jsender.log" append="true">
+            <PatternLayout pattern="%d{dd-MM-yyyy HH:mm:ss.SSS} %-5p [%t] %C{1} - %m%n"/>
+        </File>
+        <Console name="console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{dd-MM-yyyy HH:mm:ss.SSS} %-5p [%t] %C{1} - %m%n"/>
+        </Console>
+    </Appenders>
+
+    <Loggers>
+        <Root level="info">
+            <AppenderRef ref="console"/>
+        </Root>
+        <Logger name="com.zburzhynski.jsender" level="debug">
+            <AppenderRef ref="jsender"/>
+        </Logger>
+    </Loggers>
+
+</Configuration>
