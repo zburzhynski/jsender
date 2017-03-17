@@ -2,7 +2,6 @@ package com.zburzhynski.jsender.impl.rest.client;
 
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientHandlerException;
-import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.UniformInterfaceException;
 import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.api.client.config.DefaultClientConfig;
@@ -13,19 +12,21 @@ import com.zburzhynski.jsender.impl.rest.domain.unisender.CheckSmsRequest;
 import com.zburzhynski.jsender.impl.rest.domain.unisender.CheckSmsResponse;
 import com.zburzhynski.jsender.impl.rest.domain.unisender.CreateSmsMessageRequest;
 import com.zburzhynski.jsender.impl.rest.domain.unisender.CreateSmsMessageResponse;
-import com.zburzhynski.jsender.impl.rest.domain.unisender.ErrorResponse;
 import com.zburzhynski.jsender.impl.rest.domain.unisender.GetLimitRequest;
 import com.zburzhynski.jsender.impl.rest.domain.unisender.GetLimitResponse;
 import com.zburzhynski.jsender.impl.rest.domain.unisender.GetMessageListResponse;
 import com.zburzhynski.jsender.impl.rest.domain.unisender.SendSmsRequest;
 import com.zburzhynski.jsender.impl.rest.domain.unisender.SendSmsResponse;
+import com.zburzhynski.jsender.impl.rest.exception.unisender.AlphanameIncorrectException;
+import com.zburzhynski.jsender.impl.rest.exception.unisender.MessageAlreadyExistException;
+import com.zburzhynski.jsender.impl.rest.exception.unisender.MessageToLongException;
 import com.zburzhynski.jsender.impl.rest.exception.unisender.NotFoundException;
+import com.zburzhynski.jsender.impl.rest.helper.UnisenderErrorHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
 /**
  * Unisender.by rest client.
@@ -54,6 +55,33 @@ public class UnisenderRestClient {
     private static final String CHECK_SMS_URL = "http://sms.unisender.by/api/v1/checkSMS?token=%s&sms_id=%s";
 
     private Client client = Client.create(new DefaultClientConfig());
+
+
+    /**
+     * Creates sms message.
+     *
+     * @param request {@link CreateSmsMessageRequest} request
+     * @return {@link CreateSmsMessageResponse} response
+     * @throws MessageAlreadyExistException if message already exist
+     * @throws AlphanameIncorrectException if alphaname incorrect
+     * @throws MessageToLongException if message to long
+     */
+    public CreateSmsMessageResponse createSmsMessage(CreateSmsMessageRequest request)
+        throws MessageAlreadyExistException, AlphanameIncorrectException, MessageToLongException {
+        try {
+            String url = String.format(CREATE_SMS_MESSAGE_URL, request.getToken(), request.getMessage(),
+                request.getAlphanameId());
+            WebResource webResource = client.resource(url);
+            return webResource.accept(MediaType.APPLICATION_XML).get(CreateSmsMessageResponse.class);
+        } catch (UniformInterfaceException exception) {
+            UnisenderErrorHelper.throwCreateSmsMessageException(exception.getResponse());
+            LOGGER.error("UniformInterfaceException", exception);
+            return null;
+        } catch (ClientHandlerException exception) {
+            LOGGER.error("ClientHandlerException", exception);
+            return null;
+        }
+    }
 
     /**
      * Checks sms message status.
@@ -136,42 +164,11 @@ public class UnisenderRestClient {
             WebResource webResource = client.resource(url);
             return webResource.accept(MediaType.APPLICATION_XML).get(CheckSmsResponse.class);
         } catch (UniformInterfaceException exception) {
-            throwError(exception.getResponse());
             LOGGER.error("UniformInterfaceException", exception);
             return null;
         } catch (ClientHandlerException exception) {
             LOGGER.error("ClientHandlerException", exception);
             return null;
-        }
-    }
-
-    /**
-     * Creates sms message.
-     *
-     * @param request {@link CreateSmsMessageRequest} request
-     * @return {@link CreateSmsMessageResponse} response
-     */
-    public CreateSmsMessageResponse createSmsMessage(CreateSmsMessageRequest request) {
-        try {
-            String url = String.format(CREATE_SMS_MESSAGE_URL, request.getToken(), request.getMessage(),
-                request.getAlphanameId());
-            WebResource webResource = client.resource(url);
-            return webResource.accept(MediaType.APPLICATION_XML).get(CreateSmsMessageResponse.class);
-        } catch (UniformInterfaceException exception) {
-            LOGGER.error("UniformInterfaceException", exception);
-            return null;
-        } catch (ClientHandlerException exception) {
-            LOGGER.error("ClientHandlerException", exception);
-            return null;
-        }
-    }
-
-    private void throwError(ClientResponse response) throws NotFoundException {
-        if (response.getStatus() == Response.Status.NOT_FOUND.getStatusCode()) {
-            throw new NotFoundException();
-        } else if (response.getStatus() == Response.Status.INTERNAL_SERVER_ERROR.getStatusCode())  {
-            ErrorResponse errorResponse = response.getEntity(ErrorResponse.class);
-            //TODO: parse error response and throws exception
         }
     }
 

@@ -49,7 +49,7 @@ public class TestBean implements Serializable {
         try {
             CreateSmsMessageRequest request = new CreateSmsMessageRequest();
             request.setToken(token);
-            request.setMessage(URLEncoder.encode("message", "UTF-8"));
+            request.setMessage(URLEncoder.encode("Test message", "UTF-8"));
             request.setAlphanameId("test");
             CreateSmsMessageResponse response = unisenderRestClient.createSmsMessage(request);
             result = response.getStatus();
