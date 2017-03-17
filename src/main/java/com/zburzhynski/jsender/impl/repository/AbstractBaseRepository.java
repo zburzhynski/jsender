@@ -4,7 +4,6 @@ import com.zburzhynski.jsender.api.domain.IDomain;
 import com.zburzhynski.jsender.impl.domain.CriteriaAlias;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
-import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.FetchMode;
 import org.hibernate.Query;
@@ -15,6 +14,8 @@ import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.ProjectionList;
 import org.hibernate.criterion.Projections;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -33,7 +34,7 @@ import javax.annotation.Resource;
  */
 public abstract class AbstractBaseRepository<ID extends Serializable, T extends IDomain> {
 
-    private static final Logger LOGGER = Logger.getLogger(AbstractBaseRepository.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AbstractBaseRepository.class);
 
     private static final String STATE = "state";
 
