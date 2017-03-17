@@ -444,7 +444,7 @@ databaseChangeLog {
         insert(schemaName: 'jsender', tableName: 'sending_service') {
             column(name: 'id', value: 'a12a3869-3f68-49a6-af42-fe999519b5c4')
             column(name: 'name', value: 'unisender.by')
-            column(name: 'sending_type', value: 'SMS')
+            column(name: 'sending_type', value: 'EMAIL_SMS')
         }
         insert(schemaName: 'jsender', tableName: 'sending_service_param') {
             column(name: 'id', value: '1f679dc9-b88c-4ecb-b4d5-33220fd68df1')
