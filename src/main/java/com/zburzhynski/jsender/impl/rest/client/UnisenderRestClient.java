@@ -64,7 +64,6 @@ public class UnisenderRestClient {
 
     private Client client = Client.create(new DefaultClientConfig());
 
-
     /**
      * Creates sms message.
      *
