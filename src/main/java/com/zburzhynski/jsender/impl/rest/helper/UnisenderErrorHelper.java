@@ -5,7 +5,7 @@ import com.zburzhynski.jsender.impl.rest.domain.unisender.ErrorResponse;
 import com.zburzhynski.jsender.impl.rest.exception.unisender.AccessDeniedException;
 import com.zburzhynski.jsender.impl.rest.exception.unisender.AlphanameIncorrectException;
 import com.zburzhynski.jsender.impl.rest.exception.unisender.BillingException;
-import com.zburzhynski.jsender.impl.rest.exception.unisender.IncorrectArgumentsException;
+import com.zburzhynski.jsender.impl.rest.exception.unisender.IncorrectArgumentException;
 import com.zburzhynski.jsender.impl.rest.exception.unisender.IncorrectPhoneNumberException;
 import com.zburzhynski.jsender.impl.rest.exception.unisender.InvalidTokenException;
 import com.zburzhynski.jsender.impl.rest.exception.unisender.LimitExceededException;
@@ -31,9 +31,9 @@ public class UnisenderErrorHelper {
      *
      * @param response {@link ClientResponse}
      * @throws MessageAlreadyExistException if message already exist
-     * @throws AlphanameIncorrectException if alphaname incorrect
-     * @throws MessageToLongException if message to long
-     * @throws InvalidTokenException if token invalid
+     * @throws AlphanameIncorrectException  if alphaname incorrect
+     * @throws MessageToLongException       if message to long
+     * @throws InvalidTokenException        if token invalid
      */
     public static void throwCreateSmsMessageException(ClientResponse response)
         throws MessageAlreadyExistException, AlphanameIncorrectException,
@@ -55,18 +55,18 @@ public class UnisenderErrorHelper {
      * Throws check sms message status exception.
      *
      * @param response {@link ClientResponse}
-     * @throws IncorrectArgumentsException if arguments incorrect
-     * @throws NotFoundException if sms not found
-     * @throws InvalidTokenException if token invalid
+     * @throws IncorrectArgumentException if arguments incorrect
+     * @throws NotFoundException          if sms not found
+     * @throws InvalidTokenException      if token invalid
      */
     public static void throwCheckSmsMessageStatusException(ClientResponse response)
-        throws IncorrectArgumentsException, NotFoundException, InvalidTokenException {
+        throws IncorrectArgumentException, NotFoundException, InvalidTokenException {
         if (response.getStatus() == Response.Status.INTERNAL_SERVER_ERROR.getStatusCode()) {
             ErrorResponse errorResponse = response.getEntity(ErrorResponse.class);
             String message = errorResponse.getError();
             switch (message) {
                 case "incorrect arguments":
-                    throw new IncorrectArgumentsException();
+                    throw new IncorrectArgumentException();
                 case "not found":
                     throw new NotFoundException();
                 case "token is invalid":
@@ -80,7 +80,7 @@ public class UnisenderErrorHelper {
      * Throws get message list exception.
      *
      * @param response {@link ClientResponse}
-     * @throws UndefinedException if exception undefined
+     * @throws UndefinedException    if exception undefined
      * @throws InvalidTokenException if token invalid
      */
     public static void throwGetMessageListException(ClientResponse response)
@@ -102,17 +102,17 @@ public class UnisenderErrorHelper {
      * Throws send message exception.
      *
      * @param response {@link ClientResponse}
-     * @throws IncorrectPhoneNumberException     if phone number incorrect
-     * @throws IncorrectArgumentsException       if arguments incorrect
-     * @throws BillingException                  if billing error
-     * @throws MessageIdNotFoundException        if message id not found
-     * @throws AccessDeniedException             if accent denied
-     * @throws LimitExceededException            if limit exceeded
-     * @throws UndefinedException                if exception undefined
-     * @throws InvalidTokenException             if invalid token
+     * @throws IncorrectPhoneNumberException if phone number incorrect
+     * @throws IncorrectArgumentException    if arguments incorrect
+     * @throws BillingException              if billing error
+     * @throws MessageIdNotFoundException    if message id not found
+     * @throws AccessDeniedException         if accent denied
+     * @throws LimitExceededException        if limit exceeded
+     * @throws UndefinedException            if exception undefined
+     * @throws InvalidTokenException         if invalid token
      */
     public static void throwSendMessageException(ClientResponse response) throws IncorrectPhoneNumberException,
-        IncorrectArgumentsException, BillingException, MessageIdNotFoundException,
+        IncorrectArgumentException, BillingException, MessageIdNotFoundException,
         AccessDeniedException, LimitExceededException, UndefinedException, InvalidTokenException {
         if (response.getStatus() == Response.Status.INTERNAL_SERVER_ERROR.getStatusCode()) {
             ErrorResponse errorResponse = response.getEntity(ErrorResponse.class);
@@ -121,7 +121,7 @@ public class UnisenderErrorHelper {
                 case "incorrect phone number":
                     throw new IncorrectPhoneNumberException();
                 case "incorrect arguments":
-                    throw new IncorrectArgumentsException();
+                    throw new IncorrectArgumentException();
                 case "billing error":
                     throw new BillingException();
                 case "message_id not found":
@@ -143,7 +143,7 @@ public class UnisenderErrorHelper {
      * Throws get limit exception.
      *
      * @param response {@link ClientResponse}
-     * @throws UndefinedException if exception undefined
+     * @throws UndefinedException    if exception undefined
      * @throws InvalidTokenException if token invalid
      */
     public static void throwGetLimitException(ClientResponse response)
@@ -165,18 +165,18 @@ public class UnisenderErrorHelper {
      * Throws check sms exception.
      *
      * @param response {@link ClientResponse}
-     * @throws IncorrectArgumentsException if arguments incorrect
-     * @throws NotFoundException if sms not found
-     * @throws InvalidTokenException if token invalid
+     * @throws IncorrectArgumentException if arguments incorrect
+     * @throws NotFoundException          if sms not found
+     * @throws InvalidTokenException      if token invalid
      */
     public static void throwCheckSmsExcepiton(ClientResponse response)
-        throws IncorrectArgumentsException, NotFoundException, InvalidTokenException {
+        throws IncorrectArgumentException, NotFoundException, InvalidTokenException {
         if (response.getStatus() == Response.Status.INTERNAL_SERVER_ERROR.getStatusCode()) {
             ErrorResponse errorResponse = response.getEntity(ErrorResponse.class);
             String message = errorResponse.getError();
             switch (message) {
                 case "incorrect arguments":
-                    throw new IncorrectArgumentsException();
+                    throw new IncorrectArgumentException();
                 case "not found":
                     throw new NotFoundException();
                 case "token is invalid":

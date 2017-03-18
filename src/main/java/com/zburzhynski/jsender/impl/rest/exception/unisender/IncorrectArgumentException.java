@@ -7,5 +7,5 @@ package com.zburzhynski.jsender.impl.rest.exception.unisender;
  *
  * @author Nikita Shevtsou
  */
-public class IncorrectArgumentsException extends UnisenderException {
+public class IncorrectArgumentException extends UnisenderException {
 }
