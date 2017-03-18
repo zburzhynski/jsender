@@ -17,10 +17,18 @@ import com.zburzhynski.jsender.impl.rest.domain.unisender.GetLimitResponse;
 import com.zburzhynski.jsender.impl.rest.domain.unisender.GetMessageListResponse;
 import com.zburzhynski.jsender.impl.rest.domain.unisender.SendSmsRequest;
 import com.zburzhynski.jsender.impl.rest.domain.unisender.SendSmsResponse;
+import com.zburzhynski.jsender.impl.rest.exception.unisender.AccessDeniedException;
 import com.zburzhynski.jsender.impl.rest.exception.unisender.AlphanameIncorrectException;
+import com.zburzhynski.jsender.impl.rest.exception.unisender.BillingException;
+import com.zburzhynski.jsender.impl.rest.exception.unisender.IncorrectArgumentsException;
+import com.zburzhynski.jsender.impl.rest.exception.unisender.IncorrectPhoneNumberException;
+import com.zburzhynski.jsender.impl.rest.exception.unisender.InvalidTokenException;
+import com.zburzhynski.jsender.impl.rest.exception.unisender.LimitExceededException;
 import com.zburzhynski.jsender.impl.rest.exception.unisender.MessageAlreadyExistException;
+import com.zburzhynski.jsender.impl.rest.exception.unisender.MessageIdNotFoundException;
 import com.zburzhynski.jsender.impl.rest.exception.unisender.MessageToLongException;
 import com.zburzhynski.jsender.impl.rest.exception.unisender.NotFoundException;
+import com.zburzhynski.jsender.impl.rest.exception.unisender.UndefinedException;
 import com.zburzhynski.jsender.impl.rest.helper.UnisenderErrorHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -65,9 +73,11 @@ public class UnisenderRestClient {
      * @throws MessageAlreadyExistException if message already exist
      * @throws AlphanameIncorrectException if alphaname incorrect
      * @throws MessageToLongException if message to long
+     * @throws InvalidTokenException if token invalid
      */
     public CreateSmsMessageResponse createSmsMessage(CreateSmsMessageRequest request)
-        throws MessageAlreadyExistException, AlphanameIncorrectException, MessageToLongException {
+        throws MessageAlreadyExistException, AlphanameIncorrectException, MessageToLongException,
+        InvalidTokenException {
         try {
             String url = String.format(CREATE_SMS_MESSAGE_URL, request.getToken(), request.getMessage(),
                 request.getAlphanameId());
@@ -88,14 +98,22 @@ public class UnisenderRestClient {
      *
      * @param request {@link CheckSmsMessageStatusResponse} request
      * @return {@link CheckSmsMessageStatusResponse} response
+     * @throws IncorrectArgumentsException if arguments incorrect
+     * @throws NotFoundException if sms not found
+     * @throws InvalidTokenException if token invalid
      */
-    public CheckSmsMessageStatusResponse checkSmsMessageStatus(CheckSmsMessageStatusRequest request) {
+    public CheckSmsMessageStatusResponse checkSmsMessageStatus(CheckSmsMessageStatusRequest request)
+        throws IncorrectArgumentsException, InvalidTokenException, NotFoundException {
         try {
             String url = String.format(CHECK_SMS_MESSAGE_STATUS_URL, request.getToken(), request.getMessageId());
             WebResource webResource = client.resource(url);
             return webResource.accept(MediaType.APPLICATION_XML).get(CheckSmsMessageStatusResponse.class);
-        } catch (UniformInterfaceException | ClientHandlerException exception) {
+        } catch (UniformInterfaceException exception) {
+            UnisenderErrorHelper.throwCheckSmsMessageStatusException(exception.getResponse());
             LOGGER.error("Exception", exception);
+            return null;
+        } catch (ClientHandlerException exception) {
+            LOGGER.error("ClientHandlerException", exception);
             return null;
         }
     }
@@ -105,14 +123,21 @@ public class UnisenderRestClient {
      *
      * @param request {@link BaseUnisenderRequest} request
      * @return {@link GetMessageListResponse} response
+     * @throws UndefinedException if exception undefined
+     * @throws InvalidTokenException if token invalid
      */
-    public GetMessageListResponse getMessageList(BaseUnisenderRequest request) {
+    public GetMessageListResponse getMessageList(BaseUnisenderRequest request)
+        throws InvalidTokenException, UndefinedException {
         try {
             String url = String.format(GET_MESSAGE_LIST_URL, request.getToken());
             WebResource webResource = client.resource(url);
             return webResource.accept(MediaType.APPLICATION_XML).get(GetMessageListResponse.class);
-        } catch (UniformInterfaceException | ClientHandlerException exception) {
+        } catch (UniformInterfaceException exception) {
+            UnisenderErrorHelper.throwGetMessageListException(exception.getResponse());
             LOGGER.error("Exception", exception);
+            return null;
+        } catch (ClientHandlerException exception) {
+            LOGGER.error("ClientHandlerException", exception);
             return null;
         }
     }
@@ -122,14 +147,28 @@ public class UnisenderRestClient {
      *
      * @param request {@link SendSmsRequest} request
      * @return {@link SendSmsResponse} response
+     * @throws IncorrectPhoneNumberException     if phone number incorrect
+     * @throws IncorrectArgumentsException       if arguments incorrect
+     * @throws BillingException                  if billing error
+     * @throws MessageIdNotFoundException        if message id not found
+     * @throws AccessDeniedException             if accent denied
+     * @throws LimitExceededException            if limit exceeded
+     * @throws UndefinedException                if exception undefined
+     * @throws InvalidTokenException             if invalid token
      */
-    public SendSmsResponse sendSms(SendSmsRequest request) {
+    public SendSmsResponse sendSms(SendSmsRequest request) throws LimitExceededException, UndefinedException,
+        BillingException, MessageIdNotFoundException, InvalidTokenException, IncorrectArgumentsException,
+        AccessDeniedException, IncorrectPhoneNumberException {
         try {
             String url = String.format(SEND_SMS_URL, request.getToken(), request.getMessageId(), request.getPhone());
             WebResource webResource = client.resource(url);
             return webResource.accept(MediaType.APPLICATION_XML).get(SendSmsResponse.class);
-        } catch (UniformInterfaceException | ClientHandlerException exception) {
+        } catch (UniformInterfaceException exception) {
+            UnisenderErrorHelper.throwSendMessageException(exception.getResponse());
             LOGGER.error("Exception", exception);
+            return null;
+        } catch (ClientHandlerException exception) {
+            LOGGER.error("ClientHandlerException", exception);
             return null;
         }
     }
@@ -139,14 +178,20 @@ public class UnisenderRestClient {
      *
      * @param request {@link GetLimitRequest} request
      * @return {@link GetLimitResponse} response
+     * @throws UndefinedException if exception undefined
+     * @throws InvalidTokenException if token invalid
      */
-    public GetLimitResponse getLimit(GetLimitRequest request) {
+    public GetLimitResponse getLimit(GetLimitRequest request) throws InvalidTokenException, UndefinedException {
         try {
             String url = String.format(GET_LIMIT_URL, request.getToken());
             WebResource webResource = client.resource(url);
             return webResource.accept(MediaType.APPLICATION_XML).get(GetLimitResponse.class);
-        } catch (UniformInterfaceException | ClientHandlerException exception) {
+        } catch (UniformInterfaceException exception) {
+            UnisenderErrorHelper.throwGetLimitException(exception.getResponse());
             LOGGER.error("Exception", exception);
+            return null;
+        } catch (ClientHandlerException exception) {
+            LOGGER.error("ClientHandlerException", exception);
             return null;
         }
     }
@@ -157,13 +202,18 @@ public class UnisenderRestClient {
      * @param request {@link CheckSmsRequest} request
      * @return {@link CheckSmsResponse} response
      * @throws NotFoundException if sms not found
+     * @throws IncorrectArgumentsException if arguments incorrect
+     * @throws NotFoundException if sms not found
+     * @throws InvalidTokenException if token invalid
      */
-    public CheckSmsResponse checkSms(CheckSmsRequest request) throws NotFoundException {
+    public CheckSmsResponse checkSms(CheckSmsRequest request) throws NotFoundException, IncorrectArgumentsException,
+        InvalidTokenException {
         try {
             String url = String.format(CHECK_SMS_URL, request.getToken(), request.getSmsId());
             WebResource webResource = client.resource(url);
             return webResource.accept(MediaType.APPLICATION_XML).get(CheckSmsResponse.class);
         } catch (UniformInterfaceException exception) {
+            UnisenderErrorHelper.throwCheckSmsExcepiton(exception.getResponse());
             LOGGER.error("UniformInterfaceException", exception);
             return null;
         } catch (ClientHandlerException exception) {
