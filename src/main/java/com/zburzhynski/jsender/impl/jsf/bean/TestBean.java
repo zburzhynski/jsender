@@ -98,7 +98,7 @@ public class TestBean implements Serializable {
         try {
             CheckSmsRequest request = new CheckSmsRequest();
             request.setToken(token);
-            request.setSmsId(1);
+            request.setSmsId(messageId);
             CheckSmsResponse response = unisenderRestClient.checkSms(request);
             result = response.getDelivered().toString();
             LOGGER.info(response.toString());

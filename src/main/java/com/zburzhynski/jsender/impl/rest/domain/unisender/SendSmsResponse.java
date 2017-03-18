@@ -1,6 +1,7 @@
 package com.zburzhynski.jsender.impl.rest.domain.unisender;
 
 import java.io.Serializable;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -13,6 +14,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class SendSmsResponse implements Serializable {
 
+    @XmlElement(name = "sms_id")
     private Integer smsId;
 
     private String status;

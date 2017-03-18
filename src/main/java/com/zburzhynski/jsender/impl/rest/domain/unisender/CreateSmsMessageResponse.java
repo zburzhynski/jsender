@@ -1,6 +1,7 @@
 package com.zburzhynski.jsender.impl.rest.domain.unisender;
 
 import java.io.Serializable;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -17,7 +18,8 @@ public class CreateSmsMessageResponse implements Serializable {
 
     private Integer parts;
 
-    private Integer len;
+    @XmlElement(name = "len")
+    private Integer length;
 
     private String messageId;
 
@@ -39,12 +41,12 @@ public class CreateSmsMessageResponse implements Serializable {
         this.parts = parts;
     }
 
-    public Integer getLen() {
-        return len;
+    public Integer getLength() {
+        return length;
     }
 
-    public void setLen(Integer len) {
-        this.len = len;
+    public void setLength(Integer length) {
+        this.length = length;
     }
 
     public String getMessageId() {
