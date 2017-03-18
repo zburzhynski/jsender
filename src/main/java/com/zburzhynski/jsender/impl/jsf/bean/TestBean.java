@@ -13,7 +13,6 @@ import com.zburzhynski.jsender.impl.rest.domain.unisender.GetLimitResponse;
 import com.zburzhynski.jsender.impl.rest.domain.unisender.GetMessageListResponse;
 import com.zburzhynski.jsender.impl.rest.domain.unisender.SendSmsRequest;
 import com.zburzhynski.jsender.impl.rest.domain.unisender.SendSmsResponse;
-import com.zburzhynski.jsender.impl.rest.exception.unisender.NotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,7 +49,7 @@ public class TestBean implements Serializable {
             CreateSmsMessageRequest request = new CreateSmsMessageRequest();
             request.setToken(token);
             request.setMessage(URLEncoder.encode("Test message", "UTF-8"));
-            request.setAlphanameId("test");
+            request.setAlphanameId("system");
             CreateSmsMessageResponse response = unisenderRestClient.createSmsMessage(request);
             result = response.getStatus();
             LOGGER.info(response.toString());
@@ -60,38 +59,54 @@ public class TestBean implements Serializable {
     }
 
     public void checkSmsMessageStatus() {
-        CheckSmsMessageStatusRequest request = new CheckSmsMessageStatusRequest();
-        request.setToken(token);
-        request.setMessageId(messageId);
-        CheckSmsMessageStatusResponse response = unisenderRestClient.checkSmsMessageStatus(request);
-        result = response.toString();
-        LOGGER.info(response.getStatus());
+        try {
+            CheckSmsMessageStatusRequest request = new CheckSmsMessageStatusRequest();
+            request.setToken(token);
+            request.setMessageId(messageId);
+            CheckSmsMessageStatusResponse response = unisenderRestClient.checkSmsMessageStatus(request);
+            result = response.toString();
+            LOGGER.info(response.getStatus());
+        } catch (Exception e) {
+            LOGGER.warn("Error occurred", e);
+        }
     }
 
     public void getMessagesList() {
-        BaseUnisenderRequest request = new BaseUnisenderRequest();
-        request.setToken(token);
-        GetMessageListResponse response = unisenderRestClient.getMessageList(request);
-        result = response.getResult().toString();
-        LOGGER.info(response.toString());
+        try {
+            BaseUnisenderRequest request = new BaseUnisenderRequest();
+            request.setToken(token);
+            GetMessageListResponse response = unisenderRestClient.getMessageList(request);
+            result = response.getResult().toString();
+            LOGGER.info(response.toString());
+        } catch (Exception e) {
+            LOGGER.warn("Error occurred", e);
+        }
     }
 
     public void sendSms() {
-        SendSmsRequest request = new SendSmsRequest();
-        request.setToken(token);
-        request.setMessageId(messageId);
-        request.setPhone("+375299999999");
-        SendSmsResponse response = unisenderRestClient.sendSms(request);
-        result = response.getStatus();
-        LOGGER.info(response.getStatus());
+        try {
+            SendSmsRequest request = new SendSmsRequest();
+            request.setToken(token);
+            request.setMessageId(messageId);
+            request.setPhone("+375299999999");
+            SendSmsResponse response = unisenderRestClient.sendSms(request);
+            result = response.getStatus();
+            LOGGER.info(response.getStatus());
+        } catch (Exception e) {
+            LOGGER.warn("Error occurred", e);
+        }
     }
 
     public void getLimit() {
-        GetLimitRequest request = new GetLimitRequest();
-        request.setToken(token);
-        GetLimitResponse response = unisenderRestClient.getLimit(request);
-        result = response.getLimit();
-        LOGGER.info(response.toString());
+        try {
+            GetLimitRequest request = new GetLimitRequest();
+            request.setToken(token);
+            GetLimitResponse response = unisenderRestClient.getLimit(request);
+            result = response.getLimit();
+            LOGGER.info(response.toString());
+        } catch (Exception e) {
+            LOGGER.warn("Error occurred", e);
+        }
     }
 
     public void checkSms() {
@@ -102,7 +117,7 @@ public class TestBean implements Serializable {
             CheckSmsResponse response = unisenderRestClient.checkSms(request);
             result = response.getDelivered().toString();
             LOGGER.info(response.toString());
-        } catch (NotFoundException e) {
+        } catch (Exception e) {
             LOGGER.warn("Error occurred", e);
         }
     }
