@@ -21,10 +21,10 @@
                     <p:inputTextarea id="result" disabled="true" value="#{testBean.result}" />
                 </h:panelGrid>
                 <p:commandButton action="#{testBean.createSmsMessage}" value="createSMSMessage" update="result" />
-                <p:commandButton action="#{testBean.checkSms}" value="checkSms" update="result" />
                 <p:commandButton action="#{testBean.checkSmsMessageStatus}" value="checkSmsMessageStatus" update="result" />
                 <p:commandButton action="#{testBean.getMessagesList}" value="getMessagesList" update="result" />
                 <p:commandButton action="#{testBean.sendSms}" value="sendSms" update="result" />
+                <p:commandButton action="#{testBean.checkSms}" value="checkSms" update="result" />
                 <p:commandButton action="#{testBean.getLimit}" value="getLimit" update="result" />
             </h:form>
         </p:panel>
