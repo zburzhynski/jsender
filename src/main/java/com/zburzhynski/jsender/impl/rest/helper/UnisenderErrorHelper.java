@@ -1,7 +1,6 @@
 package com.zburzhynski.jsender.impl.rest.helper;
 
 import com.sun.jersey.api.client.ClientResponse;
-import com.zburzhynski.jsender.impl.rest.domain.unisender.ErrorResponse;
 import com.zburzhynski.jsender.impl.rest.exception.unisender.AccessDeniedException;
 import com.zburzhynski.jsender.impl.rest.exception.unisender.AlphanameIncorrectException;
 import com.zburzhynski.jsender.impl.rest.exception.unisender.BillingException;
@@ -60,8 +59,8 @@ public class UnisenderErrorHelper {
                 if ("alphaname is error".equals(error.getString(ERROR_FIELD))) {
                     throw new AlphanameIncorrectException();
                 }
-            } catch (JSONException e) {
-                LOGGER.error("Error parsing json", e);
+            } catch (JSONException exception) {
+                LOGGER.error("Error parsing json", exception);
             }
         }
         throw new UndefinedException();
@@ -123,21 +122,24 @@ public class UnisenderErrorHelper {
             throw new ObjectNotFoundException();
         }
         if (response.getStatus() == Response.Status.INTERNAL_SERVER_ERROR.getStatusCode()) {
-            ErrorResponse errorResponse = response.getEntity(ErrorResponse.class);
-            String message = errorResponse.getError();
-            switch (message) {
-                case "incorrect phone number":
-                    throw new IncorrectPhoneNumberException();
-                case "billing error":
-                    throw new BillingException();
-                case "access denied":
-                    throw new AccessDeniedException();
-                case "limit exceeded":
-                    throw new LimitExceededException();
-                default:
+            try {
+                JSONObject error = new JSONObject(response.getEntity(String.class));
+                switch (error.getString(ERROR_FIELD)) {
+                    case "incorrect phone number":
+                        throw new IncorrectPhoneNumberException();
+                    case "billing error":
+                        throw new BillingException();
+                    case "access denied":
+                        throw new AccessDeniedException();
+                    case "limit exceeded":
+                        throw new LimitExceededException();
+                    default:
+                }
+            } catch (JSONException exception) {
+                LOGGER.error("Error parsing json", exception);
             }
+            throw new UndefinedException();
         }
-        throw new UndefinedException();
     }
 
     /**
