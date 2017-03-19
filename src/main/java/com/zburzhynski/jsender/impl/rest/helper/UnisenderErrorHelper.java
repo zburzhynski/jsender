@@ -11,7 +11,6 @@ import com.zburzhynski.jsender.impl.rest.exception.unisender.MessageAlreadyExist
 import com.zburzhynski.jsender.impl.rest.exception.unisender.MessageToLongException;
 import com.zburzhynski.jsender.impl.rest.exception.unisender.ObjectNotFoundException;
 import com.zburzhynski.jsender.impl.rest.exception.unisender.UndefinedException;
-import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 import org.slf4j.Logger;
@@ -53,8 +52,9 @@ public class UnisenderErrorHelper {
         if (response.getStatus() == Response.Status.INTERNAL_SERVER_ERROR.getStatusCode()) {
             try {
                 JSONObject error = new JSONObject(response.getEntity(String.class));
-                if (StringUtils.isNotBlank(error.optString(MESSAGE_ID_FIELD))) {
-                    throw new MessageAlreadyExistException();
+                Integer messageId = error.optInt(MESSAGE_ID_FIELD);
+                if (messageId != null) {
+                    throw new MessageAlreadyExistException(messageId);
                 }
                 if ("alphaname is error".equals(error.getString(ERROR_FIELD))) {
                     throw new AlphanameIncorrectException();
