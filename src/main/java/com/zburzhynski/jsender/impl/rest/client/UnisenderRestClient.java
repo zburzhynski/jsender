@@ -28,7 +28,6 @@ import com.zburzhynski.jsender.impl.rest.exception.unisender.IncorrectPhoneNumbe
 import com.zburzhynski.jsender.impl.rest.exception.unisender.InvalidTokenException;
 import com.zburzhynski.jsender.impl.rest.exception.unisender.LimitExceededException;
 import com.zburzhynski.jsender.impl.rest.exception.unisender.MessageAlreadyExistException;
-import com.zburzhynski.jsender.impl.rest.exception.unisender.MessageIdNotFoundException;
 import com.zburzhynski.jsender.impl.rest.exception.unisender.MessageToLongException;
 import com.zburzhynski.jsender.impl.rest.exception.unisender.NotFoundException;
 import com.zburzhynski.jsender.impl.rest.exception.unisender.UndefinedException;
@@ -164,14 +163,14 @@ public class UnisenderRestClient {
      * @throws IncorrectPhoneNumberException if phone number incorrect
      * @throws IncorrectArgumentException    if arguments incorrect
      * @throws BillingException              if billing error
-     * @throws MessageIdNotFoundException    if message id not found
+     * @throws NotFoundException             if message not found
      * @throws AccessDeniedException         if accent denied
      * @throws LimitExceededException        if limit exceeded
      * @throws UndefinedException            if exception undefined
      * @throws InvalidTokenException         if invalid token
      */
     public SendSmsResponse sendSms(SendSmsRequest request) throws LimitExceededException, UndefinedException,
-        BillingException, MessageIdNotFoundException, InvalidTokenException, IncorrectArgumentException,
+        BillingException, NotFoundException, InvalidTokenException, IncorrectArgumentException,
         AccessDeniedException, IncorrectPhoneNumberException {
         try {
             String url = String.format(SEND_SMS_URL, request.getToken(), request.getMessageId(), request.getPhone());

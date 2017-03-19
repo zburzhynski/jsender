@@ -10,7 +10,6 @@ import com.zburzhynski.jsender.impl.rest.exception.unisender.IncorrectPhoneNumbe
 import com.zburzhynski.jsender.impl.rest.exception.unisender.InvalidTokenException;
 import com.zburzhynski.jsender.impl.rest.exception.unisender.LimitExceededException;
 import com.zburzhynski.jsender.impl.rest.exception.unisender.MessageAlreadyExistException;
-import com.zburzhynski.jsender.impl.rest.exception.unisender.MessageIdNotFoundException;
 import com.zburzhynski.jsender.impl.rest.exception.unisender.MessageToLongException;
 import com.zburzhynski.jsender.impl.rest.exception.unisender.NotFoundException;
 import com.zburzhynski.jsender.impl.rest.exception.unisender.UndefinedException;
@@ -61,14 +60,15 @@ public class UnisenderErrorHelper {
      */
     public static void throwCheckSmsMessageStatusException(ClientResponse response)
         throws IncorrectArgumentException, NotFoundException, InvalidTokenException {
+        if (response.getStatus() == Response.Status.NOT_FOUND.getStatusCode()) {
+            throw new NotFoundException();
+        }
         if (response.getStatus() == Response.Status.INTERNAL_SERVER_ERROR.getStatusCode()) {
             ErrorResponse errorResponse = response.getEntity(ErrorResponse.class);
             String message = errorResponse.getError();
             switch (message) {
                 case "incorrect arguments":
                     throw new IncorrectArgumentException();
-                case "not found":
-                    throw new NotFoundException();
                 case "token is invalid":
                     throw new InvalidTokenException();
                 default:
@@ -105,15 +105,18 @@ public class UnisenderErrorHelper {
      * @throws IncorrectPhoneNumberException if phone number incorrect
      * @throws IncorrectArgumentException    if arguments incorrect
      * @throws BillingException              if billing error
-     * @throws MessageIdNotFoundException    if message id not found
+     * @throws NotFoundException             if message not found
      * @throws AccessDeniedException         if accent denied
      * @throws LimitExceededException        if limit exceeded
      * @throws UndefinedException            if exception undefined
      * @throws InvalidTokenException         if invalid token
      */
     public static void throwSendMessageException(ClientResponse response) throws IncorrectPhoneNumberException,
-        IncorrectArgumentException, BillingException, MessageIdNotFoundException,
+        IncorrectArgumentException, BillingException, NotFoundException,
         AccessDeniedException, LimitExceededException, UndefinedException, InvalidTokenException {
+        if (response.getStatus() == Response.Status.NOT_FOUND.getStatusCode()) {
+            throw new NotFoundException();
+        }
         if (response.getStatus() == Response.Status.INTERNAL_SERVER_ERROR.getStatusCode()) {
             ErrorResponse errorResponse = response.getEntity(ErrorResponse.class);
             String message = errorResponse.getError();
@@ -124,8 +127,6 @@ public class UnisenderErrorHelper {
                     throw new IncorrectArgumentException();
                 case "billing error":
                     throw new BillingException();
-                case "message_id not found":
-                    throw new MessageIdNotFoundException();
                 case "access denied":
                     throw new AccessDeniedException();
                 case "limit exceeded":
@@ -171,14 +172,15 @@ public class UnisenderErrorHelper {
      */
     public static void throwCheckSmsExcepiton(ClientResponse response)
         throws IncorrectArgumentException, NotFoundException, InvalidTokenException {
+        if (response.getStatus() == Response.Status.NOT_FOUND.getStatusCode()) {
+            throw new NotFoundException();
+        }
         if (response.getStatus() == Response.Status.INTERNAL_SERVER_ERROR.getStatusCode()) {
             ErrorResponse errorResponse = response.getEntity(ErrorResponse.class);
             String message = errorResponse.getError();
             switch (message) {
                 case "incorrect arguments":
                     throw new IncorrectArgumentException();
-                case "not found":
-                    throw new NotFoundException();
                 case "token is invalid":
                     throw new InvalidTokenException();
                 default:
