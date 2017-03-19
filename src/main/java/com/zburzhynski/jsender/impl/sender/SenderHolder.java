@@ -1,6 +1,7 @@
 package com.zburzhynski.jsender.impl.sender;
 
 import com.zburzhynski.jsender.api.domain.SendingServices;
+import com.zburzhynski.jsender.api.domain.SendingType;
 import com.zburzhynski.jsender.api.sender.ISender;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -26,16 +27,20 @@ public class SenderHolder {
      * Gets message sender by sending service.
      *
      * @param serviceName sending service name
+     * @param sendingType sending type
      * @return message sender
      */
-    public ISender getSender(String serviceName) {
-        Map<SendingServices, ISender> senders = new HashMap<>();
+    public ISender getSender(String serviceName, SendingType sendingType) {
+        Map<SendingServices, Map<SendingType, ISender>> senderMap = new HashMap<>();
         for (ISender sender : allSenders) {
             for (SendingServices service : sender.getSendingServices()) {
-                senders.put(service, sender);
+                if (!senderMap.containsKey(service)) {
+                    senderMap.put(service, new HashMap<SendingType, ISender>());
+                }
+                senderMap.get(service).put(sender.getSendingType(), sender);
             }
         }
-        return senders.get(SendingServices.getBySite(serviceName));
+        return senderMap.get(SendingServices.getBySite(serviceName)).get(sendingType);
     }
 
 }

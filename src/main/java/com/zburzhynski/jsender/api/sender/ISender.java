@@ -1,6 +1,7 @@
 package com.zburzhynski.jsender.api.sender;
 
 import com.zburzhynski.jsender.api.domain.SendingServices;
+import com.zburzhynski.jsender.api.domain.SendingType;
 import com.zburzhynski.jsender.api.dto.Message;
 import com.zburzhynski.jsender.api.dto.SendingStatus;
 
@@ -30,5 +31,12 @@ public interface ISender {
      * @return sending services
      */
     Set<SendingServices> getSendingServices();
+
+    /**
+     * Gets sending type.
+     *
+     * @return sending type
+     */
+    SendingType getSendingType();
 
 }

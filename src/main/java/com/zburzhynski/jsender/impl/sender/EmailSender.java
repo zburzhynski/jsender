@@ -107,6 +107,11 @@ public class EmailSender extends AbstractSender implements ISender {
         return EnumSet.of(SendingServices.GMAIL_COM, SendingServices.YANDEX_RU, SendingServices.MAIL_RU);
     }
 
+    @Override
+    public SendingType getSendingType() {
+        return SendingType.EMAIL;
+    }
+
     private Session buildSession(Map<Params, SendingAccountParam> params) {
         String smtpHost = params.get(Params.MAIL_SMTP_HOST).getValue();
         String smtpPort = params.get(Params.MAIL_SMTP_PORT).getValue();

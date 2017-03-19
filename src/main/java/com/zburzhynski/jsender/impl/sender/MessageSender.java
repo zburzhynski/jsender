@@ -33,7 +33,7 @@ public class MessageSender {
      */
     public List<SendingStatus> send(Message message) {
         SendingAccount account = (SendingAccount) accountService.getById(message.getSendingAccountId());
-        return senderHolder.getSender(account.getSendingService().getName()).send(message);
+        return senderHolder.getSender(account.getSendingService().getName(), message.getSendingType()).send(message);
     }
 
 }
