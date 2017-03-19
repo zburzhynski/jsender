@@ -2,9 +2,12 @@ package com.zburzhynski.jsender.impl.rest.client;
 
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientHandlerException;
+import com.sun.jersey.api.client.GenericType;
 import com.sun.jersey.api.client.UniformInterfaceException;
 import com.sun.jersey.api.client.WebResource;
+import com.sun.jersey.api.client.config.ClientConfig;
 import com.sun.jersey.api.client.config.DefaultClientConfig;
+import com.sun.jersey.api.json.JSONConfiguration;
 import com.zburzhynski.jsender.impl.rest.domain.unisender.BaseUnisenderRequest;
 import com.zburzhynski.jsender.impl.rest.domain.unisender.CheckSmsMessageStatusRequest;
 import com.zburzhynski.jsender.impl.rest.domain.unisender.CheckSmsMessageStatusResponse;
@@ -34,6 +37,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+import javax.annotation.PostConstruct;
 import javax.ws.rs.core.MediaType;
 
 /**
@@ -62,7 +67,17 @@ public class UnisenderRestClient {
 
     private static final String CHECK_SMS_URL = "http://sms.unisender.by/api/v1/checkSMS?token=%s&sms_id=%s";
 
-    private Client client = Client.create(new DefaultClientConfig());
+    private Client client;
+
+    /**
+     * Inits.
+     */
+    @PostConstruct
+    public void init() {
+        ClientConfig config = new DefaultClientConfig();
+        config.getFeatures().put(JSONConfiguration.FEATURE_POJO_MAPPING, Boolean.TRUE);
+        client = Client.create(config);
+    }
 
     /**
      * Creates sms message.
@@ -210,7 +225,8 @@ public class UnisenderRestClient {
         try {
             String url = String.format(CHECK_SMS_URL, request.getToken(), request.getSmsId());
             WebResource webResource = client.resource(url);
-            return webResource.accept(MediaType.APPLICATION_XML).get(CheckSmsResponse.class);
+            return webResource.accept(MediaType.APPLICATION_XML).get(new GenericType<List<CheckSmsResponse>>() {
+            }).get(0);
         } catch (UniformInterfaceException exception) {
             UnisenderErrorHelper.throwCheckSmsExcepiton(exception.getResponse());
             LOGGER.error("UniformInterfaceException", exception);
