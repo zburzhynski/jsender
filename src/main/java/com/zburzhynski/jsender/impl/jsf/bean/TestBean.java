@@ -35,9 +35,9 @@ public class TestBean implements Serializable {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TestBean.class);
 
-    private String token = "b374580e1efce9b53c881487275cd3b0";
+    private String token = "67c8209a7acdb1f64772fb31e6c8d5e8";
 
-    private Integer messageId = 63033;
+    private Integer messageId = 62826;
 
     private String result;
 
@@ -88,7 +88,7 @@ public class TestBean implements Serializable {
             SendSmsRequest request = new SendSmsRequest();
             request.setToken(token);
             request.setMessageId(messageId);
-            request.setPhone("375299999999");
+            request.setPhone("+375299999999");
             SendSmsResponse response = unisenderRestClient.sendSms(request);
             result = response.getStatus();
             LOGGER.info(response.getStatus());

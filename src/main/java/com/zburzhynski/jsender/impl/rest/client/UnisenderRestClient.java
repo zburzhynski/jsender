@@ -23,7 +23,6 @@ import com.zburzhynski.jsender.impl.rest.domain.unisender.SendSmsResponse;
 import com.zburzhynski.jsender.impl.rest.exception.unisender.AccessDeniedException;
 import com.zburzhynski.jsender.impl.rest.exception.unisender.AlphanameIncorrectException;
 import com.zburzhynski.jsender.impl.rest.exception.unisender.BillingException;
-import com.zburzhynski.jsender.impl.rest.exception.unisender.IncorrectArgumentException;
 import com.zburzhynski.jsender.impl.rest.exception.unisender.IncorrectPhoneNumberException;
 import com.zburzhynski.jsender.impl.rest.exception.unisender.InvalidTokenException;
 import com.zburzhynski.jsender.impl.rest.exception.unisender.LimitExceededException;
@@ -111,12 +110,11 @@ public class UnisenderRestClient {
      *
      * @param request {@link CheckSmsMessageStatusResponse} request
      * @return {@link CheckSmsMessageStatusResponse} response
-     * @throws IncorrectArgumentException if arguments incorrect
      * @throws NotFoundException          if sms not found
      * @throws InvalidTokenException      if token invalid
      */
     public CheckSmsMessageStatusResponse checkSmsMessageStatus(CheckSmsMessageStatusRequest request)
-        throws IncorrectArgumentException, InvalidTokenException, NotFoundException {
+        throws InvalidTokenException, NotFoundException {
         try {
             String url = String.format(CHECK_SMS_MESSAGE_STATUS_URL, request.getToken(), request.getMessageId());
             WebResource webResource = client.resource(url);
@@ -161,7 +159,6 @@ public class UnisenderRestClient {
      * @param request {@link SendSmsRequest} request
      * @return {@link SendSmsResponse} response
      * @throws IncorrectPhoneNumberException if phone number incorrect
-     * @throws IncorrectArgumentException    if arguments incorrect
      * @throws BillingException              if billing error
      * @throws NotFoundException             if message not found
      * @throws AccessDeniedException         if accent denied
@@ -170,8 +167,8 @@ public class UnisenderRestClient {
      * @throws InvalidTokenException         if invalid token
      */
     public SendSmsResponse sendSms(SendSmsRequest request) throws LimitExceededException, UndefinedException,
-        BillingException, NotFoundException, InvalidTokenException, IncorrectArgumentException,
-        AccessDeniedException, IncorrectPhoneNumberException {
+        BillingException, NotFoundException, InvalidTokenException, AccessDeniedException,
+        IncorrectPhoneNumberException {
         try {
             String url = String.format(SEND_SMS_URL, request.getToken(), request.getMessageId(), request.getPhone());
             WebResource webResource = client.resource(url);
@@ -215,12 +212,10 @@ public class UnisenderRestClient {
      * @param request {@link CheckSmsRequest} request
      * @return {@link CheckSmsResponse} response
      * @throws NotFoundException          if sms not found
-     * @throws IncorrectArgumentException if arguments incorrect
      * @throws NotFoundException          if sms not found
      * @throws InvalidTokenException      if token invalid
      */
-    public CheckSmsResponse checkSms(CheckSmsRequest request) throws NotFoundException, IncorrectArgumentException,
-        InvalidTokenException {
+    public CheckSmsResponse checkSms(CheckSmsRequest request) throws NotFoundException, InvalidTokenException {
         try {
             String url = String.format(CHECK_SMS_URL, request.getToken(), request.getSmsId());
             WebResource webResource = client.resource(url);
