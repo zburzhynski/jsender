@@ -17,7 +17,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
-import java.net.URLEncoder;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
@@ -39,6 +38,8 @@ public class TestBean implements Serializable {
 
     private Integer messageId = 63033;
 
+    private String message;
+
     private String result;
 
     @ManagedProperty(value = "#{unisenderRestClient}")
@@ -48,8 +49,8 @@ public class TestBean implements Serializable {
         try {
             CreateSmsMessageRequest request = new CreateSmsMessageRequest();
             request.setToken(token);
-            request.setMessage(URLEncoder.encode("Test message", "UTF-8"));
-            request.setAlphanameId("system");
+            request.setMessage(message);
+            //request.setAlphanameId("system");
             CreateSmsMessageResponse response = unisenderRestClient.createSmsMessage(request);
             result = response.getStatus();
             LOGGER.info(response.toString());
@@ -136,6 +137,14 @@ public class TestBean implements Serializable {
 
     public void setMessageId(Integer messageId) {
         this.messageId = messageId;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     public String getResult() {
