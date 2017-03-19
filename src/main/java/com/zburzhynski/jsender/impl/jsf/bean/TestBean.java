@@ -88,7 +88,7 @@ public class TestBean implements Serializable {
             SendSmsRequest request = new SendSmsRequest();
             request.setToken(token);
             request.setMessageId(messageId);
-            request.setPhone("+375299999999");
+            request.setPhone("375299999999");
             SendSmsResponse response = unisenderRestClient.sendSms(request);
             result = response.getStatus();
             LOGGER.info(response.getStatus());
