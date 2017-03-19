@@ -21,6 +21,8 @@ public abstract class CommonConstant {
     public static final String RIGHT_BRACKET = "]";
     public static final String LEFT_PARENTHESIS = "(";
     public static final String RIGHT_PARENTHESIS = ")";
+    public static final String AMPERSAND = "&";
+    public static final String EQUALS = "=";
     public static final String RUSSIAN_DATE_FORMAT = "dd.MM.yyyy";
     public static final String TIME_FORMAT = "HH:mm:ss";
     public static final String DATE_TIME_FORMAT = RUSSIAN_DATE_FORMAT + SPACE + TIME_FORMAT;

@@ -12,6 +12,11 @@ import com.zburzhynski.jsender.impl.rest.exception.unisender.MessageAlreadyExist
 import com.zburzhynski.jsender.impl.rest.exception.unisender.MessageToLongException;
 import com.zburzhynski.jsender.impl.rest.exception.unisender.NotFoundException;
 import com.zburzhynski.jsender.impl.rest.exception.unisender.UndefinedException;
+import org.apache.commons.lang3.StringUtils;
+import org.codehaus.jettison.json.JSONException;
+import org.codehaus.jettison.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.ws.rs.core.Response;
 
@@ -23,6 +28,12 @@ import javax.ws.rs.core.Response;
  * @author Vladimir Zburzhynski
  */
 public class UnisenderErrorHelper {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(UnisenderErrorHelper.class);
+
+    private static final String MESSAGE_ID_FIELD = "message_id";
+
+    private static final String ERROR_FIELD = "error";
 
     /**
      * Throws create sms message method exception.
@@ -39,14 +50,20 @@ public class UnisenderErrorHelper {
         if (response.getStatus() == Response.Status.FORBIDDEN.getStatusCode()) {
             throw new InvalidTokenException();
         }
-        if (response.getStatus() == Response.Status.INTERNAL_SERVER_ERROR.getStatusCode()) {
-            ErrorResponse errorResponse = response.getEntity(ErrorResponse.class);
-            String message = errorResponse.getError();
-            switch (message) {
-                case "alphaname is error":
-                    throw new AlphanameIncorrectException();
-                default:
+        try {
+            if (response.getStatus() == Response.Status.INTERNAL_SERVER_ERROR.getStatusCode()) {
+                JSONObject error = new JSONObject(response.getEntity(String.class));
+                if (StringUtils.isNotBlank(error.getString(MESSAGE_ID_FIELD))) {
+                    throw new MessageAlreadyExistException();
+                }
+                switch (error.getString(ERROR_FIELD)) {
+                    case "alphaname is error":
+                        throw new AlphanameIncorrectException();
+                    default:
+                }
             }
+        } catch (JSONException e) {
+            LOGGER.error("Error parsing json", e);
         }
     }
 
@@ -54,8 +71,8 @@ public class UnisenderErrorHelper {
      * Throws check sms message status exception.
      *
      * @param response {@link ClientResponse}
-     * @throws NotFoundException          if sms not found
-     * @throws InvalidTokenException      if token invalid
+     * @throws NotFoundException     if sms not found
+     * @throws InvalidTokenException if token invalid
      */
     public static void throwCheckSmsMessageStatusException(ClientResponse response)
         throws NotFoundException, InvalidTokenException {
@@ -157,8 +174,8 @@ public class UnisenderErrorHelper {
      * Throws check sms exception.
      *
      * @param response {@link ClientResponse}
-     * @throws NotFoundException          if sms not found
-     * @throws InvalidTokenException      if token invalid
+     * @throws NotFoundException     if sms not found
+     * @throws InvalidTokenException if token invalid
      */
     public static void throwCheckSmsExcepiton(ClientResponse response)
         throws NotFoundException, InvalidTokenException {

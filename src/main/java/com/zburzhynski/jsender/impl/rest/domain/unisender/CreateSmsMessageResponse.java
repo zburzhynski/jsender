@@ -21,6 +21,7 @@ public class CreateSmsMessageResponse implements Serializable {
     @XmlElement(name = "len")
     private Integer length;
 
+    @XmlElement(name = "message_id")
     private String messageId;
 
     private String alphaname;
