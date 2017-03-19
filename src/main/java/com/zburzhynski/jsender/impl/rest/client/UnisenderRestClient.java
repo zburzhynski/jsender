@@ -120,9 +120,10 @@ public class UnisenderRestClient {
      * @return {@link CheckSmsMessageStatusResponse} response
      * @throws ObjectNotFoundException if sms not found
      * @throws InvalidTokenException   if token invalid
+     * @throws UndefinedException      if application error occurred
      */
     public CheckSmsMessageStatusResponse checkSmsMessageStatus(CheckSmsMessageStatusRequest request)
-        throws InvalidTokenException, ObjectNotFoundException {
+        throws ObjectNotFoundException, InvalidTokenException, UndefinedException {
         try {
             String url = String.format(CHECK_SMS_MESSAGE_STATUS_URL, request.getToken(), request.getMessageId());
             WebResource webResource = client.resource(url);
@@ -193,8 +194,8 @@ public class UnisenderRestClient {
      *
      * @param request {@link GetLimitRequest} request
      * @return {@link GetLimitResponse} response
-     * @throws UndefinedException    if exception undefined
      * @throws InvalidTokenException if token invalid
+     * @throws UndefinedException    if exception undefined
      */
     public GetLimitResponse getLimit(GetLimitRequest request) throws InvalidTokenException, UndefinedException {
         try {
@@ -217,8 +218,10 @@ public class UnisenderRestClient {
      * @return {@link CheckSmsResponse} response
      * @throws ObjectNotFoundException if sms not found
      * @throws InvalidTokenException   if token invalid
+     * @throws UndefinedException      if exception undefined
      */
-    public CheckSmsResponse checkSms(CheckSmsRequest request) throws ObjectNotFoundException, InvalidTokenException {
+    public CheckSmsResponse checkSms(CheckSmsRequest request) throws ObjectNotFoundException, InvalidTokenException,
+        UndefinedException {
         try {
             String url = String.format(CHECK_SMS_URL, request.getToken(), request.getSmsId());
             WebResource webResource = client.resource(url);

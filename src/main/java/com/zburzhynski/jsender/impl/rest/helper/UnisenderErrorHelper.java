@@ -57,17 +57,14 @@ public class UnisenderErrorHelper {
                 if (StringUtils.isNotBlank(error.optString(MESSAGE_ID_FIELD))) {
                     throw new MessageAlreadyExistException();
                 }
-                switch (error.getString(ERROR_FIELD)) {
-                    case "alphaname is error":
-                        throw new AlphanameIncorrectException();
-                    case "undefined error":
-                        throw new UndefinedException();
-                    default:
+                if ("alphaname is error".equals(error.getString(ERROR_FIELD))) {
+                    throw new AlphanameIncorrectException();
                 }
             } catch (JSONException e) {
                 LOGGER.error("Error parsing json", e);
             }
         }
+        throw new UndefinedException();
     }
 
     /**
@@ -76,38 +73,32 @@ public class UnisenderErrorHelper {
      * @param response {@link ClientResponse}
      * @throws ObjectNotFoundException if sms not found
      * @throws InvalidTokenException   if token invalid
+     * @throws UndefinedException      if application error occurred
      */
     public static void throwCheckSmsMessageStatusException(ClientResponse response)
-        throws ObjectNotFoundException, InvalidTokenException {
+        throws ObjectNotFoundException, InvalidTokenException, UndefinedException {
         if (response.getStatus() == Response.Status.FORBIDDEN.getStatusCode()) {
             throw new InvalidTokenException();
         }
         if (response.getStatus() == Response.Status.NOT_FOUND.getStatusCode()) {
             throw new ObjectNotFoundException();
         }
+        throw new UndefinedException();
     }
 
     /**
      * Throws get message list exception.
      *
      * @param response {@link ClientResponse}
-     * @throws UndefinedException    if exception undefined
      * @throws InvalidTokenException if token invalid
+     * @throws UndefinedException    if exception undefined
      */
     public static void throwGetMessageListException(ClientResponse response)
         throws UndefinedException, InvalidTokenException {
         if (response.getStatus() == Response.Status.FORBIDDEN.getStatusCode()) {
             throw new InvalidTokenException();
         }
-        if (response.getStatus() == Response.Status.INTERNAL_SERVER_ERROR.getStatusCode()) {
-            ErrorResponse errorResponse = response.getEntity(ErrorResponse.class);
-            String message = errorResponse.getError();
-            switch (message) {
-                case "undefined error":
-                    throw new UndefinedException();
-                default:
-            }
-        }
+        throw new UndefinedException();
     }
 
     /**
@@ -119,12 +110,12 @@ public class UnisenderErrorHelper {
      * @throws ObjectNotFoundException       if message not found
      * @throws AccessDeniedException         if accent denied
      * @throws LimitExceededException        if limit exceeded
-     * @throws UndefinedException            if exception undefined
      * @throws InvalidTokenException         if invalid token
+     * @throws UndefinedException            if exception undefined
      */
     public static void throwSendMessageException(ClientResponse response) throws IncorrectPhoneNumberException,
         BillingException, ObjectNotFoundException,
-        AccessDeniedException, LimitExceededException, UndefinedException, InvalidTokenException {
+        AccessDeniedException, LimitExceededException, InvalidTokenException, UndefinedException {
         if (response.getStatus() == Response.Status.FORBIDDEN.getStatusCode()) {
             throw new InvalidTokenException();
         }
@@ -143,34 +134,25 @@ public class UnisenderErrorHelper {
                     throw new AccessDeniedException();
                 case "limit exceeded":
                     throw new LimitExceededException();
-                case "undefined error":
-                    throw new UndefinedException();
                 default:
             }
         }
+        throw new UndefinedException();
     }
 
     /**
      * Throws get limit exception.
      *
      * @param response {@link ClientResponse}
-     * @throws UndefinedException    if exception undefined
      * @throws InvalidTokenException if token invalid
+     * @throws UndefinedException    if exception undefined
      */
     public static void throwGetLimitException(ClientResponse response)
-        throws UndefinedException, InvalidTokenException {
+        throws InvalidTokenException, UndefinedException {
         if (response.getStatus() == Response.Status.FORBIDDEN.getStatusCode()) {
             throw new InvalidTokenException();
         }
-        if (response.getStatus() == Response.Status.INTERNAL_SERVER_ERROR.getStatusCode()) {
-            ErrorResponse errorResponse = response.getEntity(ErrorResponse.class);
-            String message = errorResponse.getError();
-            switch (message) {
-                case "undefined error":
-                    throw new UndefinedException();
-                default:
-            }
-        }
+        throw new UndefinedException();
     }
 
     /**
@@ -179,15 +161,17 @@ public class UnisenderErrorHelper {
      * @param response {@link ClientResponse}
      * @throws ObjectNotFoundException if sms not found
      * @throws InvalidTokenException   if token invalid
+     * @throws UndefinedException      if exception undefined
      */
     public static void throwCheckSmsExcepiton(ClientResponse response)
-        throws ObjectNotFoundException, InvalidTokenException {
+        throws ObjectNotFoundException, InvalidTokenException, UndefinedException {
         if (response.getStatus() == Response.Status.FORBIDDEN.getStatusCode()) {
             throw new InvalidTokenException();
         }
         if (response.getStatus() == Response.Status.NOT_FOUND.getStatusCode()) {
             throw new ObjectNotFoundException();
         }
+        throw new UndefinedException();
     }
 
 }
