@@ -18,4 +18,5 @@ public class CheckSmsRequest extends BaseUnisenderRequest {
     public void setSmsId(Integer smsId) {
         this.smsId = smsId;
     }
+
 }
