@@ -30,7 +30,7 @@ import com.zburzhynski.jsender.impl.rest.exception.unisender.InvalidTokenExcepti
 import com.zburzhynski.jsender.impl.rest.exception.unisender.LimitExceededException;
 import com.zburzhynski.jsender.impl.rest.exception.unisender.MessageAlreadyExistException;
 import com.zburzhynski.jsender.impl.rest.exception.unisender.MessageToLongException;
-import com.zburzhynski.jsender.impl.rest.exception.unisender.NotFoundException;
+import com.zburzhynski.jsender.impl.rest.exception.unisender.ObjectNotFoundException;
 import com.zburzhynski.jsender.impl.rest.exception.unisender.UndefinedException;
 import com.zburzhynski.jsender.impl.rest.helper.UnisenderErrorHelper;
 import org.apache.commons.lang3.StringUtils;
@@ -119,11 +119,11 @@ public class UnisenderRestClient {
      *
      * @param request {@link CheckSmsMessageStatusResponse} request
      * @return {@link CheckSmsMessageStatusResponse} response
-     * @throws NotFoundException     if sms not found
-     * @throws InvalidTokenException if token invalid
+     * @throws ObjectNotFoundException if sms not found
+     * @throws InvalidTokenException   if token invalid
      */
     public CheckSmsMessageStatusResponse checkSmsMessageStatus(CheckSmsMessageStatusRequest request)
-        throws InvalidTokenException, NotFoundException {
+        throws InvalidTokenException, ObjectNotFoundException {
         try {
             String url = String.format(CHECK_SMS_MESSAGE_STATUS_URL, request.getToken(), request.getMessageId());
             WebResource webResource = client.resource(url);
@@ -169,14 +169,14 @@ public class UnisenderRestClient {
      * @return {@link SendSmsResponse} response
      * @throws IncorrectPhoneNumberException if phone number incorrect
      * @throws BillingException              if billing error
-     * @throws NotFoundException             if message not found
+     * @throws ObjectNotFoundException       if message not found
      * @throws AccessDeniedException         if accent denied
      * @throws LimitExceededException        if limit exceeded
      * @throws UndefinedException            if exception undefined
      * @throws InvalidTokenException         if invalid token
      */
     public SendSmsResponse sendSms(SendSmsRequest request) throws LimitExceededException, UndefinedException,
-        BillingException, NotFoundException, InvalidTokenException, AccessDeniedException,
+        BillingException, ObjectNotFoundException, InvalidTokenException, AccessDeniedException,
         IncorrectPhoneNumberException {
         try {
             String url = String.format(SEND_SMS_URL, request.getToken(), request.getMessageId(), request.getPhone());
@@ -220,11 +220,10 @@ public class UnisenderRestClient {
      *
      * @param request {@link CheckSmsRequest} request
      * @return {@link CheckSmsResponse} response
-     * @throws NotFoundException     if sms not found
-     * @throws NotFoundException     if sms not found
-     * @throws InvalidTokenException if token invalid
+     * @throws ObjectNotFoundException if sms not found
+     * @throws InvalidTokenException   if token invalid
      */
-    public CheckSmsResponse checkSms(CheckSmsRequest request) throws NotFoundException, InvalidTokenException {
+    public CheckSmsResponse checkSms(CheckSmsRequest request) throws ObjectNotFoundException, InvalidTokenException {
         try {
             String url = String.format(CHECK_SMS_URL, request.getToken(), request.getSmsId());
             WebResource webResource = client.resource(url);

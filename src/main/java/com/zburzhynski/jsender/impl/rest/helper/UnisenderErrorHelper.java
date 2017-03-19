@@ -10,7 +10,7 @@ import com.zburzhynski.jsender.impl.rest.exception.unisender.InvalidTokenExcepti
 import com.zburzhynski.jsender.impl.rest.exception.unisender.LimitExceededException;
 import com.zburzhynski.jsender.impl.rest.exception.unisender.MessageAlreadyExistException;
 import com.zburzhynski.jsender.impl.rest.exception.unisender.MessageToLongException;
-import com.zburzhynski.jsender.impl.rest.exception.unisender.NotFoundException;
+import com.zburzhynski.jsender.impl.rest.exception.unisender.ObjectNotFoundException;
 import com.zburzhynski.jsender.impl.rest.exception.unisender.UndefinedException;
 import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jettison.json.JSONException;
@@ -74,16 +74,16 @@ public class UnisenderErrorHelper {
      * Throws check sms message status exception.
      *
      * @param response {@link ClientResponse}
-     * @throws NotFoundException     if sms not found
-     * @throws InvalidTokenException if token invalid
+     * @throws ObjectNotFoundException if sms not found
+     * @throws InvalidTokenException   if token invalid
      */
     public static void throwCheckSmsMessageStatusException(ClientResponse response)
-        throws NotFoundException, InvalidTokenException {
+        throws ObjectNotFoundException, InvalidTokenException {
         if (response.getStatus() == Response.Status.FORBIDDEN.getStatusCode()) {
             throw new InvalidTokenException();
         }
         if (response.getStatus() == Response.Status.NOT_FOUND.getStatusCode()) {
-            throw new NotFoundException();
+            throw new ObjectNotFoundException();
         }
     }
 
@@ -116,20 +116,20 @@ public class UnisenderErrorHelper {
      * @param response {@link ClientResponse}
      * @throws IncorrectPhoneNumberException if phone number incorrect
      * @throws BillingException              if billing error
-     * @throws NotFoundException             if message not found
+     * @throws ObjectNotFoundException       if message not found
      * @throws AccessDeniedException         if accent denied
      * @throws LimitExceededException        if limit exceeded
      * @throws UndefinedException            if exception undefined
      * @throws InvalidTokenException         if invalid token
      */
     public static void throwSendMessageException(ClientResponse response) throws IncorrectPhoneNumberException,
-        BillingException, NotFoundException,
+        BillingException, ObjectNotFoundException,
         AccessDeniedException, LimitExceededException, UndefinedException, InvalidTokenException {
         if (response.getStatus() == Response.Status.FORBIDDEN.getStatusCode()) {
             throw new InvalidTokenException();
         }
         if (response.getStatus() == Response.Status.NOT_FOUND.getStatusCode()) {
-            throw new NotFoundException();
+            throw new ObjectNotFoundException();
         }
         if (response.getStatus() == Response.Status.INTERNAL_SERVER_ERROR.getStatusCode()) {
             ErrorResponse errorResponse = response.getEntity(ErrorResponse.class);
@@ -177,16 +177,16 @@ public class UnisenderErrorHelper {
      * Throws check sms exception.
      *
      * @param response {@link ClientResponse}
-     * @throws NotFoundException     if sms not found
-     * @throws InvalidTokenException if token invalid
+     * @throws ObjectNotFoundException if sms not found
+     * @throws InvalidTokenException   if token invalid
      */
     public static void throwCheckSmsExcepiton(ClientResponse response)
-        throws NotFoundException, InvalidTokenException {
+        throws ObjectNotFoundException, InvalidTokenException {
         if (response.getStatus() == Response.Status.FORBIDDEN.getStatusCode()) {
             throw new InvalidTokenException();
         }
         if (response.getStatus() == Response.Status.NOT_FOUND.getStatusCode()) {
-            throw new NotFoundException();
+            throw new ObjectNotFoundException();
         }
     }
 
