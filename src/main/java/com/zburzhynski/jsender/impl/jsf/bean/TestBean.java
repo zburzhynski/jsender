@@ -35,9 +35,9 @@ public class TestBean implements Serializable {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TestBean.class);
 
-    private String token;
+    private String token = "b374580e1efce9b53c881487275cd3b0";
 
-    private Integer messageId;
+    private Integer messageId = 63033;
 
     private String result;
 
