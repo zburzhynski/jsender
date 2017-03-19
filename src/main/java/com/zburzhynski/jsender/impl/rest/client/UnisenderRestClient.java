@@ -106,7 +106,6 @@ public class UnisenderRestClient {
             return webResource.accept(MediaType.APPLICATION_XML).get(CreateSmsMessageResponse.class);
         } catch (UniformInterfaceException exception) {
             UnisenderErrorHelper.throwCreateSmsMessageException(exception.getResponse());
-            LOGGER.error("Uniform interface exception occurred", exception);
         } catch (ClientHandlerException exception) {
             LOGGER.error("Client handler exception occurred", exception);
         }
@@ -130,7 +129,6 @@ public class UnisenderRestClient {
             return webResource.accept(MediaType.APPLICATION_XML).get(CheckSmsMessageStatusResponse.class);
         } catch (UniformInterfaceException exception) {
             UnisenderErrorHelper.throwCheckSmsMessageStatusException(exception.getResponse());
-            LOGGER.error("Uniform interface exception occurred", exception);
         } catch (ClientHandlerException exception) {
             LOGGER.error("Client handler exception occurred", exception);
         }
@@ -153,7 +151,6 @@ public class UnisenderRestClient {
             return webResource.accept(MediaType.APPLICATION_XML).get(GetMessageListResponse.class);
         } catch (UniformInterfaceException exception) {
             UnisenderErrorHelper.throwGetMessageListException(exception.getResponse());
-            LOGGER.error("Uniform interface exception occurred", exception);
         } catch (ClientHandlerException exception) {
             LOGGER.error("Client handler exception occurred", exception);
         }
@@ -182,7 +179,6 @@ public class UnisenderRestClient {
             return webResource.accept(MediaType.APPLICATION_XML).get(SendSmsResponse.class);
         } catch (UniformInterfaceException exception) {
             UnisenderErrorHelper.throwSendMessageException(exception.getResponse());
-            LOGGER.error("Uniform interface exception occurred", exception);
         } catch (ClientHandlerException exception) {
             LOGGER.error("Client handler exception occurred", exception);
         }
@@ -204,7 +200,6 @@ public class UnisenderRestClient {
             return webResource.accept(MediaType.APPLICATION_XML).get(GetLimitResponse.class);
         } catch (UniformInterfaceException exception) {
             UnisenderErrorHelper.throwGetLimitException(exception.getResponse());
-            LOGGER.error("Uniform interface exception occurred", exception);
         } catch (ClientHandlerException exception) {
             LOGGER.error("Client handler exception occurred", exception);
         }
@@ -229,7 +224,6 @@ public class UnisenderRestClient {
             }).get(0);
         } catch (UniformInterfaceException exception) {
             UnisenderErrorHelper.throwCheckSmsExcepiton(exception.getResponse());
-            LOGGER.error("Uniform interface exception occurred", exception);
         } catch (ClientHandlerException exception) {
             LOGGER.error("Client handler exception occurred", exception);
         }
