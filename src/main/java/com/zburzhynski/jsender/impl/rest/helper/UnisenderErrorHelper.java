@@ -43,27 +43,30 @@ public class UnisenderErrorHelper {
      * @throws AlphanameIncorrectException  if alphaname incorrect
      * @throws MessageToLongException       if message to long
      * @throws InvalidTokenException        if token invalid
+     * @throws UndefinedException           if application error occurred
      */
     public static void throwCreateSmsMessageException(ClientResponse response)
         throws MessageAlreadyExistException, AlphanameIncorrectException,
-        MessageToLongException, InvalidTokenException {
+        MessageToLongException, InvalidTokenException, UndefinedException {
         if (response.getStatus() == Response.Status.FORBIDDEN.getStatusCode()) {
             throw new InvalidTokenException();
         }
-        try {
-            if (response.getStatus() == Response.Status.INTERNAL_SERVER_ERROR.getStatusCode()) {
+        if (response.getStatus() == Response.Status.INTERNAL_SERVER_ERROR.getStatusCode()) {
+            try {
                 JSONObject error = new JSONObject(response.getEntity(String.class));
-                if (StringUtils.isNotBlank(error.getString(MESSAGE_ID_FIELD))) {
+                if (StringUtils.isNotBlank(error.optString(MESSAGE_ID_FIELD))) {
                     throw new MessageAlreadyExistException();
                 }
                 switch (error.getString(ERROR_FIELD)) {
                     case "alphaname is error":
                         throw new AlphanameIncorrectException();
+                    case "undefined error":
+                        throw new UndefinedException();
                     default:
                 }
+            } catch (JSONException e) {
+                LOGGER.error("Error parsing json", e);
             }
-        } catch (JSONException e) {
-            LOGGER.error("Error parsing json", e);
         }
     }
 

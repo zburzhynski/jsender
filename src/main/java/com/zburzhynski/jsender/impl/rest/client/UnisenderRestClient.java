@@ -91,10 +91,11 @@ public class UnisenderRestClient {
      * @throws AlphanameIncorrectException  if alphaname incorrect
      * @throws MessageToLongException       if message to long
      * @throws InvalidTokenException        if token invalid
+     * @throws UndefinedException           if application error occurred
      */
     public CreateSmsMessageResponse createSmsMessage(CreateSmsMessageRequest request)
         throws MessageAlreadyExistException, AlphanameIncorrectException, MessageToLongException,
-        InvalidTokenException {
+        InvalidTokenException, UndefinedException {
         try {
             String url = String.format(CREATE_SMS_MESSAGE_URL, request.getToken(), request.getMessage());
             if (StringUtils.isNotBlank(request.getAlphanameId())) {
@@ -118,8 +119,8 @@ public class UnisenderRestClient {
      *
      * @param request {@link CheckSmsMessageStatusResponse} request
      * @return {@link CheckSmsMessageStatusResponse} response
-     * @throws NotFoundException          if sms not found
-     * @throws InvalidTokenException      if token invalid
+     * @throws NotFoundException     if sms not found
+     * @throws InvalidTokenException if token invalid
      */
     public CheckSmsMessageStatusResponse checkSmsMessageStatus(CheckSmsMessageStatusRequest request)
         throws InvalidTokenException, NotFoundException {
@@ -219,9 +220,9 @@ public class UnisenderRestClient {
      *
      * @param request {@link CheckSmsRequest} request
      * @return {@link CheckSmsResponse} response
-     * @throws NotFoundException          if sms not found
-     * @throws NotFoundException          if sms not found
-     * @throws InvalidTokenException      if token invalid
+     * @throws NotFoundException     if sms not found
+     * @throws NotFoundException     if sms not found
+     * @throws InvalidTokenException if token invalid
      */
     public CheckSmsResponse checkSms(CheckSmsRequest request) throws NotFoundException, InvalidTokenException {
         try {
