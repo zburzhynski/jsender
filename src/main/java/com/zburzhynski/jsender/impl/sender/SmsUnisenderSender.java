@@ -29,6 +29,8 @@ import com.zburzhynski.jsender.impl.rest.exception.unisender.MessageAlreadyExist
 import com.zburzhynski.jsender.impl.rest.exception.unisender.MessageToLongException;
 import com.zburzhynski.jsender.impl.rest.exception.unisender.ObjectNotFoundException;
 import com.zburzhynski.jsender.impl.rest.exception.unisender.UndefinedException;
+import com.zburzhynski.jsender.impl.service.AbstractSender;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,7 +52,7 @@ import java.util.Set;
  * @author Vladimir Zburzhynski
  */
 @Component
-public class SmsUnisenderSender implements ISender {
+public class SmsUnisenderSender extends AbstractSender implements ISender {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SmsUnisenderSender.class);
 
@@ -77,15 +79,16 @@ public class SmsUnisenderSender implements ISender {
         Map<Params, SendingAccountParam> params = getAccountParams(message.getSendingAccountId());
         String token = params.get(Params.TOKEN).getValue();
         try {
-            Integer messageId = createSmsMessage(token, message.getText());
-            if (isMessageModerated(token, messageId)) {
-                for (Recipient recipient : message.getRecipients()) {
+            for (Recipient recipient : message.getRecipients()) {
+                String smsText = prepareText(message.getText(), recipient);
+                Integer messageId = createSmsMessage(token, smsText);
+                if (isMessageModerated(token, messageId)) {
                     for (String phone : recipient.getPhones()) {
                         try {
                             SendSmsRequest sendRequest = new SendSmsRequest();
                             sendRequest.setToken(token);
                             sendRequest.setMessageId(messageId);
-                            sendRequest.setPhone(phone);
+                            sendRequest.setPhone(preparePhone(phone));
                             SendSmsResponse smsResponse = unisenderRestClient.sendSms(sendRequest);
                             if (smsResponse != null) {
                                 SentMessage sentMessage = new SentMessage();
@@ -95,7 +98,7 @@ public class SmsUnisenderSender implements ISender {
                                 sentMessage.setRecipientFullName(recipient.getFullName());
                                 sentMessage.setContactInfo(phone);
                                 sentMessage.setSubject(message.getSubject());
-                                sentMessage.setText(message.getText());
+                                sentMessage.setText(smsText);
                                 sentMessage.setSendingType(SendingType.SMS);
                                 sentMessageService.saveOrUpdate(sentMessage);
                             }
@@ -155,6 +158,10 @@ public class SmsUnisenderSender implements ISender {
         request.setMessageId(messageId);
         CheckSmsMessageStatusResponse response = unisenderRestClient.checkSmsMessageStatus(request);
         return MODERATED_STATUS.equals(response.getStatus());
+    }
+
+    private String preparePhone(String phone) {
+        return phone.replaceFirst("\\+", StringUtils.EMPTY);
     }
 
     private Map<Params, SendingAccountParam> getAccountParams(String accountId) {
