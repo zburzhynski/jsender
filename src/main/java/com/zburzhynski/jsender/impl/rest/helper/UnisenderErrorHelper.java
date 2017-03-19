@@ -43,7 +43,7 @@ public class UnisenderErrorHelper {
      * @throws AlphanameIncorrectException  if alphaname incorrect
      * @throws MessageToLongException       if message to long
      * @throws InvalidTokenException        if token invalid
-     * @throws UndefinedException           if application error occurred
+     * @throws UndefinedException           if exception undefined
      */
     public static void throwCreateSmsMessageException(ClientResponse response)
         throws MessageAlreadyExistException, AlphanameIncorrectException,
@@ -73,7 +73,7 @@ public class UnisenderErrorHelper {
      * @param response {@link ClientResponse}
      * @throws ObjectNotFoundException if sms not found
      * @throws InvalidTokenException   if token invalid
-     * @throws UndefinedException      if application error occurred
+     * @throws UndefinedException      if exception undefined
      */
     public static void throwCheckSmsMessageStatusException(ClientResponse response)
         throws ObjectNotFoundException, InvalidTokenException, UndefinedException {

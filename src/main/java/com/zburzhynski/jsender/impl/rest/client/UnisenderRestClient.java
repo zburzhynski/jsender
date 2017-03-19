@@ -91,7 +91,7 @@ public class UnisenderRestClient {
      * @throws AlphanameIncorrectException  if alphaname incorrect
      * @throws MessageToLongException       if message to long
      * @throws InvalidTokenException        if token invalid
-     * @throws UndefinedException           if application error occurred
+     * @throws UndefinedException           if exception undefined
      */
     public CreateSmsMessageResponse createSmsMessage(CreateSmsMessageRequest request)
         throws MessageAlreadyExistException, AlphanameIncorrectException, MessageToLongException,
@@ -119,7 +119,7 @@ public class UnisenderRestClient {
      * @return {@link CheckSmsMessageStatusResponse} response
      * @throws ObjectNotFoundException if sms not found
      * @throws InvalidTokenException   if token invalid
-     * @throws UndefinedException      if application error occurred
+     * @throws UndefinedException      if exception undefined
      */
     public CheckSmsMessageStatusResponse checkSmsMessageStatus(CheckSmsMessageStatusRequest request)
         throws ObjectNotFoundException, InvalidTokenException, UndefinedException {
@@ -140,8 +140,8 @@ public class UnisenderRestClient {
      *
      * @param request {@link BaseUnisenderRequest} request
      * @return {@link GetMessageListResponse} response
-     * @throws UndefinedException    if exception undefined
      * @throws InvalidTokenException if token invalid
+     * @throws UndefinedException    if exception undefined
      */
     public GetMessageListResponse getMessageList(BaseUnisenderRequest request)
         throws InvalidTokenException, UndefinedException {
@@ -167,12 +167,12 @@ public class UnisenderRestClient {
      * @throws ObjectNotFoundException       if message not found
      * @throws AccessDeniedException         if accent denied
      * @throws LimitExceededException        if limit exceeded
-     * @throws UndefinedException            if exception undefined
      * @throws InvalidTokenException         if invalid token
+     * @throws UndefinedException            if exception undefined
      */
-    public SendSmsResponse sendSms(SendSmsRequest request) throws LimitExceededException, UndefinedException,
-        BillingException, ObjectNotFoundException, InvalidTokenException, AccessDeniedException,
-        IncorrectPhoneNumberException {
+    public SendSmsResponse sendSms(SendSmsRequest request) throws LimitExceededException,
+        BillingException, ObjectNotFoundException, AccessDeniedException,
+        IncorrectPhoneNumberException, InvalidTokenException, UndefinedException {
         try {
             String url = String.format(SEND_SMS_URL, request.getToken(), request.getMessageId(), request.getPhone());
             WebResource webResource = client.resource(url);
