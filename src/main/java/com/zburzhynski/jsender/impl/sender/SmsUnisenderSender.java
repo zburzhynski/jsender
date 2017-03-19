@@ -13,12 +13,22 @@ import com.zburzhynski.jsender.impl.domain.SendingAccount;
 import com.zburzhynski.jsender.impl.domain.SendingAccountParam;
 import com.zburzhynski.jsender.impl.domain.SentMessage;
 import com.zburzhynski.jsender.impl.rest.client.UnisenderRestClient;
-import com.zburzhynski.jsender.impl.rest.domain.unisender.BaseUnisenderRequest;
 import com.zburzhynski.jsender.impl.rest.domain.unisender.CheckSmsMessageStatusRequest;
 import com.zburzhynski.jsender.impl.rest.domain.unisender.CheckSmsMessageStatusResponse;
 import com.zburzhynski.jsender.impl.rest.domain.unisender.CreateSmsMessageRequest;
-import com.zburzhynski.jsender.impl.rest.domain.unisender.GetMessageListResult;
+import com.zburzhynski.jsender.impl.rest.domain.unisender.CreateSmsMessageResponse;
 import com.zburzhynski.jsender.impl.rest.domain.unisender.SendSmsRequest;
+import com.zburzhynski.jsender.impl.rest.domain.unisender.SendSmsResponse;
+import com.zburzhynski.jsender.impl.rest.exception.unisender.AccessDeniedException;
+import com.zburzhynski.jsender.impl.rest.exception.unisender.AlphanameIncorrectException;
+import com.zburzhynski.jsender.impl.rest.exception.unisender.BillingException;
+import com.zburzhynski.jsender.impl.rest.exception.unisender.IncorrectPhoneNumberException;
+import com.zburzhynski.jsender.impl.rest.exception.unisender.InvalidTokenException;
+import com.zburzhynski.jsender.impl.rest.exception.unisender.LimitExceededException;
+import com.zburzhynski.jsender.impl.rest.exception.unisender.MessageAlreadyExistException;
+import com.zburzhynski.jsender.impl.rest.exception.unisender.MessageToLongException;
+import com.zburzhynski.jsender.impl.rest.exception.unisender.ObjectNotFoundException;
+import com.zburzhynski.jsender.impl.rest.exception.unisender.UndefinedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,42 +76,51 @@ public class SmsUnisenderSender implements ISender {
         List<SendingStatus> response = new ArrayList<>();
         Map<Params, SendingAccountParam> params = getAccountParams(message.getSendingAccountId());
         String token = params.get(Params.TOKEN).getValue();
-        Integer messageId = getMessageId(token, message.getText());
-        if (new Integer(0).equals(messageId)) {
-            return null;
-        }
-        if (!checkStatus(token, messageId)) {
-            return null;
-        }
-        for (Recipient recipient : message.getRecipients()) {
-            for (String phone : recipient.getPhones()) {
-                SendingStatus status = new SendingStatus();
-                status.setRecipientFullName(recipient.getFullName());
-                status.setContactInfo(phone);
-                try {
-                    SendSmsRequest sendRequest = new SendSmsRequest();
-                    sendRequest.setToken(token);
-                    sendRequest.setMessageId(messageId);
-                    sendRequest.setPhone(phone);
-                    unisenderRestClient.sendSms(sendRequest);
-                    SentMessage sentMessage = new SentMessage();
-                    sentMessage.setSentDate(new Date());
-                    sentMessage.setRecipientId(recipient.getId());
-                    sentMessage.setRecipientSource(recipient.getRecipientSource());
-                    sentMessage.setRecipientFullName(recipient.getFullName());
-                    sentMessage.setContactInfo(phone);
-                    sentMessage.setSubject(message.getSubject());
-                    sentMessage.setText(message.getText());
-                    sentMessage.setSendingType(SendingType.SMS);
-                    sentMessageService.saveOrUpdate(sentMessage);
-                    status.setDescription("Sms sent successfully");
-                    LOGGER.info("Sms sent successfully, phone number = " + phone);
-                } catch (Exception e) {
-                    status.setDescription(e.getClass().getName());
-                    LOGGER.error("An error occurred while sending email", e);
+        try {
+            Integer messageId = createSmsMessage(token, message.getText());
+            if (isMessageModerated(token, messageId)) {
+                for (Recipient recipient : message.getRecipients()) {
+                    for (String phone : recipient.getPhones()) {
+                        try {
+                            SendSmsRequest sendRequest = new SendSmsRequest();
+                            sendRequest.setToken(token);
+                            sendRequest.setMessageId(messageId);
+                            sendRequest.setPhone(phone);
+                            SendSmsResponse smsResponse = unisenderRestClient.sendSms(sendRequest);
+                            if (smsResponse != null) {
+                                SentMessage sentMessage = new SentMessage();
+                                sentMessage.setSentDate(new Date());
+                                sentMessage.setRecipientId(recipient.getId());
+                                sentMessage.setRecipientSource(recipient.getRecipientSource());
+                                sentMessage.setRecipientFullName(recipient.getFullName());
+                                sentMessage.setContactInfo(phone);
+                                sentMessage.setSubject(message.getSubject());
+                                sentMessage.setText(message.getText());
+                                sentMessage.setSendingType(SendingType.SMS);
+                                sentMessageService.saveOrUpdate(sentMessage);
+                            }
+                        } catch (IncorrectPhoneNumberException e) {
+                            LOGGER.error("Incorrect phone number exception", e);
+                        } catch (BillingException e) {
+                            LOGGER.error("Billing exception", e);
+                        } catch (AccessDeniedException e) {
+                            LOGGER.error("Access denied exception", e);
+                        } catch (LimitExceededException e) {
+                            LOGGER.error("Limit exceeded exception", e);
+                        }
+                    }
                 }
-                response.add(status);
             }
+        } catch (ObjectNotFoundException e) {
+            LOGGER.error("Object not found exception", e);
+        } catch (AlphanameIncorrectException e) {
+            LOGGER.error("Alphaname incorrect exception", e);
+        } catch (MessageToLongException e) {
+            LOGGER.error("Message to long exception", e);
+        } catch (InvalidTokenException e) {
+            LOGGER.error("Invalid token exception", e);
+        } catch (UndefinedException e) {
+            LOGGER.error("Undefined exception", e);
         }
         return response;
     }
@@ -116,35 +135,26 @@ public class SmsUnisenderSender implements ISender {
         return SendingType.SMS;
     }
 
-    private Integer getMessageId(String token, String text) {
+    private Integer createSmsMessage(String token, String text) throws InvalidTokenException, MessageToLongException,
+        UndefinedException, AlphanameIncorrectException {
         try {
-            BaseUnisenderRequest messageListRequest = new BaseUnisenderRequest();
-            messageListRequest.setToken(token);
-            List<GetMessageListResult> results = unisenderRestClient.getMessageList(messageListRequest).getResult();
-            for (GetMessageListResult result : results) {
-                if (text.equals(result.getMessage())) {
-                    return result.getMessageId();
-                }
-            }
-            CreateSmsMessageRequest createSmsRequest = new CreateSmsMessageRequest();
-            createSmsRequest.setToken(token);
-            createSmsRequest.setMessage(text);
-            return unisenderRestClient.createSmsMessage(createSmsRequest).getMessageId();
-        } catch (Exception e) {
-            return 0;
+            CreateSmsMessageRequest request = new CreateSmsMessageRequest();
+            request.setToken(token);
+            request.setMessage(text);
+            CreateSmsMessageResponse response = unisenderRestClient.createSmsMessage(request);
+            return response.getMessageId();
+        } catch (MessageAlreadyExistException e) {
+            return e.getMessageId();
         }
     }
 
-    private boolean checkStatus(String token, Integer messageId) {
-        try {
-            CheckSmsMessageStatusRequest checkRequest = new CheckSmsMessageStatusRequest();
-            checkRequest.setToken(token);
-            checkRequest.setMessageId(messageId);
-            CheckSmsMessageStatusResponse checkResponse = unisenderRestClient.checkSmsMessageStatus(checkRequest);
-            return MODERATED_STATUS.equals(checkResponse.getStatus());
-        } catch (Exception e) {
-            return false;
-        }
+    private boolean isMessageModerated(String token, Integer messageId) throws UndefinedException,
+        InvalidTokenException, ObjectNotFoundException {
+        CheckSmsMessageStatusRequest request = new CheckSmsMessageStatusRequest();
+        request.setToken(token);
+        request.setMessageId(messageId);
+        CheckSmsMessageStatusResponse response = unisenderRestClient.checkSmsMessageStatus(request);
+        return MODERATED_STATUS.equals(response.getStatus());
     }
 
     private Map<Params, SendingAccountParam> getAccountParams(String accountId) {
