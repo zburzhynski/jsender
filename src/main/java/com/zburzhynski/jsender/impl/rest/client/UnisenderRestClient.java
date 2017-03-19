@@ -2,6 +2,7 @@ package com.zburzhynski.jsender.impl.rest.client;
 
 import static com.zburzhynski.jsender.api.domain.CommonConstant.AMPERSAND;
 import static com.zburzhynski.jsender.api.domain.CommonConstant.EQUALS;
+import static java.net.URLEncoder.encode;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientHandlerException;
 import com.sun.jersey.api.client.GenericType;
@@ -70,6 +71,8 @@ public class UnisenderRestClient {
 
     private static final String ALPHANAME_ID_PARAM = "alphaname_id";
 
+    public static final String UTF_8 = "UTF-8";
+
     private Client client;
 
     /**
@@ -97,17 +100,20 @@ public class UnisenderRestClient {
         throws MessageAlreadyExistException, AlphanameIncorrectException, MessageToLongException,
         InvalidTokenException, UndefinedException {
         try {
-            String url = String.format(CREATE_SMS_MESSAGE_URL, request.getToken(), request.getMessage());
+            String url = String.format(CREATE_SMS_MESSAGE_URL, request.getToken(), encode(request.getMessage(), UTF_8));
             if (StringUtils.isNotBlank(request.getAlphanameId())) {
                 String alphanameUrl = AMPERSAND + ALPHANAME_ID_PARAM + EQUALS + request.getAlphanameId();
                 url += alphanameUrl;
             }
             WebResource webResource = client.resource(url);
-            return webResource.accept(MediaType.APPLICATION_XML).get(CreateSmsMessageResponse.class);
+            return webResource.accept(MediaType.APPLICATION_XML).get(new GenericType<List<CreateSmsMessageResponse>>() {
+            }).get(0);
         } catch (UniformInterfaceException exception) {
             UnisenderErrorHelper.throwCreateSmsMessageException(exception.getResponse());
         } catch (ClientHandlerException exception) {
             LOGGER.error("Client handler exception occurred", exception);
+        } catch (Exception exception) {
+            LOGGER.error("Exception occurred", exception);
         }
         return null;
     }
