@@ -22,7 +22,7 @@ public class CreateSmsMessageResponse implements Serializable {
     private Integer length;
 
     @XmlElement(name = "message_id")
-    private String messageId;
+    private Integer messageId;
 
     private String alphaname;
 
@@ -50,11 +50,11 @@ public class CreateSmsMessageResponse implements Serializable {
         this.length = length;
     }
 
-    public String getMessageId() {
+    public Integer getMessageId() {
         return messageId;
     }
 
-    public void setMessageId(String messageId) {
+    public void setMessageId(Integer messageId) {
         this.messageId = messageId;
     }
 
