@@ -12,6 +12,7 @@ import static javax.faces.application.FacesMessage.SEVERITY_ERROR;
 import com.zburzhynski.jsender.api.dto.Message;
 import com.zburzhynski.jsender.api.dto.Recipient;
 import com.zburzhynski.jsender.api.dto.SendingStatus;
+import com.zburzhynski.jsender.api.exception.SendingException;
 import com.zburzhynski.jsender.impl.domain.Client;
 import com.zburzhynski.jsender.impl.domain.SendingAccount;
 import com.zburzhynski.jsender.impl.jsf.validator.SendingValidator;
@@ -44,6 +45,8 @@ import javax.faces.context.FacesContext;
 public class SendingBean implements Serializable {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SendingBean.class);
+
+    private static final String GROWL_ID = "sendingStatusForm:sendingMessages";
 
     private int tabIndex;
 
@@ -145,7 +148,11 @@ public class SendingBean implements Serializable {
         if (!valid) {
             return null;
         }
-        sendingStatuses = messageSender.send(messageToSend);
+        try {
+            sendingStatuses = messageSender.send(messageToSend);
+        } catch (SendingException e) {
+            addMessageToGrowl(e.getMessage());
+        }
         return SENDING_STATUS.getPath();
     }
 
@@ -246,6 +253,19 @@ public class SendingBean implements Serializable {
 
     public void setSettingBean(SettingBean settingBean) {
         this.settingBean = settingBean;
+    }
+
+    /**
+     * Adds localisation message to growl.
+     *
+     * @param message localisation message
+     */
+    private void addMessageToGrowl(String message) {
+        FacesContext context = FacesContext.getCurrentInstance();
+        FacesMessage facesMessage = new FacesMessage(reader.readProperty(message), StringUtils.EMPTY);
+        facesMessage.setSeverity(SEVERITY_ERROR);
+        context.getExternalContext().getFlash().setKeepMessages(true);
+        context.addMessage(GROWL_ID, facesMessage);
     }
 
     /**

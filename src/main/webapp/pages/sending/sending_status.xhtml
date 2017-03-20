@@ -12,6 +12,7 @@
             <h:form id="sendingStatusForm">
                 <h4>#{msgs['sendingStatus.header']}</h4>
                 <p:focus />
+                <p:growl id="sendingMessages" />
                 <p:dataTable value="#{sendingBean.sendingStatuses}"
                              var="status">
                     <p:column headerText="#{msgs['person.fullName']}" style="width: 30%">

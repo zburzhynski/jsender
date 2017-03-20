@@ -2,6 +2,7 @@ package com.zburzhynski.jsender.impl.sender;
 
 import com.zburzhynski.jsender.api.dto.Message;
 import com.zburzhynski.jsender.api.dto.SendingStatus;
+import com.zburzhynski.jsender.api.exception.SendingException;
 import com.zburzhynski.jsender.api.service.ISendingAccountService;
 import com.zburzhynski.jsender.impl.domain.SendingAccount;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,8 +31,9 @@ public class MessageSender {
      *
      * @param message message to send
      * @return sending status
+     * @throws SendingException if any
      */
-    public List<SendingStatus> send(Message message) {
+    public List<SendingStatus> send(Message message) throws SendingException {
         SendingAccount account = (SendingAccount) accountService.getById(message.getSendingAccountId());
         return senderHolder.getSender(account.getSendingService().getName(), message.getSendingType()).send(message);
     }
