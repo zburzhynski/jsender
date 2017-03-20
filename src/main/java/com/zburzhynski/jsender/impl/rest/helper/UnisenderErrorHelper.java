@@ -52,8 +52,8 @@ public class UnisenderErrorHelper {
         if (response.getStatus() == Response.Status.INTERNAL_SERVER_ERROR.getStatusCode()) {
             try {
                 JSONObject error = new JSONObject(response.getEntity(String.class));
-                Integer messageId = error.optInt(MESSAGE_ID_FIELD);
-                if (messageId != null) {
+                int messageId = error.optInt(MESSAGE_ID_FIELD);
+                if (messageId != 0) {
                     throw new MessageAlreadyExistException(messageId);
                 }
                 if ("alphaname is error".equals(error.getString(ERROR_FIELD))) {
