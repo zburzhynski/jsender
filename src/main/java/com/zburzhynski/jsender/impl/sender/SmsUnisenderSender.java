@@ -61,14 +61,6 @@ public class SmsUnisenderSender extends AbstractSender implements ISender {
 
     private static final String MODERATED_STATUS = "moderated";
 
-    private static final String MESSAGE_TO_LONG = "smsUnisenderSender.messageToLong";
-
-    private static final String INVALID_TOKEN = "smsUnisenderSender.invalidToken";
-
-    private static final String ALPHANAME_INCORRECT = "smsUnisenderSender.alphanameIncorrect";
-
-    private static final String UNDEFINED_ERROR = "smsUnisenderSender.undefinedError";
-
     @Autowired
     private UnisenderRestClient unisenderRestClient;
 
@@ -85,11 +77,11 @@ public class SmsUnisenderSender extends AbstractSender implements ISender {
         String token = params.get(Params.TOKEN).getValue();
         try {
             for (Recipient recipient : message.getRecipients()) {
-                String smsText = prepareText(message.getText(), recipient);
-                Integer messageId = createSmsMessage(token, smsText.replaceAll(HTML_TAG_PATTERN, ""));
-                if (isMessageModerated(token, messageId)) {
-                    for (String phone : recipient.getPhones()) {
-                        try {
+                try {
+                    String smsText = prepareText(message.getText(), recipient).replaceAll(HTML_TAG_PATTERN, "");
+                    Integer messageId = createSmsMessage(token, smsText);
+                    if (isMessageModerated(token, messageId)) {
+                        for (String phone : recipient.getPhones()) {
                             SendSmsRequest sendRequest = new SendSmsRequest();
                             sendRequest.setToken(token);
                             sendRequest.setMessageId(messageId);
@@ -107,32 +99,28 @@ public class SmsUnisenderSender extends AbstractSender implements ISender {
                                 sentMessage.setSendingType(SendingType.SMS);
                                 sentMessageService.saveOrUpdate(sentMessage);
                             }
-                        } catch (IncorrectPhoneNumberException e) {
-                            LOGGER.error("Incorrect phone number exception", e);
-                        } catch (BillingException e) {
-                            LOGGER.error("Billing exception", e);
-                        } catch (AccessDeniedException e) {
-                            LOGGER.error("Access denied exception", e);
-                        } catch (LimitExceededException e) {
-                            LOGGER.error("Limit exceeded exception", e);
-                        } catch (ObjectNotFoundException e) {
-                            LOGGER.error("Object not found exception", e);
-                        } catch (UndefinedException e) {
-                            LOGGER.error("Undefined exception", e);
                         }
                     }
+                } catch (MessageToLongException e) {
+                    LOGGER.warn("Message is to long", e);
+                } catch (ObjectNotFoundException e) {
+                    LOGGER.warn("Message not found", e);
+                } catch (IncorrectPhoneNumberException e) {
+                    LOGGER.warn("Incorrect phone number", e);
                 }
             }
-        } catch (MessageToLongException e) {
-            throw new SendingException(MESSAGE_TO_LONG);
         } catch (InvalidTokenException e) {
-            throw new SendingException(INVALID_TOKEN);
+            throw new SendingException("smsUnisenderSender.invalidToken");
         } catch (AlphanameIncorrectException e) {
-            throw new SendingException(ALPHANAME_INCORRECT);
+            throw new SendingException("smsUnisenderSender.alphanameIncorrect");
+        } catch (BillingException e) {
+            throw new SendingException("smsUnisenderSender.billingError");
+        } catch (AccessDeniedException e) {
+            throw new SendingException("smsUnisenderSender.accessDenied");
+        } catch (LimitExceededException e) {
+            throw new SendingException("smsUnisenderSender.limitExceeded");
         } catch (UndefinedException e) {
-            throw new SendingException(UNDEFINED_ERROR);
-        } catch (ObjectNotFoundException e) {
-            LOGGER.error("Object not found exception", e);
+            throw new SendingException("smsUnisenderSender.undefinedError");
         }
         return response;
     }

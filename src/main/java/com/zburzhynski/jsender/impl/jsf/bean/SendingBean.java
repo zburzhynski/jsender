@@ -151,7 +151,7 @@ public class SendingBean implements Serializable {
         try {
             sendingStatuses = messageSender.send(messageToSend);
         } catch (SendingException e) {
-            addMessageToGrowl(e.getMessage());
+            addFlashMessage(e.getMessage());
         }
         return SENDING_STATUS.getPath();
     }
@@ -256,11 +256,11 @@ public class SendingBean implements Serializable {
     }
 
     /**
-     * Adds localisation message to growl.
+     * Adds localisation message to flash context.
      *
      * @param message localisation message
      */
-    private void addMessageToGrowl(String message) {
+    private void addFlashMessage(String message) {
         FacesContext context = FacesContext.getCurrentInstance();
         FacesMessage facesMessage = new FacesMessage(reader.readProperty(message), StringUtils.EMPTY);
         facesMessage.setSeverity(SEVERITY_ERROR);
