@@ -6,6 +6,7 @@ import com.zburzhynski.jsender.api.domain.SendingType;
 import com.zburzhynski.jsender.api.dto.Message;
 import com.zburzhynski.jsender.api.dto.Recipient;
 import com.zburzhynski.jsender.api.dto.SendingStatus;
+import com.zburzhynski.jsender.api.exception.SendingException;
 import com.zburzhynski.jsender.api.sender.ISender;
 import com.zburzhynski.jsender.api.service.ISendingAccountService;
 import com.zburzhynski.jsender.api.service.ISentMessageService;
@@ -56,7 +57,17 @@ public class SmsUnisenderSender extends AbstractSender implements ISender {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SmsUnisenderSender.class);
 
+    private static final String HTML_TAG_PATTERN = "\\<.*?>";
+
     private static final String MODERATED_STATUS = "moderated";
+
+    private static final String MESSAGE_TO_LONG = "smsUnisenderSender.messageToLong";
+
+    private static final String INVALID_TOKEN = "smsUnisenderSender.invalidToken";
+
+    private static final String ALPHANAME_INCORRECT = "smsUnisenderSender.alphanameIncorrect";
+
+    private static final String UNDEFINED_ERROR = "smsUnisenderSender.undefinedError";
 
     @Autowired
     private UnisenderRestClient unisenderRestClient;
@@ -72,16 +83,17 @@ public class SmsUnisenderSender extends AbstractSender implements ISender {
      *
      * @param message sms to send
      * @return sending response
+     * @throws SendingException if any
      */
     @Override
-    public List<SendingStatus> send(Message message) {
+    public List<SendingStatus> send(Message message) throws SendingException {
         List<SendingStatus> response = new ArrayList<>();
         Map<Params, SendingAccountParam> params = getAccountParams(message.getSendingAccountId());
         String token = params.get(Params.TOKEN).getValue();
         try {
             for (Recipient recipient : message.getRecipients()) {
                 String smsText = prepareText(message.getText(), recipient);
-                Integer messageId = createSmsMessage(token, smsText);
+                Integer messageId = createSmsMessage(token, smsText.replaceAll(HTML_TAG_PATTERN, ""));
                 if (isMessageModerated(token, messageId)) {
                     for (String phone : recipient.getPhones()) {
                         try {
@@ -110,20 +122,24 @@ public class SmsUnisenderSender extends AbstractSender implements ISender {
                             LOGGER.error("Access denied exception", e);
                         } catch (LimitExceededException e) {
                             LOGGER.error("Limit exceeded exception", e);
+                        } catch (ObjectNotFoundException e) {
+                            LOGGER.error("Object not found exception", e);
+                        } catch (UndefinedException e) {
+                            LOGGER.error("Undefined exception", e);
                         }
                     }
                 }
             }
+        } catch (MessageToLongException e) {
+            throw new SendingException(MESSAGE_TO_LONG);
+        } catch (InvalidTokenException e) {
+            throw new SendingException(INVALID_TOKEN);
+        } catch (AlphanameIncorrectException e) {
+            throw new SendingException(ALPHANAME_INCORRECT);
+        } catch (UndefinedException e) {
+            throw new SendingException(UNDEFINED_ERROR);
         } catch (ObjectNotFoundException e) {
             LOGGER.error("Object not found exception", e);
-        } catch (AlphanameIncorrectException e) {
-            LOGGER.error("Alphaname incorrect exception", e);
-        } catch (MessageToLongException e) {
-            LOGGER.error("Message to long exception", e);
-        } catch (InvalidTokenException e) {
-            LOGGER.error("Invalid token exception", e);
-        } catch (UndefinedException e) {
-            LOGGER.error("Undefined exception", e);
         }
         return response;
     }
