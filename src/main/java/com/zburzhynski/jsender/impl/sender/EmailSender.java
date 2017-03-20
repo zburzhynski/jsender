@@ -7,6 +7,7 @@ import com.zburzhynski.jsender.api.domain.SendingType;
 import com.zburzhynski.jsender.api.dto.Message;
 import com.zburzhynski.jsender.api.dto.Recipient;
 import com.zburzhynski.jsender.api.dto.SendingStatus;
+import com.zburzhynski.jsender.api.exception.SendingException;
 import com.zburzhynski.jsender.api.sender.ISender;
 import com.zburzhynski.jsender.api.service.ISendingAccountService;
 import com.zburzhynski.jsender.api.service.ISentMessageService;
@@ -55,14 +56,8 @@ public class EmailSender extends AbstractSender implements ISender {
     @Autowired
     private ISendingAccountService accountService;
 
-    /**
-     * Send email.
-     *
-     * @param email email to send
-     * @return sending response
-     */
     @Override
-    public List<SendingStatus> send(Message email) {
+    public List<SendingStatus> send(Message email) throws SendingException {
         List<SendingStatus> response = new ArrayList<>();
         Map<Params, SendingAccountParam> params = getAccountParams(email.getSendingAccountId());
         Session session = buildSession(params);

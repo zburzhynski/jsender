@@ -78,13 +78,6 @@ public class SmsUnisenderSender extends AbstractSender implements ISender {
     @Autowired
     private ISendingAccountService accountService;
 
-    /**
-     * Send sms.
-     *
-     * @param message sms to send
-     * @return sending response
-     * @throws SendingException if any
-     */
     @Override
     public List<SendingStatus> send(Message message) throws SendingException {
         List<SendingStatus> response = new ArrayList<>();
