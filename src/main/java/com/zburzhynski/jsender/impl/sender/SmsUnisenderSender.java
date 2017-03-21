@@ -1,6 +1,7 @@
 package com.zburzhynski.jsender.impl.sender;
 
 import com.zburzhynski.jsender.api.domain.Params;
+import com.zburzhynski.jsender.api.domain.ResponseStatus;
 import com.zburzhynski.jsender.api.domain.SendingServices;
 import com.zburzhynski.jsender.api.domain.SendingType;
 import com.zburzhynski.jsender.api.dto.Message;
@@ -83,31 +84,42 @@ public class SmsUnisenderSender extends AbstractSender implements ISender {
                     Integer messageId = createSmsMessage(token, alphanameId, smsText);
                     if (isMessageModerated(token, messageId)) {
                         for (String phone : recipient.getPhones()) {
-                            SendSmsRequest sendRequest = new SendSmsRequest();
-                            sendRequest.setToken(token);
-                            sendRequest.setMessageId(messageId);
-                            sendRequest.setPhone(preparePhone(phone));
-                            SendSmsResponse smsResponse = unisenderRestClient.sendSms(sendRequest);
-                            if (smsResponse != null) {
-                                SentMessage sentMessage = new SentMessage();
-                                sentMessage.setSentDate(new Date());
-                                sentMessage.setRecipientId(recipient.getId());
-                                sentMessage.setRecipientSource(recipient.getRecipientSource());
-                                sentMessage.setRecipientFullName(recipient.getFullName());
-                                sentMessage.setContactInfo(phone);
-                                sentMessage.setSubject(message.getSubject());
-                                sentMessage.setText(smsText);
-                                sentMessage.setSendingType(SendingType.SMS);
-                                sentMessageService.saveOrUpdate(sentMessage);
+                            try {
+                                SendSmsRequest sendRequest = new SendSmsRequest();
+                                sendRequest.setToken(token);
+                                sendRequest.setMessageId(messageId);
+                                sendRequest.setPhone(preparePhone(phone));
+                                SendSmsResponse smsResponse = unisenderRestClient.sendSms(sendRequest);
+                                if (smsResponse != null) {
+                                    SentMessage sentMessage = new SentMessage();
+                                    sentMessage.setSentDate(new Date());
+                                    sentMessage.setRecipientId(recipient.getId());
+                                    sentMessage.setRecipientSource(recipient.getRecipientSource());
+                                    sentMessage.setRecipientFullName(recipient.getFullName());
+                                    sentMessage.setContactInfo(phone);
+                                    sentMessage.setSubject(message.getSubject());
+                                    sentMessage.setText(smsText);
+                                    sentMessage.setSendingType(SendingType.SMS);
+                                    sentMessageService.saveOrUpdate(sentMessage);
+                                    response.add(createOkSendingStatus(smsResponse.getSmsId().toString(),
+                                        recipient, phone));
+                                } else {
+                                    response.add(createErrorSendingStatus(recipient, phone,
+                                        "smsUnisender.undefinedError"));
+                                }
+                            } catch (IncorrectPhoneNumberException e) {
+                                response.add(createErrorSendingStatus(recipient, phone,
+                                    "smsUnisender.incorrectPhoneNumber"));
                             }
                         }
                     }
                 } catch (MessageToLongException e) {
-                    LOGGER.warn("Message is to long", e);
+                    for (String phone : recipient.getPhones()) {
+                        response.add(createErrorSendingStatus(recipient, phone,
+                            "smsUnisender.messageToLong"));
+                    }
                 } catch (ObjectNotFoundException e) {
                     LOGGER.warn("Message not found", e);
-                } catch (IncorrectPhoneNumberException e) {
-                    LOGGER.warn("Incorrect phone number", e);
                 }
             }
         } catch (InvalidTokenException e) {
@@ -170,6 +182,26 @@ public class SmsUnisenderSender extends AbstractSender implements ISender {
             params.put(Params.valueOf(param.getParam().getName().toUpperCase()), param);
         }
         return params;
+    }
+
+    private SendingStatus createOkSendingStatus(String id, Recipient recipient, String phone) {
+        return createSendingStatus(id, recipient, phone, ResponseStatus.SENDING, null);
+    }
+
+    private SendingStatus createErrorSendingStatus(Recipient recipient, String phone, String description) {
+        return createSendingStatus(null, recipient, phone, ResponseStatus.ERROR, description);
+    }
+
+    private SendingStatus createSendingStatus(String id, Recipient recipient, String phone, ResponseStatus status,
+                                              String description) {
+        SendingStatus sendingStatus = new SendingStatus();
+        sendingStatus.setId(id);
+        sendingStatus.setRecipientFullName(recipient.getFullName());
+        sendingStatus.setContactInfo(phone);
+        sendingStatus.setSendingDate(new Date());
+        sendingStatus.setStatus(status);
+        sendingStatus.setDescription(description);
+        return sendingStatus;
     }
 
 }

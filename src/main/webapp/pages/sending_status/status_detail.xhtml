@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui">
+
+    <style type="text/css">
+        .inputText {
+            width: 95%;
+        }
+    </style>
+    <p:dialog id="statusDetailDialog"
+              widgetVar="statusDetailDialog"
+              header="#{msgs['sendingStatus.showDetail']}"
+              width="520"
+              closable="false"
+              position="center"
+              resizable="false"
+              modal="true">
+        <h:panelGrid columns="2" columnClasses="name,val" width="100%">
+            <h:outputLabel for="recipientFullName" value="#{msgs['person.fullName']}:" />
+            <p:inputText id="recipientFullName" value="#{sendingBean.sendingStatus.recipientFullName}" readonly="true"
+                         styleClass="inputText"/>
+            <h:outputLabel for="contactInfo" value="#{msgs['person.recipient.contactInfo']}:" />
+            <p:inputText id="contactInfo" value="#{sendingBean.sendingStatus.contactInfo}" readonly="true"
+                         styleClass="inputText" />
+            <h:outputLabel for="sendingDate" value="#{msgs['sendingStatus.sendingDate']}:" />
+            <p:inputText id="sendingDate" value="#{sendingBean.sendingStatus.sendingDate}" readonly="true"
+                         styleClass="inputText">
+                <f:convertDateTime pattern="HH:mm dd.MM.yyyy" />
+            </p:inputText>
+            <h:outputLabel for="deliveryDate" value="#{msgs['sendingStatus.deliveryDate']}:" />
+            <p:inputText id="deliveryDate" value="#{sendingBean.sendingStatus.deliveryDate}" readonly="true"
+                         styleClass="inputText">
+                <f:convertDateTime pattern="HH:mm dd.MM.yyyy" />
+            </p:inputText>
+            <h:outputLabel for="status" value="#{msgs['sendingStatus.status']}:" />
+            <p:inputText id="status" value="#{msgs[sendingBean.sendingStatus.status.value]}" readonly="true"
+                         styleClass="inputText"/>
+            <h:outputLabel for="description" value="#{msgs['sendingStatus.description']}:" />
+            <p:inputTextarea id="description" value="#{sendingBean.sendingStatus.description}" readonly="true" style="width: 95%; height: 200px" />
+        </h:panelGrid>
+        <h:panelGrid width="100%" style="text-align: center">
+            <h:commandButton value="#{msgs['button.ok']}"
+                             oncomplete="PF('statusDetailDialog').show();"
+                             style="height: 25px; font-weight: bold" />
+        </h:panelGrid>
+    </p:dialog>
+
+</ui:composition>
