@@ -17,7 +17,9 @@ public enum Params {
 
     MAIL_SMTP_PORT,
 
-    TOKEN
+    TOKEN,
+
+    ALPHANAME_ID
 
 }
 

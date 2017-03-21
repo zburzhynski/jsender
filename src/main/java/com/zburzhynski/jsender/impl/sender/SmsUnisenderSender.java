@@ -75,11 +75,12 @@ public class SmsUnisenderSender extends AbstractSender implements ISender {
         List<SendingStatus> response = new ArrayList<>();
         Map<Params, SendingAccountParam> params = getAccountParams(message.getSendingAccountId());
         String token = params.get(Params.TOKEN).getValue();
+        Integer alphanameId = Integer.valueOf(params.get(Params.ALPHANAME_ID).getValue());
         try {
             for (Recipient recipient : message.getRecipients()) {
                 try {
                     String smsText = prepareText(message.getText(), recipient).replaceAll(HTML_TAG_PATTERN, "");
-                    Integer messageId = createSmsMessage(token, smsText);
+                    Integer messageId = createSmsMessage(token, alphanameId, smsText);
                     if (isMessageModerated(token, messageId)) {
                         for (String phone : recipient.getPhones()) {
                             SendSmsRequest sendRequest = new SendSmsRequest();
@@ -135,11 +136,12 @@ public class SmsUnisenderSender extends AbstractSender implements ISender {
         return SendingType.SMS;
     }
 
-    private Integer createSmsMessage(String token, String text) throws InvalidTokenException, MessageToLongException,
-        UndefinedException, AlphanameIncorrectException {
+    private Integer createSmsMessage(String token, Integer alphanameId, String text) throws InvalidTokenException,
+        MessageToLongException, UndefinedException, AlphanameIncorrectException {
         try {
             CreateSmsMessageRequest request = new CreateSmsMessageRequest();
             request.setToken(token);
+            request.setAlphanameId(alphanameId != 0 ? alphanameId : null);
             request.setMessage(text);
             CreateSmsMessageResponse response = unisenderRestClient.createSmsMessage(request);
             return response.getMessageId();
