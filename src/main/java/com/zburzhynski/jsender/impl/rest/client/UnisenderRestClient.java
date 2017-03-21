@@ -34,7 +34,6 @@ import com.zburzhynski.jsender.impl.rest.exception.unisender.MessageToLongExcept
 import com.zburzhynski.jsender.impl.rest.exception.unisender.ObjectNotFoundException;
 import com.zburzhynski.jsender.impl.rest.exception.unisender.UndefinedException;
 import com.zburzhynski.jsender.impl.rest.helper.UnisenderErrorHelper;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -101,7 +100,7 @@ public class UnisenderRestClient {
         InvalidTokenException, UndefinedException {
         try {
             String url = String.format(CREATE_SMS_MESSAGE_URL, request.getToken(), encode(request.getMessage(), UTF_8));
-            if (StringUtils.isNotBlank(request.getAlphanameId())) {
+            if (request.getAlphanameId() != null) {
                 String alphanameUrl = AMPERSAND + ALPHANAME_ID_PARAM + EQUALS + request.getAlphanameId();
                 url += alphanameUrl;
             }

@@ -11,7 +11,7 @@ public class CreateSmsMessageRequest extends BaseUnisenderRequest {
 
     private String message;
 
-    private String alphanameId;
+    private Integer alphanameId;
 
     public String getMessage() {
         return message;
@@ -21,11 +21,11 @@ public class CreateSmsMessageRequest extends BaseUnisenderRequest {
         this.message = message;
     }
 
-    public String getAlphanameId() {
+    public Integer getAlphanameId() {
         return alphanameId;
     }
 
-    public void setAlphanameId(String alphanameId) {
+    public void setAlphanameId(Integer alphanameId) {
         this.alphanameId = alphanameId;
     }
 
