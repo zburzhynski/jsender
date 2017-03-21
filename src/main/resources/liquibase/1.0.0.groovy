@@ -344,6 +344,12 @@ databaseChangeLog {
             column(name: 'type', value: 'PASSWORD')
             column(name: 'description', value: 'API ключ')
         }
+        insert(schemaName: 'jsender', tableName: 'param') {
+            column(name: 'id', value: 'ae0843a9-9ee9-4835-b4d1-c2f3bbba0991')
+            column(name: 'name', value: 'alphaname_id')
+            column(name: 'type', value: 'INTEGER')
+            column(name: 'description', value: 'ID альфа-имени')
+        }
     }
 
     changeSet(id: '2017-02-04-21', author: 'Nikita Shevtsov <shevtsou@gmail.com>') {
@@ -450,6 +456,12 @@ databaseChangeLog {
             column(name: 'id', value: '1f679dc9-b88c-4ecb-b4d5-33220fd68df1')
             column(name: 'sending_service_id', value: 'a12a3869-3f68-49a6-af42-fe999519b5c4')
             column(name: 'param_id', value: '1a4259ce-0797-4ce6-a215-fbb9b2eb62e6')
+        }
+        insert(schemaName: 'jsender', tableName: 'sending_service_param') {
+            column(name: 'id', value: 'f914197d-7afb-49b1-a414-c41d5d9e5799')
+            column(name: 'sending_service_id', value: 'a12a3869-3f68-49a6-af42-fe999519b5c4')
+            column(name: 'param_id', value: 'ae0843a9-9ee9-4835-b4d1-c2f3bbba0991')
+            column(name: 'value', value: '0')
         }
     }
 
