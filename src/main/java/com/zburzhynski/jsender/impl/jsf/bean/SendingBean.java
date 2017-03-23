@@ -150,6 +150,7 @@ public class SendingBean implements Serializable {
      */
     public void createMessage() {
         messageToSend = new Message();
+        recipients.clear();
         tabIndex = 0;
         messageToSend.setFrom(settingBean.getOrganizationName());
         sendingAccountListBean.findByServiceSendingType(null);
