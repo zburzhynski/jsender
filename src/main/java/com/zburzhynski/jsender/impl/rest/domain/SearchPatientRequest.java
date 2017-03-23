@@ -68,6 +68,12 @@ public class SearchPatientRequest implements Serializable {
 
     private Long end;
 
+    private String visitType;
+
+    private String treatmentType;
+
+    private Boolean onlyDebtor;
+
     public Integer getCardNumber() {
         return cardNumber;
     }
@@ -282,6 +288,30 @@ public class SearchPatientRequest implements Serializable {
 
     public void setEnd(Long end) {
         this.end = end;
+    }
+
+    public String getVisitType() {
+        return visitType;
+    }
+
+    public void setVisitType(String visitType) {
+        this.visitType = visitType;
+    }
+
+    public String getTreatmentType() {
+        return treatmentType;
+    }
+
+    public void setTreatmentType(String treatmentType) {
+        this.treatmentType = treatmentType;
+    }
+
+    public Boolean getOnlyDebtor() {
+        return onlyDebtor;
+    }
+
+    public void setOnlyDebtor(Boolean onlyDebtor) {
+        this.onlyDebtor = onlyDebtor;
     }
 
 }

@@ -9,13 +9,29 @@
 
     <ui:define name="content">
         <style type="text/css">
-            .clm1 {
+            .patientSearch {
+                width: 55%;
+                vertical-align: top;
+            }
+            .visitSearh {
                 width: 45%;
+                vertical-align: top;
+            }
+            .clm1 {
+                width: 60%;
                 text-align: left;
                 font-weight: bold;
             }
             .clm2 {
-                width: 55%;
+                width: 40%;
+            }
+            .clm3 {
+                width: 60%;
+                text-align: left;
+                font-weight: bold;
+            }
+            .clm4 {
+                width: 40%;
             }
             .inputText {
                 width: 96%;
@@ -34,43 +50,14 @@
         </style>
         <p:panel>
             <h:form id="recipientSearchForm">
-                <h:panelGrid columns="2" columnClasses="clm1,clm2" width="60%" >
-                    <h:outputText value="#{msgs['recipientSearch.cardNumber']}:" />
-                    <p:inputText value="#{recipientBean.searchPatientRequest.cardNumber}"
-                                 size="10" />
-                    <h:outputText value="#{msgs['recipientSearch.startDentalCardDate']}:" />
-                    <p:calendar value="#{recipientBean.searchPatientRequest.startCardDate}"
-                                label="#{msgs['recipientSearch.startDentalCardDate']}"
-                                pattern="dd/MM/yyyy"
-                                navigator="true"
-                                locale="ru"
-                                renderAsPopup="true"
-                                converterMessage="#{msgs['dateValidator.invalidDate']}"
-                                style="width:56%">
-                    </p:calendar>
-                    <h:outputText value="#{msgs['recipientSearch.endDentalCardDate']}:" />
-                    <p:calendar value="#{recipientBean.searchPatientRequest.endCardDate}"
-                                label="#{msgs['recipientSearch.endDentalCardDate']}"
-                                       pattern="dd/MM/yyyy"
-                                       navigator="true"
-                                       locale="ru"
-                                       renderAsPopup="true"
-                                       converterMessage="#{msgs['dateValidator.invalidDate']}"
-                                       style="width:56%">
-                    </p:calendar>
-                    <h:outputText value="#{msgs['person.surname']}:" />
-                    <p:inputText value="#{recipientBean.searchPatientRequest.surname}"
-                                 styleClass="inputText" />
-                    <h:outputText value="#{msgs['person.name']}:" />
-                    <p:inputText value="#{recipientBean.searchPatientRequest.name}"
-                                 styleClass="inputText" />
-                    <h:outputText value="#{msgs['person.patronymic']}:" />
-                    <p:inputText value="#{recipientBean.searchPatientRequest.patronymic}"
-                                 styleClass="inputText" />
-                    <h:outputText value="#{msgs['recipientSearch.startBirthdayDate']}:" />
-                    <h:panelGroup>
-                        <p:calendar value="#{recipientBean.searchPatientRequest.startBirthdayDate}"
-                                    label="#{msgs['recipientSearch.startBirthdayDate']}"
+                <h:panelGrid columns="2" columnClasses="patientSearch, visitSearh" width="100%">
+                    <h:panelGrid columns="2" columnClasses="clm1,clm2" width="90%" >
+                        <h:outputText value="#{msgs['recipientSearch.cardNumber']}:" />
+                        <p:inputText value="#{recipientBean.searchPatientRequest.cardNumber}"
+                                     size="10" />
+                        <h:outputText value="#{msgs['recipientSearch.startDentalCardDate']}:" />
+                        <p:calendar value="#{recipientBean.searchPatientRequest.startCardDate}"
+                                    label="#{msgs['recipientSearch.startDentalCardDate']}"
                                     pattern="dd/MM/yyyy"
                                     navigator="true"
                                     locale="ru"
@@ -78,101 +65,159 @@
                                     converterMessage="#{msgs['dateValidator.invalidDate']}"
                                     style="width:56%">
                         </p:calendar>
-                        <h:selectBooleanCheckbox id="birthdayIgnoreYear" value="#{recipientBean.searchPatientRequest.birthdayIgnoreYear}" />
-                        <h:outputLabel for="birthdayIgnoreYear" value="#{msgs['recipientSearch.ignoreBirthdayYear']}" styleClass="ignoreYear" />
-                    </h:panelGroup>
-                    <h:outputText value="#{msgs['recipientSearch.endBirthdayDate']}:" />
-                    <p:calendar value="#{recipientBean.searchPatientRequest.endBirthdayDate}"
-                                label="#{msgs['recipientSearch.endBirthdayDate']}"
-                                pattern="dd/MM/yyyy"
-                                navigator="true"
-                                locale="ru"
-                                renderAsPopup="true"
-                                converterMessage="#{msgs['dateValidator.invalidDate']}"
-                                style="width:56%">
-                    </p:calendar>
-                    <h:outputText value="#{msgs['person.gender']}:" />
-                    <p:selectOneRadio style="border: 0"
-                                        value="#{recipientBean.searchPatientRequest.gender}">
-                        <p:ajax partialSubmit="true" update="socialStatus" />
-                        <f:selectItems value="#{genderBean.genders}" var="g" itemValue="#{g}"
-                                       itemLabel="#{msgs[g.value]}" />
-                    </p:selectOneRadio>
-                    <h:outputText value="#{msgs['recipientSearch.socialStatus']}:" />
-                    <h:selectOneMenu id="socialStatus"
-                                     value="#{recipientBean.searchPatientRequest.socialStatus}"
-                                     styleClass="ui-inputfield ui-state-default ui-corner-all selectMenu">
-                        <c:if test="#{recipientBean.searchPatientRequest.gender=='M'}">
+                        <h:outputText value="#{msgs['recipientSearch.endDentalCardDate']}:" />
+                        <p:calendar value="#{recipientBean.searchPatientRequest.endCardDate}"
+                                    label="#{msgs['recipientSearch.endDentalCardDate']}"
+                                           pattern="dd/MM/yyyy"
+                                           navigator="true"
+                                           locale="ru"
+                                           renderAsPopup="true"
+                                           converterMessage="#{msgs['dateValidator.invalidDate']}"
+                                           style="width:56%">
+                        </p:calendar>
+                        <h:outputText value="#{msgs['person.surname']}:" />
+                        <p:inputText value="#{recipientBean.searchPatientRequest.surname}"
+                                     styleClass="inputText" />
+                        <h:outputText value="#{msgs['person.name']}:" />
+                        <p:inputText value="#{recipientBean.searchPatientRequest.name}"
+                                     styleClass="inputText" />
+                        <h:outputText value="#{msgs['person.patronymic']}:" />
+                        <p:inputText value="#{recipientBean.searchPatientRequest.patronymic}"
+                                     styleClass="inputText" />
+                        <h:outputText value="#{msgs['recipientSearch.startBirthdayDate']}:" />
+                        <h:panelGroup>
+                            <p:calendar value="#{recipientBean.searchPatientRequest.startBirthdayDate}"
+                                        label="#{msgs['recipientSearch.startBirthdayDate']}"
+                                        pattern="dd/MM/yyyy"
+                                        navigator="true"
+                                        locale="ru"
+                                        renderAsPopup="true"
+                                        converterMessage="#{msgs['dateValidator.invalidDate']}"
+                                        style="width:56%">
+                            </p:calendar>
+                            <h:selectBooleanCheckbox id="birthdayIgnoreYear" value="#{recipientBean.searchPatientRequest.birthdayIgnoreYear}" />
+                            <h:outputLabel for="birthdayIgnoreYear" value="#{msgs['recipientSearch.ignoreBirthdayYear']}" styleClass="ignoreYear" />
+                        </h:panelGroup>
+                        <h:outputText value="#{msgs['recipientSearch.endBirthdayDate']}:" />
+                        <p:calendar value="#{recipientBean.searchPatientRequest.endBirthdayDate}"
+                                    label="#{msgs['recipientSearch.endBirthdayDate']}"
+                                    pattern="dd/MM/yyyy"
+                                    navigator="true"
+                                    locale="ru"
+                                    renderAsPopup="true"
+                                    converterMessage="#{msgs['dateValidator.invalidDate']}"
+                                    style="width:56%">
+                        </p:calendar>
+                        <h:outputText value="#{msgs['person.gender']}:" />
+                        <p:selectOneRadio style="border: 0"
+                                            value="#{recipientBean.searchPatientRequest.gender}">
+                            <p:ajax partialSubmit="true" update="socialStatus" />
+                            <f:selectItems value="#{genderBean.genders}" var="g" itemValue="#{g}"
+                                           itemLabel="#{msgs[g.value]}" />
+                        </p:selectOneRadio>
+                        <h:outputText value="#{msgs['recipientSearch.socialStatus']}:" />
+                        <h:selectOneMenu id="socialStatus"
+                                         value="#{recipientBean.searchPatientRequest.socialStatus}"
+                                         styleClass="ui-inputfield ui-state-default ui-corner-all selectMenu">
+                            <c:if test="#{recipientBean.searchPatientRequest.gender=='M'}">
+                                <f:selectItem itemLabel="" noSelectionOption="true" />
+                                <f:selectItems value="#{socialStatusBean.socialStatuses}" var="status"
+                                               itemValue="#{status}"
+                                               itemLabel="#{msgs[status.male]}" />
+                            </c:if>
+                            <c:if test="#{recipientBean.searchPatientRequest.gender=='F'}">
+                                <f:selectItem itemLabel="" noSelectionOption="true" />
+                                <f:selectItems value="#{socialStatusBean.socialStatuses}" var="status"
+                                               itemValue="#{status}"
+                                               itemLabel="#{msgs[status.female]}" />
+                            </c:if>
+                        </h:selectOneMenu>
+                        <h:outputText value="#{msgs['recipientSearch.residenceType']}:" />
+                        <h:selectOneMenu value="#{recipientBean.searchPatientRequest.residenceType}"
+                                         styleClass="ui-inputfield ui-state-default ui-corner-all selectMenu">
                             <f:selectItem itemLabel="" noSelectionOption="true" />
-                            <f:selectItems value="#{socialStatusBean.socialStatuses}" var="status"
-                                           itemValue="#{status}"
-                                           itemLabel="#{msgs[status.male]}" />
-                        </c:if>
-                        <c:if test="#{recipientBean.searchPatientRequest.gender=='F'}">
+                            <f:selectItems value="#{residenceTypeBean.residenceTypes}" var="residence"
+                                           itemValue="#{residence}"
+                                           itemLabel="#{msgs[residence.value]}" />
+                        </h:selectOneMenu>
+                        <h:outputText value="#{msgs['recipientSearch.address']}:" />
+                        <p:inputTextarea value="#{recipientBean.searchPatientRequest.address}"
+                                         styleClass="area" />
+                        <h:outputText value="#{msgs['recipientSearch.phoneNumber']}:" />
+                        <p:inputText value="#{recipientBean.searchPatientRequest.homePhoneNumber}"
+                                     styleClass="inputText" />
+                        <h:outputText value="#{msgs['recipientSearch.mobilePhoneNumber']}:" />
+                        <p:inputText value="#{recipientBean.searchPatientRequest.mobilePhoneNumber}"
+                                     styleClass="inputText" />
+                        <h:outputText value="#{msgs['recipientSearch.job']}:" />
+                        <p:inputText value="#{recipientBean.searchPatientRequest.job}"
+                                     styleClass="inputText" />
+                        <h:outputText value="#{msgs['recipientSearch.jobPosition']}:" />
+                        <p:inputText value="#{recipientBean.searchPatientRequest.jobPosition}"
+                                     styleClass="inputText" />
+                        <h:outputText value="#{msgs['recipientSearch.workAddress']}:" />
+                        <p:inputText value="#{recipientBean.searchPatientRequest.workAddress}"
+                                     styleClass="inputText" />
+                        <h:outputText value="#{msgs['recipientSearch.workPhoneNumber']}:" />
+                        <p:inputText value="#{recipientBean.searchPatientRequest.workPhoneNumber}"
+                                     styleClass="inputText" />
+                        <h:outputText value="#{msgs['recipientSearch.passportSeries']}:" />
+                        <p:inputText value="#{recipientBean.searchPatientRequest.passportSeries}"
+                                     styleClass="inputText" />
+                        <h:outputText value="#{msgs['recipientSearch.passportNumber']}:" />
+                        <p:inputText value="#{recipientBean.searchPatientRequest.passportNumber}"
+                                     styleClass="inputText" />
+                    </h:panelGrid>
+                    <h:panelGrid columns="2" columnClasses="clm3, clm4">
+                        <h:outputText value="#{msgs['recipientSearch.dentalVisit']}" style="color: blue" />
+                        <p:spacer />
+                        <h:outputText value="#{msgs['recipientSearch.additionalInformation']}:" />
+                        <p:inputTextarea value="#{recipientBean.searchPatientRequest.additionalInformation}"
+                                         styleClass="area" />
+                        <h:outputText value="#{msgs['recipientSearch.startVisitDate']}:" />
+                        <p:calendar value="#{recipientBean.searchPatientRequest.startVisitDate}"
+                                    label="#{msgs['recipientSearch.startVisitDate']}"
+                                    pattern="dd/MM/yyyy"
+                                    navigator="true"
+                                    locale="ru"
+                                    renderAsPopup="true"
+                                    converterMessage="#{msgs['dateValidator.invalidDate']}"
+                                    style="width:56%">
+                        </p:calendar>
+                        <h:outputText value="#{msgs['recipientSearch.endVisitDate']}:" />
+                        <p:calendar value="#{recipientBean.searchPatientRequest.endVisitDate}"
+                                    label="#{msgs['recipientSearch.endVisitDate']}"
+                                    pattern="dd/MM/yyyy"
+                                    navigator="true"
+                                    locale="ru"
+                                    renderAsPopup="true"
+                                    converterMessage="#{msgs['dateValidator.invalidDate']}"
+                                    style="width:56%">
+                        </p:calendar>
+
+                        <h:outputText value="#{msgs['recipientSearch.visitType']}:" />
+                        <h:selectOneMenu value="#{recipientBean.searchPatientRequest.visitType}"
+                                         styleClass="ui-inputfield ui-state-default ui-corner-all selectMenu"
+                                         style="width: 100%">
                             <f:selectItem itemLabel="" noSelectionOption="true" />
-                            <f:selectItems value="#{socialStatusBean.socialStatuses}" var="status"
-                                           itemValue="#{status}"
-                                           itemLabel="#{msgs[status.female]}" />
-                        </c:if>
-                    </h:selectOneMenu>
-                    <h:outputText value="#{msgs['recipientSearch.residenceType']}:" />
-                    <h:selectOneMenu value="#{recipientBean.searchPatientRequest.residenceType}"
-                                     styleClass="ui-inputfield ui-state-default ui-corner-all selectMenu">
-                        <f:selectItem itemLabel="" noSelectionOption="true" />
-                        <f:selectItems value="#{residenceTypeBean.residenceTypes}" var="residence"
-                                       itemValue="#{residence}"
-                                       itemLabel="#{msgs[residence.value]}" />
-                    </h:selectOneMenu>
-                    <h:outputText value="#{msgs['recipientSearch.address']}:" />
-                    <p:inputTextarea value="#{recipientBean.searchPatientRequest.address}"
-                                     styleClass="area" />
-                    <h:outputText value="#{msgs['recipientSearch.phoneNumber']}:" />
-                    <p:inputText value="#{recipientBean.searchPatientRequest.homePhoneNumber}"
-                                 styleClass="inputText" />
-                    <h:outputText value="#{msgs['recipientSearch.mobilePhoneNumber']}:" />
-                    <p:inputText value="#{recipientBean.searchPatientRequest.mobilePhoneNumber}"
-                                 styleClass="inputText" />
-                    <h:outputText value="#{msgs['recipientSearch.job']}:" />
-                    <p:inputText value="#{recipientBean.searchPatientRequest.job}"
-                                 styleClass="inputText" />
-                    <h:outputText value="#{msgs['recipientSearch.jobPosition']}:" />
-                    <p:inputText value="#{recipientBean.searchPatientRequest.jobPosition}"
-                                 styleClass="inputText" />
-                    <h:outputText value="#{msgs['recipientSearch.workAddress']}:" />
-                    <p:inputText value="#{recipientBean.searchPatientRequest.workAddress}"
-                                 styleClass="inputText" />
-                    <h:outputText value="#{msgs['recipientSearch.workPhoneNumber']}:" />
-                    <p:inputText value="#{recipientBean.searchPatientRequest.workPhoneNumber}"
-                                 styleClass="inputText" />
-                    <h:outputText value="#{msgs['recipientSearch.passportSeries']}:" />
-                    <p:inputText value="#{recipientBean.searchPatientRequest.passportSeries}"
-                                 styleClass="inputText" />
-                    <h:outputText value="#{msgs['recipientSearch.passportNumber']}:" />
-                    <p:inputText value="#{recipientBean.searchPatientRequest.passportNumber}"
-                                 styleClass="inputText" />
-                    <h:outputText value="#{msgs['recipientSearch.additionalInformation']}:" />
-                    <p:inputTextarea value="#{recipientBean.searchPatientRequest.additionalInformation}"
-                                     styleClass="area" />
-                    <h:outputText value="#{msgs['recipientSearch.startVisitDate']}:" />
-                    <p:calendar value="#{recipientBean.searchPatientRequest.startVisitDate}"
-                                label="#{msgs['recipientSearch.startVisitDate']}"
-                                pattern="dd/MM/yyyy"
-                                navigator="true"
-                                locale="ru"
-                                renderAsPopup="true"
-                                converterMessage="#{msgs['dateValidator.invalidDate']}"
-                                style="width:56%">
-                    </p:calendar>
-                    <h:outputText value="#{msgs['recipientSearch.endVisitDate']}:" />
-                    <p:calendar value="#{recipientBean.searchPatientRequest.endVisitDate}"
-                                label="#{msgs['recipientSearch.endVisitDate']}"
-                                pattern="dd/MM/yyyy"
-                                navigator="true"
-                                locale="ru"
-                                renderAsPopup="true"
-                                converterMessage="#{msgs['dateValidator.invalidDate']}"
-                                style="width:56%">
-                    </p:calendar>
+                            <f:selectItems value="#{visitTypeBean.visitTypes}" var="type"
+                                           itemValue="#{type}"
+                                           itemLabel="#{msgs[type.value]}" />
+                        </h:selectOneMenu>
+                        <h:outputText value="#{msgs['recipientSearch.treatmentType']}:" />
+                        <h:selectOneMenu value="#{recipientBean.searchPatientRequest.treatmentType}"
+                                         styleClass="ui-inputfield ui-state-default ui-corner-all selectMenu"
+                                         style="width: 100%">
+                            <f:selectItem itemLabel="" noSelectionOption="true" />
+                            <f:selectItems value="#{treatmentTypeBean.treatmentTypes}" var="treatmentType"
+                                           itemValue="#{treatmentType}"
+                                           itemLabel="#{msgs[treatmentType.value]}" />
+                        </h:selectOneMenu>
+                        <h:outputText value="#{msgs['recipientSearch.additional']}" style="color: blue" />
+                        <h:outputText />
+                        <h:outputLabel for="onlyDebtor" value="#{msgs['recipientSearch.onlyDebtor']}" styleClass="b" />
+                        <h:selectBooleanCheckbox id="onlyDebtor" value="#{recipientBean.searchPatientRequest.onlyDebtor}" />
+                    </h:panelGrid>
                 </h:panelGrid>
                 <h:panelGrid width="100%">
                     <h:messages id="validationMessages" style="color:red;" />
