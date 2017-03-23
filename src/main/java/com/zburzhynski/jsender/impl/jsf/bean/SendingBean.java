@@ -9,14 +9,22 @@ import static com.zburzhynski.jsender.api.domain.View.RECIPIENTS;
 import static com.zburzhynski.jsender.api.domain.View.SENDING;
 import static com.zburzhynski.jsender.api.domain.View.SENDING_STATUS;
 import static javax.faces.application.FacesMessage.SEVERITY_ERROR;
+import com.zburzhynski.jsender.api.domain.Params;
+import com.zburzhynski.jsender.api.domain.ResponseStatus;
+import com.zburzhynski.jsender.api.domain.SendingType;
 import com.zburzhynski.jsender.api.dto.Message;
 import com.zburzhynski.jsender.api.dto.Recipient;
 import com.zburzhynski.jsender.api.dto.SendingStatus;
 import com.zburzhynski.jsender.api.exception.SendingException;
+import com.zburzhynski.jsender.api.service.ISendingAccountService;
 import com.zburzhynski.jsender.impl.domain.Client;
 import com.zburzhynski.jsender.impl.domain.SendingAccount;
+import com.zburzhynski.jsender.impl.domain.SendingAccountParam;
 import com.zburzhynski.jsender.impl.jsf.validator.SendingValidator;
+import com.zburzhynski.jsender.impl.rest.client.UnisenderRestClient;
 import com.zburzhynski.jsender.impl.rest.domain.PatientDto;
+import com.zburzhynski.jsender.impl.rest.domain.unisender.CheckSmsRequest;
+import com.zburzhynski.jsender.impl.rest.domain.unisender.CheckSmsResponse;
 import com.zburzhynski.jsender.impl.sender.MessageSender;
 import com.zburzhynski.jsender.impl.util.PropertyReader;
 import org.apache.commons.lang.StringUtils;
@@ -25,6 +33,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -50,6 +59,8 @@ public class SendingBean implements Serializable {
 
     private int tabIndex;
 
+    private SendingStatus sendingStatus;
+
     private Message messageToSend;
 
     private List<SendingStatus> sendingStatuses;
@@ -71,6 +82,12 @@ public class SendingBean implements Serializable {
     @ManagedProperty(value = "#{sendingAccountListBean}")
     private SendingAccountListBean sendingAccountListBean;
 
+    @ManagedProperty(value = "#{sendingAccountService}")
+    private ISendingAccountService accountService;
+
+    @ManagedProperty(value = "#{unisenderRestClient}")
+    private UnisenderRestClient unisenderRestClient;
+
     @ManagedProperty(value = "#{propertyReader}")
     private PropertyReader reader;
 
@@ -83,6 +100,49 @@ public class SendingBean implements Serializable {
     @PostConstruct
     public void init() {
         createMessage();
+    }
+
+    /**
+     * Refreshes sending statues.
+     */
+    public void refreshSendingStatuses() {
+        try {
+            if (SendingType.SMS.equals(messageToSend.getSendingType())) {
+                List<SendingStatus> newSendingStatuses = new ArrayList<>();
+                SendingAccount account = (SendingAccount) accountService.getById(messageToSend.getSendingAccountId());
+                String token = "";
+                for (SendingAccountParam accountParam : account.getAccountParams()) {
+                    if (Params.TOKEN.toString().equals(accountParam.getParam().getName().toUpperCase())) {
+                        token = accountParam.getValue();
+                    }
+                }
+                for (SendingStatus status : sendingStatuses) {
+                    switch (status.getStatus()) {
+                        case OK:
+                            continue;
+                        case ERROR:
+                            newSendingStatuses.add(status);
+                            break;
+                        case SENDING:
+                            CheckSmsRequest request = new CheckSmsRequest();
+                            request.setSmsId(Integer.valueOf(status.getId()));
+                            request.setToken(token);
+                            CheckSmsResponse smsResponse = unisenderRestClient.checkSms(request);
+                            if (!new Long(0).equals(smsResponse.getDelivered())) {
+                                status.setDeliveryDate(new Date(smsResponse.getDelivered()));
+                                status.setStatus(ResponseStatus.OK);
+                            }
+                            newSendingStatuses.add(status);
+                            break;
+                         default:
+                    }
+
+                }
+                sendingStatuses = newSendingStatuses;
+            }
+        } catch (Exception e) {
+            LOGGER.error("Exception", e);
+        }
     }
 
     /**
@@ -157,6 +217,15 @@ public class SendingBean implements Serializable {
     }
 
     /**
+     * Select current sendingStatus.
+     *
+     * @param status sending sendingStatus to select
+     */
+    public void selectSentStatus(SendingStatus status) {
+        this.sendingStatus = status;
+    }
+
+    /**
      * Gets phone numbers description.
      *
      * @param recipient recipient
@@ -203,6 +272,14 @@ public class SendingBean implements Serializable {
         this.tabIndex = tabIndex;
     }
 
+    public SendingStatus getSendingStatus() {
+        return sendingStatus;
+    }
+
+    public void setSendingStatus(SendingStatus sendingStatus) {
+        this.sendingStatus = sendingStatus;
+    }
+
     public Message getMessageToSend() {
         return messageToSend;
     }
@@ -245,6 +322,14 @@ public class SendingBean implements Serializable {
 
     public void setSendingAccountListBean(SendingAccountListBean sendingAccountListBean) {
         this.sendingAccountListBean = sendingAccountListBean;
+    }
+
+    public void setAccountService(ISendingAccountService accountService) {
+        this.accountService = accountService;
+    }
+
+    public void setUnisenderRestClient(UnisenderRestClient unisenderRestClient) {
+        this.unisenderRestClient = unisenderRestClient;
     }
 
     public void setReader(PropertyReader reader) {

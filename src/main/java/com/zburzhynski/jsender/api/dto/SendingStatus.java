@@ -1,5 +1,9 @@
 package com.zburzhynski.jsender.api.dto;
 
+import com.zburzhynski.jsender.api.domain.ResponseStatus;
+
+import java.util.Date;
+
 /**
  * Sending status.
  * <p/>
@@ -9,11 +13,27 @@ package com.zburzhynski.jsender.api.dto;
  */
 public class SendingStatus {
 
+    private String id;
+
     private String recipientFullName;
 
     private String contactInfo;
 
+    private Date sendingDate;
+
+    private Date deliveryDate;
+
+    private ResponseStatus status;
+
     private String description;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getRecipientFullName() {
         return recipientFullName;
@@ -29,6 +49,30 @@ public class SendingStatus {
 
     public void setContactInfo(String contactInfo) {
         this.contactInfo = contactInfo;
+    }
+
+    public Date getSendingDate() {
+        return sendingDate;
+    }
+
+    public void setSendingDate(Date sendingDate) {
+        this.sendingDate = sendingDate;
+    }
+
+    public Date getDeliveryDate() {
+        return deliveryDate;
+    }
+
+    public void setDeliveryDate(Date deliveryDate) {
+        this.deliveryDate = deliveryDate;
+    }
+
+    public ResponseStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(ResponseStatus status) {
+        this.status = status;
     }
 
     public String getDescription() {
