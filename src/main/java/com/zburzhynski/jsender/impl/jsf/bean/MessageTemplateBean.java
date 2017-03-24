@@ -11,6 +11,7 @@ import com.zburzhynski.jsender.api.domain.View;
 import com.zburzhynski.jsender.api.service.IMessageTemplateService;
 import com.zburzhynski.jsender.impl.domain.MessageTemplate;
 import com.zburzhynski.jsender.impl.jsf.validator.MessageTemplateSelectValidator;
+import com.zburzhynski.jsender.impl.jsf.validator.MessageTemplateValidator;
 import com.zburzhynski.jsender.impl.util.BeanUtils;
 import com.zburzhynski.jsender.impl.util.PropertyReader;
 import org.primefaces.model.LazyDataModel;
@@ -36,6 +37,10 @@ public class MessageTemplateBean {
 
     private static final String SENDING_BEAN = "sendingBean";
 
+    private static final String BR_HTML_TAG = "<br>";
+
+    private static final String DIV_HTML_CLOSE_TAG = "</div>";
+
     private View redirectFrom = MESSAGE_TEMPLATES;
 
     private MessageTemplate messageTemplate;
@@ -48,6 +53,9 @@ public class MessageTemplateBean {
 
     @ManagedProperty(value = "#{propertyReader}")
     private PropertyReader reader;
+
+    @ManagedProperty(value = "#{messageTemplateValidator}")
+    private MessageTemplateValidator messageTemplateValidator;
 
     @ManagedProperty(value = "#{messageTemplateSelectValidator}")
     private MessageTemplateSelectValidator templateSelectValidator;
@@ -73,6 +81,18 @@ public class MessageTemplateBean {
      */
     public void insertTag(TemplateTag tag) {
         String text = isNotBlank(messageTemplate.getText()) ? messageTemplate.getText() : EMPTY;
+        int insertIndex = text.lastIndexOf(BR_HTML_TAG + DIV_HTML_CLOSE_TAG);
+        if (insertIndex != -1) {
+            messageTemplate.setText(new StringBuilder(text).insert(
+                insertIndex, reader.readProperty(tag.getValue())).toString());
+            return;
+        }
+        insertIndex = text.lastIndexOf(DIV_HTML_CLOSE_TAG);
+        if (insertIndex != -1) {
+            messageTemplate.setText(new StringBuilder(text).insert(
+                insertIndex, reader.readProperty(tag.getValue())).toString());
+            return;
+        }
         messageTemplate.setText(text + reader.readProperty(tag.getValue()));
     }
 
@@ -92,6 +112,10 @@ public class MessageTemplateBean {
      * @return path for navigating
      */
     public String saveMessageTemplate() {
+        boolean valid = messageTemplateValidator.validate(messageTemplate);
+        if (!valid) {
+            return null;
+        }
         messageTemplateService.saveOrUpdate(messageTemplate);
         return MESSAGE_TEMPLATES.getPath();
     }
@@ -167,6 +191,10 @@ public class MessageTemplateBean {
 
     public void setReader(PropertyReader reader) {
         this.reader = reader;
+    }
+
+    public void setMessageTemplateValidator(MessageTemplateValidator messageTemplateValidator) {
+        this.messageTemplateValidator = messageTemplateValidator;
     }
 
     public void setTemplateSelectValidator(MessageTemplateSelectValidator templateSelectValidator) {

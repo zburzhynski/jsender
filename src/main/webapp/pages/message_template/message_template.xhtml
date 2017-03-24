@@ -11,13 +11,10 @@
         <style type="text/css">
             .name {
                 font-weight: bold;
-                width: 6%;
+                width: 10%;
             }
             .val {
-                width: 59%;
-            }
-            .msg {
-                width: 35%;
+                width: 90%;
             }
             .cal .ui-inputfield {
                 width: 97%;
@@ -31,15 +28,12 @@
         <p:panel>
             <h:form id="messageTemplateForm">
                 <p:focus />
-                <h:panelGrid columns="3" columnClasses="name,val,msg" width="100%">
+                <p:messages id="messages" />
+                <h:panelGrid columns="2" columnClasses="name,val" width="60%">
                     <h:outputLabel for="subject" value="#{msgs['messageTemplate.subject']}:" />
-                    <p:inputText id="subject" value="#{messageTemplateBean.messageTemplate.subject}" required="true" maxlength="250" style="width: 98%" />
-                    <p:message id="subjectMessage" for="subject" />
-                </h:panelGrid>
-                <h:panelGrid columns="3" columnClasses="name,val,msg">
+                    <p:inputText id="subject" value="#{messageTemplateBean.messageTemplate.subject}" style="width: 98%" />
                     <h:outputLabel for="text" value="#{msgs['messageTemplate.text']}:" />
-                    <p:editor id="text" value="#{messageTemplateBean.messageTemplate.text}" required="true" maxlength="2000" styleClass="area" style="width: 100%" />
-                    <p:message id="textMessage" for="text" />
+                    <p:editor id="text" value="#{messageTemplateBean.messageTemplate.text}" styleClass="area" style="width: 100%" />
                 </h:panelGrid>
                 <h:panelGrid columns="3">
                     <p:menuButton value="#{msgs['messageTemplate.insertTag']}">
@@ -48,7 +42,7 @@
                         </c:forEach>
                     </p:menuButton>
                     <p:commandButton id="saveMessageTemplate" value="#{msgs['button.save']}"
-                                     update="subjectMessage textMessage"
+                                     update="messages"
                                      action="#{messageTemplateBean.saveMessageTemplate}" />
                     <p:commandButton id="cancelUpdateMessageTemplate" value="#{msgs['button.cancel']}"
                                      action="/pages/message_template/message_templates?faces-redirect=true"
