@@ -72,7 +72,7 @@ public class SearchPatientRequest implements Serializable {
 
     private String treatmentType;
 
-    private Boolean onlyDebtor;
+    private boolean onlyDebtor;
 
     public Integer getCardNumber() {
         return cardNumber;
@@ -306,11 +306,11 @@ public class SearchPatientRequest implements Serializable {
         this.treatmentType = treatmentType;
     }
 
-    public Boolean getOnlyDebtor() {
+    public boolean isOnlyDebtor() {
         return onlyDebtor;
     }
 
-    public void setOnlyDebtor(Boolean onlyDebtor) {
+    public void setOnlyDebtor(boolean onlyDebtor) {
         this.onlyDebtor = onlyDebtor;
     }
 
