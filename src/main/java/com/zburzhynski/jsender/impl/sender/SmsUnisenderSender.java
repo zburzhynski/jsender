@@ -1,5 +1,6 @@
 package com.zburzhynski.jsender.impl.sender;
 
+import static com.zburzhynski.jsender.api.domain.CommonConstant.SPACE;
 import com.zburzhynski.jsender.api.domain.Params;
 import com.zburzhynski.jsender.api.domain.ResponseStatus;
 import com.zburzhynski.jsender.api.domain.SendingServices;
@@ -60,6 +61,8 @@ public class SmsUnisenderSender extends AbstractSender implements ISender {
 
     private static final String HTML_TAG_PATTERN = "\\<.*?>";
 
+    private static final String HTML_SPACE = "&nbsp";
+
     private static final String MODERATED_STATUS = "moderated";
 
     @Autowired
@@ -81,6 +84,7 @@ public class SmsUnisenderSender extends AbstractSender implements ISender {
             for (Recipient recipient : message.getRecipients()) {
                 try {
                     String smsText = prepareText(message.getText(), recipient).replaceAll(HTML_TAG_PATTERN, "");
+                    smsText = smsText.replaceAll(HTML_SPACE, SPACE);
                     Integer messageId = createSmsMessage(token, alphanameId, smsText);
                     if (isMessageModerated(token, messageId)) {
                         for (String phone : recipient.getPhones()) {
@@ -103,9 +107,6 @@ public class SmsUnisenderSender extends AbstractSender implements ISender {
                                     sentMessageService.saveOrUpdate(sentMessage);
                                     response.add(createOkSendingStatus(smsResponse.getSmsId().toString(),
                                         recipient, phone));
-                                } else {
-                                    response.add(createErrorSendingStatus(recipient, phone,
-                                        "smsUnisender.undefinedError"));
                                 }
                             } catch (IncorrectPhoneNumberException e) {
                                 response.add(createErrorSendingStatus(recipient, phone,
