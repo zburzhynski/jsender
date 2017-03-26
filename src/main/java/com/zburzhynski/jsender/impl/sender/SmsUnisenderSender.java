@@ -83,8 +83,7 @@ public class SmsUnisenderSender extends AbstractSender implements ISender {
         try {
             for (Recipient recipient : message.getRecipients()) {
                 try {
-                    String smsText = prepareText(message.getText(), recipient).replaceAll(HTML_TAG_PATTERN, "");
-                    smsText = smsText.replaceAll(HTML_SPACE, SPACE);
+                    String smsText = htmlToString(prepareText(message.getText(), recipient));
                     Integer messageId = createSmsMessage(token, alphanameId, smsText);
                     if (isMessageModerated(token, messageId)) {
                         for (String phone : recipient.getPhones()) {
@@ -183,6 +182,10 @@ public class SmsUnisenderSender extends AbstractSender implements ISender {
             params.put(Params.valueOf(param.getParam().getName().toUpperCase()), param);
         }
         return params;
+    }
+
+    private String htmlToString(String text) {
+        return text.replaceAll(HTML_SPACE, SPACE).replaceAll(HTML_TAG_PATTERN, "");
     }
 
     private SendingStatus createOkSendingStatus(String id, Recipient recipient, String phone) {
