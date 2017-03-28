@@ -57,6 +57,8 @@ public class SendingBean implements Serializable {
 
     private static final String GROWL_ID = "sendingStatusForm:sendingMessages";
 
+    private static final int SECOND_SCALE = 1000;
+
     private int tabIndex;
 
     private SendingStatus sendingStatus;
@@ -129,7 +131,7 @@ public class SendingBean implements Serializable {
                             request.setToken(token);
                             CheckSmsResponse smsResponse = unisenderRestClient.checkSms(request);
                             if (!new Long(0).equals(smsResponse.getDelivered())) {
-                                status.setDeliveryDate(new Date(smsResponse.getDelivered()));
+                                status.setDeliveryDate(new Date(smsResponse.getDelivered() * SECOND_SCALE));
                                 status.setStatus(ResponseStatus.OK);
                             }
                             newSendingStatuses.add(status);
