@@ -26,12 +26,10 @@
                 <p:messages id="messages" />
                 <h:panelGrid columns="3" columnClasses="name,val,msg" width="70%">
                 <p:outputLabel id="description"
-                               value="#{settingBean.setting.description}"
-                               required="true" />
+                               value="#{settingBean.setting.description}" />
                 <c:if test="#{settingBean.setting.type == 'STRING'}">
                     <p:inputTextarea id="stringValue"
                                      value="#{settingBean.setting.value}"
-                                     required="true"
                                      label="#{settingBean.setting.description}"
                                      maxlength="250"
                                      style="width: 97%" />
@@ -39,7 +37,6 @@
                 <c:if test="#{settingBean.setting.type == 'INTEGER'}">
                     <p:inputText id="integerValue"
                                      value="#{settingBean.setting.value}"
-                                     required="true"
                                      label="#{settingBean.setting.description}"
                                      maxlength="250"
                                      style="width: 97%">
@@ -55,7 +52,6 @@
                                      mask="99.99.9999"
                                      value="#{settingBean.setting.value}"
                                      label="#{settingBean.setting.description}"
-                                     required="true"
                                      maxlength="250"
                                      style="width: 97%">
                     </p:inputMask>
@@ -64,13 +60,13 @@
                     <h:inputSecret id="passwordValue"
                                    value="#{settingBean.setting.value}"
                                    label="#{settingBean.setting.description}"
-                                   required="true"
                                    maxlength="250"
                                    style="width: 97%" />
                 </c:if>
                 </h:panelGrid>
                 <h:panelGrid columns="2">
                     <p:commandButton id="saveSetting"
+                                     update="messages"
                                      value="#{msgs['button.save']}"
                                      action="#{settingBean.saveSetting}" />
                     <p:commandButton id="cancelUpdateSetting"
