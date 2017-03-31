@@ -2,6 +2,7 @@ package com.zburzhynski.jsender.impl.jsf.validator;
 
 import com.zburzhynski.jsender.api.domain.SendingType;
 import com.zburzhynski.jsender.api.dto.Message;
+import com.zburzhynski.jsender.api.dto.Recipient;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
@@ -73,17 +74,21 @@ public class SendingValidator extends BaseValidator {
     private boolean validateRecipients(Message message) {
         switch (message.getSendingType()) {
             case SMS:
-                if (CollectionUtils.isEmpty(message.getRecipients())) {
-                    addMessage(MOBILE_PHONE_NUMBER_NOT_SPECIFIED);
-                    return false;
+                for (Recipient recipient : message.getRecipients()) {
+                    if (CollectionUtils.isNotEmpty(recipient.getPhones())) {
+                        return true;
+                    }
                 }
-                break;
+                addMessage(MOBILE_PHONE_NUMBER_NOT_SPECIFIED);
+                return false;
             case EMAIL:
-                if (CollectionUtils.isEmpty(message.getRecipients())) {
-                    addMessage(EMAIL_NOT_SPECIFIED);
-                    return false;
+                for (Recipient recipient : message.getRecipients()) {
+                    if (CollectionUtils.isNotEmpty(recipient.getEmails())) {
+                        return true;
+                    }
                 }
-                break;
+                addMessage(EMAIL_NOT_SPECIFIED);
+                return false;
             default:
         }
         return true;
