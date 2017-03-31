@@ -27,6 +27,7 @@
                 <p:growl id="sendingMessages" />
                 <p:dataTable id="sendingStatuses"
                              value="#{sendingBean.sendingStatuses}"
+                             emptyMessage="#{msgs['sendingStatus.empty']}"
                              var="status">
                     <p:column headerText="#{msgs['person.fullName']}" style="width: 26%">
                         <h:outputText value="#{status.recipientFullName}" />
@@ -59,13 +60,13 @@
                     </p:column>
                 </p:dataTable>
                 <br />
-                <p:commandButton action="#{sendingBean.refreshSendingStatuses}"
-                                 update="sendingStatusForm:sendingStatuses"
-                                 title="#{msgs['button.refresh']}"
-                                 icon="ui-icon-refresh" />
-                <p:commandButton action="/pages/sending/sending?faces-redirect=true"
-                                 value="#{msgs['button.ok']}" />
-
+                <h:panelGrid columns="2">
+                    <p:commandButton action="/pages/sending/sending?faces-redirect=true"
+                                     value="#{msgs['button.ok']}" />
+                    <p:commandButton action="#{sendingBean.refreshSendingStatuses}"
+                                     update="sendingStatusForm:sendingStatuses"
+                                     value="#{msgs['button.refresh']}"/>
+                </h:panelGrid>
                 <ui:include src="status_detail.xhtml" />
             </h:form>
         </p:panel>
