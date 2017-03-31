@@ -28,7 +28,7 @@
             <h:outputLabel for="subject" value="#{msgs['sentMessage.subject']}:" />
             <p:inputText id="subject" value="#{sentMessageBean.sentMessage.subject}" readonly="true" />
             <h:outputLabel for="text" value="#{msgs['sentMessage.text']}:" />
-            <p:editor id="text" value="#{sentMessageBean.sentMessage.text}" disabled="true" styleClass="area" />
+            <p:editor id="text" controls="" value="#{sentMessageBean.sentMessage.text}" disabled="true" styleClass="area" />
         </h:panelGrid>
         <h:panelGrid width="100%" style="text-align: center">
             <h:commandButton value="#{msgs['button.ok']}"
