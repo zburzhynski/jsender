@@ -116,7 +116,18 @@ public class UnisenderErrorHelper {
         BillingException, ObjectNotFoundException,
         AccessDeniedException, LimitExceededException, InvalidTokenException, UndefinedException {
         if (response.getStatus() == Response.Status.FORBIDDEN.getStatusCode()) {
-            throw new InvalidTokenException();
+            try {
+                JSONObject error = new JSONObject(response.getEntity(String.class));
+                switch (error.getString(ERROR_FIELD)) {
+                    case "token is invalid":
+                        throw new InvalidTokenException();
+                    case "limit excided":
+                        throw new LimitExceededException();
+                    default:
+                }
+            } catch (JSONException exception) {
+                LOGGER.error("Error parsing json", exception);
+            }
         }
         if (response.getStatus() == Response.Status.NOT_FOUND.getStatusCode()) {
             throw new ObjectNotFoundException();
@@ -131,15 +142,13 @@ public class UnisenderErrorHelper {
                         throw new BillingException();
                     case "access denied":
                         throw new AccessDeniedException();
-                    case "limit exceeded":
-                        throw new LimitExceededException();
                     default:
                 }
             } catch (JSONException exception) {
                 LOGGER.error("Error parsing json", exception);
             }
-            throw new UndefinedException();
         }
+        throw new UndefinedException();
     }
 
     /**
