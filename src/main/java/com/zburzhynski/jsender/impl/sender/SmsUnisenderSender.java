@@ -95,16 +95,7 @@ public class SmsUnisenderSender extends AbstractSender implements ISender {
                                 sendRequest.setPhone(preparePhone(phone));
                                 SendSmsResponse smsResponse = unisenderRestClient.sendSms(sendRequest);
                                 if (smsResponse != null) {
-                                    SentMessage sentMessage = new SentMessage();
-                                    sentMessage.setSentDate(new Date());
-                                    sentMessage.setRecipientId(recipient.getId());
-                                    sentMessage.setRecipientSource(recipient.getRecipientSource());
-                                    sentMessage.setRecipientFullName(recipient.getFullName());
-                                    sentMessage.setContactInfo(phone);
-                                    sentMessage.setSubject(message.getSubject());
-                                    sentMessage.setText(smsText);
-                                    sentMessage.setSendingType(SendingType.SMS);
-                                    sentMessageService.saveOrUpdate(sentMessage);
+                                    saveMessage(recipient, message, phone, smsText);
                                     response.add(createOkSendingStatus(smsResponse.getSmsId().toString(),
                                         recipient, phone));
                                 }
@@ -209,6 +200,19 @@ public class SmsUnisenderSender extends AbstractSender implements ISender {
         sendingStatus.setStatus(status);
         sendingStatus.setDescription(description);
         return sendingStatus;
+    }
+
+    private void saveMessage(Recipient recipient, Message message, String phone, String smsText) {
+        SentMessage sentMessage = new SentMessage();
+        sentMessage.setSentDate(new Date());
+        sentMessage.setRecipientId(recipient.getId());
+        sentMessage.setRecipientSource(recipient.getRecipientSource());
+        sentMessage.setRecipientFullName(recipient.getFullName());
+        sentMessage.setContactInfo(phone);
+        sentMessage.setSubject(message.getSubject());
+        sentMessage.setText(smsText);
+        sentMessage.setSendingType(SendingType.SMS);
+        sentMessageService.saveOrUpdate(sentMessage);
     }
 
 }
