@@ -95,4 +95,3 @@ public class SendingValidator extends BaseValidator {
     }
 
 }
-
