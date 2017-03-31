@@ -133,10 +133,10 @@ public class SmsUnisenderSender extends AbstractSender implements ISender {
             throw new SendingException("smsUnisenderSender.accessDenied");
         } catch (LimitExceededException e) {
             throw new SendingException("smsUnisenderSender.limitExceeded");
-        } catch (HostUnavailableException e) {
-            throw new SendingException("smsUnisender.hostUnavailableException");
         } catch (UndefinedException e) {
             throw new SendingException("smsUnisenderSender.undefinedError");
+        } catch (HostUnavailableException e) {
+            throw new SendingException("smsUnisender.hostUnavailableException");
         }
         return response;
     }
