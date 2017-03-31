@@ -25,6 +25,7 @@ import com.zburzhynski.jsender.impl.rest.domain.unisender.SendSmsResponse;
 import com.zburzhynski.jsender.impl.rest.exception.unisender.AccessDeniedException;
 import com.zburzhynski.jsender.impl.rest.exception.unisender.AlphanameIncorrectException;
 import com.zburzhynski.jsender.impl.rest.exception.unisender.BillingException;
+import com.zburzhynski.jsender.impl.rest.exception.unisender.HostUnavailableException;
 import com.zburzhynski.jsender.impl.rest.exception.unisender.IncorrectPhoneNumberException;
 import com.zburzhynski.jsender.impl.rest.exception.unisender.InvalidTokenException;
 import com.zburzhynski.jsender.impl.rest.exception.unisender.LimitExceededException;
@@ -132,6 +133,8 @@ public class SmsUnisenderSender extends AbstractSender implements ISender {
             throw new SendingException("smsUnisenderSender.accessDenied");
         } catch (LimitExceededException e) {
             throw new SendingException("smsUnisenderSender.limitExceeded");
+        } catch (HostUnavailableException e) {
+            throw new SendingException("smsUnisender.hostUnavailableException");
         } catch (UndefinedException e) {
             throw new SendingException("smsUnisenderSender.undefinedError");
         }
@@ -149,7 +152,7 @@ public class SmsUnisenderSender extends AbstractSender implements ISender {
     }
 
     private Integer createSmsMessage(String token, Integer alphanameId, String text) throws InvalidTokenException,
-        MessageToLongException, UndefinedException, AlphanameIncorrectException {
+        MessageToLongException, UndefinedException, AlphanameIncorrectException, HostUnavailableException {
         try {
             CreateSmsMessageRequest request = new CreateSmsMessageRequest();
             request.setToken(token);
@@ -163,7 +166,7 @@ public class SmsUnisenderSender extends AbstractSender implements ISender {
     }
 
     private boolean isMessageModerated(String token, Integer messageId) throws UndefinedException,
-        InvalidTokenException, ObjectNotFoundException {
+        InvalidTokenException, ObjectNotFoundException, HostUnavailableException {
         CheckSmsMessageStatusRequest request = new CheckSmsMessageStatusRequest();
         request.setToken(token);
         request.setMessageId(messageId);

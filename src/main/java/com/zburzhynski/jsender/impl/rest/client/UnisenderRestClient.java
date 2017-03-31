@@ -26,6 +26,7 @@ import com.zburzhynski.jsender.impl.rest.domain.unisender.SendSmsResponse;
 import com.zburzhynski.jsender.impl.rest.exception.unisender.AccessDeniedException;
 import com.zburzhynski.jsender.impl.rest.exception.unisender.AlphanameIncorrectException;
 import com.zburzhynski.jsender.impl.rest.exception.unisender.BillingException;
+import com.zburzhynski.jsender.impl.rest.exception.unisender.HostUnavailableException;
 import com.zburzhynski.jsender.impl.rest.exception.unisender.IncorrectPhoneNumberException;
 import com.zburzhynski.jsender.impl.rest.exception.unisender.InvalidTokenException;
 import com.zburzhynski.jsender.impl.rest.exception.unisender.LimitExceededException;
@@ -93,11 +94,12 @@ public class UnisenderRestClient {
      * @throws AlphanameIncorrectException  if alphaname incorrect
      * @throws MessageToLongException       if message to long
      * @throws InvalidTokenException        if token invalid
+     * @throws HostUnavailableException if host unavailable
      * @throws UndefinedException           if exception undefined
      */
     public CreateSmsMessageResponse createSmsMessage(CreateSmsMessageRequest request)
         throws MessageAlreadyExistException, AlphanameIncorrectException, MessageToLongException,
-        InvalidTokenException, UndefinedException {
+        InvalidTokenException, HostUnavailableException, UndefinedException {
         try {
             String url = String.format(CREATE_SMS_MESSAGE_URL, request.getToken(), encode(request.getMessage(), UTF_8));
             if (request.getAlphanameId() != null) {
@@ -111,6 +113,7 @@ public class UnisenderRestClient {
             UnisenderErrorHelper.throwCreateSmsMessageException(exception.getResponse());
         } catch (ClientHandlerException exception) {
             LOGGER.error("Client handler exception occurred", exception);
+            throw new HostUnavailableException();
         } catch (Exception exception) {
             LOGGER.error("Exception occurred", exception);
         }
@@ -122,12 +125,13 @@ public class UnisenderRestClient {
      *
      * @param request {@link CheckSmsMessageStatusResponse} request
      * @return {@link CheckSmsMessageStatusResponse} response
-     * @throws ObjectNotFoundException if sms not found
-     * @throws InvalidTokenException   if token invalid
-     * @throws UndefinedException      if exception undefined
+     * @throws ObjectNotFoundException  if sms not found
+     * @throws InvalidTokenException    if token invalid
+     * @throws HostUnavailableException if host unavailable
+     * @throws UndefinedException       if exception undefined
      */
     public CheckSmsMessageStatusResponse checkSmsMessageStatus(CheckSmsMessageStatusRequest request)
-        throws ObjectNotFoundException, InvalidTokenException, UndefinedException {
+        throws ObjectNotFoundException, InvalidTokenException, HostUnavailableException, UndefinedException {
         try {
             String url = String.format(CHECK_SMS_MESSAGE_STATUS_URL, request.getToken(), request.getMessageId());
             WebResource webResource = client.resource(url);
@@ -136,6 +140,7 @@ public class UnisenderRestClient {
             UnisenderErrorHelper.throwCheckSmsMessageStatusException(exception.getResponse());
         } catch (ClientHandlerException exception) {
             LOGGER.error("Client handler exception occurred", exception);
+            throw new HostUnavailableException();
         }
         return null;
     }
@@ -146,10 +151,11 @@ public class UnisenderRestClient {
      * @param request {@link BaseUnisenderRequest} request
      * @return {@link GetMessageListResponse} response
      * @throws InvalidTokenException if token invalid
+     * @throws HostUnavailableException if host unavailable
      * @throws UndefinedException    if exception undefined
      */
     public GetMessageListResponse getMessageList(BaseUnisenderRequest request)
-        throws InvalidTokenException, UndefinedException {
+        throws InvalidTokenException, HostUnavailableException, UndefinedException {
         try {
             String url = String.format(GET_MESSAGE_LIST_URL, request.getToken());
             WebResource webResource = client.resource(url);
@@ -158,6 +164,7 @@ public class UnisenderRestClient {
             UnisenderErrorHelper.throwGetMessageListException(exception.getResponse());
         } catch (ClientHandlerException exception) {
             LOGGER.error("Client handler exception occurred", exception);
+            throw new HostUnavailableException();
         }
         return null;
     }
@@ -173,11 +180,12 @@ public class UnisenderRestClient {
      * @throws AccessDeniedException         if accent denied
      * @throws LimitExceededException        if limit exceeded
      * @throws InvalidTokenException         if invalid token
+     * @throws HostUnavailableException if host unavailable
      * @throws UndefinedException            if exception undefined
      */
     public SendSmsResponse sendSms(SendSmsRequest request) throws LimitExceededException,
         BillingException, ObjectNotFoundException, AccessDeniedException,
-        IncorrectPhoneNumberException, InvalidTokenException, UndefinedException {
+        IncorrectPhoneNumberException, InvalidTokenException, HostUnavailableException, UndefinedException {
         try {
             String url = String.format(SEND_SMS_URL, request.getToken(), request.getMessageId(), request.getPhone());
             WebResource webResource = client.resource(url);
@@ -186,6 +194,7 @@ public class UnisenderRestClient {
             UnisenderErrorHelper.throwSendMessageException(exception.getResponse());
         } catch (ClientHandlerException exception) {
             LOGGER.error("Client handler exception occurred", exception);
+            throw new HostUnavailableException();
         }
         return null;
     }
@@ -196,9 +205,11 @@ public class UnisenderRestClient {
      * @param request {@link GetLimitRequest} request
      * @return {@link GetLimitResponse} response
      * @throws InvalidTokenException if token invalid
+     * @throws HostUnavailableException if host unavailable
      * @throws UndefinedException    if exception undefined
      */
-    public GetLimitResponse getLimit(GetLimitRequest request) throws InvalidTokenException, UndefinedException {
+    public GetLimitResponse getLimit(GetLimitRequest request) throws InvalidTokenException, HostUnavailableException,
+        UndefinedException {
         try {
             String url = String.format(GET_LIMIT_URL, request.getToken());
             WebResource webResource = client.resource(url);
@@ -207,6 +218,7 @@ public class UnisenderRestClient {
             UnisenderErrorHelper.throwGetLimitException(exception.getResponse());
         } catch (ClientHandlerException exception) {
             LOGGER.error("Client handler exception occurred", exception);
+            throw new HostUnavailableException();
         }
         return null;
     }
@@ -218,10 +230,11 @@ public class UnisenderRestClient {
      * @return {@link CheckSmsResponse} response
      * @throws ObjectNotFoundException if sms not found
      * @throws InvalidTokenException   if token invalid
+     * @throws HostUnavailableException if host unavailable
      * @throws UndefinedException      if exception undefined
      */
     public CheckSmsResponse checkSms(CheckSmsRequest request) throws ObjectNotFoundException, InvalidTokenException,
-        UndefinedException {
+        HostUnavailableException, UndefinedException {
         try {
             String url = String.format(CHECK_SMS_URL, request.getToken(), request.getSmsId());
             WebResource webResource = client.resource(url);
