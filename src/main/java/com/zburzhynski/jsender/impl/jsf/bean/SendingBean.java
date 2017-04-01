@@ -119,26 +119,17 @@ public class SendingBean implements Serializable {
                     }
                 }
                 for (SendingStatus status : sendingStatuses) {
-                    switch (status.getStatus()) {
-                        case OK:
-                            continue;
-                        case ERROR:
-                            newSendingStatuses.add(status);
-                            break;
-                        case SENDING:
-                            CheckSmsRequest request = new CheckSmsRequest();
-                            request.setSmsId(Integer.valueOf(status.getId()));
-                            request.setToken(token);
-                            CheckSmsResponse smsResponse = unisenderRestClient.checkSms(request);
-                            if (!new Long(0).equals(smsResponse.getDelivered())) {
-                                status.setDeliveryDate(new Date(smsResponse.getDelivered() * SECOND_SCALE));
-                                status.setStatus(ResponseStatus.OK);
-                            }
-                            newSendingStatuses.add(status);
-                            break;
-                         default:
+                    if (ResponseStatus.SENDING.equals(status.getStatus())) {
+                        CheckSmsRequest request = new CheckSmsRequest();
+                        request.setSmsId(Integer.valueOf(status.getId()));
+                        request.setToken(token);
+                        CheckSmsResponse smsResponse = unisenderRestClient.checkSms(request);
+                        if (!new Long(0).equals(smsResponse.getDelivered())) {
+                            status.setDeliveryDate(new Date(smsResponse.getDelivered() * SECOND_SCALE));
+                            status.setStatus(ResponseStatus.OK);
+                        }
                     }
-
+                    newSendingStatuses.add(status);
                 }
                 sendingStatuses = newSendingStatuses;
             }
