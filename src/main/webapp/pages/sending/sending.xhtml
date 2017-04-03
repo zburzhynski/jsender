@@ -41,7 +41,11 @@
                                          action="#{sendingBean.createMessage}"
                                          value="#{msgs['sending.button.newSending']}"
                                          icon="ui-icon-document"
-                                         update="@form" />
+                                         update="@form">
+                            <p:confirm header="#{msgs['createMessageConfirm.header']}"
+                                       message="#{msgs['createMessageConfirm.message']}?"
+                                       icon="ui-icon-alert" />
+                        </p:commandButton>
                     </h:panelGrid>
                     <h:panelGrid columns="4" columnClasses="clm1,clm2,clm3,clm4" style="padding-top: 5px" width="100%">
                         <h:outputLabel value="#{msgs['sending.sendingType']}:" />
@@ -146,6 +150,16 @@
                                          icon="ui-icon-mail-closed" />
                     </h:panelGrid>
                 </h:panelGrid>
+                <p:confirmDialog global="true" closeOnEscape="true">
+                    <p:commandButton value="#{msgs['button.ok']}"
+                                     type="button"
+                                     styleClass="ui-confirmdialog-yes"
+                                     icon="ui-icon-check" />
+                    <p:commandButton value="#{msgs['button.cancel']}"
+                                     type="button"
+                                     styleClass="ui-confirmdialog-no"
+                                     icon="ui-icon-close" />
+                </p:confirmDialog>
                 <p:confirmDialog global="true" closeOnEscape="true">
                     <p:commandButton value="#{msgs['button.ok']}"
                                      type="button"
