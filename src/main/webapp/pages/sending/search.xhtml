@@ -223,10 +223,10 @@
                     <h:messages id="validationMessages" style="color:red;" />
                 </h:panelGrid>
                 <h:panelGrid columns="3" style="text-align: center; vertical-align: bottom; padding-top: 5px">
-                    <h:commandButton id="search" value="#{msgs['button.find']}"
+                    <p:commandButton id="search" value="#{msgs['button.find']}"
                                      action="#{recipientBean.searchRecipient}" />
-                    <h:commandButton id="clear" value="#{msgs['button.clear']}" action="#{recipientBean.clearSearchFilter}" update="recipientSearchForm" />
-                    <h:commandButton id="cancelSearch" value="#{msgs['button.cancel']}" action="/pages/sending/recipients?faces-redirect=true"
+                    <p:commandButton id="clear" value="#{msgs['button.clear']}" action="#{recipientBean.clearSearchFilter}" update="recipientSearchForm" />
+                    <p:commandButton id="cancelSearch" value="#{msgs['button.cancel']}" action="/pages/sending/recipients?faces-redirect=true"
                                      immediate="true" />
                 </h:panelGrid>
             </h:form>

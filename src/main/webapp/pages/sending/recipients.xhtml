@@ -23,6 +23,8 @@
                              rows="#{recipientBean.rowCount}">
                     <p:ajax event="rowSelect" update="recipientsForm:selectGrid" />
                     <p:ajax event="rowUnselect" update="recipientsForm:selectGrid" />
+                    <p:ajax event="rowSelectCheckbox" update="recipientsForm:selectGrid" />
+                    <p:ajax event="rowUnselectCheckbox" update="recipientsForm:selectGrid" />
                     <p:column selectionMode="multiple" style="width:16px;text-align:center" />
                     <p:column headerText="#{msgs['recipient.number']}" width="6%">
                         <h:outputText value="#{recipient.number}" />
