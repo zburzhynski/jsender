@@ -103,7 +103,7 @@ databaseChangeLog {
             column(name: 'id', value: '445157fe-0ea5-4702-94e3-eb9cd4948024')
             column(name: 'category', value: 'REQUISITE')
             column(name: 'name', value: 'organization_name')
-            column(name: 'value', value: 'Название организации')
+            column(name: 'value', value: '')
             column(name: 'type', value: 'STRING')
             column(name: 'description', value: 'Название организации')
         }
@@ -111,7 +111,7 @@ databaseChangeLog {
             column(name: 'id', value: 'c9a11401-2795-4cac-a172-10ee4ebd5734')
             column(name: 'category', value: 'REQUISITE')
             column(name: 'name', value: 'organization_address')
-            column(name: 'value', value: 'Адрес организации')
+            column(name: 'value', value: '')
             column(name: 'type', value: 'STRING')
             column(name: 'description', value: 'Адрес организации')
         }
@@ -119,7 +119,7 @@ databaseChangeLog {
             column(name: 'id', value: '3226f6cb-314e-4c7a-91a2-5993469de0b0')
             column(name: 'category', value: 'REQUISITE')
             column(name: 'name', value: 'organization_mobile_phone_number')
-            column(name: 'value', value: 'Мобильный телефон организации')
+            column(name: 'value', value: '')
             column(name: 'type', value: 'STRING')
             column(name: 'description', value: 'Мобильный телефон организации')
         }
