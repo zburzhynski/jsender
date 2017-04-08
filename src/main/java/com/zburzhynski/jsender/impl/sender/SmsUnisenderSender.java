@@ -101,14 +101,14 @@ public class SmsUnisenderSender extends AbstractSender implements ISender {
                                 }
                             } catch (IncorrectPhoneNumberException e) {
                                 response.add(createErrorSendingStatus(recipient, phone,
-                                    "smsUnisender.incorrectPhoneNumber"));
+                                    "smsUnisenderSender.incorrectPhoneNumber"));
                             }
                         }
                     }
                 } catch (MessageToLongException e) {
                     for (String phone : recipient.getPhones()) {
                         response.add(createErrorSendingStatus(recipient, phone,
-                            "smsUnisender.messageToLong"));
+                            "smsUnisenderSender.messageToLong"));
                     }
                 } catch (ObjectNotFoundException e) {
                     LOGGER.warn("Message not found", e);
