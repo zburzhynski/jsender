@@ -105,35 +105,6 @@ public class SendingBean implements Serializable {
     }
 
     /**
-     * Refreshes sending statues.
-     */
-    public void refreshSendingStatuses() {
-        try {
-            if (SendingType.SMS.equals(messageToSend.getSendingType())) {
-                SendingAccount account = (SendingAccount) accountService.getById(messageToSend.getSendingAccountId());
-                String token = getParamValue(account, Params.TOKEN);
-                if (StringUtils.isBlank(token)) {
-                    throw new IllegalArgumentException("Token is null");
-                }
-                for (SendingStatus status : sendingStatuses) {
-                    if (ResponseStatus.SENDING.equals(status.getStatus())) {
-                        CheckSmsRequest request = new CheckSmsRequest();
-                        request.setSmsId(Integer.valueOf(status.getId()));
-                        request.setToken(token);
-                        CheckSmsResponse smsResponse = unisenderRestClient.checkSms(request);
-                        if (!new Long(0).equals(smsResponse.getDelivered())) {
-                            status.setDeliveryDate(new Date(smsResponse.getDelivered() * SECOND_SCALE));
-                            status.setStatus(ResponseStatus.OK);
-                        }
-                    }
-                }
-            }
-        } catch (Exception e) {
-            addMessage("sendingStatus.refreshStatusError");
-        }
-    }
-
-    /**
      * Creates new message.
      */
     public void createMessage() {
@@ -206,12 +177,32 @@ public class SendingBean implements Serializable {
     }
 
     /**
-     * Select current sendingStatus.
-     *
-     * @param status sending sendingStatus to select
+     * Refreshes sending statues.
      */
-    public void selectSentStatus(SendingStatus status) {
-        this.sendingStatus = status;
+    public void refreshSendingStatuses() {
+        try {
+            if (SendingType.SMS.equals(messageToSend.getSendingType())) {
+                SendingAccount account = (SendingAccount) accountService.getById(messageToSend.getSendingAccountId());
+                String token = getParamValue(account, Params.TOKEN);
+                if (StringUtils.isBlank(token)) {
+                    throw new IllegalArgumentException("Token is null");
+                }
+                for (SendingStatus status : sendingStatuses) {
+                    if (ResponseStatus.SENDING.equals(status.getStatus())) {
+                        CheckSmsRequest request = new CheckSmsRequest();
+                        request.setSmsId(Integer.valueOf(status.getId()));
+                        request.setToken(token);
+                        CheckSmsResponse smsResponse = unisenderRestClient.checkSms(request);
+                        if (!new Long(0).equals(smsResponse.getDelivered())) {
+                            status.setDeliveryDate(new Date(smsResponse.getDelivered() * SECOND_SCALE));
+                            status.setStatus(ResponseStatus.OK);
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            addMessage("sendingStatus.refreshStatusError");
+        }
     }
 
     /**

@@ -87,7 +87,6 @@ public class EmailSender extends AbstractSender implements ISender {
                     sentMessage.setSendingType(SendingType.EMAIL);
                     sentMessageService.saveOrUpdate(sentMessage);
                     status.setStatus(ResponseStatus.OK);
-                    status.setDescription("Email sent successfully");
                     LOGGER.info("Email sent successfully, address = " + address);
                 } catch (Exception e) {
                     status.setStatus(ResponseStatus.ERROR);

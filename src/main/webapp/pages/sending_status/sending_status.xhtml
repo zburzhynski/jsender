@@ -50,11 +50,12 @@
                     </p:column>
                     <p:column width="3.5%">
                         <h:panelGroup>
-                            <p:commandLink update="sendingStatusForm:statusDetailDialog"
-                                           action="#{sendingBean.selectSentStatus(status)}"
-                                           oncomplete="PF('statusDetailDialog').show();"
+                            <p:commandLink oncomplete="PF('statusDetailDialog').show();"
+                                           update="sendingStatusForm:statusDetailDialog"
                                            style="padding-right: 5px">
                                 <p:graphicImage url="/resources/css/css-images/text.png" title="#{msgs['sendingStatus.showDetail']}" />
+                                <f:setPropertyActionListener
+                                        target="#{sendingBean.sendingStatus}" value="#{status}" />
                             </p:commandLink>
                         </h:panelGroup>
                     </p:column>

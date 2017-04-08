@@ -34,6 +34,7 @@ import com.zburzhynski.jsender.impl.rest.exception.unisender.MessageToLongExcept
 import com.zburzhynski.jsender.impl.rest.exception.unisender.ObjectNotFoundException;
 import com.zburzhynski.jsender.impl.rest.exception.unisender.UndefinedException;
 import com.zburzhynski.jsender.impl.service.AbstractSender;
+import com.zburzhynski.jsender.impl.util.PropertyReader;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -75,6 +76,9 @@ public class SmsUnisenderSender extends AbstractSender implements ISender {
     @Autowired
     private ISendingAccountService accountService;
 
+    @Autowired
+    private PropertyReader propertyReader;
+
     @Override
     public List<SendingStatus> send(Message message) throws SendingException {
         List<SendingStatus> response = new ArrayList<>();
@@ -96,19 +100,18 @@ public class SmsUnisenderSender extends AbstractSender implements ISender {
                                 SendSmsResponse smsResponse = unisenderRestClient.sendSms(sendRequest);
                                 if (smsResponse != null) {
                                     saveMessage(recipient, message, phone, smsText);
-                                    response.add(createOkSendingStatus(smsResponse.getSmsId().toString(),
+                                    response.add(createOkStatus(smsResponse.getSmsId().toString(),
                                         recipient, phone));
                                 }
                             } catch (IncorrectPhoneNumberException e) {
-                                response.add(createErrorSendingStatus(recipient, phone,
+                                response.add(createErrorStatus(recipient, phone,
                                     "smsUnisenderSender.incorrectPhoneNumber"));
                             }
                         }
                     }
                 } catch (MessageToLongException e) {
                     for (String phone : recipient.getPhones()) {
-                        response.add(createErrorSendingStatus(recipient, phone,
-                            "smsUnisenderSender.messageToLong"));
+                        response.add(createErrorStatus(recipient, phone, "smsUnisenderSender.messageToLong"));
                     }
                 } catch (ObjectNotFoundException e) {
                     LOGGER.warn("Message not found", e);
@@ -182,23 +185,23 @@ public class SmsUnisenderSender extends AbstractSender implements ISender {
         return text.replaceAll(HTML_SPACE, SPACE).replaceAll(HTML_TAG_PATTERN, "");
     }
 
-    private SendingStatus createOkSendingStatus(String id, Recipient recipient, String phone) {
+    private SendingStatus createOkStatus(String id, Recipient recipient, String phone) {
         return createSendingStatus(id, recipient, phone, ResponseStatus.SENDING, null);
     }
 
-    private SendingStatus createErrorSendingStatus(Recipient recipient, String phone, String description) {
-        return createSendingStatus(null, recipient, phone, ResponseStatus.ERROR, description);
+    private SendingStatus createErrorStatus(Recipient recipient, String phone, String message) {
+        return createSendingStatus(null, recipient, phone, ResponseStatus.ERROR, message);
     }
 
     private SendingStatus createSendingStatus(String id, Recipient recipient, String phone, ResponseStatus status,
-                                              String description) {
+                                              String message) {
         SendingStatus sendingStatus = new SendingStatus();
         sendingStatus.setId(id);
         sendingStatus.setRecipientFullName(recipient.getFullName());
         sendingStatus.setContactInfo(phone);
         sendingStatus.setSendingDate(new Date());
         sendingStatus.setStatus(status);
-        sendingStatus.setDescription(description);
+        sendingStatus.setDescription(StringUtils.isNotBlank(message) ? propertyReader.readProperty(message) : null);
         return sendingStatus;
     }
 
