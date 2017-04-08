@@ -36,9 +36,9 @@
             <p:editor id="text" controls="" value="#{sentMessageBean.sentMessage.text}" style="width: 98%;" disabled="true" />
         </h:panelGrid>
         <h:panelGrid width="100%" style="text-align: center">
-            <h:commandButton value="#{msgs['button.ok']}"
-                             oncomplete="PF('sentMessageDialog').show();"
-                             style="height: 25px; font-weight: bold" />
+            <p:commandButton value="#{msgs['button.ok']}"
+                             oncomplete="PF('sentMessageDialog').hide();"
+                             style="font-weight: bold" />
         </h:panelGrid>
     </p:dialog>
 
