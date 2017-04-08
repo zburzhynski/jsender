@@ -2,6 +2,7 @@ package com.zburzhynski.jsender.impl.sender;
 
 import static javax.mail.Message.RecipientType;
 import com.zburzhynski.jsender.api.domain.Params;
+import com.zburzhynski.jsender.api.domain.ResponseStatus;
 import com.zburzhynski.jsender.api.domain.SendingServices;
 import com.zburzhynski.jsender.api.domain.SendingType;
 import com.zburzhynski.jsender.api.dto.Message;
@@ -85,9 +86,11 @@ public class EmailSender extends AbstractSender implements ISender {
                     sentMessage.setText(email.getText());
                     sentMessage.setSendingType(SendingType.EMAIL);
                     sentMessageService.saveOrUpdate(sentMessage);
+                    status.setStatus(ResponseStatus.OK);
                     status.setDescription("Email sent successfully");
                     LOGGER.info("Email sent successfully, address = " + address);
                 } catch (Exception e) {
+                    status.setStatus(ResponseStatus.ERROR);
                     status.setDescription(e.getClass().getName());
                     LOGGER.error("An error occurred while sending email", e);
                 }
