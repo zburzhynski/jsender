@@ -43,9 +43,9 @@
             <p:inputTextarea id="description" value="#{sendingBean.sendingStatus.description}" readonly="true" style="width: 95%; height: 200px" />
         </h:panelGrid>
         <h:panelGrid width="100%" style="text-align: center">
-            <h:commandButton value="#{msgs['button.ok']}"
-                             oncomplete="PF('statusDetailDialog').show();"
-                             style="height: 25px; font-weight: bold" />
+            <p:commandButton value="#{msgs['button.ok']}"
+                             oncomplete="PF('statusDetailDialog').hide();"
+                             style="font-weight: bold" />
         </h:panelGrid>
     </p:dialog>
 
