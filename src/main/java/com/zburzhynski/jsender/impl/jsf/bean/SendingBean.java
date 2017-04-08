@@ -129,7 +129,7 @@ public class SendingBean implements Serializable {
                 }
             }
         } catch (Exception e) {
-            LOGGER.error("Exception", e);
+            addMessage("sending.errorRefreshingStatusesMessage");
         }
     }
 
@@ -340,6 +340,18 @@ public class SendingBean implements Serializable {
         facesMessage.setSeverity(SEVERITY_ERROR);
         context.getExternalContext().getFlash().setKeepMessages(true);
         context.addMessage(GROWL_ID, facesMessage);
+    }
+
+    /**
+     * Adds localisation message to context.
+     *
+     * @param message localisation message
+     */
+    private void addMessage(String message) {
+        FacesContext context = FacesContext.getCurrentInstance();
+        FacesMessage facesMessage = new FacesMessage(reader.readProperty(message), StringUtils.EMPTY);
+        facesMessage.setSeverity(SEVERITY_ERROR);
+        context.addMessage(null, facesMessage);
     }
 
     private String getParamValue(SendingAccount account, Params param) {
