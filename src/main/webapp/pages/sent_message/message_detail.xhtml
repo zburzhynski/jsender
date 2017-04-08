@@ -6,6 +6,11 @@
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui">
 
+    <style type="text/css">
+        .inputText {
+            width: 95%;
+        }
+    </style>
     <p:dialog id="sentMessageDialog"
               widgetVar="sentMessageDialog"
               header="#{msgs['sentMessage.showDetail']}"
@@ -14,21 +19,21 @@
               position="center"
               resizable="false"
               modal="true">
-        <h:panelGrid id="sentMessageDialogPanelGrid" columns="2" columnClasses="name,val" width="40%">
+        <h:panelGrid id="sentMessageDialogPanelGrid" width="100%" columns="2" columnClasses="name, val">
             <h:outputLabel for="sentDate" value="#{msgs['sentMessage.sentDate']}:" />
-            <p:inputText id="sentDate" value="#{sentMessageBean.sentMessage.sentDate}" readonly="true">
+            <p:inputText id="sentDate" value="#{sentMessageBean.sentMessage.sentDate}" styleClass="inputText" readonly="true">
                 <f:convertDateTime pattern="HH:mm dd.MM.yyyy" />
             </p:inputText>
             <h:outputLabel for="sendingType" value="#{msgs['sentMessage.sendingType']}:" />
-            <p:inputText id="sendingType" value="#{sentMessageBean.sentMessage.sendingType}" readonly="true" />
+            <p:inputText id="sendingType" value="#{sentMessageBean.sentMessage.sendingType}" styleClass="inputText" readonly="true" />
             <h:outputLabel for="fullName" value="#{msgs['person.fullName']}:" />
-            <p:inputText id="fullName" value="#{sentMessageBean.sentMessage.recipientFullName}" readonly="true" />
+            <p:inputTextarea id="fullName" value="#{sentMessageBean.sentMessage.recipientFullName}" styleClass="inputText" readonly="true" />
             <h:outputLabel for="contactInfo" value="#{msgs['sentMessage.contactInfo']}:" />
-            <p:inputText id="contactInfo" value="#{sentMessageBean.sentMessage.contactInfo}" readonly="true" />
+            <p:inputText id="contactInfo" value="#{sentMessageBean.sentMessage.contactInfo}" styleClass="inputText" readonly="true" />
             <h:outputLabel for="subject" value="#{msgs['sentMessage.subject']}:" />
-            <p:inputText id="subject" value="#{sentMessageBean.sentMessage.subject}" readonly="true" />
+            <p:inputText id="subject" value="#{sentMessageBean.sentMessage.subject}" styleClass="inputText" readonly="true" />
             <h:outputLabel for="text" value="#{msgs['sentMessage.text']}:" />
-            <p:editor id="text" controls="" value="#{sentMessageBean.sentMessage.text}" disabled="true" styleClass="area" />
+            <p:editor id="text" controls="" value="#{sentMessageBean.sentMessage.text}" style="width: 98%;" disabled="true" />
         </h:panelGrid>
         <h:panelGrid width="100%" style="text-align: center">
             <h:commandButton value="#{msgs['button.ok']}"

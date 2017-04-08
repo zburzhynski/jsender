@@ -7,6 +7,18 @@
                 template="/pages/template/layout_template.xhtml">
 
     <ui:define name="content">
+        <style type="text/css">
+            .name {
+                font-weight: bold;
+                width: 20%;
+            }
+            .val {
+                width: 80%;
+            }
+            .cal .ui-inputfield {
+                width: 97%;
+            }
+        </style>
         <p:panel>
             <h:form id="sentMessageForm">
                 <h4>#{msgs['sentMessages.header']}</h4>
