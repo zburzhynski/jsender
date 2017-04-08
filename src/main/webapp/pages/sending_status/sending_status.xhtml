@@ -64,6 +64,7 @@
                     <p:commandButton action="/pages/sending/sending?faces-redirect=true"
                                      value="#{msgs['button.ok']}" />
                     <p:commandButton action="#{sendingBean.refreshSendingStatuses}"
+                                     rendered="#{not empty sendingBean.sendingStatuses}"
                                      update="sendingStatusForm:sendingStatuses"
                                      value="#{msgs['button.refresh']}"/>
                 </h:panelGrid>
