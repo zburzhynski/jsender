@@ -65,7 +65,7 @@
                                      value="#{msgs['button.ok']}" />
                     <p:commandButton action="#{sendingBean.refreshSendingStatuses}"
                                      rendered="#{not empty sendingBean.sendingStatuses}"
-                                     update="sendingStatusForm:sendingStatuses"
+                                     update="sendingStatusForm:sendingStatuses sendingMessages"
                                      value="#{msgs['button.refresh']}"/>
                 </h:panelGrid>
                 <ui:include src="status_detail.xhtml" />
