@@ -129,7 +129,7 @@ public class SendingBean implements Serializable {
                 }
             }
         } catch (Exception e) {
-            addMessage("sending.errorRefreshingStatusesMessage");
+            addMessage("sendingStatus.refreshStatusError");
         }
     }
 
