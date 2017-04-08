@@ -41,7 +41,7 @@
                 resize: none;
             }
             .selectMenu {
-                width: 99%;
+                width: 100%;
             }
             .ignoreYear {
                 font-size: 14px;
@@ -51,10 +51,10 @@
         <p:panel>
             <h:form id="recipientSearchForm">
                 <h:panelGrid columns="2" columnClasses="patientSearch, visitSearh" width="100%">
-                    <h:panelGrid columns="2" columnClasses="clm1,clm2" width="90%" >
+                    <h:panelGrid columns="2" columnClasses="clm1,clm2" width="86%" >
                         <h:outputText value="#{msgs['recipientSearch.cardNumber']}:" />
                         <p:inputText value="#{recipientBean.searchPatientRequest.cardNumber}"
-                                     size="10" />
+                                     size="10" style="width: 95%" />
                         <h:outputText value="#{msgs['recipientSearch.startDentalCardDate']}:" />
                         <p:calendar value="#{recipientBean.searchPatientRequest.startCardDate}"
                                     label="#{msgs['recipientSearch.startDentalCardDate']}"
@@ -63,7 +63,7 @@
                                     locale="ru"
                                     renderAsPopup="true"
                                     converterMessage="#{msgs['dateValidator.invalidDate']}"
-                                    style="width:56%">
+                                    style="width:100%">
                         </p:calendar>
                         <h:outputText value="#{msgs['recipientSearch.endDentalCardDate']}:" />
                         <p:calendar value="#{recipientBean.searchPatientRequest.endCardDate}"
@@ -73,7 +73,7 @@
                                            locale="ru"
                                            renderAsPopup="true"
                                            converterMessage="#{msgs['dateValidator.invalidDate']}"
-                                           style="width:56%">
+                                           style="width:100%">
                         </p:calendar>
                         <h:outputText value="#{msgs['person.surname']}:" />
                         <p:inputText value="#{recipientBean.searchPatientRequest.surname}"
@@ -93,7 +93,7 @@
                                         locale="ru"
                                         renderAsPopup="true"
                                         converterMessage="#{msgs['dateValidator.invalidDate']}"
-                                        style="width:56%">
+                                        style="width: 100%">
                             </p:calendar>
                             <h:selectBooleanCheckbox id="birthdayIgnoreYear" value="#{recipientBean.searchPatientRequest.birthdayIgnoreYear}" />
                             <h:outputLabel for="birthdayIgnoreYear" value="#{msgs['recipientSearch.ignoreBirthdayYear']}" styleClass="ignoreYear" />
@@ -106,7 +106,7 @@
                                     locale="ru"
                                     renderAsPopup="true"
                                     converterMessage="#{msgs['dateValidator.invalidDate']}"
-                                    style="width:56%">
+                                    style="width: 100%">
                         </p:calendar>
                         <h:outputText value="#{msgs['person.gender']}:" />
                         <p:selectOneRadio style="border: 0"
@@ -168,7 +168,7 @@
                         <p:inputText value="#{recipientBean.searchPatientRequest.passportNumber}"
                                      styleClass="inputText" />
                     </h:panelGrid>
-                    <h:panelGrid columns="2" columnClasses="clm3, clm4">
+                    <h:panelGrid columns="2" columnClasses="clm3, clm4" style="width: 91%">
                         <h:outputText value="#{msgs['recipientSearch.dentalVisit']}" style="color: blue" />
                         <p:spacer />
                         <h:outputText value="#{msgs['recipientSearch.additionalInformation']}:" />

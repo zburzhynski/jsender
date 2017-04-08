@@ -27,7 +27,7 @@ import com.zburzhynski.jsender.impl.rest.domain.unisender.CheckSmsRequest;
 import com.zburzhynski.jsender.impl.rest.domain.unisender.CheckSmsResponse;
 import com.zburzhynski.jsender.impl.sender.MessageSender;
 import com.zburzhynski.jsender.impl.util.PropertyReader;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -110,13 +110,10 @@ public class SendingBean implements Serializable {
     public void refreshSendingStatuses() {
         try {
             if (SendingType.SMS.equals(messageToSend.getSendingType())) {
-                List<SendingStatus> newSendingStatuses = new ArrayList<>();
                 SendingAccount account = (SendingAccount) accountService.getById(messageToSend.getSendingAccountId());
-                String token = "";
-                for (SendingAccountParam accountParam : account.getAccountParams()) {
-                    if (Params.TOKEN.toString().equals(accountParam.getParam().getName().toUpperCase())) {
-                        token = accountParam.getValue();
-                    }
+                String token = getParamValue(account, Params.TOKEN);
+                if (StringUtils.isBlank(token)) {
+                    throw new IllegalArgumentException("Token is null");
                 }
                 for (SendingStatus status : sendingStatuses) {
                     if (ResponseStatus.SENDING.equals(status.getStatus())) {
@@ -129,9 +126,7 @@ public class SendingBean implements Serializable {
                             status.setStatus(ResponseStatus.OK);
                         }
                     }
-                    newSendingStatuses.add(status);
                 }
-                sendingStatuses = newSendingStatuses;
             }
         } catch (Exception e) {
             LOGGER.error("Exception", e);
@@ -347,16 +342,13 @@ public class SendingBean implements Serializable {
         context.addMessage(GROWL_ID, facesMessage);
     }
 
-    /**
-     * Adds localisation message to context.
-     *
-     * @param message localisation message
-     */
-    protected void addMessage(String message) {
-        FacesContext context = FacesContext.getCurrentInstance();
-        FacesMessage facesMessage = new FacesMessage(reader.readProperty(message), StringUtils.EMPTY);
-        facesMessage.setSeverity(SEVERITY_ERROR);
-        context.addMessage(null, facesMessage);
+    private String getParamValue(SendingAccount account, Params param) {
+        for (SendingAccountParam accountParam : account.getAccountParams()) {
+            if (param.name().equals(accountParam.getParam().getName().toUpperCase())) {
+                return accountParam.getValue();
+            }
+        }
+        return null;
     }
 
 }
