@@ -21,7 +21,7 @@
               modal="true">
         <h:panelGrid columns="2" columnClasses="name,val" width="100%">
             <h:outputLabel for="recipientFullName" value="#{msgs['person.fullName']}:" />
-            <p:inputText id="recipientFullName" value="#{sendingBean.sendingStatus.recipientFullName}" readonly="true"
+            <p:inputTextarea id="recipientFullName" value="#{sendingBean.sendingStatus.recipientFullName}" readonly="true"
                          styleClass="inputText"/>
             <h:outputLabel for="contactInfo" value="#{msgs['person.recipient.contactInfo']}:" />
             <p:inputText id="contactInfo" value="#{sendingBean.sendingStatus.contactInfo}" readonly="true"
