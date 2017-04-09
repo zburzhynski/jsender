@@ -90,7 +90,7 @@
                                                  icon="ui-icon-clipboard" />
                             </h:panelGrid>
                         </p:tab>
-                        <p:tab title="#{msgs['sending.recipients']}">
+                        <p:tab title="#{msgs['sending.recipients']}(#{sendingBean.messageToSend.recipients.size()})">
                             <p:dataTable value="#{sendingBean.messageToSend.recipients}"
                                          var="recipient"
                                          paginator="true"
