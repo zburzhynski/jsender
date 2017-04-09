@@ -32,7 +32,7 @@ public abstract class AbstractSender {
      *
      * @return parepared text
      */
-    public String prepareText(String text, Recipient recipient) {
+    protected String prepareText(String text, Recipient recipient) {
         text = replaceTag(TemplateTag.CLIENT_SURNAME, text, recipient.getSurname());
         text = replaceTag(TemplateTag.CLIENT_NAME, text, recipient.getName());
         text = replaceTag(TemplateTag.CLIENT_PATRONYMIC, text, recipient.getPatronymic());
