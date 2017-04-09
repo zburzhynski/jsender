@@ -68,6 +68,7 @@ public class EmailSender extends AbstractSender implements ISender {
                 SendingStatus status = new SendingStatus();
                 status.setRecipientFullName(recipient.getFullName());
                 status.setContactInfo(address);
+                status.setSendingDate(new Date());
                 try {
                     javax.mail.Message message = new MimeMessage(session);
                     message.setFrom(new InternetAddress(params.get(Params.USER_NAME).getValue(), email.getFrom()));
