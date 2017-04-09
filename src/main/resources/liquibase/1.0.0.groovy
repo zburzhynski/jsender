@@ -313,7 +313,7 @@ databaseChangeLog {
                 referencedTableSchemaName: 'jsender', referencedTableName: 'param', referencedColumnNames: 'id')
     }
 
-    changeSet(id: '2017-02-04-20', author: 'Nikita Shevtsov <shevtsou@gmail.com>') {
+    changeSet(id: '2017-03-11-20', author: 'Nikita Shevtsov <shevtsou@gmail.com>') {
         insert(schemaName: 'jsender', tableName: 'param') {
             column(name: 'id', value: 'a039ad9b-4a0a-4622-a549-ce355c45cea1')
             column(name: 'name', value: 'mail_smtp_host')
@@ -352,7 +352,7 @@ databaseChangeLog {
         }
     }
 
-    changeSet(id: '2017-02-04-21', author: 'Nikita Shevtsov <shevtsou@gmail.com>') {
+    changeSet(id: '2017-03-11-21', author: 'Nikita Shevtsov <shevtsou@gmail.com>') {
         comment("Insert gmail.com account")
         insert(schemaName: 'jsender', tableName: 'sending_service') {
             column(name: 'id', value: '06967298-6360-4d8f-af5f-a20d58dd4414')
@@ -383,7 +383,7 @@ databaseChangeLog {
         }
     }
 
-    changeSet(id: '2017-03-12-01', author: 'Nikita Shevtsov <shevtsou@gmail.com>') {
+    changeSet(id: '2017-03-11-22', author: 'Nikita Shevtsov <shevtsou@gmail.com>') {
         comment("Insert yandex.ru account")
         insert(schemaName: 'jsender', tableName: 'sending_service') {
             column(name: 'id', value: '543e6b2e-cb4d-4b64-a26a-e31820473af2')
@@ -414,7 +414,7 @@ databaseChangeLog {
         }
     }
 
-    changeSet(id: '2017-03-12-02', author: 'Nikita Shevtsov <shevtsou@gmail.com>') {
+    changeSet(id: '2017-03-11-23', author: 'Nikita Shevtsov <shevtsou@gmail.com>') {
         comment("Insert mail.ru account")
         insert(schemaName: 'jsender', tableName: 'sending_service') {
             column(name: 'id', value: 'e152bd93-43c4-4ed8-ac4d-d3a4ea0b509b')
@@ -445,11 +445,11 @@ databaseChangeLog {
         }
     }
 
-    changeSet(id: '2017-03-16-01', author: 'Nikita Shevtsov <shevtsou@gmail.com>') {
+    changeSet(id: '2017-03-11-24', author: 'Nikita Shevtsov <shevtsou@gmail.com>') {
         comment("Insert unisender.by account")
         insert(schemaName: 'jsender', tableName: 'sending_service') {
             column(name: 'id', value: 'a12a3869-3f68-49a6-af42-fe999519b5c4')
-            column(name: 'name', value: 'unisender.by')
+            column(name: 'name', value: 'sms.unisender.by')
             column(name: 'sending_type', value: 'SMS')
         }
         insert(schemaName: 'jsender', tableName: 'sending_service_param') {

@@ -17,7 +17,9 @@ public enum SendingServices {
 
     MAIL_RU("mail.ru"),
 
-    UNISENDER_BY("unisender.by");
+    SMS_UNISENDER_BY("sms.unisender.by"),
+
+    EMAIL_UNISENDER_BY("email.unisender.by");
 
     private String site;
 
