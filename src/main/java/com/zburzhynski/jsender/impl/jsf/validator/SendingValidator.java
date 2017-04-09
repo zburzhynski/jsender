@@ -83,7 +83,7 @@ public class SendingValidator extends BaseValidator {
             addMessage(TEXT_NOT_SPECIFIED);
             return false;
         }
-        if (StringUtils.isBlank(message.getFrom())) {
+        if (SendingType.EMAIL.equals(message.getSendingType()) && StringUtils.isBlank(message.getFrom())) {
             addMessage(FROM_NOT_SPECIFIED);
             return false;
         }
