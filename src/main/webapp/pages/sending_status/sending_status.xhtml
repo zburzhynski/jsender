@@ -11,10 +11,10 @@
         <style type="text/css">
             .name {
                 font-weight: bold;
-                width: 40%;
+                width: 30%;
             }
             .val {
-                width: 60%;
+                width: 70%;
             }
             .cal .ui-inputfield {
                 width: 97%;
@@ -32,7 +32,7 @@
                     <p:column headerText="#{msgs['person.fullName']}" style="width: 26%">
                         <h:outputText value="#{status.recipientFullName}" />
                     </p:column>
-                    <p:column headerText="#{msgs['person.recipient.contactInfo']}" style="width: 22%">
+                    <p:column headerText="#{msgs['sendingStatus.contactInfo']}" style="width: 22%">
                         <h:outputText value="#{status.contactInfo}" />
                     </p:column>
                     <p:column headerText="#{msgs['sendingStatus.sendingDate']}" style="width: 17%">
@@ -50,11 +50,12 @@
                     </p:column>
                     <p:column width="3.5%">
                         <h:panelGroup>
-                            <p:commandLink update="sendingStatusForm:statusDetailDialog"
-                                           action="#{sendingBean.selectSentStatus(status)}"
-                                           oncomplete="PF('statusDetailDialog').show();"
+                            <p:commandLink oncomplete="PF('statusDetailDialog').show();"
+                                           update="sendingStatusForm:statusDetailDialog"
                                            style="padding-right: 5px">
                                 <p:graphicImage url="/resources/css/css-images/text.png" title="#{msgs['sendingStatus.showDetail']}" />
+                                <f:setPropertyActionListener
+                                        target="#{sendingBean.sendingStatus}" value="#{status}" />
                             </p:commandLink>
                         </h:panelGroup>
                     </p:column>
@@ -65,7 +66,7 @@
                                      value="#{msgs['button.ok']}" />
                     <p:commandButton action="#{sendingBean.refreshSendingStatuses}"
                                      rendered="#{not empty sendingBean.sendingStatuses}"
-                                     update="sendingStatusForm:sendingStatuses"
+                                     update="sendingStatusForm:sendingStatuses sendingMessages"
                                      value="#{msgs['button.refresh']}"/>
                 </h:panelGrid>
                 <ui:include src="status_detail.xhtml" />

@@ -18,12 +18,12 @@
                 vertical-align: top;
             }
             .clm1 {
-                width: 60%;
+                width: 50%;
                 text-align: left;
                 font-weight: bold;
             }
             .clm2 {
-                width: 40%;
+                width: 50%;
             }
             .clm3 {
                 width: 60%;
@@ -47,14 +47,17 @@
                 font-size: 14px;
                 font-weight: bold;
             }
+            .cal .ui-inputfield {
+                width: 96%;
+            }
         </style>
         <p:panel>
             <h:form id="recipientSearchForm">
                 <h:panelGrid columns="2" columnClasses="patientSearch, visitSearh" width="100%">
-                    <h:panelGrid columns="2" columnClasses="clm1,clm2" width="86%" >
+                    <h:panelGrid columns="2" columnClasses="clm1,clm2" style="width: 95%" >
                         <h:outputText value="#{msgs['recipientSearch.cardNumber']}:" />
                         <p:inputText value="#{recipientBean.searchPatientRequest.cardNumber}"
-                                     size="10" style="width: 95%" />
+                                     size="10" style="width: 96%" />
                         <h:outputText value="#{msgs['recipientSearch.startDentalCardDate']}:" />
                         <p:calendar value="#{recipientBean.searchPatientRequest.startCardDate}"
                                     label="#{msgs['recipientSearch.startDentalCardDate']}"
@@ -63,17 +66,17 @@
                                     locale="ru"
                                     renderAsPopup="true"
                                     converterMessage="#{msgs['dateValidator.invalidDate']}"
-                                    style="width:100%">
+                                    styleClass="cal">
                         </p:calendar>
                         <h:outputText value="#{msgs['recipientSearch.endDentalCardDate']}:" />
                         <p:calendar value="#{recipientBean.searchPatientRequest.endCardDate}"
                                     label="#{msgs['recipientSearch.endDentalCardDate']}"
-                                           pattern="dd/MM/yyyy"
-                                           navigator="true"
-                                           locale="ru"
-                                           renderAsPopup="true"
-                                           converterMessage="#{msgs['dateValidator.invalidDate']}"
-                                           style="width:100%">
+                                    pattern="dd/MM/yyyy"
+                                    navigator="true"
+                                    locale="ru"
+                                    renderAsPopup="true"
+                                    converterMessage="#{msgs['dateValidator.invalidDate']}"
+                                    styleClass="cal">
                         </p:calendar>
                         <h:outputText value="#{msgs['person.surname']}:" />
                         <p:inputText value="#{recipientBean.searchPatientRequest.surname}"
@@ -93,7 +96,7 @@
                                         locale="ru"
                                         renderAsPopup="true"
                                         converterMessage="#{msgs['dateValidator.invalidDate']}"
-                                        style="width: 100%">
+                                        styleClass="cal">
                             </p:calendar>
                             <h:selectBooleanCheckbox id="birthdayIgnoreYear" value="#{recipientBean.searchPatientRequest.birthdayIgnoreYear}" />
                             <h:outputLabel for="birthdayIgnoreYear" value="#{msgs['recipientSearch.ignoreBirthdayYear']}" styleClass="ignoreYear" />
@@ -106,7 +109,7 @@
                                     locale="ru"
                                     renderAsPopup="true"
                                     converterMessage="#{msgs['dateValidator.invalidDate']}"
-                                    style="width: 100%">
+                                    styleClass="cal">
                         </p:calendar>
                         <h:outputText value="#{msgs['person.gender']}:" />
                         <p:selectOneRadio style="border: 0"

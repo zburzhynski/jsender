@@ -34,7 +34,7 @@ public class EmailUnisenderSender implements ISender {
 
     @Override
     public Set<SendingServices> getSendingServices() {
-        return EnumSet.of(SendingServices.UNISENDER_BY);
+        return EnumSet.of(SendingServices.EMAIL_UNISENDER_BY);
     }
 
     @Override
