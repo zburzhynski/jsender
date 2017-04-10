@@ -5,6 +5,7 @@ import static com.zburzhynski.jsender.api.domain.TemplateTag.ORGANIZATION_MOBILE
 import static com.zburzhynski.jsender.api.domain.TemplateTag.ORGANIZATION_NAME;
 import com.zburzhynski.jsender.api.domain.SendingType;
 import com.zburzhynski.jsender.api.domain.Settings;
+import com.zburzhynski.jsender.api.domain.TemplateTag;
 import com.zburzhynski.jsender.api.dto.Message;
 import com.zburzhynski.jsender.api.dto.Recipient;
 import com.zburzhynski.jsender.api.service.ISettingService;
@@ -14,6 +15,9 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Sending validator.
@@ -40,6 +44,8 @@ public class SendingValidator extends BaseValidator {
     private static final String MOBILE_PHONE_NUMBER_NOT_SPECIFIED = "sendingValidator.mobilePhoneNumberNotSpecified";
 
     private static final String EMAIL_NOT_SPECIFIED = "sendingValidator.emailNotSpecified";
+
+    private static final String INVALID_TAG = "sendingValidator.invalidTag";
 
     private static final String ORGANIZATION_NAME_TAG_NOT_SPECIFIED =
         "sendingValidator.organizationNameTagNotSpecified";
@@ -118,6 +124,9 @@ public class SendingValidator extends BaseValidator {
     }
 
     private boolean validateTags(Message message) {
+        if (hasInvalidTags(message.getText())) {
+            return false;
+        }
         if (message.getText().contains(reader.readProperty(ORGANIZATION_NAME.getValue()))) {
             Setting setting =(Setting) settingService.getByName(Settings.ORGANIZATION_NAME);
             if (StringUtils.isEmpty(setting.getValue())) {
@@ -140,6 +149,26 @@ public class SendingValidator extends BaseValidator {
             }
         }
         return true;
+    }
+
+    private boolean hasInvalidTags(String value) {
+        Pattern tagPattern = Pattern.compile("\\{.*}");
+        Matcher matcher = tagPattern.matcher(value);
+        while (matcher.find()) {
+            boolean valid = false;
+            String tag = matcher.group();
+            for (TemplateTag templateTag : TemplateTag.values()) {
+                if (tag.equals(reader.readProperty(templateTag.getValue()))) {
+                    valid = true;
+                    break;
+                }
+            }
+            if (!valid) {
+                addMessage(INVALID_TAG, tag);
+                return true;
+            }
+        }
+        return false;
     }
 
 }
