@@ -1,6 +1,8 @@
 package com.zburzhynski.jsender.impl.sender;
 
 import static com.zburzhynski.jsender.api.domain.CommonConstant.SPACE;
+import static org.apache.commons.lang3.StringUtils.EMPTY;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import com.zburzhynski.jsender.api.domain.Params;
 import com.zburzhynski.jsender.api.domain.ResponseStatus;
 import com.zburzhynski.jsender.api.domain.SendingServices;
@@ -35,7 +37,6 @@ import com.zburzhynski.jsender.impl.rest.exception.unisender.ObjectNotFoundExcep
 import com.zburzhynski.jsender.impl.rest.exception.unisender.UndefinedException;
 import com.zburzhynski.jsender.impl.service.AbstractSender;
 import com.zburzhynski.jsender.impl.util.PropertyReader;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,9 +62,9 @@ public class SmsUnisenderSender extends AbstractSender implements ISender {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SmsUnisenderSender.class);
 
-    private static final String HTML_TAG_PATTERN = "\\<.*?>";
+    private static final String HTML_SPACE = "&nbsp;";
 
-    private static final String HTML_SPACE = "&nbsp";
+    private static final String HTML_TAG = "\\<.*?>";
 
     private static final String MODERATED_STATUS = "moderated";
 
@@ -169,7 +170,7 @@ public class SmsUnisenderSender extends AbstractSender implements ISender {
     }
 
     private String preparePhone(String phone) {
-        return phone.replaceFirst("\\+", StringUtils.EMPTY);
+        return phone.replaceFirst("\\+", EMPTY);
     }
 
     private Map<Params, SendingAccountParam> getAccountParams(String accountId) {
@@ -182,7 +183,7 @@ public class SmsUnisenderSender extends AbstractSender implements ISender {
     }
 
     private String htmlToString(String text) {
-        return text.replaceAll(HTML_SPACE, SPACE).replaceAll(HTML_TAG_PATTERN, "");
+        return text.replaceAll(HTML_SPACE, SPACE).replaceAll(HTML_TAG, EMPTY).replaceAll(" +", SPACE).trim();
     }
 
     private SendingStatus createOkStatus(String id, Recipient recipient, String phone) {
@@ -201,7 +202,7 @@ public class SmsUnisenderSender extends AbstractSender implements ISender {
         sendingStatus.setContactInfo(phone);
         sendingStatus.setSendingDate(new Date());
         sendingStatus.setStatus(status);
-        sendingStatus.setDescription(StringUtils.isNotBlank(message) ? propertyReader.readProperty(message) : null);
+        sendingStatus.setDescription(isNotBlank(message) ? propertyReader.readProperty(message) : null);
         return sendingStatus;
     }
 
