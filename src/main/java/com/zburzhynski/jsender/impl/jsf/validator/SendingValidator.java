@@ -45,7 +45,7 @@ public class SendingValidator extends BaseValidator {
 
     private static final String EMAIL_NOT_SPECIFIED = "sendingValidator.emailNotSpecified";
 
-    private static final String INVALID_TAG_ERROR = "sendingValidator.invalidTagError";
+    private static final String INVALID_TAG = "sendingValidator.invalidTag";
 
     private static final String ORGANIZATION_NAME_TAG_NOT_SPECIFIED =
         "sendingValidator.organizationNameTagNotSpecified";
@@ -124,7 +124,7 @@ public class SendingValidator extends BaseValidator {
     }
 
     private boolean validateTags(Message message) {
-        if (containsInvalidTags(message.getText())) {
+        if (hasInvalidTags(message.getText())) {
             return false;
         }
         if (message.getText().contains(reader.readProperty(ORGANIZATION_NAME.getValue()))) {
@@ -151,7 +151,7 @@ public class SendingValidator extends BaseValidator {
         return true;
     }
 
-    private boolean containsInvalidTags(String value) {
+    private boolean hasInvalidTags(String value) {
         Pattern tagPattern = Pattern.compile("\\{.*}");
         Matcher matcher = tagPattern.matcher(value);
         while (matcher.find()) {
@@ -164,7 +164,7 @@ public class SendingValidator extends BaseValidator {
                 }
             }
             if (!valid) {
-                addMessage(INVALID_TAG_ERROR, tag);
+                addMessage(INVALID_TAG, tag);
                 return true;
             }
         }
