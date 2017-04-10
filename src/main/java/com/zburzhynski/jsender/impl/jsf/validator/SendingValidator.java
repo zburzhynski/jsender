@@ -16,6 +16,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -69,10 +71,10 @@ public class SendingValidator extends BaseValidator {
      * @return false if message not valid, else true
      */
     public boolean validate(Message message) {
-        return validateRequiredFields(message) && validateRecipients(message) && validateTags(message);
+        return checkRequiredFields(message) && checkRecipients(message) && checkTags(message);
     }
 
-    private boolean validateRequiredFields(Message message) {
+    private boolean checkRequiredFields(Message message) {
         if (message.getSendingType() == null) {
             addMessage(SENDING_TYPE_NOT_SPECIFIED);
             return false;
@@ -100,7 +102,7 @@ public class SendingValidator extends BaseValidator {
         return true;
     }
 
-    private boolean validateRecipients(Message message) {
+    private boolean checkRecipients(Message message) {
         switch (message.getSendingType()) {
             case SMS:
                 for (Recipient recipient : message.getRecipients()) {
@@ -123,52 +125,42 @@ public class SendingValidator extends BaseValidator {
         return true;
     }
 
-    private boolean validateTags(Message message) {
-        if (hasInvalidTags(message.getText())) {
-            return false;
+    private boolean checkTags(Message message) {
+        Set<String> tags = new HashSet<>();
+        for (TemplateTag templateTag : TemplateTag.values()) {
+            tags.add(reader.readProperty(templateTag.getValue()));
+        }
+        Pattern tagPattern = Pattern.compile("\\{.*}");
+        Matcher matcher = tagPattern.matcher(message.getText());
+        while (matcher.find()) {
+            String tag = matcher.group();
+            if (!tags.contains(tag)) {
+                addMessage(INVALID_TAG, tag);
+                return false;
+            }
         }
         if (message.getText().contains(reader.readProperty(ORGANIZATION_NAME.getValue()))) {
-            Setting setting =(Setting) settingService.getByName(Settings.ORGANIZATION_NAME);
+            Setting setting = (Setting) settingService.getByName(Settings.ORGANIZATION_NAME);
             if (StringUtils.isEmpty(setting.getValue())) {
                 addMessage(ORGANIZATION_NAME_TAG_NOT_SPECIFIED);
                 return false;
             }
         }
         if (message.getText().contains(reader.readProperty(ORGANIZATION_ADDRESS.getValue()))) {
-            Setting setting =(Setting) settingService.getByName(Settings.ORGANIZATION_ADDRESS);
+            Setting setting = (Setting) settingService.getByName(Settings.ORGANIZATION_ADDRESS);
             if (StringUtils.isEmpty(setting.getValue())) {
                 addMessage(ORGANIZATION_ADDRESS_TAG_NOT_SPECIFIED);
                 return false;
             }
         }
         if (message.getText().contains(reader.readProperty(ORGANIZATION_MOBILE_PHONE_NUMBER.getValue()))) {
-            Setting setting =(Setting) settingService.getByName(Settings.ORGANIZATION_MOBILE_PHONE_NUMBER);
+            Setting setting = (Setting) settingService.getByName(Settings.ORGANIZATION_MOBILE_PHONE_NUMBER);
             if (StringUtils.isEmpty(setting.getValue())) {
                 addMessage(ORGANIZATION_MOBILE_PHONE_NUMBER_TAG_NOT_SPECIFIED);
                 return false;
             }
         }
         return true;
-    }
-
-    private boolean hasInvalidTags(String value) {
-        Pattern tagPattern = Pattern.compile("\\{.*}");
-        Matcher matcher = tagPattern.matcher(value);
-        while (matcher.find()) {
-            boolean valid = false;
-            String tag = matcher.group();
-            for (TemplateTag templateTag : TemplateTag.values()) {
-                if (tag.equals(reader.readProperty(templateTag.getValue()))) {
-                    valid = true;
-                    break;
-                }
-            }
-            if (!valid) {
-                addMessage(INVALID_TAG, tag);
-                return true;
-            }
-        }
-        return false;
     }
 
 }
