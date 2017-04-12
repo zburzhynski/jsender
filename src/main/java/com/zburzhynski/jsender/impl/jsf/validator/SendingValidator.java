@@ -130,7 +130,7 @@ public class SendingValidator extends BaseValidator {
         for (TemplateTag templateTag : TemplateTag.values()) {
             tags.add(reader.readProperty(templateTag.getValue()));
         }
-        Pattern tagPattern = Pattern.compile("\\{.*}");
+        Pattern tagPattern = Pattern.compile("\\{.*?}");
         Matcher matcher = tagPattern.matcher(message.getText());
         while (matcher.find()) {
             String tag = matcher.group();
