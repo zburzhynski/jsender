@@ -1,28 +1,61 @@
-package com.zburzhynski.jsender.impl.service;
+package com.zburzhynski.jsender.impl.util;
 
+import static com.zburzhynski.jsender.api.domain.CommonConstant.SPACE;
+import static org.apache.commons.lang3.StringUtils.EMPTY;
 import com.zburzhynski.jsender.api.domain.Settings;
 import com.zburzhynski.jsender.api.domain.TemplateTag;
 import com.zburzhynski.jsender.api.dto.Recipient;
 import com.zburzhynski.jsender.api.service.ISettingService;
 import com.zburzhynski.jsender.impl.domain.Setting;
-import com.zburzhynski.jsender.impl.util.PropertyReader;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
- * Abstract sender.
+ * Message text helper.
  * <p/>
- * Date: 01.03.2017
+ * Date: 12.04.2017
  *
  * @author Nikita Shevtsou
  */
-public abstract class AbstractSender {
+@Component
+public class TextHelper {
+
+    private static final String HTML_SPACE = "&nbsp;";
+
+    private static final String HTML_TAG = "\\<.*?>";
+
+    @Autowired
+    private PropertyReader reader;
+
 
     @Autowired
     private PropertyReader propertyReader;
 
     @Autowired
     private ISettingService<String, Setting> settingService;
+
+    /**
+     * Prepares sms text.
+     *
+     * @param text      text to prepare
+     * @param recipient recipient
+     * @return prepared text
+     */
+    public String prepareSmsText(String text, Recipient recipient) {
+        return htmlToString(prepareText(text, recipient));
+    }
+
+    /**
+     * Prepares sms text.
+     *
+     * @param text      text to prepare
+     * @param recipient recipient
+     * @return prepared text
+     */
+    public String prepareEmailText(String text, Recipient recipient) {
+        return prepareText(text, recipient);
+    }
 
     /**
      * Prepares message text.
@@ -32,7 +65,7 @@ public abstract class AbstractSender {
      *
      * @return parepared text
      */
-    protected String prepareText(String text, Recipient recipient) {
+    private String prepareText(String text, Recipient recipient) {
         text = replaceTag(TemplateTag.CLIENT_SURNAME, text, recipient.getSurname());
         text = replaceTag(TemplateTag.CLIENT_NAME, text, recipient.getName());
         text = replaceTag(TemplateTag.CLIENT_PATRONYMIC, text, recipient.getPatronymic());
@@ -49,6 +82,10 @@ public abstract class AbstractSender {
 
     private String replaceTag(TemplateTag tag, String text, String replacement) {
         return StringUtils.replace(text, propertyReader.readProperty(tag.getValue()), replacement);
+    }
+
+    private String htmlToString(String text) {
+        return text.replaceAll(HTML_SPACE, SPACE).replaceAll(HTML_TAG, EMPTY).replaceAll(" +", SPACE).trim();
     }
 
 }

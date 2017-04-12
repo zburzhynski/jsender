@@ -15,7 +15,7 @@ import com.zburzhynski.jsender.api.service.ISentMessageService;
 import com.zburzhynski.jsender.impl.domain.SendingAccount;
 import com.zburzhynski.jsender.impl.domain.SendingAccountParam;
 import com.zburzhynski.jsender.impl.domain.SentMessage;
-import com.zburzhynski.jsender.impl.service.AbstractSender;
+import com.zburzhynski.jsender.impl.util.TextHelper;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,11 +45,14 @@ import javax.mail.internet.MimeMessage;
  * @author Vladimir Zburzhynski
  */
 @Component
-public class EmailSender extends AbstractSender implements ISender {
+public class EmailSender implements ISender {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(EmailSender.class);
 
     private static final String CONTENT_TYPE = "text/html;charset=UTF-8";
+
+    @Autowired
+    private TextHelper textHelper;
 
     @Autowired
     private ISentMessageService sentMessageService;
@@ -75,7 +78,7 @@ public class EmailSender extends AbstractSender implements ISender {
                     message.setRecipients(RecipientType.TO, InternetAddress.parse(address));
                     message.setSubject(StringUtils.isNotBlank(email.getSubject()) ? email.getSubject() : null);
                     message.setContent(StringUtils.isNotBlank(email.getText()) ?
-                        prepareText(email.getText(), recipient) : null, CONTENT_TYPE);
+                        textHelper.prepareEmailText(email.getText(), recipient) : null, CONTENT_TYPE);
                     Transport.send(message);
                     SentMessage sentMessage = new SentMessage();
                     sentMessage.setSentDate(new Date());
