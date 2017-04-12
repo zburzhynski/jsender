@@ -12,6 +12,7 @@ public enum View {
     CLIENTS("/pages/client/clients?faces-redirect=true"),
     CLIENT("/pages/client/client?faces-redirect=true"),
     SENDING("/pages/sending/sending?faces-redirect=true"),
+    SENDING_PREVIEW("/pages/sending/sending_preview?faces-redirect=true"),
     SENDING_STATUS("/pages/sending_status/sending_status?faces-redirect=true"),
     SENDING_STATUS_DETAIL("/pages/sending_status/status_detail?faces-redirect=true"),
     RECIPIENTS("/pages/sending/recipients?faces-redirect=true"),
