@@ -26,10 +26,6 @@ public class TextHelper {
     private static final String HTML_TAG = "\\<.*?>";
 
     @Autowired
-    private PropertyReader reader;
-
-
-    @Autowired
     private PropertyReader propertyReader;
 
     @Autowired
@@ -60,9 +56,8 @@ public class TextHelper {
     /**
      * Prepares message text.
      *
-     * @param text text to prepare
+     * @param text      text to prepare
      * @param recipient recipient
-     *
      * @return parepared text
      */
     private String prepareText(String text, Recipient recipient) {

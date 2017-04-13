@@ -69,6 +69,17 @@ public class SendingBean implements Serializable {
     }
 
     /**
+     * Creates new message.
+     */
+    public void createMessage() {
+        messageToSend = new Message();
+        recipients.clear();
+        tabIndex = 0;
+        messageToSend.setFrom(settingBean.getOrganizationName());
+        sendingAccountListBean.findByServiceSendingType(null);
+    }
+
+    /**
      * Redirect to sending preview.xhtml.
      *
      * @return path for navigation
@@ -79,17 +90,6 @@ public class SendingBean implements Serializable {
             return null;
         }
         return SENDING_PREVIEW.getPath();
-    }
-
-    /**
-     * Creates new message.
-     */
-    public void createMessage() {
-        messageToSend = new Message();
-        recipients.clear();
-        tabIndex = 0;
-        messageToSend.setFrom(settingBean.getOrganizationName());
-        sendingAccountListBean.findByServiceSendingType(null);
     }
 
     /**
