@@ -7,40 +7,24 @@ import static com.zburzhynski.jsender.api.domain.CommonConstant.SPACE;
 import static com.zburzhynski.jsender.api.domain.View.MESSAGE_TEMPLATES;
 import static com.zburzhynski.jsender.api.domain.View.RECIPIENTS;
 import static com.zburzhynski.jsender.api.domain.View.SENDING;
-import static com.zburzhynski.jsender.api.domain.View.SENDING_STATUS;
-import static javax.faces.application.FacesMessage.SEVERITY_ERROR;
-import com.zburzhynski.jsender.api.domain.Params;
-import com.zburzhynski.jsender.api.domain.ResponseStatus;
-import com.zburzhynski.jsender.api.domain.SendingType;
+import static com.zburzhynski.jsender.api.domain.View.SENDING_PREVIEW;
 import com.zburzhynski.jsender.api.dto.Message;
 import com.zburzhynski.jsender.api.dto.Recipient;
-import com.zburzhynski.jsender.api.dto.SendingStatus;
-import com.zburzhynski.jsender.api.exception.SendingException;
-import com.zburzhynski.jsender.api.service.ISendingAccountService;
 import com.zburzhynski.jsender.impl.domain.Client;
 import com.zburzhynski.jsender.impl.domain.SendingAccount;
-import com.zburzhynski.jsender.impl.domain.SendingAccountParam;
 import com.zburzhynski.jsender.impl.jsf.validator.SendingValidator;
-import com.zburzhynski.jsender.impl.rest.client.UnisenderRestClient;
 import com.zburzhynski.jsender.impl.rest.domain.PatientDto;
-import com.zburzhynski.jsender.impl.rest.domain.unisender.CheckSmsRequest;
-import com.zburzhynski.jsender.impl.rest.domain.unisender.CheckSmsResponse;
-import com.zburzhynski.jsender.impl.sender.MessageSender;
-import com.zburzhynski.jsender.impl.util.PropertyReader;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
-import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
-import javax.faces.context.FacesContext;
 
 /**
  * Sending bean.
@@ -55,17 +39,9 @@ public class SendingBean implements Serializable {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SendingBean.class);
 
-    private static final String GROWL_ID = "sendingStatusForm:sendingMessages";
-
-    private static final int SECOND_SCALE = 1000;
-
     private int tabIndex;
 
-    private SendingStatus sendingStatus;
-
     private Message messageToSend;
-
-    private List<SendingStatus> sendingStatuses;
 
     private List<Client> recipients = new ArrayList<>();
 
@@ -75,23 +51,11 @@ public class SendingBean implements Serializable {
     @ManagedProperty(value = "#{messageTemplateBean}")
     private MessageTemplateBean messageTemplateBean;
 
-    @ManagedProperty(value = "#{messageSender}")
-    private MessageSender messageSender;
-
     @ManagedProperty(value = "#{sendingValidator}")
     private SendingValidator sendingValidator;
 
     @ManagedProperty(value = "#{sendingAccountListBean}")
     private SendingAccountListBean sendingAccountListBean;
-
-    @ManagedProperty(value = "#{sendingAccountService}")
-    private ISendingAccountService accountService;
-
-    @ManagedProperty(value = "#{unisenderRestClient}")
-    private UnisenderRestClient unisenderRestClient;
-
-    @ManagedProperty(value = "#{propertyReader}")
-    private PropertyReader reader;
 
     @ManagedProperty(value = "#{settingBean}")
     private SettingBean settingBean;
@@ -102,6 +66,19 @@ public class SendingBean implements Serializable {
     @PostConstruct
     public void init() {
         createMessage();
+    }
+
+    /**
+     * Redirect to sending preview.xhtml.
+     *
+     * @return path for navigation
+     */
+    public String next() {
+        boolean valid = sendingValidator.validate(messageToSend);
+        if (!valid) {
+            return null;
+        }
+        return SENDING_PREVIEW.getPath();
     }
 
     /**
@@ -159,53 +136,6 @@ public class SendingBean implements Serializable {
     }
 
     /**
-     * Sends message.
-     *
-     * @return path for navigation
-     */
-    public String send() {
-        boolean valid = sendingValidator.validate(messageToSend);
-        if (!valid) {
-            return null;
-        }
-        try {
-            sendingStatuses = messageSender.send(messageToSend);
-        } catch (SendingException e) {
-            addFlashMessage(e.getMessage());
-        }
-        return SENDING_STATUS.getPath();
-    }
-
-    /**
-     * Refreshes sending statues.
-     */
-    public void refreshSendingStatuses() {
-        try {
-            if (SendingType.SMS.equals(messageToSend.getSendingType())) {
-                SendingAccount account = (SendingAccount) accountService.getById(messageToSend.getSendingAccountId());
-                String token = getParamValue(account, Params.TOKEN);
-                if (StringUtils.isBlank(token)) {
-                    throw new IllegalArgumentException("Token is null");
-                }
-                for (SendingStatus status : sendingStatuses) {
-                    if (ResponseStatus.SENDING.equals(status.getStatus())) {
-                        CheckSmsRequest request = new CheckSmsRequest();
-                        request.setSmsId(Integer.valueOf(status.getId()));
-                        request.setToken(token);
-                        CheckSmsResponse smsResponse = unisenderRestClient.checkSms(request);
-                        if (!new Long(0).equals(smsResponse.getDelivered())) {
-                            status.setDeliveryDate(new Date(smsResponse.getDelivered() * SECOND_SCALE));
-                            status.setStatus(ResponseStatus.OK);
-                        }
-                    }
-                }
-            }
-        } catch (Exception e) {
-            addMessage("sendingStatus.refreshStatusError");
-        }
-    }
-
-    /**
      * Gets phone numbers description.
      *
      * @param recipient recipient
@@ -252,24 +182,12 @@ public class SendingBean implements Serializable {
         this.tabIndex = tabIndex;
     }
 
-    public SendingStatus getSendingStatus() {
-        return sendingStatus;
-    }
-
-    public void setSendingStatus(SendingStatus sendingStatus) {
-        this.sendingStatus = sendingStatus;
-    }
-
     public Message getMessageToSend() {
         return messageToSend;
     }
 
     public void setMessageToSend(Message messageToSend) {
         this.messageToSend = messageToSend;
-    }
-
-    public List<SendingStatus> getSendingStatuses() {
-        return sendingStatuses;
     }
 
     public List<Client> getRecipients() {
@@ -292,10 +210,6 @@ public class SendingBean implements Serializable {
         this.messageTemplateBean = messageTemplateBean;
     }
 
-    public void setMessageSender(MessageSender messageSender) {
-        this.messageSender = messageSender;
-    }
-
     public void setSendingValidator(SendingValidator sendingValidator) {
         this.sendingValidator = sendingValidator;
     }
@@ -304,54 +218,8 @@ public class SendingBean implements Serializable {
         this.sendingAccountListBean = sendingAccountListBean;
     }
 
-    public void setAccountService(ISendingAccountService accountService) {
-        this.accountService = accountService;
-    }
-
-    public void setUnisenderRestClient(UnisenderRestClient unisenderRestClient) {
-        this.unisenderRestClient = unisenderRestClient;
-    }
-
-    public void setReader(PropertyReader reader) {
-        this.reader = reader;
-    }
-
     public void setSettingBean(SettingBean settingBean) {
         this.settingBean = settingBean;
-    }
-
-    /**
-     * Adds localisation message to flash context.
-     *
-     * @param message localisation message
-     */
-    private void addFlashMessage(String message) {
-        FacesContext context = FacesContext.getCurrentInstance();
-        FacesMessage facesMessage = new FacesMessage(reader.readProperty(message), StringUtils.EMPTY);
-        facesMessage.setSeverity(SEVERITY_ERROR);
-        context.getExternalContext().getFlash().setKeepMessages(true);
-        context.addMessage(GROWL_ID, facesMessage);
-    }
-
-    /**
-     * Adds localisation message to context.
-     *
-     * @param message localisation message
-     */
-    private void addMessage(String message) {
-        FacesContext context = FacesContext.getCurrentInstance();
-        FacesMessage facesMessage = new FacesMessage(reader.readProperty(message), StringUtils.EMPTY);
-        facesMessage.setSeverity(SEVERITY_ERROR);
-        context.addMessage(null, facesMessage);
-    }
-
-    private String getParamValue(SendingAccount account, Params param) {
-        for (SendingAccountParam accountParam : account.getAccountParams()) {
-            if (param.name().equals(accountParam.getParam().getName().toUpperCase())) {
-                return accountParam.getValue();
-            }
-        }
-        return null;
     }
 
 }

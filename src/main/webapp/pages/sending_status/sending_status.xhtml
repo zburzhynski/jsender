@@ -26,7 +26,7 @@
                 <p:focus />
                 <p:growl id="sendingMessages" />
                 <p:dataTable id="sendingStatuses"
-                             value="#{sendingBean.sendingStatuses}"
+                             value="#{sendingStatusBean.sendingStatuses}"
                              emptyMessage="#{msgs['sendingStatus.empty']}"
                              var="status">
                     <p:column headerText="#{msgs['person.fullName']}" style="width: 26%">
@@ -55,7 +55,7 @@
                                            style="padding-right: 5px">
                                 <p:graphicImage url="/resources/css/css-images/text.png" title="#{msgs['sendingStatus.showDetail']}" />
                                 <f:setPropertyActionListener
-                                        target="#{sendingBean.sendingStatus}" value="#{status}" />
+                                        target="#{sendingStatusBean.sendingStatus}" value="#{status}" />
                             </p:commandLink>
                         </h:panelGroup>
                     </p:column>
@@ -64,8 +64,8 @@
                 <h:panelGrid columns="2">
                     <p:commandButton action="/pages/sending/sending?faces-redirect=true"
                                      value="#{msgs['button.ok']}" />
-                    <p:commandButton action="#{sendingBean.refreshSendingStatuses}"
-                                     rendered="#{not empty sendingBean.sendingStatuses}"
+                    <p:commandButton action="#{sendingStatusBean.refreshSendingStatuses}"
+                                     rendered="#{not empty sendingStatusBean.sendingStatuses}"
                                      update="sendingStatusForm:sendingStatuses sendingMessages"
                                      value="#{msgs['button.refresh']}"/>
                 </h:panelGrid>
