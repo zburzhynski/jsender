@@ -1,6 +1,5 @@
 package com.zburzhynski.jsender.impl.sender;
 
-import static com.zburzhynski.jsender.api.domain.CommonConstant.SPACE;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import com.zburzhynski.jsender.api.domain.Params;
@@ -35,8 +34,8 @@ import com.zburzhynski.jsender.impl.rest.exception.unisender.MessageAlreadyExist
 import com.zburzhynski.jsender.impl.rest.exception.unisender.MessageToLongException;
 import com.zburzhynski.jsender.impl.rest.exception.unisender.ObjectNotFoundException;
 import com.zburzhynski.jsender.impl.rest.exception.unisender.UndefinedException;
-import com.zburzhynski.jsender.impl.service.AbstractSender;
 import com.zburzhynski.jsender.impl.util.PropertyReader;
+import com.zburzhynski.jsender.impl.util.TextHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,15 +57,14 @@ import java.util.Set;
  * @author Vladimir Zburzhynski
  */
 @Component
-public class SmsUnisenderSender extends AbstractSender implements ISender {
+public class SmsUnisenderSender implements ISender {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SmsUnisenderSender.class);
 
-    private static final String HTML_SPACE = "&nbsp;";
-
-    private static final String HTML_TAG = "\\<.*?>";
-
     private static final String MODERATED_STATUS = "moderated";
+
+    @Autowired
+    private TextHelper textHelper;
 
     @Autowired
     private UnisenderRestClient unisenderRestClient;
@@ -89,7 +87,7 @@ public class SmsUnisenderSender extends AbstractSender implements ISender {
         try {
             for (Recipient recipient : message.getRecipients()) {
                 try {
-                    String smsText = htmlToString(prepareText(message.getText(), recipient));
+                    String smsText = textHelper.prepareSmsText(message.getText(), recipient);
                     Integer messageId = createSmsMessage(token, alphanameId, smsText);
                     if (isMessageModerated(token, messageId)) {
                         for (String phone : recipient.getPhones()) {
@@ -180,10 +178,6 @@ public class SmsUnisenderSender extends AbstractSender implements ISender {
             params.put(Params.valueOf(param.getParam().getName().toUpperCase()), param);
         }
         return params;
-    }
-
-    private String htmlToString(String text) {
-        return text.replaceAll(HTML_SPACE, SPACE).replaceAll(HTML_TAG, EMPTY).replaceAll(" +", SPACE).trim();
     }
 
     private SendingStatus createOkStatus(String id, Recipient recipient, String phone) {
