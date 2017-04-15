@@ -3,7 +3,7 @@ package com.zburzhynski.jsender.impl.sender;
 import com.zburzhynski.jsender.api.domain.SendingServices;
 import com.zburzhynski.jsender.api.domain.SendingType;
 import com.zburzhynski.jsender.api.dto.Message;
-import com.zburzhynski.jsender.api.dto.SendingStatus;
+import com.zburzhynski.jsender.api.dto.SendingResponse;
 import com.zburzhynski.jsender.api.exception.SendingException;
 import com.zburzhynski.jsender.api.sender.ISender;
 import org.slf4j.Logger;
@@ -11,7 +11,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.util.EnumSet;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -27,7 +26,7 @@ public class EmailUnisenderSender implements ISender {
     private static final Logger LOGGER = LoggerFactory.getLogger(EmailUnisenderSender.class);
 
     @Override
-    public List<SendingStatus> send(Message message) throws SendingException {
+    public SendingResponse send(Message message) throws SendingException {
         LOGGER.info("Email unisender sent message");
         return null;
     }

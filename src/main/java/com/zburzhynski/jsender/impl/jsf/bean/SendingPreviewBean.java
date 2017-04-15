@@ -1,6 +1,6 @@
 package com.zburzhynski.jsender.impl.jsf.bean;
 
-import static com.zburzhynski.jsender.api.domain.View.SENDING_STATUS;
+import static com.zburzhynski.jsender.api.domain.View.MESSAGE_STATUS;
 import static javax.faces.application.FacesMessage.SEVERITY_ERROR;
 import com.zburzhynski.jsender.api.dto.Recipient;
 import com.zburzhynski.jsender.api.exception.SendingException;
@@ -70,11 +70,11 @@ public class SendingPreviewBean implements Serializable {
     public String send() {
         try {
             sendingStatusBean.setMessageToSend(sendingBean.getMessageToSend());
-            sendingStatusBean.setSendingStatuses(messageSender.send(sendingBean.getMessageToSend()));
+            sendingStatusBean.setSendingResponse(messageSender.send(sendingBean.getMessageToSend()));
         } catch (SendingException e) {
             addFlashMessage(e.getMessage());
         }
-        return SENDING_STATUS.getPath();
+        return MESSAGE_STATUS.getPath();
     }
 
     /**

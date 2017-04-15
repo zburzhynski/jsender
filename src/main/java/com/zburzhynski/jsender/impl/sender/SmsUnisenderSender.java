@@ -3,12 +3,13 @@ package com.zburzhynski.jsender.impl.sender;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import com.zburzhynski.jsender.api.domain.Params;
-import com.zburzhynski.jsender.api.domain.ResponseStatus;
 import com.zburzhynski.jsender.api.domain.SendingServices;
+import com.zburzhynski.jsender.api.domain.SendingStatus;
 import com.zburzhynski.jsender.api.domain.SendingType;
 import com.zburzhynski.jsender.api.dto.Message;
+import com.zburzhynski.jsender.api.dto.MessageStatus;
 import com.zburzhynski.jsender.api.dto.Recipient;
-import com.zburzhynski.jsender.api.dto.SendingStatus;
+import com.zburzhynski.jsender.api.dto.SendingResponse;
 import com.zburzhynski.jsender.api.exception.SendingException;
 import com.zburzhynski.jsender.api.sender.ISender;
 import com.zburzhynski.jsender.api.service.ISendingAccountService;
@@ -79,8 +80,8 @@ public class SmsUnisenderSender implements ISender {
     private PropertyReader propertyReader;
 
     @Override
-    public List<SendingStatus> send(Message message) throws SendingException {
-        List<SendingStatus> response = new ArrayList<>();
+    public SendingResponse send(Message message) throws SendingException {
+        SendingResponse response = new SendingResponse();
         Map<Params, SendingAccountParam> params = getAccountParams(message.getSendingAccountId());
         String token = params.get(Params.TOKEN).getValue();
         Integer alphanameId = Integer.valueOf(params.get(Params.ALPHANAME_ID).getValue());
@@ -99,19 +100,21 @@ public class SmsUnisenderSender implements ISender {
                                 SendSmsResponse smsResponse = unisenderRestClient.sendSms(sendRequest);
                                 if (smsResponse != null) {
                                     saveMessage(recipient, message, phone, smsText);
-                                    response.add(createSentStatus(smsResponse.getSmsId().toString(),
-                                        recipient, phone));
+                                    response.addMessageStatus(createSentStatus(smsResponse.getSmsId().toString(),
+                                        recipient, phone, message.getText()));
                                 }
                             } catch (IncorrectPhoneNumberException e) {
-                                response.add(createErrorStatus(recipient, phone,
-                                    "smsUnisenderSender.incorrectPhoneNumber"));
+                                response.addMessageStatus(createErrorStatus(recipient, phone,
+                                    "smsUnisenderSender.incorrectPhoneNumber", message.getText()));
                             }
                         }
                     }
                 } catch (MessageToLongException e) {
-                    response.addAll(createErrorStatus(recipient, "smsUnisenderSender.messageToLong"));
+                    response.addMessageStatuses(createErrorStatus(recipient,
+                        "smsUnisenderSender.messageToLong", message.getText()));
                 } catch (UndefinedException e) {
-                    response.addAll(createErrorStatus(recipient, "smsUnisenderSender.undefinedError"));
+                    response.addMessageStatuses(createErrorStatus(recipient,
+                        "smsUnisenderSender.undefinedError", message.getText()));
                 } catch (ObjectNotFoundException e) {
                     LOGGER.warn("Message not found", e);
                 }
@@ -178,32 +181,33 @@ public class SmsUnisenderSender implements ISender {
         return params;
     }
 
-    private SendingStatus createSentStatus(String id, Recipient recipient, String phone) {
-        return createStatus(id, recipient, phone, ResponseStatus.SENT, null);
+    private MessageStatus createSentStatus(String id, Recipient recipient, String phone, String text) {
+        return createStatus(id, recipient, phone, SendingStatus.SENT, null, text);
     }
 
-    private List<SendingStatus> createErrorStatus(Recipient recipient, String message) {
-        List<SendingStatus> statuses = new ArrayList<>();
+    private List<MessageStatus> createErrorStatus(Recipient recipient, String message, String text) {
+        List<MessageStatus> statuses = new ArrayList<>();
         for (String phone : recipient.getPhones()) {
-            statuses.add(createStatus(null, recipient, phone, ResponseStatus.ERROR, message));
+            statuses.add(createStatus(null, recipient, phone, SendingStatus.ERROR, message, text));
         }
         return statuses;
     }
 
-    private SendingStatus createErrorStatus(Recipient recipient, String phone, String message) {
-        return createStatus(null, recipient, phone, ResponseStatus.ERROR, message);
+    private MessageStatus createErrorStatus(Recipient recipient, String phone, String message, String text) {
+        return createStatus(null, recipient, phone, SendingStatus.ERROR, message, text);
     }
 
-    private SendingStatus createStatus(String id, Recipient recipient, String phone, ResponseStatus status,
-                                       String message) {
-        SendingStatus sendingStatus = new SendingStatus();
-        sendingStatus.setId(id);
-        sendingStatus.setRecipientFullName(recipient.getFullName());
-        sendingStatus.setContactInfo(phone);
-        sendingStatus.setSendingDate(new Date());
-        sendingStatus.setStatus(status);
-        sendingStatus.setDescription(isNotBlank(message) ? propertyReader.readProperty(message) : null);
-        return sendingStatus;
+    private MessageStatus createStatus(String id, Recipient recipient, String phone, SendingStatus status,
+                                       String message, String text) {
+        MessageStatus messageStatus = new MessageStatus();
+        messageStatus.setId(id);
+        messageStatus.setText(text);
+        messageStatus.setRecipientFullName(recipient.getFullName());
+        messageStatus.setContactInfo(phone);
+        messageStatus.setSendingDate(new Date());
+        messageStatus.setStatus(status);
+        messageStatus.setDescription(isNotBlank(message) ? propertyReader.readProperty(message) : null);
+        return messageStatus;
     }
 
     private void saveMessage(Recipient recipient, Message message, String phone, String smsText) {

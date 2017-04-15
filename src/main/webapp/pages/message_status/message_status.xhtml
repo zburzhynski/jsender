@@ -22,30 +22,30 @@
         </style>
         <p:panel>
             <h:form id="sendingStatusForm">
-                <h4>#{msgs['sendingStatus.header']}</h4>
+                <h4>#{msgs['messageStatus.header']}</h4>
                 <p:focus />
                 <p:growl id="sendingMessages" />
-                <p:dataTable id="sendingStatuses"
-                             value="#{sendingStatusBean.sendingStatuses}"
-                             emptyMessage="#{msgs['sendingStatus.empty']}"
+                <p:dataTable id="messageStatuses"
+                             value="#{sendingStatusBean.sendingResponse.messageStatuses}"
+                             emptyMessage="#{msgs['messageStatus.empty']}"
                              var="status">
                     <p:column headerText="#{msgs['person.fullName']}" style="width: 26%">
                         <h:outputText value="#{status.recipientFullName}" />
                     </p:column>
-                    <p:column headerText="#{msgs['sendingStatus.contactInfo']}" style="width: 22%">
+                    <p:column headerText="#{msgs['messageStatus.contactInfo']}" style="width: 22%">
                         <h:outputText value="#{status.contactInfo}" />
                     </p:column>
-                    <p:column headerText="#{msgs['sendingStatus.sendingDate']}" style="width: 17%">
+                    <p:column headerText="#{msgs['messageStatus.sendingDate']}" style="width: 17%">
                         <h:outputText value="#{status.sendingDate}">
                             <f:convertDateTime pattern="HH:mm dd.MM.yyyy" />
                         </h:outputText>
                     </p:column>
-                    <p:column headerText="#{msgs['sendingStatus.deliveryDate']}" style="width: 17%">
+                    <p:column headerText="#{msgs['messageStatus.deliveryDate']}" style="width: 17%">
                         <h:outputText value="#{status.deliveryDate}">
                             <f:convertDateTime pattern="HH:mm dd.MM.yyyy" />
                         </h:outputText>
                     </p:column>
-                    <p:column headerText="#{msgs['sendingStatus.status']}" style="width: 15%">
+                    <p:column headerText="#{msgs['messageStatus.status']}" style="width: 15%">
                         <h:outputText value="#{msgs[status.status.value]}" />
                     </p:column>
                     <p:column width="3.5%">
@@ -53,9 +53,9 @@
                             <p:commandLink oncomplete="PF('statusDetailDialog').show();"
                                            update="sendingStatusForm:statusDetailDialog"
                                            style="padding-right: 5px">
-                                <p:graphicImage url="/resources/css/css-images/text.png" title="#{msgs['sendingStatus.showDetail']}" />
+                                <p:graphicImage url="/resources/css/css-images/text.png" title="#{msgs['messageStatus.showDetail']}" />
                                 <f:setPropertyActionListener
-                                        target="#{sendingStatusBean.sendingStatus}" value="#{status}" />
+                                        target="#{sendingStatusBean.messageStatus}" value="#{status}" />
                             </p:commandLink>
                         </h:panelGroup>
                     </p:column>
@@ -65,8 +65,8 @@
                     <p:commandButton action="/pages/sending/sending?faces-redirect=true"
                                      value="#{msgs['button.ok']}" />
                     <p:commandButton action="#{sendingStatusBean.refreshSendingStatuses}"
-                                     rendered="#{not empty sendingStatusBean.sendingStatuses}"
-                                     update="sendingStatusForm:sendingStatuses sendingMessages"
+                                     rendered="#{not empty sendingStatusBean.sendingResponse.messageStatuses}"
+                                     update="sendingStatusForm:messageStatuses sendingMessages"
                                      value="#{msgs['button.refresh']}"/>
                 </h:panelGrid>
                 <ui:include src="status_detail.xhtml" />

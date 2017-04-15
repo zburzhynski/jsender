@@ -1,17 +1,17 @@
 package com.zburzhynski.jsender.api.domain;
 
 /**
- * Represents response status.
+ * Represents sending status.
  * <p/>
  * Date: 21.03.2017
  *
  * @author Nikita Shevtsou
  */
-public enum ResponseStatus {
+public enum SendingStatus {
 
-    SENT("responseStatus.sent"),
-    DELIVERED("responseStatus.delivered"),
-    ERROR("responseStatus.error");
+    SENT("sendingStatus.sent"),
+    DELIVERED("sendingStatus.delivered"),
+    ERROR("sendingStatus.error");
 
     private String value;
 
@@ -20,7 +20,7 @@ public enum ResponseStatus {
      *
      * @param value localization message
      */
-    ResponseStatus(String value) {
+    SendingStatus(String value) {
         this.value = value;
     }
 
