@@ -99,7 +99,7 @@ public class SmsUnisenderSender implements ISender {
                                 SendSmsResponse smsResponse = unisenderRestClient.sendSms(sendRequest);
                                 if (smsResponse != null) {
                                     saveMessage(recipient, message, phone, smsText);
-                                    response.add(createOkStatus(smsResponse.getSmsId().toString(),
+                                    response.add(createSentStatus(smsResponse.getSmsId().toString(),
                                         recipient, phone));
                                 }
                             } catch (IncorrectPhoneNumberException e) {
@@ -180,8 +180,8 @@ public class SmsUnisenderSender implements ISender {
         return params;
     }
 
-    private SendingStatus createOkStatus(String id, Recipient recipient, String phone) {
-        return createSendingStatus(id, recipient, phone, ResponseStatus.SENDING, null);
+    private SendingStatus createSentStatus(String id, Recipient recipient, String phone) {
+        return createSendingStatus(id, recipient, phone, ResponseStatus.SENT, null);
     }
 
     private SendingStatus createErrorStatus(Recipient recipient, String phone, String message) {

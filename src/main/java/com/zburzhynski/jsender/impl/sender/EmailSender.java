@@ -90,7 +90,7 @@ public class EmailSender implements ISender {
                     sentMessage.setText(email.getText());
                     sentMessage.setSendingType(SendingType.EMAIL);
                     sentMessageService.saveOrUpdate(sentMessage);
-                    status.setStatus(ResponseStatus.OK);
+                    status.setStatus(ResponseStatus.DELIVERED);
                     LOGGER.info("Email sent successfully, address = " + address);
                 } catch (Exception e) {
                     status.setStatus(ResponseStatus.ERROR);
