@@ -109,9 +109,9 @@ public class SmsUnisenderSender implements ISender {
                         }
                     }
                 } catch (MessageToLongException e) {
-                    for (String phone : recipient.getPhones()) {
-                        response.add(createErrorStatus(recipient, phone, "smsUnisenderSender.messageToLong"));
-                    }
+                    response.addAll(createErrorStatus(recipient, "smsUnisenderSender.messageToLong"));
+                } catch (UndefinedException e) {
+                    response.addAll(createErrorStatus(recipient, "smsUnisenderSender.undefinedError"));
                 } catch (ObjectNotFoundException e) {
                     LOGGER.warn("Message not found", e);
                 }
@@ -126,8 +126,6 @@ public class SmsUnisenderSender implements ISender {
             throw new SendingException("smsUnisenderSender.accessDenied");
         } catch (LimitExceededException e) {
             throw new SendingException("smsUnisenderSender.limitExceeded");
-        } catch (UndefinedException e) {
-            throw new SendingException("smsUnisenderSender.undefinedError");
         } catch (HostUnavailableException e) {
             throw new SendingException("smsUnisender.hostUnavailableException");
         }
@@ -181,15 +179,23 @@ public class SmsUnisenderSender implements ISender {
     }
 
     private SendingStatus createSentStatus(String id, Recipient recipient, String phone) {
-        return createSendingStatus(id, recipient, phone, ResponseStatus.SENT, null);
+        return createStatus(id, recipient, phone, ResponseStatus.SENT, null);
+    }
+
+    private List<SendingStatus> createErrorStatus(Recipient recipient, String message) {
+        List<SendingStatus> statuses = new ArrayList<>();
+        for (String phone : recipient.getPhones()) {
+            statuses.add(createStatus(null, recipient, phone, ResponseStatus.ERROR, message));
+        }
+        return statuses;
     }
 
     private SendingStatus createErrorStatus(Recipient recipient, String phone, String message) {
-        return createSendingStatus(null, recipient, phone, ResponseStatus.ERROR, message);
+        return createStatus(null, recipient, phone, ResponseStatus.ERROR, message);
     }
 
-    private SendingStatus createSendingStatus(String id, Recipient recipient, String phone, ResponseStatus status,
-                                              String message) {
+    private SendingStatus createStatus(String id, Recipient recipient, String phone, ResponseStatus status,
+                                       String message) {
         SendingStatus sendingStatus = new SendingStatus();
         sendingStatus.setId(id);
         sendingStatus.setRecipientFullName(recipient.getFullName());
