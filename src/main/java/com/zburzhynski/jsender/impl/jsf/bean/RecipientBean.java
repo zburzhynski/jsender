@@ -9,6 +9,7 @@ import com.zburzhynski.jsender.api.domain.View;
 import com.zburzhynski.jsender.api.dto.Recipient;
 import com.zburzhynski.jsender.api.rest.client.IPatientRestClient;
 import com.zburzhynski.jsender.impl.jsf.loader.PatientLazyDataLoader;
+import com.zburzhynski.jsender.impl.jsf.validator.PatientSearchValidator;
 import com.zburzhynski.jsender.impl.rest.domain.ContactInfoDto;
 import com.zburzhynski.jsender.impl.rest.domain.ContactInfoEmailDto;
 import com.zburzhynski.jsender.impl.rest.domain.ContactInfoPhoneDto;
@@ -51,6 +52,9 @@ public class RecipientBean implements Serializable {
     @ManagedProperty(value = "#{patientRestClient}")
     private IPatientRestClient patientRestClient;
 
+    @ManagedProperty(value = "#{patientSearchValidator}")
+    private PatientSearchValidator patientSearchValidator;
+
     @ManagedProperty(value = "#{messageHelper}")
     private MessageHelper messageHelper;
 
@@ -72,8 +76,13 @@ public class RecipientBean implements Serializable {
      * @return path for navigation
      */
     public String searchRecipient() {
-        search();
-        return RECIPIENTS.getPath();
+        boolean valid = patientSearchValidator.validate(searchPatientRequest);
+        if (valid) {
+            search();
+            return RECIPIENTS.getPath();
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -156,6 +165,10 @@ public class RecipientBean implements Serializable {
 
     public void setPatientRestClient(IPatientRestClient patientRestClient) {
         this.patientRestClient = patientRestClient;
+    }
+
+    public void setPatientSearchValidator(PatientSearchValidator patientSearchValidator) {
+        this.patientSearchValidator = patientSearchValidator;
     }
 
     public void setMessageHelper(MessageHelper messageHelper) {
