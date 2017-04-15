@@ -9,8 +9,8 @@ package com.zburzhynski.jsender.api.domain;
  */
 public enum ResponseStatus {
 
-    OK("responseStatus.ok"),
-    SENDING("responseStatus.sending"),
+    SENT("responseStatus.sent"),
+    DELIVERED("responseStatus.delivered"),
     ERROR("responseStatus.error");
 
     private String value;

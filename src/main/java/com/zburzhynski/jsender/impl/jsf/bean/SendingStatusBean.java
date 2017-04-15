@@ -65,14 +65,14 @@ public class SendingStatusBean implements Serializable {
                     throw new IllegalArgumentException("Token is null");
                 }
                 for (SendingStatus status : sendingStatuses) {
-                    if (ResponseStatus.SENDING.equals(status.getStatus())) {
+                    if (ResponseStatus.SENT.equals(status.getStatus())) {
                         CheckSmsRequest request = new CheckSmsRequest();
                         request.setSmsId(Integer.valueOf(status.getId()));
                         request.setToken(token);
                         CheckSmsResponse smsResponse = unisenderRestClient.checkSms(request);
                         if (!new Long(0).equals(smsResponse.getDelivered())) {
                             status.setDeliveryDate(new Date(smsResponse.getDelivered() * SECOND_SCALE));
-                            status.setStatus(ResponseStatus.OK);
+                            status.setStatus(ResponseStatus.DELIVERED);
                         }
                     }
                 }
