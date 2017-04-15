@@ -61,8 +61,13 @@
                     <p:commandButton action="/pages/sending/sending?faces-redirect=true"
                                      value="#{msgs['sending.back']}" />
                     <p:commandButton action="#{sendingPreviewBean.send}"
+                                     onstart="PF('statusDialog').show()"
+                                     onsuccess="PF('statusDialog').hide()"
                                      value="#{msgs['sending.send']}" />
                 </h:panelGrid>
+                <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+                    <p:graphicImage url="/resources/css/css-images/ajax_loading_bar.gif" />
+                </p:dialog>
                 <ui:include src="/pages/localization/calendar-localization.xhtml" />
                 <ui:include src="/pages/localization/editor-localization.xhtml" />
             </h:form>
