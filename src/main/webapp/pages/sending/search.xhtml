@@ -53,6 +53,8 @@
         </style>
         <p:panel>
             <h:form id="recipientSearchForm">
+                <p:focus />
+                <p:messages id="messages" />
                 <h:panelGrid columns="2" columnClasses="patientSearch, visitSearh" width="100%">
                     <h:panelGrid columns="2" columnClasses="clm1,clm2" style="width: 95%" >
                         <h:outputText value="#{msgs['recipientSearch.cardNumber']}:" />
@@ -222,11 +224,9 @@
                         <h:selectBooleanCheckbox id="onlyDebtor" value="#{recipientBean.searchPatientRequest.onlyDebtor}" />
                     </h:panelGrid>
                 </h:panelGrid>
-                <h:panelGrid width="100%">
-                    <h:messages id="validationMessages" style="color:red;" />
-                </h:panelGrid>
                 <h:panelGrid columns="3" style="text-align: center; vertical-align: bottom; padding-top: 5px">
                     <p:commandButton id="search" value="#{msgs['button.find']}"
+                                     update="messages"
                                      action="#{recipientBean.searchRecipient}" />
                     <p:commandButton id="clear" value="#{msgs['button.clear']}" action="#{recipientBean.clearSearchFilter}" update="recipientSearchForm" />
                     <p:commandButton id="cancelSearch" value="#{msgs['button.cancel']}" action="/pages/sending/recipients?faces-redirect=true"
