@@ -15,6 +15,10 @@ public class SendingStatus {
 
     private String id;
 
+    private String text;
+
+    private Integer parts;
+
     private String recipientFullName;
 
     private String contactInfo;
@@ -33,6 +37,22 @@ public class SendingStatus {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public Integer getParts() {
+        return parts;
+    }
+
+    public void setParts(Integer parts) {
+        this.parts = parts;
     }
 
     public String getRecipientFullName() {
