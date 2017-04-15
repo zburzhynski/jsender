@@ -16,6 +16,8 @@ public class PatientSearchValidator extends BaseValidator {
 
     private static final String CRITERIA_EMPTY = "patientSearchValidator.criteriaEmpty";
 
+    private static final String CARD_DATE_RANGE_INCORRECT = "patientSearchValidator.cardDateRangeIncorrect";
+
     private static final String BIRTHDAY_RANGE_INCORRECT = "patientSearchValidator.birthdayRangeIncorrect";
 
     private static final String VISIT_DATE_RANGE_INCORRECT = "patientSearchValidator.visitDateRangeIncorrect";
@@ -29,7 +31,8 @@ public class PatientSearchValidator extends BaseValidator {
      * @return true if request valid, else false
      */
     public boolean validate(SearchPatientRequest request) {
-        return checkIsEmpty(request) && checkBirthdayRange(request) && checkVisitDateRange(request);
+        return checkIsEmpty(request) && checkCardDateRange(request) &&
+            checkBirthdayRange(request) && checkVisitDateRange(request);
     }
 
     /**
@@ -65,6 +68,21 @@ public class PatientSearchValidator extends BaseValidator {
             !request.isOnlyDebtor()) {
             addMessage(CRITERIA_EMPTY);
             return false;
+        }
+        return true;
+    }
+
+    /**
+     * Checks card creation date.
+     *
+     * @param request {@link SearchPatientRequest} to check
+     */
+    private boolean checkCardDateRange(SearchPatientRequest request) {
+        if (request.getStartCardDate() != null && request.getEndCardDate() != null) {
+            if (request.getStartCardDate().after(request.getEndCardDate())) {
+                addMessage(CARD_DATE_RANGE_INCORRECT);
+                return false;
+            }
         }
         return true;
     }
