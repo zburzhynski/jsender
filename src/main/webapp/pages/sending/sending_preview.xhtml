@@ -22,7 +22,7 @@
                 <p:focus />
                 <p:messages id="messages" />
                 <h4>#{msgs['sendingPreview.header']}</h4>
-                <h:panelGrid>
+                <h:panelGrid width="100%">
                     <p:dataTable value="#{sendingBean.messageToSend.recipients}"
                                  var="recipient"
                                  selection="#{sendingPreviewBean.recipient}"
@@ -44,7 +44,7 @@
                         <p:column headerText="#{msgs['sending.recipient.phoneNumber']}" style="width: 35%">
                             <h:outputText value="#{sendingBean.getPhoneNumberDescription(recipient)}" />
                         </p:column>
-                        <p:column headerText="#{msgs['sending.recipient.email']}" style="width: 29%">
+                        <p:column headerText="#{msgs['sending.recipient.email']}" style="width: 30%">
                             <h:outputText value="#{sendingBean.getEmailDescription(recipient)}" />
                         </p:column>
                     </p:dataTable>
