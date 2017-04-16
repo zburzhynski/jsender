@@ -37,12 +37,12 @@
                     </p:column>
                     <p:column headerText="#{msgs['messageStatus.sendingDate']}" style="width: 17%">
                         <h:outputText value="#{status.sendingDate}">
-                            <f:convertDateTime pattern="HH:mm dd.MM.yyyy" />
+                            <f:convertDateTime pattern="dd.MM.yyyy HH:mm" />
                         </h:outputText>
                     </p:column>
                     <p:column headerText="#{msgs['messageStatus.deliveryDate']}" style="width: 17%">
                         <h:outputText value="#{status.deliveryDate}">
-                            <f:convertDateTime pattern="HH:mm dd.MM.yyyy" />
+                            <f:convertDateTime pattern="dd.MM.yyyy HH:mm" />
                         </h:outputText>
                     </p:column>
                     <p:column headerText="#{msgs['messageStatus.status']}" style="width: 15%">
