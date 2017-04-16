@@ -34,6 +34,10 @@ public enum Settings {
 
     JDENT_INTEGRATION_ENABLED,
 
-    JDENT_URL
+    JDENT_URL,
+
+
+    AAA,
+    BBB
 
 }

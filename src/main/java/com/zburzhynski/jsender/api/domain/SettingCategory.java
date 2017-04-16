@@ -15,6 +15,8 @@ public enum SettingCategory {
 
     REQUISITE,
 
-    JDENT
+    JDENT,
+
+    LICENSE
 
 }

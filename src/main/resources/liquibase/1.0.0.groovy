@@ -465,4 +465,24 @@ databaseChangeLog {
         }
     }
 
+    changeSet(id: '2017-04-16-01', author: 'Nikita Shevtsov <shevtsou@gmail.com>') {
+        comment("Insert license settings")
+        insert(schemaName: 'jsender', tableName: 'setting') {
+            column(name: 'id', value: '3e605e9c-774e-4624-9a66-d80cb5befe62')
+            column(name: 'category', value: 'LICENSE')
+            column(name: 'name', value: 'aaa')
+            column(name: 'value', value: 'Vzcs+Qoybk31dJoSKbjrtA==')
+            column(name: 'type', value: 'STRING')
+            column(name: 'description', value: 'aaa')
+        }
+        insert(schemaName: 'jsender', tableName: 'setting') {
+            column(name: 'id', value: '507bfb8c-bc7d-4d0c-b984-9272460ef441')
+            column(name: 'category', value: 'LICENSE')
+            column(name: 'name', value: 'bbb')
+            column(name: 'value', value: 'J6noq2cLldNAA9uhvJE8Ig==')
+            column(name: 'type', value: 'STRING')
+            column(name: 'description', value: 'bbb')
+        }
+    }
+
 }
