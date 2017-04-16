@@ -3,10 +3,9 @@ package com.zburzhynski.jsender.api.sender;
 import com.zburzhynski.jsender.api.domain.SendingServices;
 import com.zburzhynski.jsender.api.domain.SendingType;
 import com.zburzhynski.jsender.api.dto.Message;
-import com.zburzhynski.jsender.api.dto.SendingStatus;
+import com.zburzhynski.jsender.api.dto.SendingResponse;
 import com.zburzhynski.jsender.api.exception.SendingException;
 
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -22,10 +21,10 @@ public interface ISender {
      * Send message.
      *
      * @param message message to send
-     * @return response
+     * @return {@link SendingResponse} sending response
      * @throws SendingException if any
      */
-    List<SendingStatus> send(Message message) throws SendingException;
+    SendingResponse send(Message message) throws SendingException;
 
     /**
      * Get sending services.

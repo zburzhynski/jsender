@@ -2,12 +2,13 @@ package com.zburzhynski.jsender.impl.sender;
 
 import static javax.mail.Message.RecipientType;
 import com.zburzhynski.jsender.api.domain.Params;
-import com.zburzhynski.jsender.api.domain.ResponseStatus;
 import com.zburzhynski.jsender.api.domain.SendingServices;
+import com.zburzhynski.jsender.api.domain.SendingStatus;
 import com.zburzhynski.jsender.api.domain.SendingType;
 import com.zburzhynski.jsender.api.dto.Message;
+import com.zburzhynski.jsender.api.dto.MessageStatus;
 import com.zburzhynski.jsender.api.dto.Recipient;
-import com.zburzhynski.jsender.api.dto.SendingStatus;
+import com.zburzhynski.jsender.api.dto.SendingResponse;
 import com.zburzhynski.jsender.api.exception.SendingException;
 import com.zburzhynski.jsender.api.sender.ISender;
 import com.zburzhynski.jsender.api.service.ISendingAccountService;
@@ -22,11 +23,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.EnumSet;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
@@ -61,14 +60,14 @@ public class EmailSender implements ISender {
     private ISendingAccountService accountService;
 
     @Override
-    public List<SendingStatus> send(Message email) throws SendingException {
-        List<SendingStatus> response = new ArrayList<>();
+    public SendingResponse send(Message email) throws SendingException {
+        SendingResponse response = new SendingResponse();
         Map<Params, SendingAccountParam> params = getAccountParams(email.getSendingAccountId());
         Session session = buildSession(params);
         for (Recipient recipient : email.getRecipients()) {
             for (String address : recipient.getEmails()) {
                 LOGGER.info("Sending email {} ", email);
-                SendingStatus status = new SendingStatus();
+                MessageStatus status = new MessageStatus();
                 status.setRecipientFullName(recipient.getFullName());
                 status.setContactInfo(address);
                 status.setSendingDate(new Date());
@@ -90,14 +89,14 @@ public class EmailSender implements ISender {
                     sentMessage.setText(email.getText());
                     sentMessage.setSendingType(SendingType.EMAIL);
                     sentMessageService.saveOrUpdate(sentMessage);
-                    status.setStatus(ResponseStatus.DELIVERED);
+                    status.setStatus(SendingStatus.DELIVERED);
                     LOGGER.info("Email sent successfully, address = " + address);
                 } catch (Exception e) {
-                    status.setStatus(ResponseStatus.ERROR);
+                    status.setStatus(SendingStatus.ERROR);
                     status.setDescription(e.getClass().getName());
                     LOGGER.error("An error occurred while sending email", e);
                 }
-                response.add(status);
+                response.addMessageStatus(status);
             }
         }
         return response;

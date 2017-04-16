@@ -2,10 +2,11 @@ package com.zburzhynski.jsender.impl.jsf.bean;
 
 import static javax.faces.application.FacesMessage.SEVERITY_ERROR;
 import com.zburzhynski.jsender.api.domain.Params;
-import com.zburzhynski.jsender.api.domain.ResponseStatus;
+import com.zburzhynski.jsender.api.domain.SendingStatus;
 import com.zburzhynski.jsender.api.domain.SendingType;
 import com.zburzhynski.jsender.api.dto.Message;
-import com.zburzhynski.jsender.api.dto.SendingStatus;
+import com.zburzhynski.jsender.api.dto.MessageStatus;
+import com.zburzhynski.jsender.api.dto.SendingResponse;
 import com.zburzhynski.jsender.api.service.ISendingAccountService;
 import com.zburzhynski.jsender.impl.domain.SendingAccount;
 import com.zburzhynski.jsender.impl.domain.SendingAccountParam;
@@ -13,12 +14,10 @@ import com.zburzhynski.jsender.impl.rest.client.UnisenderRestClient;
 import com.zburzhynski.jsender.impl.rest.domain.unisender.CheckSmsRequest;
 import com.zburzhynski.jsender.impl.rest.domain.unisender.CheckSmsResponse;
 import com.zburzhynski.jsender.impl.util.PropertyReader;
-
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -40,9 +39,9 @@ public class SendingStatusBean implements Serializable {
 
     private Message messageToSend;
 
-    private SendingStatus sendingStatus;
+    private MessageStatus messageStatus;
 
-    private List<SendingStatus> sendingStatuses;
+    private SendingResponse sendingResponse;
 
     @ManagedProperty(value = "#{sendingAccountService}")
     private ISendingAccountService accountService;
@@ -64,15 +63,15 @@ public class SendingStatusBean implements Serializable {
                 if (StringUtils.isBlank(token)) {
                     throw new IllegalArgumentException("Token is null");
                 }
-                for (SendingStatus status : sendingStatuses) {
-                    if (ResponseStatus.SENT.equals(status.getStatus())) {
+                for (MessageStatus status : sendingResponse.getMessageStatuses()) {
+                    if (SendingStatus.SENT.equals(status.getStatus())) {
                         CheckSmsRequest request = new CheckSmsRequest();
                         request.setSmsId(Integer.valueOf(status.getId()));
                         request.setToken(token);
                         CheckSmsResponse smsResponse = unisenderRestClient.checkSms(request);
                         if (!new Long(0).equals(smsResponse.getDelivered())) {
                             status.setDeliveryDate(new Date(smsResponse.getDelivered() * SECOND_SCALE));
-                            status.setStatus(ResponseStatus.DELIVERED);
+                            status.setStatus(SendingStatus.DELIVERED);
                         }
                     }
                 }
@@ -90,20 +89,20 @@ public class SendingStatusBean implements Serializable {
         this.messageToSend = messageToSend;
     }
 
-    public SendingStatus getSendingStatus() {
-        return sendingStatus;
+    public MessageStatus getMessageStatus() {
+        return messageStatus;
     }
 
-    public void setSendingStatus(SendingStatus sendingStatus) {
-        this.sendingStatus = sendingStatus;
+    public void setMessageStatus(MessageStatus messageStatus) {
+        this.messageStatus = messageStatus;
     }
 
-    public List<SendingStatus> getSendingStatuses() {
-        return sendingStatuses;
+    public SendingResponse getSendingResponse() {
+        return sendingResponse;
     }
 
-    public void setSendingStatuses(List<SendingStatus> sendingStatuses) {
-        this.sendingStatuses = sendingStatuses;
+    public void setSendingResponse(SendingResponse sendingResponse) {
+        this.sendingResponse = sendingResponse;
     }
 
     public void setAccountService(ISendingAccountService accountService) {

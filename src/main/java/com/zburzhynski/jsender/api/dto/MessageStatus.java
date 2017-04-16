@@ -1,17 +1,17 @@
 package com.zburzhynski.jsender.api.dto;
 
-import com.zburzhynski.jsender.api.domain.ResponseStatus;
+import com.zburzhynski.jsender.api.domain.SendingStatus;
 
 import java.util.Date;
 
 /**
- * Sending status.
+ * Message status.
  * <p/>
  * Date: 03.03.2017
  *
  * @author Nikita Shevtsou
  */
-public class SendingStatus {
+public class MessageStatus {
 
     private String id;
 
@@ -27,7 +27,7 @@ public class SendingStatus {
 
     private Date deliveryDate;
 
-    private ResponseStatus status;
+    private SendingStatus status;
 
     private String description;
 
@@ -87,11 +87,11 @@ public class SendingStatus {
         this.deliveryDate = deliveryDate;
     }
 
-    public ResponseStatus getStatus() {
+    public SendingStatus getStatus() {
         return status;
     }
 
-    public void setStatus(ResponseStatus status) {
+    public void setStatus(SendingStatus status) {
         this.status = status;
     }
 

@@ -13,7 +13,7 @@
     </style>
     <p:dialog id="statusDetailDialog"
               widgetVar="statusDetailDialog"
-              header="#{msgs['sendingStatus.showDetail']}"
+              header="#{msgs['messageStatus.showDetail']}"
               width="520"
               closable="true"
               position="center"
@@ -21,32 +21,32 @@
               modal="true">
         <h:panelGrid columns="2" columnClasses="name,val" width="100%">
             <h:outputLabel for="recipientFullName" value="#{msgs['person.fullName']}:" />
-            <p:inputTextarea id="recipientFullName" value="#{sendingStatusBean.sendingStatus.recipientFullName}" readonly="true"
-                         styleClass="inputText"/>
-            <h:outputLabel for="contactInfo" value="#{msgs['sendingStatus.contactInfo']}:" />
-            <p:inputText id="contactInfo" value="#{sendingStatusBean.sendingStatus.contactInfo}" readonly="true"
+            <p:inputTextarea id="recipientFullName" value="#{sendingStatusBean.messageStatus.recipientFullName}" readonly="true"
+                             styleClass="inputText"/>
+            <h:outputLabel for="contactInfo" value="#{msgs['messageStatus.contactInfo']}:" />
+            <p:inputText id="contactInfo" value="#{sendingStatusBean.messageStatus.contactInfo}" readonly="true"
                          styleClass="inputText" />
-            <h:outputLabel for="sendingDate" value="#{msgs['sendingStatus.sendingDate']}:" />
-            <p:inputText id="sendingDate" value="#{sendingStatusBean.sendingStatus.sendingDate}" readonly="true"
+            <h:outputLabel for="sendingDate" value="#{msgs['messageStatus.sendingDate']}:" />
+            <p:inputText id="sendingDate" value="#{sendingStatusBean.messageStatus.sendingDate}" readonly="true"
                          styleClass="inputText">
                 <f:convertDateTime pattern="HH:mm dd.MM.yyyy" />
             </p:inputText>
-            <h:outputLabel for="deliveryDate" value="#{msgs['sendingStatus.deliveryDate']}:"
-                           rendered="#{sendingStatusBean.sendingStatus.status != 'ERROR'}" />
-            <p:inputText id="deliveryDate" value="#{sendingStatusBean.sendingStatus.deliveryDate}" readonly="true"
-                         rendered="#{sendingStatusBean.sendingStatus.status != 'ERROR'}"
+            <h:outputLabel for="deliveryDate" value="#{msgs['messageStatus.deliveryDate']}:"
+                           rendered="#{sendingStatusBean.messageStatus.status != 'ERROR'}" />
+            <p:inputText id="deliveryDate" value="#{sendingStatusBean.messageStatus.deliveryDate}" readonly="true"
+                         rendered="#{sendingStatusBean.messageStatus.status != 'ERROR'}"
                          styleClass="inputText">
                 <f:convertDateTime pattern="HH:mm dd.MM.yyyy" />
             </p:inputText>
-            <h:outputLabel for="status" value="#{msgs['sendingStatus.status']}:" />
-            <p:inputText id="status" value="#{msgs[sendingStatusBean.sendingStatus.status.value]}" readonly="true"
+            <h:outputLabel for="status" value="#{msgs['messageStatus.status']}:" />
+            <p:inputText id="status" value="#{msgs[sendingStatusBean.messageStatus.status.value]}" readonly="true"
                          styleClass="inputText"/>
-            <h:outputLabel for="description" value="#{msgs['sendingStatus.description']}:" rendered="#{sendingStatusBean.sendingStatus.status == 'ERROR'}" />
-            <p:inputTextarea id="description" value="#{sendingStatusBean.sendingStatus.description}"
+            <h:outputLabel for="description" value="#{msgs['messageStatus.description']}:" rendered="#{sendingStatusBean.messageStatus.status == 'ERROR'}" />
+            <p:inputTextarea id="description" value="#{sendingStatusBean.messageStatus.description}"
                              readonly="true"
                              style="width: 95%;
                              height: 200px"
-                             rendered="#{sendingStatusBean.sendingStatus.status == 'ERROR'}" />
+                             rendered="#{sendingStatusBean.messageStatus.status == 'ERROR'}" />
         </h:panelGrid>
         <h:panelGrid width="100%" style="text-align: center">
             <p:commandButton value="#{msgs['button.ok']}"
