@@ -15,13 +15,13 @@ public class MessageStatus {
 
     private String id;
 
-    private String text;
-
-    private Integer parts;
-
     private String recipientFullName;
 
     private String contactInfo;
+
+    private String text;
+
+    private Integer parts;
 
     private Date sendingDate;
 
@@ -39,22 +39,6 @@ public class MessageStatus {
         this.id = id;
     }
 
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
-    }
-
-    public Integer getParts() {
-        return parts;
-    }
-
-    public void setParts(Integer parts) {
-        this.parts = parts;
-    }
-
     public String getRecipientFullName() {
         return recipientFullName;
     }
@@ -69,6 +53,22 @@ public class MessageStatus {
 
     public void setContactInfo(String contactInfo) {
         this.contactInfo = contactInfo;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public Integer getParts() {
+        return parts;
+    }
+
+    public void setParts(Integer parts) {
+        this.parts = parts;
     }
 
     public Date getSendingDate() {

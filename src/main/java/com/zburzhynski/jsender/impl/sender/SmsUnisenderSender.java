@@ -104,8 +104,8 @@ public class SmsUnisenderSender implements ISender {
                                         recipient, phone, message.getText()));
                                 }
                             } catch (IncorrectPhoneNumberException e) {
-                                response.addMessageStatus(createErrorStatus(recipient, phone,
-                                    "smsUnisenderSender.incorrectPhoneNumber", message.getText()));
+                                response.addMessageStatus(createErrorStatus(recipient, phone, message.getText(),
+                                    "smsUnisenderSender.incorrectPhoneNumber"));
                             }
                         }
                     }
@@ -182,35 +182,35 @@ public class SmsUnisenderSender implements ISender {
     }
 
     private MessageStatus createSentStatus(String id, Recipient recipient, String phone, String text) {
-        return createStatus(id, recipient, phone, SendingStatus.SENT, null, text);
+        return createStatus(id, recipient, phone, text, SendingStatus.SENT, null);
     }
 
-    private List<MessageStatus> createErrorStatus(Recipient recipient, String message, String text) {
+    private List<MessageStatus> createErrorStatus(Recipient recipient, String text, String message) {
         List<MessageStatus> statuses = new ArrayList<>();
         for (String phone : recipient.getPhones()) {
-            statuses.add(createStatus(null, recipient, phone, SendingStatus.ERROR, message, text));
+            statuses.add(createStatus(null, recipient, phone, text, SendingStatus.ERROR, message));
         }
         return statuses;
     }
 
-    private MessageStatus createErrorStatus(Recipient recipient, String phone, String message, String text) {
-        return createStatus(null, recipient, phone, SendingStatus.ERROR, message, text);
+    private MessageStatus createErrorStatus(Recipient recipient, String phone, String text, String message) {
+        return createStatus(null, recipient, phone, text, SendingStatus.ERROR, message);
     }
 
-    private MessageStatus createStatus(String id, Recipient recipient, String phone, SendingStatus status,
-                                       String message, String text) {
+    private MessageStatus createStatus(String id, Recipient recipient, String phone, String text, SendingStatus status,
+                                       String message) {
         MessageStatus messageStatus = new MessageStatus();
         messageStatus.setId(id);
-        messageStatus.setText(text);
         messageStatus.setRecipientFullName(recipient.getFullName());
         messageStatus.setContactInfo(phone);
+        messageStatus.setText(text);
         messageStatus.setSendingDate(new Date());
         messageStatus.setStatus(status);
         messageStatus.setDescription(isNotBlank(message) ? propertyReader.readProperty(message) : null);
         return messageStatus;
     }
 
-    private void saveMessage(Recipient recipient, Message message, String phone, String smsText) {
+    private void saveMessage(Recipient recipient, Message message, String phone, String text) {
         SentMessage sentMessage = new SentMessage();
         sentMessage.setSentDate(new Date());
         sentMessage.setRecipientId(recipient.getId());
@@ -218,7 +218,7 @@ public class SmsUnisenderSender implements ISender {
         sentMessage.setRecipientFullName(recipient.getFullName());
         sentMessage.setContactInfo(phone);
         sentMessage.setSubject(message.getSubject());
-        sentMessage.setText(smsText);
+        sentMessage.setText(text);
         sentMessage.setSendingType(SendingType.SMS);
         sentMessageService.saveOrUpdate(sentMessage);
     }

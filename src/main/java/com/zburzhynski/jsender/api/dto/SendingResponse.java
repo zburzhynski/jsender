@@ -20,10 +20,7 @@ public class SendingResponse {
      * @param status {@link MessageStatus} message status to add
      */
     public void addMessageStatus(MessageStatus status) {
-        if (messageStatuses == null) {
-            messageStatuses = new ArrayList<>();
-        }
-        messageStatuses.add(status);
+        getMessageStatuses().add(status);
     }
 
     /**
@@ -32,13 +29,18 @@ public class SendingResponse {
      * @param statuses {@link MessageStatus} message statuses to add
      */
     public void addMessageStatuses(List<MessageStatus> statuses) {
+        getMessageStatuses().addAll(statuses);
+    }
+
+    /**
+     * Gets message response.
+     *
+     * @return message response
+     */
+    public List<MessageStatus> getMessageStatuses() {
         if (messageStatuses == null) {
             messageStatuses = new ArrayList<>();
         }
-        messageStatuses.addAll(statuses);
-    }
-
-    public List<MessageStatus> getMessageStatuses() {
         return messageStatuses;
     }
 
