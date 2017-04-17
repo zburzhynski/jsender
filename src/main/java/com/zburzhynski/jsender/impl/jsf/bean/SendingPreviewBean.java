@@ -73,6 +73,7 @@ public class SendingPreviewBean implements Serializable {
             sendingStatusBean.setSendingResponse(messageSender.send(sendingBean.getMessageToSend()));
         } catch (SendingException e) {
             addFlashMessage(e.getMessage());
+            sendingStatusBean.setSendingResponse(null);
         }
         return MESSAGE_STATUS.getPath();
     }

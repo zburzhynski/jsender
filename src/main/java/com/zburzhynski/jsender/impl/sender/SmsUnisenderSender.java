@@ -6,17 +6,21 @@ import com.zburzhynski.jsender.api.domain.Params;
 import com.zburzhynski.jsender.api.domain.SendingServices;
 import com.zburzhynski.jsender.api.domain.SendingStatus;
 import com.zburzhynski.jsender.api.domain.SendingType;
+import com.zburzhynski.jsender.api.domain.Settings;
 import com.zburzhynski.jsender.api.dto.Message;
 import com.zburzhynski.jsender.api.dto.MessageStatus;
 import com.zburzhynski.jsender.api.dto.Recipient;
 import com.zburzhynski.jsender.api.dto.SendingResponse;
+import com.zburzhynski.jsender.api.exception.EncryptionException;
 import com.zburzhynski.jsender.api.exception.SendingException;
 import com.zburzhynski.jsender.api.sender.ISender;
 import com.zburzhynski.jsender.api.service.ISendingAccountService;
 import com.zburzhynski.jsender.api.service.ISentMessageService;
+import com.zburzhynski.jsender.api.service.ISettingService;
 import com.zburzhynski.jsender.impl.domain.SendingAccount;
 import com.zburzhynski.jsender.impl.domain.SendingAccountParam;
 import com.zburzhynski.jsender.impl.domain.SentMessage;
+import com.zburzhynski.jsender.impl.domain.Setting;
 import com.zburzhynski.jsender.impl.rest.client.UnisenderRestClient;
 import com.zburzhynski.jsender.impl.rest.domain.unisender.CheckSmsMessageStatusRequest;
 import com.zburzhynski.jsender.impl.rest.domain.unisender.CheckSmsMessageStatusResponse;
@@ -30,11 +34,13 @@ import com.zburzhynski.jsender.impl.rest.exception.unisender.BillingException;
 import com.zburzhynski.jsender.impl.rest.exception.unisender.HostUnavailableException;
 import com.zburzhynski.jsender.impl.rest.exception.unisender.IncorrectPhoneNumberException;
 import com.zburzhynski.jsender.impl.rest.exception.unisender.InvalidTokenException;
+import com.zburzhynski.jsender.impl.rest.exception.unisender.LicenseException;
 import com.zburzhynski.jsender.impl.rest.exception.unisender.LimitExceededException;
 import com.zburzhynski.jsender.impl.rest.exception.unisender.MessageAlreadyExistException;
 import com.zburzhynski.jsender.impl.rest.exception.unisender.MessageToLongException;
 import com.zburzhynski.jsender.impl.rest.exception.unisender.ObjectNotFoundException;
 import com.zburzhynski.jsender.impl.rest.exception.unisender.UndefinedException;
+import com.zburzhynski.jsender.impl.util.CryptoUtils;
 import com.zburzhynski.jsender.impl.util.PropertyReader;
 import com.zburzhynski.jsender.impl.util.TextHelper;
 import org.slf4j.Logger;
@@ -79,6 +85,9 @@ public class SmsUnisenderSender implements ISender {
     @Autowired
     private PropertyReader propertyReader;
 
+    @Autowired
+    private ISettingService settingService;
+
     @Override
     public SendingResponse send(Message message) throws SendingException {
         SendingResponse response = new SendingResponse();
@@ -90,18 +99,21 @@ public class SmsUnisenderSender implements ISender {
                 try {
                     String smsText = textHelper.prepareSmsText(message.getText(), recipient);
                     Integer messageId = createSmsMessage(token, alphanameId, smsText);
-                    if (isMessageModerated(token, messageId)) {
+                    CheckSmsMessageStatusResponse statusResponse = getMessageStatus(token, messageId);
+                    if (MODERATED_STATUS.equals(statusResponse.getStatus())) {
                         for (String phone : recipient.getPhones()) {
                             try {
+                                checkStatus(statusResponse);
                                 SendSmsRequest sendRequest = new SendSmsRequest();
                                 sendRequest.setToken(token);
                                 sendRequest.setMessageId(messageId);
                                 sendRequest.setPhone(preparePhone(phone));
                                 SendSmsResponse smsResponse = unisenderRestClient.sendSms(sendRequest);
                                 if (smsResponse != null) {
+                                    updateSmsCount(statusResponse);
                                     saveMessage(recipient, message, phone, smsText);
                                     response.addMessageStatus(createSentStatus(smsResponse.getSmsId().toString(),
-                                        recipient, phone, message.getText()));
+                                        recipient, phone, message.getText(), statusResponse.getParts()));
                                 }
                             } catch (IncorrectPhoneNumberException e) {
                                 response.addMessageStatus(createErrorStatus(recipient, phone, message.getText(),
@@ -131,6 +143,8 @@ public class SmsUnisenderSender implements ISender {
             throw new SendingException("smsUnisenderSender.limitExceeded");
         } catch (HostUnavailableException e) {
             throw new SendingException("smsUnisender.hostUnavailableException");
+        } catch (LicenseException e) {
+            throw new SendingException("smsUnisender.licenseException");
         }
         return response;
     }
@@ -159,17 +173,48 @@ public class SmsUnisenderSender implements ISender {
         }
     }
 
-    private boolean isMessageModerated(String token, Integer messageId) throws UndefinedException,
+    private CheckSmsMessageStatusResponse getMessageStatus(String token, Integer messageId) throws UndefinedException,
         InvalidTokenException, ObjectNotFoundException, HostUnavailableException {
         CheckSmsMessageStatusRequest request = new CheckSmsMessageStatusRequest();
         request.setToken(token);
         request.setMessageId(messageId);
-        CheckSmsMessageStatusResponse response = unisenderRestClient.checkSmsMessageStatus(request);
-        return MODERATED_STATUS.equals(response.getStatus());
+        return unisenderRestClient.checkSmsMessageStatus(request);
     }
 
     private String preparePhone(String phone) {
         return phone.replaceFirst("\\+", EMPTY);
+    }
+
+    private void checkStatus(CheckSmsMessageStatusResponse status) throws LimitExceededException, LicenseException {
+        try {
+            Integer aaa = CryptoUtils.decryptInt(((Setting) settingService.getByName(Settings.AAA)).getValue());
+            Integer bbb = CryptoUtils.decryptInt(((Setting) settingService.getByName(Settings.BBB)).getValue());
+            if (aaa == null || bbb == null) {
+                throw new LicenseException();
+            }
+            Integer newValue = aaa + status.getParts();
+            if (newValue > bbb) {
+                throw new LimitExceededException();
+            }
+        } catch (EncryptionException e) {
+            throw new LicenseException();
+        }
+    }
+
+    private void updateSmsCount(CheckSmsMessageStatusResponse status) throws LicenseException {
+        try {
+            Setting aaaSetting = (Setting) settingService.getByName(Settings.AAA);
+            Integer aaa = CryptoUtils.decryptInt(aaaSetting.getValue());
+            Integer bbb = CryptoUtils.decryptInt(((Setting) settingService.getByName(Settings.BBB)).getValue());
+            if (aaa == null || bbb == null) {
+                throw new LicenseException();
+            }
+            Integer newValue = aaa + status.getParts();
+            aaaSetting.setValue(CryptoUtils.encrypt(newValue.toString()));
+            settingService.saveOrUpdate(aaaSetting);
+        } catch (EncryptionException e) {
+            throw new LicenseException();
+        }
     }
 
     private Map<Params, SendingAccountParam> getAccountParams(String accountId) {
@@ -181,8 +226,10 @@ public class SmsUnisenderSender implements ISender {
         return params;
     }
 
-    private MessageStatus createSentStatus(String id, Recipient recipient, String phone, String text) {
-        return createStatus(id, recipient, phone, text, SendingStatus.SENT, null);
+    private MessageStatus createSentStatus(String id, Recipient recipient, String phone, String text, Integer parts) {
+        MessageStatus status = createStatus(id, recipient, phone, text, SendingStatus.SENT, null);
+        status.setParts(parts);
+        return status;
     }
 
     private List<MessageStatus> createErrorStatus(Recipient recipient, String text, String message) {
