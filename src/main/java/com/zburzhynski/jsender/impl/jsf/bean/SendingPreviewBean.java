@@ -71,6 +71,7 @@ public class SendingPreviewBean implements Serializable {
         try {
             sendingStatusBean.setMessageToSend(sendingBean.getMessageToSend());
             sendingStatusBean.setSendingResponse(messageSender.send(sendingBean.getMessageToSend()));
+            settingBean.init();
         } catch (SendingException e) {
             addFlashMessage(e.getMessage());
             sendingStatusBean.setSendingResponse(null);
@@ -86,6 +87,15 @@ public class SendingPreviewBean implements Serializable {
     public void selectRecipientListener(SelectEvent event) {
         recipient = (Recipient) event.getObject();
         prepareText();
+    }
+
+    /**
+     * Gets sms balance.
+     *
+     * @return sms balance
+     */
+    public Integer getSmsBalance() {
+        return settingBean.getSmsBalance();
     }
 
     public Recipient getRecipient() {

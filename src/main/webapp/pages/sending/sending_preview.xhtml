@@ -11,17 +11,19 @@
         <p:panel>
             <style type="text/css">
                 .clm1 {
-                    width: 13%;
-                    font-weight: bold;
+                    width: 85%;
                 }
                 .clm2 {
-                    width: 87%;
+                    width: 15%;
                 }
             </style>
             <h:form id="sendingPreviewForm">
                 <p:focus />
                 <p:messages id="messages" />
-                <h4>#{msgs['sendingPreview.header']}</h4>
+                <h:panelGrid columns="3" columnClasses="clm1, clm2" width="100%">
+                    <h4>#{msgs['sendingPreview.header']}</h4>
+                    <h:outputText value="#{msgs['sendingPreview.smsBalance']}: #{sendingPreviewBean.smsBalance}" />
+                </h:panelGrid>
                 <h:panelGrid width="100%">
                     <p:dataTable value="#{sendingBean.messageToSend.recipients}"
                                  var="recipient"
