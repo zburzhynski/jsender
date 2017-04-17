@@ -187,10 +187,13 @@ public class SmsUnisenderSender implements ISender {
 
     private void checkStatus(CheckSmsMessageStatusResponse status) throws LimitExceededException, LicenseException {
         try {
-            Setting aaa = (Setting) settingService.getByName(Settings.AAA);
-            Setting bbb = (Setting) settingService.getByName(Settings.BBB);
-            Integer newValue = CryptoUtils.decryptInt(aaa.getValue()) + status.getParts();
-            if (newValue > CryptoUtils.decryptInt(bbb.getValue())) {
+            Integer aaa = CryptoUtils.decryptInt(((Setting) settingService.getByName(Settings.AAA)).getValue());
+            Integer bbb = CryptoUtils.decryptInt(((Setting) settingService.getByName(Settings.BBB)).getValue());
+            if (aaa == null || bbb == null) {
+                throw new LicenseException();
+            }
+            Integer newValue = aaa + status.getParts();
+            if (newValue > bbb) {
                 throw new LimitExceededException();
             }
         } catch (EncryptionException e) {
@@ -200,10 +203,15 @@ public class SmsUnisenderSender implements ISender {
 
     private void updateSmsCount(CheckSmsMessageStatusResponse status) throws LicenseException {
         try {
-            Setting aaa = (Setting) settingService.getByName(Settings.AAA);
-            Integer newValue = CryptoUtils.decryptInt(aaa.getValue()) + status.getParts();
-            aaa.setValue(CryptoUtils.encrypt(newValue.toString()));
-            settingService.saveOrUpdate(aaa);
+            Setting aaaSetting = (Setting) settingService.getByName(Settings.AAA);
+            Integer aaa = CryptoUtils.decryptInt(aaaSetting.getValue());
+            Integer bbb = CryptoUtils.decryptInt(((Setting) settingService.getByName(Settings.BBB)).getValue());
+            if (aaa == null || bbb == null) {
+                throw new LicenseException();
+            }
+            Integer newValue = aaa + status.getParts();
+            aaaSetting.setValue(CryptoUtils.encrypt(newValue.toString()));
+            settingService.saveOrUpdate(aaaSetting);
         } catch (EncryptionException e) {
             throw new LicenseException();
         }
