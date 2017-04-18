@@ -465,7 +465,7 @@ databaseChangeLog {
         }
     }
 
-    changeSet(id: '2017-04-16-01', author: 'Nikita Shevtsov <shevtsou@gmail.com>') {
+    changeSet(id: '2017-03-11-25', author: 'Nikita Shevtsov <shevtsou@gmail.com>') {
         comment("Insert license settings")
         insert(schemaName: 'jsender', tableName: 'setting') {
             column(name: 'id', value: '3e605e9c-774e-4624-9a66-d80cb5befe62')
