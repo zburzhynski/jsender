@@ -332,7 +332,7 @@
 
         <module name="MethodLength">
             <property name="severity" value="warning"/>
-            <property name="max" value="55"/>
+            <property name="max" value="60"/>
             <property name="countEmpty" value="false"/>
         </module>
 
