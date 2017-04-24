@@ -103,14 +103,14 @@ public class SmsUnisenderSender implements ISender {
                     if (MODERATED_STATUS.equals(statusResponse.getStatus())) {
                         for (String phone : recipient.getPhones()) {
                             try {
-                                checkStatus(statusResponse);
+                                checkBalance(statusResponse);
                                 SendSmsRequest sendRequest = new SendSmsRequest();
                                 sendRequest.setToken(token);
                                 sendRequest.setMessageId(messageId);
                                 sendRequest.setPhone(preparePhone(phone));
                                 SendSmsResponse smsResponse = unisenderRestClient.sendSms(sendRequest);
                                 if (smsResponse != null) {
-                                    updateSmsCount(statusResponse);
+                                    updateBalance(statusResponse);
                                     saveMessage(recipient, message, phone, smsText);
                                     response.addMessageStatus(createSentStatus(smsResponse.getSmsId().toString(),
                                         recipient, phone, message.getText(), statusResponse.getParts()));
@@ -185,15 +185,14 @@ public class SmsUnisenderSender implements ISender {
         return phone.replaceFirst("\\+", EMPTY);
     }
 
-    private void checkStatus(CheckSmsMessageStatusResponse status) throws LimitExceededException, LicenseException {
+    private void checkBalance(CheckSmsMessageStatusResponse status) throws LimitExceededException, LicenseException {
         try {
             Integer aaa = CryptoUtils.decryptInt(((Setting) settingService.getByName(Settings.AAA)).getValue());
             Integer bbb = CryptoUtils.decryptInt(((Setting) settingService.getByName(Settings.BBB)).getValue());
             if (aaa == null || bbb == null) {
                 throw new LicenseException();
             }
-            Integer newValue = aaa + status.getParts();
-            if (newValue > bbb) {
+            if (aaa + status.getParts() > bbb) {
                 throw new LimitExceededException();
             }
         } catch (EncryptionException e) {
@@ -201,17 +200,17 @@ public class SmsUnisenderSender implements ISender {
         }
     }
 
-    private void updateSmsCount(CheckSmsMessageStatusResponse status) throws LicenseException {
+    private void updateBalance(CheckSmsMessageStatusResponse status) throws LicenseException {
         try {
-            Setting aaaSetting = (Setting) settingService.getByName(Settings.AAA);
-            Integer aaa = CryptoUtils.decryptInt(aaaSetting.getValue());
+            Setting setting = (Setting) settingService.getByName(Settings.AAA);
+            Integer aaa = CryptoUtils.decryptInt(setting.getValue());
             Integer bbb = CryptoUtils.decryptInt(((Setting) settingService.getByName(Settings.BBB)).getValue());
             if (aaa == null || bbb == null) {
                 throw new LicenseException();
             }
-            Integer newValue = aaa + status.getParts();
-            aaaSetting.setValue(CryptoUtils.encrypt(newValue.toString()));
-            settingService.saveOrUpdate(aaaSetting);
+            Integer value = aaa + status.getParts();
+            setting.setValue(CryptoUtils.encrypt(value.toString()));
+            settingService.saveOrUpdate(setting);
         } catch (EncryptionException e) {
             throw new LicenseException();
         }
