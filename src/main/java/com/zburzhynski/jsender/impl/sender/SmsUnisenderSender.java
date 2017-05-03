@@ -122,11 +122,11 @@ public class SmsUnisenderSender implements ISender {
                         }
                     }
                 } catch (MessageToLongException e) {
-                    response.addMessageStatuses(createErrorStatus(recipient,
-                        "smsUnisenderSender.messageToLong", message.getText()));
+                    response.addMessageStatuses(createErrorStatus(recipient, message.getText(),
+                        "smsUnisenderSender.messageToLong"));
                 } catch (UndefinedException e) {
-                    response.addMessageStatuses(createErrorStatus(recipient,
-                        "smsUnisenderSender.undefinedError", message.getText()));
+                    response.addMessageStatuses(createErrorStatus(recipient, message.getText(),
+                        "smsUnisenderSender.undefinedError"));
                 } catch (ObjectNotFoundException e) {
                     LOGGER.warn("Message not found", e);
                 }
