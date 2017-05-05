@@ -64,6 +64,8 @@ public class SearchPatientRequest implements Serializable {
 
     private Date endVisitDate;
 
+    private boolean searchByLastVisitDate;
+
     private String visitType;
 
     private String treatmentType;
@@ -272,6 +274,14 @@ public class SearchPatientRequest implements Serializable {
 
     public void setEndVisitDate(Date endVisitDate) {
         this.endVisitDate = endVisitDate;
+    }
+
+    public boolean isSearchByLastVisitDate() {
+        return searchByLastVisitDate;
+    }
+
+    public void setSearchByLastVisitDate(boolean searchByLastVisitDate) {
+        this.searchByLastVisitDate = searchByLastVisitDate;
     }
 
     public String getVisitType() {

@@ -199,7 +199,8 @@
                                     converterMessage="#{msgs['dateValidator.invalidDate']}"
                                     style="width:56%">
                         </p:calendar>
-
+                        <h:outputLabel for="searchByLastVisitDate" value="#{msgs['recipientSearch.searchByLastVisitDate']}" styleClass="b" />
+                        <h:selectBooleanCheckbox id="searchByLastVisitDate" value="#{recipientBean.searchPatientRequest.searchByLastVisitDate}" />
                         <h:outputText value="#{msgs['recipientSearch.visitType']}:" />
                         <h:selectOneMenu value="#{recipientBean.searchPatientRequest.visitType}"
                                          styleClass="ui-inputfield ui-state-default ui-corner-all selectMenu"
