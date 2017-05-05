@@ -24,6 +24,8 @@ public class PatientSearchValidator extends BaseValidator {
 
     private static final String IGNORE_YEAR_NOT_SELECTED = "patientSearchValidator.ignoreYearNotSelected";
 
+    private static final String LAST_VISIT_DATE_NOT_SELECTED = "patientSearchValidator.lastVisitDateNotSelected";
+
     /**
      * Validates patient search request.
      *
@@ -113,6 +115,11 @@ public class PatientSearchValidator extends BaseValidator {
      * @param request {@link SearchPatientRequest} to check
      */
     private boolean checkVisitDateRange(SearchPatientRequest request) {
+        if (request.isSearchByLastVisitDate() && request.getStartVisitDate() == null
+            && request.getEndVisitDate() == null) {
+            addMessage(LAST_VISIT_DATE_NOT_SELECTED);
+            return false;
+        }
         if (request.getStartVisitDate() != null && request.getEndVisitDate() != null) {
             if (request.getStartVisitDate().after(request.getEndVisitDate())) {
                 addMessage(VISIT_DATE_RANGE_INCORRECT);
@@ -125,6 +132,7 @@ public class PatientSearchValidator extends BaseValidator {
     private boolean isEmptyDentalVisit(SearchPatientRequest request) {
         return request.getStartVisitDate() == null &&
             request.getEndVisitDate() == null &&
+            !request.isSearchByLastVisitDate() &&
             request.getVisitType() == null &&
             request.getTreatmentType() == null;
     }
