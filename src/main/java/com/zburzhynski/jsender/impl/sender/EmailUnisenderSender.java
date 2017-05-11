@@ -4,7 +4,6 @@ import com.zburzhynski.jsender.api.domain.SendingServices;
 import com.zburzhynski.jsender.api.domain.SendingType;
 import com.zburzhynski.jsender.api.dto.Message;
 import com.zburzhynski.jsender.api.dto.SendingResponse;
-import com.zburzhynski.jsender.api.exception.SendingException;
 import com.zburzhynski.jsender.api.sender.ISender;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,7 +25,7 @@ public class EmailUnisenderSender implements ISender {
     private static final Logger LOGGER = LoggerFactory.getLogger(EmailUnisenderSender.class);
 
     @Override
-    public SendingResponse send(Message message) throws SendingException {
+    public SendingResponse send(Message message) {
         LOGGER.info("Email unisender sent message");
         return null;
     }

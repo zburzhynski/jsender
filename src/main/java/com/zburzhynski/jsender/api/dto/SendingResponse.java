@@ -14,6 +14,8 @@ public class SendingResponse {
 
     private List<MessageStatus> messageStatuses;
 
+    private String errorMessage;
+
     /**
      * Adds message status.
      *
@@ -47,5 +49,14 @@ public class SendingResponse {
     public void setMessageStatuses(List<MessageStatus> messageStatuses) {
         this.messageStatuses = messageStatuses;
     }
+
+    public String getErrorMessage() {
+        return errorMessage;
+    }
+
+    public void setErrorMessage(String errorMessage) {
+        this.errorMessage = errorMessage;
+    }
+
 
 }

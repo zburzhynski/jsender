@@ -4,7 +4,6 @@ import com.zburzhynski.jsender.api.domain.SendingServices;
 import com.zburzhynski.jsender.api.domain.SendingType;
 import com.zburzhynski.jsender.api.dto.Message;
 import com.zburzhynski.jsender.api.dto.SendingResponse;
-import com.zburzhynski.jsender.api.exception.SendingException;
 
 import java.util.Set;
 
@@ -22,9 +21,8 @@ public interface ISender {
      *
      * @param message message to send
      * @return {@link SendingResponse} sending response
-     * @throws SendingException if any
      */
-    SendingResponse send(Message message) throws SendingException;
+    SendingResponse send(Message message);
 
     /**
      * Get sending services.
