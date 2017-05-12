@@ -12,7 +12,6 @@ import com.zburzhynski.jsender.api.dto.MessageStatus;
 import com.zburzhynski.jsender.api.dto.Recipient;
 import com.zburzhynski.jsender.api.dto.SendingResponse;
 import com.zburzhynski.jsender.api.exception.EncryptionException;
-import com.zburzhynski.jsender.api.exception.SendingException;
 import com.zburzhynski.jsender.api.sender.ISender;
 import com.zburzhynski.jsender.api.service.ISendingAccountService;
 import com.zburzhynski.jsender.api.service.ISentMessageService;
@@ -89,7 +88,7 @@ public class SmsUnisenderSender implements ISender {
     private ISettingService settingService;
 
     @Override
-    public SendingResponse send(Message message) throws SendingException {
+    public SendingResponse send(Message message) {
         SendingResponse response = new SendingResponse();
         Map<Params, SendingAccountParam> params = getAccountParams(message.getSendingAccountId());
         String token = params.get(Params.TOKEN).getValue();
@@ -132,19 +131,19 @@ public class SmsUnisenderSender implements ISender {
                 }
             }
         } catch (InvalidTokenException e) {
-            throw new SendingException("smsUnisenderSender.invalidToken");
+            response.setErrorMessage("smsUnisenderSender.invalidToken");
         } catch (AlphanameIncorrectException e) {
-            throw new SendingException("smsUnisenderSender.alphanameIncorrect");
+            response.setErrorMessage("smsUnisenderSender.alphanameIncorrect");
         } catch (BillingException e) {
-            throw new SendingException("smsUnisenderSender.billingError");
+            response.setErrorMessage("smsUnisenderSender.billingError");
         } catch (AccessDeniedException e) {
-            throw new SendingException("smsUnisenderSender.accessDenied");
+            response.setErrorMessage("smsUnisenderSender.accessDenied");
         } catch (LimitExceededException e) {
-            throw new SendingException("smsUnisenderSender.limitExceeded");
+            response.setErrorMessage("smsUnisenderSender.limitExceeded");
         } catch (HostUnavailableException e) {
-            throw new SendingException("smsUnisender.hostUnavailableException");
+            response.setErrorMessage("smsUnisender.hostUnavailableException");
         } catch (LicenseException e) {
-            throw new SendingException("smsUnisender.licenseException");
+            response.setErrorMessage("smsUnisender.licenseException");
         }
         return response;
     }

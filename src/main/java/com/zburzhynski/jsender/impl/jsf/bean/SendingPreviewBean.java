@@ -3,7 +3,7 @@ package com.zburzhynski.jsender.impl.jsf.bean;
 import static com.zburzhynski.jsender.api.domain.View.MESSAGE_STATUS;
 import static javax.faces.application.FacesMessage.SEVERITY_ERROR;
 import com.zburzhynski.jsender.api.dto.Recipient;
-import com.zburzhynski.jsender.api.exception.SendingException;
+import com.zburzhynski.jsender.api.dto.SendingResponse;
 import com.zburzhynski.jsender.impl.sender.MessageSender;
 import com.zburzhynski.jsender.impl.util.PropertyReader;
 import com.zburzhynski.jsender.impl.util.TextHelper;
@@ -68,14 +68,13 @@ public class SendingPreviewBean implements Serializable {
      * @return path for navigation
      */
     public String send() {
-        try {
-            sendingStatusBean.setMessageToSend(sendingBean.getMessageToSend());
-            sendingStatusBean.setSendingResponse(messageSender.send(sendingBean.getMessageToSend()));
-            settingBean.init();
-        } catch (SendingException e) {
-            addFlashMessage(e.getMessage());
-            sendingStatusBean.setSendingResponse(null);
+        sendingStatusBean.setMessageToSend(sendingBean.getMessageToSend());
+        SendingResponse response = messageSender.send(sendingBean.getMessageToSend());
+        sendingStatusBean.setSendingResponse(response);
+        if (StringUtils.isNotEmpty(response.getErrorMessage())) {
+            addFlashMessage(response.getErrorMessage());
         }
+        settingBean.init();
         return MESSAGE_STATUS.getPath();
     }
 

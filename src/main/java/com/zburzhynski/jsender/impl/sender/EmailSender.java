@@ -9,7 +9,6 @@ import com.zburzhynski.jsender.api.dto.Message;
 import com.zburzhynski.jsender.api.dto.MessageStatus;
 import com.zburzhynski.jsender.api.dto.Recipient;
 import com.zburzhynski.jsender.api.dto.SendingResponse;
-import com.zburzhynski.jsender.api.exception.SendingException;
 import com.zburzhynski.jsender.api.sender.ISender;
 import com.zburzhynski.jsender.api.service.ISendingAccountService;
 import com.zburzhynski.jsender.api.service.ISentMessageService;
@@ -60,7 +59,7 @@ public class EmailSender implements ISender {
     private ISendingAccountService accountService;
 
     @Override
-    public SendingResponse send(Message email) throws SendingException {
+    public SendingResponse send(Message email) {
         SendingResponse response = new SendingResponse();
         Map<Params, SendingAccountParam> params = getAccountParams(email.getSendingAccountId());
         Session session = buildSession(params);
