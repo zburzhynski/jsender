@@ -11,6 +11,7 @@ public enum Settings {
 
     DEFAULT_COUNTRY_CODE,
 
+    SMS_SENDING_DELAY,
 
     SENDING_RECIPIENTS_PER_PAGE,
 

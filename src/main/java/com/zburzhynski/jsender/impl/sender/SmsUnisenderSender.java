@@ -93,6 +93,7 @@ public class SmsUnisenderSender implements ISender {
         Map<Params, SendingAccountParam> params = getAccountParams(message.getSendingAccountId());
         String token = params.get(Params.TOKEN).getValue();
         Integer alphanameId = Integer.valueOf(params.get(Params.ALPHANAME_ID).getValue());
+        long sendingDelay = Long.parseLong(((Setting) settingService.getByName(Settings.SMS_SENDING_DELAY)).getValue());
         try {
             for (Recipient recipient : message.getRecipients()) {
                 try {
@@ -120,6 +121,9 @@ public class SmsUnisenderSender implements ISender {
                             }
                         }
                     }
+                    if (sendingDelay > 0) {
+                        Thread.sleep(sendingDelay);
+                    }
                 } catch (MessageToLongException e) {
                     response.addMessageStatuses(createErrorStatus(recipient, message.getText(),
                         "smsUnisenderSender.messageToLong"));
@@ -128,6 +132,8 @@ public class SmsUnisenderSender implements ISender {
                         "smsUnisenderSender.undefinedError"));
                 } catch (ObjectNotFoundException e) {
                     LOGGER.warn("Message not found", e);
+                } catch (InterruptedException e) {
+                    LOGGER.warn("Interrupted exception" + e);
                 }
             }
         } catch (InvalidTokenException e) {
