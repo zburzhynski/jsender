@@ -51,6 +51,14 @@ databaseChangeLog {
             column(name: 'type', value: 'STRING')
             column(name: 'description', value: 'Код страны по умолчанию')
         }
+        insert(schemaName: 'jsender', tableName: 'setting') {
+            column(name: 'id', value: 'd807c290-0d31-427c-bffe-0a6a27b3a264')
+            column(name: 'category', value: 'COMMON')
+            column(name: 'name', value: 'sms_sending_delay')
+            column(name: 'value', value: '0')
+            column(name: 'type', value: 'INTEGER')
+            column(name: 'description', value: 'Задержка при отправке СМС')
+        }
     }
 
     changeSet(id: '2017-03-11-05', author: 'Nikita Shevtsov <shevtsou@gmail.com>') {

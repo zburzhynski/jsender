@@ -18,6 +18,7 @@ import static com.zburzhynski.jsender.api.domain.Settings.SEARCH_RECIPIENTS_PER_
 import static com.zburzhynski.jsender.api.domain.Settings.SENDING_ACCOUNTS_PER_PAGE;
 import static com.zburzhynski.jsender.api.domain.Settings.SENDING_RECIPIENTS_PER_PAGE;
 import static com.zburzhynski.jsender.api.domain.Settings.SENT_MESSAGES_PER_PAGE;
+import static com.zburzhynski.jsender.api.domain.Settings.SMS_SENDING_DELAY;
 import com.zburzhynski.jsender.api.domain.View;
 import com.zburzhynski.jsender.api.service.ISettingService;
 import com.zburzhynski.jsender.impl.domain.Setting;
@@ -116,6 +117,15 @@ public class SettingBean implements Serializable {
      */
     public String getDefaultCountryCode() {
         return settings.get(DEFAULT_COUNTRY_CODE.name()).getValue();
+    }
+
+    /**
+     * Gets sms sending delay.
+     *
+     * @return sms sending delay
+     */
+    public long getSmsSendingDelay() {
+        return Long.parseLong(settings.get(SMS_SENDING_DELAY.name()).getValue());
     }
 
     /**
