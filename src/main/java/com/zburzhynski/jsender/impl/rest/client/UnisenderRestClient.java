@@ -244,6 +244,7 @@ public class UnisenderRestClient {
             UnisenderErrorHelper.throwCheckSmsExcepiton(exception.getResponse());
         } catch (ClientHandlerException exception) {
             LOGGER.error("Client handler exception occurred", exception);
+            throw new HostUnavailableException();
         }
         return null;
     }
