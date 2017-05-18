@@ -57,7 +57,7 @@ databaseChangeLog {
             column(name: 'name', value: 'sms_sending_delay')
             column(name: 'value', value: '0')
             column(name: 'type', value: 'INTEGER')
-            column(name: 'description', value: 'Задержка при отправке СМС')
+            column(name: 'description', value: 'Задержка при отправке СМС, мс')
         }
     }
 
