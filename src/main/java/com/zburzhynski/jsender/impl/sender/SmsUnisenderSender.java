@@ -133,7 +133,7 @@ public class SmsUnisenderSender implements ISender {
                 } catch (ObjectNotFoundException e) {
                     LOGGER.warn("Message not found", e);
                 } catch (InterruptedException e) {
-                    LOGGER.warn("Interrupted exception", e);
+                    LOGGER.error("Interrupted exception", e);
                 }
             }
         } catch (InvalidTokenException e) {
