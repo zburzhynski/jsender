@@ -232,6 +232,7 @@ public class SettingBean implements Serializable {
      *
      * @return sms balance
      */
+    //TODO: remove
     public Integer getSmsBalance() {
         try {
             Integer aaa = CryptoUtils.decryptInt(settings.get(AAA.name()).getValue());

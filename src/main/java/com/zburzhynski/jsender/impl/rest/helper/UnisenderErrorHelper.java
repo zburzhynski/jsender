@@ -25,13 +25,17 @@ import javax.ws.rs.core.Response;
  *
  * @author Vladimir Zburzhynski
  */
-public class UnisenderErrorHelper {
+public final class UnisenderErrorHelper {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UnisenderErrorHelper.class);
 
     private static final String MESSAGE_ID_FIELD = "message_id";
 
     private static final String ERROR_FIELD = "error";
+
+    private UnisenderErrorHelper() {
+        throw new AssertionError();
+    }
 
     /**
      * Throws create sms message method exception.
@@ -46,12 +50,15 @@ public class UnisenderErrorHelper {
     public static void throwCreateSmsMessageException(ClientResponse response)
         throws MessageAlreadyExistException, AlphanameIncorrectException,
         MessageToLongException, InvalidTokenException, UndefinedException {
+        LOGGER.debug("Client response {}", response);
         if (response.getStatus() == Response.Status.FORBIDDEN.getStatusCode()) {
             throw new InvalidTokenException();
         }
         if (response.getStatus() == Response.Status.INTERNAL_SERVER_ERROR.getStatusCode()) {
             try {
-                JSONObject error = new JSONObject(response.getEntity(String.class));
+                String message = response.getEntity(String.class);
+                LOGGER.debug("Response message {}", message);
+                JSONObject error = new JSONObject(message);
                 int messageId = error.optInt(MESSAGE_ID_FIELD);
                 if (messageId != 0) {
                     throw new MessageAlreadyExistException(messageId);
@@ -76,6 +83,7 @@ public class UnisenderErrorHelper {
      */
     public static void throwCheckSmsMessageStatusException(ClientResponse response)
         throws ObjectNotFoundException, InvalidTokenException, UndefinedException {
+        LOGGER.debug("Client response {}", response);
         if (response.getStatus() == Response.Status.FORBIDDEN.getStatusCode()) {
             throw new InvalidTokenException();
         }
@@ -94,6 +102,7 @@ public class UnisenderErrorHelper {
      */
     public static void throwGetMessageListException(ClientResponse response)
         throws UndefinedException, InvalidTokenException {
+        LOGGER.debug("Client response {}", response);
         if (response.getStatus() == Response.Status.FORBIDDEN.getStatusCode()) {
             throw new InvalidTokenException();
         }
@@ -115,9 +124,12 @@ public class UnisenderErrorHelper {
     public static void throwSendMessageException(ClientResponse response) throws IncorrectPhoneNumberException,
         BillingException, ObjectNotFoundException,
         AccessDeniedException, LimitExceededException, InvalidTokenException, UndefinedException {
+        LOGGER.debug("Client response {}", response);
         if (response.getStatus() == Response.Status.FORBIDDEN.getStatusCode()) {
             try {
-                JSONObject error = new JSONObject(response.getEntity(String.class));
+                String message = response.getEntity(String.class);
+                LOGGER.debug("Response message {}", message);
+                JSONObject error = new JSONObject(message);
                 switch (error.getString(ERROR_FIELD)) {
                     case "token is invalid":
                         throw new InvalidTokenException();
@@ -134,7 +146,9 @@ public class UnisenderErrorHelper {
         }
         if (response.getStatus() == Response.Status.INTERNAL_SERVER_ERROR.getStatusCode()) {
             try {
-                JSONObject error = new JSONObject(response.getEntity(String.class));
+                String message = response.getEntity(String.class);
+                LOGGER.debug("Response message {}", message);
+                JSONObject error = new JSONObject(message);
                 switch (error.getString(ERROR_FIELD)) {
                     case "incorrect phone number":
                         throw new IncorrectPhoneNumberException();
@@ -160,6 +174,7 @@ public class UnisenderErrorHelper {
      */
     public static void throwGetLimitException(ClientResponse response)
         throws InvalidTokenException, UndefinedException {
+        LOGGER.debug("Client response {}", response);
         if (response.getStatus() == Response.Status.FORBIDDEN.getStatusCode()) {
             throw new InvalidTokenException();
         }
@@ -176,6 +191,7 @@ public class UnisenderErrorHelper {
      */
     public static void throwCheckSmsExcepiton(ClientResponse response)
         throws ObjectNotFoundException, InvalidTokenException, UndefinedException {
+        LOGGER.debug("Client response {}", response);
         if (response.getStatus() == Response.Status.FORBIDDEN.getStatusCode()) {
             throw new InvalidTokenException();
         }
