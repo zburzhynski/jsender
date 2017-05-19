@@ -95,6 +95,7 @@ public class SmsUnisenderSender implements ISender {
         Integer alphanameId = Integer.valueOf(params.get(Params.ALPHANAME_ID).getValue());
         long sendingDelay = Long.parseLong(((Setting) settingService.getByName(Settings.SMS_SENDING_DELAY)).getValue());
         try {
+            boolean countBalance = isCountBalance();
             for (Recipient recipient : message.getRecipients()) {
                 try {
                     String smsText = textHelper.prepareSmsText(message.getText(), recipient);
@@ -103,14 +104,14 @@ public class SmsUnisenderSender implements ISender {
                     if (MODERATED_STATUS.equals(statusResponse.getStatus())) {
                         for (String phone : recipient.getPhones()) {
                             try {
-                                checkBalance(statusResponse);
+                                checkBalance(statusResponse, countBalance);
                                 SendSmsRequest sendRequest = new SendSmsRequest();
                                 sendRequest.setToken(token);
                                 sendRequest.setMessageId(messageId);
                                 sendRequest.setPhone(preparePhone(phone));
                                 SendSmsResponse smsResponse = unisenderRestClient.sendSms(sendRequest);
                                 if (smsResponse != null) {
-                                    updateBalance(statusResponse);
+                                    updateBalance(statusResponse, countBalance);
                                     saveMessage(recipient, message, phone, smsText);
                                     response.addMessageStatus(createSentStatus(smsResponse.getSmsId().toString(),
                                         recipient, phone, message.getText(), statusResponse.getParts()));
@@ -190,32 +191,47 @@ public class SmsUnisenderSender implements ISender {
         return phone.replaceFirst("\\+", EMPTY);
     }
 
-    private void checkBalance(CheckSmsMessageStatusResponse status) throws LimitExceededException, LicenseException {
+    private void checkBalance(CheckSmsMessageStatusResponse status, boolean countBalance) throws LimitExceededException,
+        LicenseException {
         try {
-            Integer aaa = CryptoUtils.decryptInt(((Setting) settingService.getByName(Settings.AAA)).getValue());
-            Integer bbb = CryptoUtils.decryptInt(((Setting) settingService.getByName(Settings.BBB)).getValue());
-            if (aaa == null || bbb == null) {
-                throw new LicenseException();
-            }
-            if (aaa + status.getParts() > bbb) {
-                throw new LimitExceededException();
+            if (countBalance) {
+                Integer aaa = CryptoUtils.decryptInt(((Setting) settingService.getByName(Settings.AAA)).getValue());
+                Integer bbb = CryptoUtils.decryptInt(((Setting) settingService.getByName(Settings.BBB)).getValue());
+                if (aaa == null || bbb == null) {
+                    throw new LicenseException();
+                }
+                if (aaa + status.getParts() > bbb) {
+                    throw new LimitExceededException();
+                }
             }
         } catch (EncryptionException e) {
             throw new LicenseException();
         }
     }
 
-    private void updateBalance(CheckSmsMessageStatusResponse status) throws LicenseException {
+    private void updateBalance(CheckSmsMessageStatusResponse status, boolean countBalance) throws LicenseException {
         try {
-            Setting setting = (Setting) settingService.getByName(Settings.AAA);
-            Integer aaa = CryptoUtils.decryptInt(setting.getValue());
-            Integer bbb = CryptoUtils.decryptInt(((Setting) settingService.getByName(Settings.BBB)).getValue());
-            if (aaa == null || bbb == null) {
-                throw new LicenseException();
+            if (countBalance) {
+
+                Setting setting = (Setting) settingService.getByName(Settings.AAA);
+                Integer aaa = CryptoUtils.decryptInt(setting.getValue());
+                Integer bbb = CryptoUtils.decryptInt(((Setting) settingService.getByName(Settings.BBB)).getValue());
+                if (aaa == null || bbb == null) {
+                    throw new LicenseException();
+                }
+                Integer value = aaa + status.getParts();
+                setting.setValue(CryptoUtils.encrypt(value.toString()));
+                settingService.saveOrUpdate(setting);
             }
-            Integer value = aaa + status.getParts();
-            setting.setValue(CryptoUtils.encrypt(value.toString()));
-            settingService.saveOrUpdate(setting);
+        } catch (EncryptionException e) {
+            throw new LicenseException();
+        }
+    }
+
+    private boolean isCountBalance() throws LicenseException {
+        try {
+            return Boolean.parseBoolean(CryptoUtils.decrypt(((Setting) settingService.getByName(Settings.CCC))
+                .getValue()));
         } catch (EncryptionException e) {
             throw new LicenseException();
         }

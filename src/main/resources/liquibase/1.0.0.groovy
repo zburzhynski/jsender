@@ -491,6 +491,14 @@ databaseChangeLog {
             column(name: 'type', value: 'STRING')
             column(name: 'description', value: 'bbb')
         }
+        insert(schemaName: 'jsender', tableName: 'setting') {
+            column(name: 'id', value: 'cf423e2c-55af-4e75-9323-68a8bbbfd881')
+            column(name: 'category', value: 'LICENSE')
+            column(name: 'name', value: 'ccc')
+            column(name: 'value', value: 'J+s1XnfFxr9sO2aDVT/G3g==')
+            column(name: 'type', value: 'STRING')
+            column(name: 'description', value: 'ccc')
+        }
     }
 
 }

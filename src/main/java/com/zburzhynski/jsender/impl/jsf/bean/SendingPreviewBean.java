@@ -1,10 +1,16 @@
 package com.zburzhynski.jsender.impl.jsf.bean;
 
+import static com.zburzhynski.jsender.api.domain.Settings.AAA;
+import static com.zburzhynski.jsender.api.domain.Settings.BBB;
+import static com.zburzhynski.jsender.api.domain.Settings.CCC;
 import static com.zburzhynski.jsender.api.domain.View.MESSAGE_STATUS;
 import static javax.faces.application.FacesMessage.SEVERITY_ERROR;
 import com.zburzhynski.jsender.api.dto.Recipient;
 import com.zburzhynski.jsender.api.dto.SendingResponse;
+import com.zburzhynski.jsender.api.service.ISettingService;
+import com.zburzhynski.jsender.impl.domain.Setting;
 import com.zburzhynski.jsender.impl.sender.MessageSender;
+import com.zburzhynski.jsender.impl.util.CryptoUtils;
 import com.zburzhynski.jsender.impl.util.PropertyReader;
 import com.zburzhynski.jsender.impl.util.TextHelper;
 import org.apache.commons.lang3.StringUtils;
@@ -31,6 +37,10 @@ public class SendingPreviewBean implements Serializable {
 
     private static final String GROWL_ID = "sendingStatusForm:sendingMessages";
 
+    private boolean countSmsBalance;
+
+    private int smsBalance;
+
     private Recipient recipient;
 
     private String text;
@@ -50,8 +60,8 @@ public class SendingPreviewBean implements Serializable {
     @ManagedProperty(value = "#{propertyReader}")
     private PropertyReader reader;
 
-    @ManagedProperty(value = "#{settingBean}")
-    private SettingBean settingBean;
+    @ManagedProperty(value = "#{settingService}")
+    private ISettingService settingService;
 
     /**
      * Init bean state.
@@ -60,6 +70,7 @@ public class SendingPreviewBean implements Serializable {
     public void init() {
         recipient = sendingBean.getMessageToSend().getRecipients().get(0);
         prepareText();
+        refreshSmsBalance();
     }
 
     /**
@@ -74,7 +85,6 @@ public class SendingPreviewBean implements Serializable {
         if (StringUtils.isNotEmpty(response.getErrorMessage())) {
             addFlashMessage(response.getErrorMessage());
         }
-        settingBean.init();
         return MESSAGE_STATUS.getPath();
     }
 
@@ -88,13 +98,12 @@ public class SendingPreviewBean implements Serializable {
         prepareText();
     }
 
-    /**
-     * Gets sms balance.
-     *
-     * @return sms balance
-     */
-    public Integer getSmsBalance() {
-        return settingBean.getSmsBalance();
+    public boolean isCountSmsBalance() {
+        return countSmsBalance;
+    }
+
+    public int getSmsBalance() {
+        return smsBalance;
     }
 
     public Recipient getRecipient() {
@@ -133,8 +142,30 @@ public class SendingPreviewBean implements Serializable {
         this.reader = reader;
     }
 
-    public void setSettingBean(SettingBean settingBean) {
-        this.settingBean = settingBean;
+    public void setSettingService(ISettingService settingService) {
+        this.settingService = settingService;
+    }
+
+    private void refreshSmsBalance() {
+        try {
+            countSmsBalance =  Boolean.parseBoolean(CryptoUtils.decrypt(((Setting) settingService.getByName(CCC))
+                .getValue()));
+        } catch (Exception e) {
+            countSmsBalance = true;
+        }
+        if (countSmsBalance) {
+            try {
+                Integer aaa = CryptoUtils.decryptInt(((Setting) settingService.getByName(AAA)).getValue());
+                Integer bbb = CryptoUtils.decryptInt(((Setting) settingService.getByName(BBB)).getValue());
+                if (aaa != null && bbb != null) {
+                    smsBalance = bbb - aaa;
+                } else {
+                    smsBalance = 0;
+                }
+            } catch (Exception e) {
+                smsBalance =  0;
+            }
+        }
     }
 
     private void prepareText() {
