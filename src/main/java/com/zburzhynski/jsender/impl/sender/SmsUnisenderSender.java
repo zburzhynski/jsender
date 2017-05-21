@@ -191,6 +191,15 @@ public class SmsUnisenderSender implements ISender {
         return phone.replaceFirst("\\+", EMPTY);
     }
 
+    private boolean isCountBalance() throws LicenseException {
+        try {
+            return Boolean.parseBoolean(CryptoUtils.decrypt(((Setting) settingService.getByName(Settings.CCC))
+                .getValue()));
+        } catch (EncryptionException e) {
+            throw new LicenseException();
+        }
+    }
+
     private void checkBalance(CheckSmsMessageStatusResponse status, boolean countBalance) throws LimitExceededException,
         LicenseException {
         try {
@@ -212,7 +221,6 @@ public class SmsUnisenderSender implements ISender {
     private void updateBalance(CheckSmsMessageStatusResponse status, boolean countBalance) throws LicenseException {
         try {
             if (countBalance) {
-
                 Setting setting = (Setting) settingService.getByName(Settings.AAA);
                 Integer aaa = CryptoUtils.decryptInt(setting.getValue());
                 Integer bbb = CryptoUtils.decryptInt(((Setting) settingService.getByName(Settings.BBB)).getValue());
@@ -223,15 +231,6 @@ public class SmsUnisenderSender implements ISender {
                 setting.setValue(CryptoUtils.encrypt(value.toString()));
                 settingService.saveOrUpdate(setting);
             }
-        } catch (EncryptionException e) {
-            throw new LicenseException();
-        }
-    }
-
-    private boolean isCountBalance() throws LicenseException {
-        try {
-            return Boolean.parseBoolean(CryptoUtils.decrypt(((Setting) settingService.getByName(Settings.CCC))
-                .getValue()));
         } catch (EncryptionException e) {
             throw new LicenseException();
         }
