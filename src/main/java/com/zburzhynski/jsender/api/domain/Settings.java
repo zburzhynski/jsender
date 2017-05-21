@@ -39,6 +39,7 @@ public enum Settings {
 
 
     AAA,
-    BBB
+    BBB,
+    CCC
 
 }

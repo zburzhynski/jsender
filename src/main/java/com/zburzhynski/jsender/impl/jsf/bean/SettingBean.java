@@ -4,8 +4,6 @@ import static com.zburzhynski.jsender.api.domain.SettingCategory.COMMON;
 import static com.zburzhynski.jsender.api.domain.SettingCategory.JDENT;
 import static com.zburzhynski.jsender.api.domain.SettingCategory.REQUISITE;
 import static com.zburzhynski.jsender.api.domain.SettingCategory.VIEW;
-import static com.zburzhynski.jsender.api.domain.Settings.AAA;
-import static com.zburzhynski.jsender.api.domain.Settings.BBB;
 import static com.zburzhynski.jsender.api.domain.Settings.CLIENTS_PER_PAGE;
 import static com.zburzhynski.jsender.api.domain.Settings.DEFAULT_COUNTRY_CODE;
 import static com.zburzhynski.jsender.api.domain.Settings.JDENT_INTEGRATION_ENABLED;
@@ -23,7 +21,6 @@ import com.zburzhynski.jsender.api.domain.View;
 import com.zburzhynski.jsender.api.service.ISettingService;
 import com.zburzhynski.jsender.impl.domain.Setting;
 import com.zburzhynski.jsender.impl.jsf.validator.SettingValidator;
-import com.zburzhynski.jsender.impl.util.CryptoUtils;
 import org.apache.commons.lang.BooleanUtils;
 
 import java.io.Serializable;
@@ -225,25 +222,6 @@ public class SettingBean implements Serializable {
      */
     public String getJdentUrl() {
         return settings.get(JDENT_URL.name()).getValue();
-    }
-
-    /**
-     * Gets sms balance.
-     *
-     * @return sms balance
-     */
-    //TODO: remove
-    public Integer getSmsBalance() {
-        try {
-            Integer aaa = CryptoUtils.decryptInt(settings.get(AAA.name()).getValue());
-            Integer bbb = CryptoUtils.decryptInt(settings.get(BBB.name()).getValue());
-            if (aaa != null && bbb != null) {
-                return bbb - aaa;
-            }
-            return 0;
-        } catch (Exception e) {
-            return 0;
-        }
     }
 
     public Map<String, Setting> getSettings() {
