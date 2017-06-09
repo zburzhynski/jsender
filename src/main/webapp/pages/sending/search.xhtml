@@ -43,10 +43,6 @@
             .selectMenu {
                 width: 100%;
             }
-            .ignoreYear {
-                font-size: 14px;
-                font-weight: bold;
-            }
             .cal .ui-inputfield {
                 width: 96%;
             }
@@ -90,7 +86,6 @@
                         <p:inputText value="#{recipientBean.searchPatientRequest.patronymic}"
                                      styleClass="inputText" />
                         <h:outputText value="#{msgs['recipientSearch.startBirthdayDate']}:" />
-                        <h:panelGroup>
                             <p:calendar value="#{recipientBean.searchPatientRequest.startBirthdayDate}"
                                         label="#{msgs['recipientSearch.startBirthdayDate']}"
                                         pattern="dd/MM/yyyy"
@@ -100,9 +95,6 @@
                                         converterMessage="#{msgs['dateValidator.invalidDate']}"
                                         styleClass="cal">
                             </p:calendar>
-                            <h:selectBooleanCheckbox id="birthdayIgnoreYear" value="#{recipientBean.searchPatientRequest.birthdayIgnoreYear}" />
-                            <h:outputLabel for="birthdayIgnoreYear" value="#{msgs['recipientSearch.ignoreBirthdayYear']}" styleClass="ignoreYear" />
-                        </h:panelGroup>
                         <h:outputText value="#{msgs['recipientSearch.endBirthdayDate']}:" />
                         <p:calendar value="#{recipientBean.searchPatientRequest.endBirthdayDate}"
                                     label="#{msgs['recipientSearch.endBirthdayDate']}"
@@ -113,6 +105,8 @@
                                     converterMessage="#{msgs['dateValidator.invalidDate']}"
                                     styleClass="cal">
                         </p:calendar>
+                        <h:outputLabel for="birthdayIgnoreYear" value="#{msgs['recipientSearch.ignoreBirthdayYear']}" styleClass="b" />
+                        <h:selectBooleanCheckbox id="birthdayIgnoreYear" value="#{recipientBean.searchPatientRequest.birthdayIgnoreYear}" />
                         <h:outputText value="#{msgs['person.gender']}:" />
                         <p:selectOneRadio style="border: 0"
                                             value="#{recipientBean.searchPatientRequest.gender}">
