@@ -20,6 +20,7 @@ import com.zburzhynski.jsender.impl.util.MessageHelper;
 import org.primefaces.model.LazyDataModel;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -185,7 +186,8 @@ public class RecipientBean implements Serializable {
             if (sendingBean != null) {
                 for (PatientDto selected : selectedRecipients) {
                     ContactInfoDto contactInfo = selected.getContactInfo();
-                    if (isEmpty(contactInfo.getEmails()) && !hasMobilePhone(contactInfo.getPhones())) {
+                    List<String> mobilePhones = getMobilePhones(contactInfo.getPhones());
+                    if (isEmpty(contactInfo.getEmails()) && isEmpty(mobilePhones)) {
                         continue;
                     }
                     Recipient recipient = new Recipient();
@@ -194,9 +196,7 @@ public class RecipientBean implements Serializable {
                     recipient.setName(selected.getName());
                     recipient.setPatronymic(selected.getPatronymic());
                     recipient.setRecipientSource(RecipientSourceType.JDENT);
-                    for (ContactInfoPhoneDto phone : contactInfo.getPhones()) {
-                        recipient.addPhone(phone.getFullNumber());
-                    }
+                    recipient.getPhones().addAll(mobilePhones);
                     for (ContactInfoEmailDto email : contactInfo.getEmails()) {
                         recipient.addEmail(email.getAddress());
                     }
@@ -206,13 +206,14 @@ public class RecipientBean implements Serializable {
         }
     }
 
-    private boolean hasMobilePhone(List<ContactInfoPhoneDto> phones) {
+    private List<String> getMobilePhones(List<ContactInfoPhoneDto> phones) {
+        List<String> mobilePhones = new ArrayList<>();
         for (ContactInfoPhoneDto phone : phones) {
             if (PhoneNumberType.MOBILE.equals(phone.getPhoneNumberType())) {
-                return true;
+                mobilePhones.add(phone.getFullNumber());
             }
         }
-        return false;
+        return mobilePhones;
     }
 
 }
