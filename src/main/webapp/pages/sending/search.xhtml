@@ -213,6 +213,26 @@
                                            itemValue="#{treatmentType}"
                                            itemLabel="#{msgs[treatmentType.value]}" />
                         </h:selectOneMenu>
+                        <h:outputText value="#{msgs['recipientSearch.startPlannedVisitDate']}:" />
+                        <p:calendar value="#{recipientBean.searchPatientRequest.startPlannedVisitDate}"
+                                    label="#{msgs['recipientSearch.startPlannedVisitDate']}"
+                                    pattern="dd/MM/yyyy"
+                                    navigator="true"
+                                    locale="ru"
+                                    renderAsPopup="true"
+                                    converterMessage="#{msgs['dateValidator.invalidDate']}"
+                                    style="width:56%">
+                        </p:calendar>
+                        <h:outputText value="#{msgs['recipientSearch.endPlannedVisitDate']}:" />
+                        <p:calendar value="#{recipientBean.searchPatientRequest.endPlannedVisitDate}"
+                                    label="#{msgs['recipientSearch.endPlannedVisitDate']}"
+                                    pattern="dd/MM/yyyy"
+                                    navigator="true"
+                                    locale="ru"
+                                    renderAsPopup="true"
+                                    converterMessage="#{msgs['dateValidator.invalidDate']}"
+                                    style="width:56%">
+                        </p:calendar>
                         <h:outputText value="#{msgs['recipientSearch.additional']}" style="color: blue" />
                         <h:outputText />
                         <h:outputLabel for="onlyDebtor" value="#{msgs['recipientSearch.onlyDebtor']}" styleClass="b" />
