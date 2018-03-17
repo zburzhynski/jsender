@@ -22,6 +22,8 @@ public class PatientSearchValidator extends BaseValidator {
 
     private static final String VISIT_DATE_RANGE_INCORRECT = "patientSearchValidator.visitDateRangeIncorrect";
 
+    private static final String PLANEND_VISIT_DATE_RANGE_INCORRECT = "patientSearchValidator.plannedVisitDateRangeIncorrect";
+
     private static final String IGNORE_YEAR_NOT_SELECTED = "patientSearchValidator.ignoreYearNotSelected";
 
     private static final String LAST_VISIT_DATE_NOT_SELECTED = "patientSearchValidator.lastVisitDateNotSelected";
@@ -34,7 +36,7 @@ public class PatientSearchValidator extends BaseValidator {
      */
     public boolean validate(SearchPatientRequest request) {
         return checkIsEmpty(request) && checkCardDateRange(request) &&
-            checkBirthdayRange(request) && checkVisitDateRange(request);
+            checkBirthdayRange(request) && checkVisitDateRange(request) && checkPlannedVisitDateRange(request);
     }
 
     /**
@@ -129,12 +131,29 @@ public class PatientSearchValidator extends BaseValidator {
         return true;
     }
 
+    /**
+     * Checks planned visit date range.
+     *
+     * @param request {@link SearchPatientRequest} to check
+     */
+    private boolean checkPlannedVisitDateRange(SearchPatientRequest request) {
+        if (request.getStartPlannedVisitDate() != null && request.getEndPlannedVisitDate() != null) {
+            if (request.getStartPlannedVisitDate().after(request.getEndPlannedVisitDate())) {
+                addMessage(PLANEND_VISIT_DATE_RANGE_INCORRECT);
+                return false;
+            }
+        }
+        return true;
+    }
+
     private boolean isEmptyDentalVisit(SearchPatientRequest request) {
         return request.getStartVisitDate() == null &&
             request.getEndVisitDate() == null &&
             !request.isSearchByLastVisitDate() &&
             request.getVisitType() == null &&
-            request.getTreatmentType() == null;
+            request.getTreatmentType() == null &&
+            request.getStartPlannedVisitDate() == null &&
+            request.getEndPlannedVisitDate() == null;
     }
 
 }

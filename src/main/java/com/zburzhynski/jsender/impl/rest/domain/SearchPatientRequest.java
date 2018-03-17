@@ -70,6 +70,10 @@ public class SearchPatientRequest implements Serializable {
 
     private String treatmentType;
 
+    private Date startPlannedVisitDate;
+
+    private Date endPlannedVisitDate;
+
     private boolean onlyDebtor;
 
     private Long start;
@@ -294,6 +298,22 @@ public class SearchPatientRequest implements Serializable {
 
     public String getTreatmentType() {
         return treatmentType;
+    }
+
+    public Date getStartPlannedVisitDate() {
+        return startPlannedVisitDate;
+    }
+
+    public void setStartPlannedVisitDate(Date startPlannedVisitDate) {
+        this.startPlannedVisitDate = startPlannedVisitDate;
+    }
+
+    public Date getEndPlannedVisitDate() {
+        return endPlannedVisitDate;
+    }
+
+    public void setEndPlannedVisitDate(Date endPlannedVisitDate) {
+        this.endPlannedVisitDate = endPlannedVisitDate;
     }
 
     public void setTreatmentType(String treatmentType) {
