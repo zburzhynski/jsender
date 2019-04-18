@@ -56,18 +56,18 @@ public class UnisenderRestClient {
     private static final Logger LOGGER = LoggerFactory.getLogger(UnisenderRestClient.class);
 
     private static final String CREATE_SMS_MESSAGE_URL =
-        "http://sms.unisender.by/api/v1/createSmsMessage?token=%s&message=%s";
+        "http://app.sms.by/api/v1/createSmsMessage?token=%s&message=%s";
 
     private static final String CHECK_SMS_MESSAGE_STATUS_URL =
-        "http://sms.unisender.by/api/v1/checkSMSMessageStatus?token=%s&message_id=%s";
+        "http://app.sms.by/api/v1/checkSMSMessageStatus?token=%s&message_id=%s";
 
-    private static final String GET_MESSAGE_LIST_URL = "http://sms.unisender.by/api/v1/getMessagesList?token=%s";
+    private static final String GET_MESSAGE_LIST_URL = "http://app.sms.by/api/v1/getMessagesList?token=%s";
 
-    private static final String SEND_SMS_URL = "http://sms.unisender.by/api/v1/sendSms?token=%s&message_id=%s&phone=%s";
+    private static final String SEND_SMS_URL = "http://app.sms.by/api/v1/sendSms?token=%s&message_id=%s&phone=%s";
 
-    private static final String GET_LIMIT_URL = "http://sms.unisender.by/api/v1/getLimit?token=%s";
+    private static final String GET_LIMIT_URL = "http://app.sms.by/api/v1/getLimit?token=%s";
 
-    private static final String CHECK_SMS_URL = "http://sms.unisender.by/api/v1/checkSMS?token=%s&sms_id=%s";
+    private static final String CHECK_SMS_URL = "http://app.sms.by/api/v1/checkSMS?token=%s&sms_id=%s";
 
     private static final String ALPHANAME_ID_PARAM = "alphaname_id";
 
