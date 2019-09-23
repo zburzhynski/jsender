@@ -22,7 +22,8 @@ public class PatientSearchValidator extends BaseValidator {
 
     private static final String VISIT_DATE_RANGE_INCORRECT = "patientSearchValidator.visitDateRangeIncorrect";
 
-    private static final String PLANEND_VISIT_DATE_RANGE_INCORRECT = "patientSearchValidator.plannedVisitDateRangeIncorrect";
+    private static final String PLANEND_VISIT_DATE_RANGE_INCORRECT =
+        "patientSearchValidator.plannedVisitDateRangeIncorrect";
 
     private static final String IGNORE_YEAR_NOT_SELECTED = "patientSearchValidator.ignoreYearNotSelected";
 
