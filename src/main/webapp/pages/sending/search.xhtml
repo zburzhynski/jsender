@@ -110,23 +110,23 @@
                         <h:outputText value="#{msgs['person.gender']}:" />
                         <p:selectOneRadio style="border: 0"
                                             value="#{recipientBean.searchPatientRequest.gender}">
-                            <p:ajax partialSubmit="true" update="socialStatus" />
+                            <p:ajax partialSubmit="true" update="maritalStatus" />
                             <f:selectItems value="#{genderBean.genders}" var="g" itemValue="#{g}"
                                            itemLabel="#{msgs[g.value]}" />
                         </p:selectOneRadio>
-                        <h:outputText value="#{msgs['recipientSearch.socialStatus']}:" />
-                        <h:selectOneMenu id="socialStatus"
-                                         value="#{recipientBean.searchPatientRequest.socialStatus}"
+                        <h:outputText value="#{msgs['recipientSearch.maritalStatus']}:" />
+                        <h:selectOneMenu id="maritalStatus"
+                                         value="#{recipientBean.searchPatientRequest.maritalStatus}"
                                          styleClass="ui-inputfield ui-state-default ui-corner-all selectMenu">
                             <c:if test="#{recipientBean.searchPatientRequest.gender=='M'}">
                                 <f:selectItem itemLabel="" noSelectionOption="true" />
-                                <f:selectItems value="#{socialStatusBean.socialStatuses}" var="status"
+                                <f:selectItems value="#{maritalStatusBean.socialStatuses}" var="status"
                                                itemValue="#{status}"
                                                itemLabel="#{msgs[status.male]}" />
                             </c:if>
                             <c:if test="#{recipientBean.searchPatientRequest.gender=='F'}">
                                 <f:selectItem itemLabel="" noSelectionOption="true" />
-                                <f:selectItems value="#{socialStatusBean.socialStatuses}" var="status"
+                                <f:selectItems value="#{maritalStatusBean.socialStatuses}" var="status"
                                                itemValue="#{status}"
                                                itemLabel="#{msgs[status.female]}" />
                             </c:if>

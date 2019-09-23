@@ -34,7 +34,7 @@ public class SearchPatientRequest implements Serializable {
 
     private String gender;
 
-    private String socialStatus;
+    private String maritalStatus;
 
     private String residenceType;
 
@@ -160,12 +160,12 @@ public class SearchPatientRequest implements Serializable {
         this.gender = gender;
     }
 
-    public String getSocialStatus() {
-        return socialStatus;
+    public String getMaritalStatus() {
+        return maritalStatus;
     }
 
-    public void setSocialStatus(String socialStatus) {
-        this.socialStatus = socialStatus;
+    public void setMaritalStatus(String maritalStatus) {
+        this.maritalStatus = maritalStatus;
     }
 
     public String getResidenceType() {

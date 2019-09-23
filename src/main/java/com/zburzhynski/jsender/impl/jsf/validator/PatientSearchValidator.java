@@ -55,7 +55,7 @@ public class PatientSearchValidator extends BaseValidator {
             request.getEndBirthdayDate() == null &&
             !request.isBirthdayIgnoreYear() &&
             request.getGender() == null &&
-            request.getSocialStatus() == null &&
+            request.getMaritalStatus() == null &&
             request.getResidenceType() == null &&
             isBlank(request.getAddress()) &&
             isBlank(request.getHomePhoneNumber()) &&

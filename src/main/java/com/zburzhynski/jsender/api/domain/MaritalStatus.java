@@ -1,19 +1,19 @@
 package com.zburzhynski.jsender.api.domain;
 
 /**
- * Class represents social statuses of person.
+ * Class represents marital statuses of person.
  * <p/>
  * Date: 03.07.2015
  *
  * @author Vladimir Zburzhynski
  */
-public enum SocialStatus {
+public enum MaritalStatus {
 
-    N("socialStatus.male.none", "socialStatus.female.none"),
-    M("socialStatus.male.married", "socialStatus.female.married"),
-    S("socialStatus.male.single", "socialStatus.female.single"),
-    D("socialStatus.male.divorced", "socialStatus.female.divorced"),
-    W("socialStatus.male.widower", "socialStatus.female.widower");
+    N("maritalStatus.male.none", "maritalStatus.female.none"),
+    M("maritalStatus.male.married", "maritalStatus.female.married"),
+    S("maritalStatus.male.single", "maritalStatus.female.single"),
+    D("maritalStatus.male.divorced", "maritalStatus.female.divorced"),
+    W("maritalStatus.male.widower", "maritalStatus.female.widower");
 
     private String male;
 
@@ -25,7 +25,7 @@ public enum SocialStatus {
      * @param male   male status
      * @param female female status
      */
-    SocialStatus(String male, String female) {
+    MaritalStatus(String male, String female) {
         this.male = male;
         this.female = female;
     }
